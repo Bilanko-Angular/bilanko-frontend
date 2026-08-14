@@ -1,0 +1,310 @@
+/* =========================================
+   STRUCTURE GÉNÉRALE & TYPOGRAPHIE
+   ========================================= */
+:host {
+  font-family: 'DM Sans', sans-serif;
+  color: #2B2B28;       /* Anthracite */
+  background-color: #FFFFFF; /* Fond blanc */
+  padding: 2rem;
+  display: block;
+}
+
+/* Classe utilitaire pour forcer l'alignement des chiffres */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* =========================================
+   EN-TÊTE DE LA PAGE
+   ========================================= */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-header h1 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+  color: #2B2B28;
+}
+
+.page-header p {
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: #666666;
+  margin: 0;
+  max-width: 500px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* =========================================
+   BOUTONS
+   ========================================= */
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: inherit;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-primary {
+  background-color: #63B78D; /* Vert Bilanko */
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background-color: #54a17c; /* darken(#63B78D, 5%) */
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #2B2B28;
+  border-color: #cccccc;
+}
+
+.btn-secondary:hover {
+  background-color: #F9F9F9;
+}
+
+/* =========================================
+   TABLEAU "ESPRIT GRAND LIVRE"
+   ========================================= */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.registry-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.registry-table th,
+.registry-table td {
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid #E5E5E5;
+  text-align: left;
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+
+.registry-table thead th {
+  font-weight: 500;
+  color: #666666;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid #2B2B28;
+}
+
+.registry-table tbody tr:hover {
+  background-color: #F9F9F9;
+}
+
+.align-left { text-align: left; }
+.align-center { text-align: center; }
+.align-right { text-align: right; }
+
+.amount-positive {
+  color: #2E5F45; /* Vert Foncé */
+  font-weight: 500;
+}
+
+.empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: #666666;
+  border: 1px dashed #cccccc;
+  border-radius: 4px;
+}
+
+/* =========================================
+   MENU D'ACTIONS (3 points verticaux)
+   ========================================= */
+.action-cell {
+  position: relative;
+  display: inline-block;
+}
+
+.kebab-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666666;
+  padding: 0 0.5rem;
+  line-height: 1;
+}
+
+.kebab-btn:hover {
+  color: #2B2B28;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 100%;
+  top: 0;
+  background-color: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  border-radius: 4px;
+  min-width: 120px;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #2B2B28;
+}
+
+.dropdown-item:hover {
+  background-color: #F9F9F9;
+}
+
+.dropdown-item.danger {
+  color: #B23B3B; /* Alerte Rouge */
+}
+
+/* =========================================
+   MODALES (Pop-ups)
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(43, 43, 40, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background-color: #FFFFFF;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.modal-content.modal-small {
+  max-width: 400px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #E5E5E5;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2B2B28;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666666;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #2B2B28;
+}
+
+.modal-form {
+  padding: 1.5rem;
+}
+
+/* =========================================
+   FORMULAIRES
+   ========================================= */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #2B2B28;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  background-color: #FFFFFF;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #63B78D; /* Vert Bilanko */
+}
+
+.error-text {
+  display: block;
+  color: #B23B3B;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkbox-group .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
