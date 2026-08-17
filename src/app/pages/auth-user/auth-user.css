@@ -1,28 +1,53 @@
-/* ===== Auth Container — Split Layout ===== */
+/* ============================================================
+   AUTH LAYOUT — Split view (décoration gauche / formulaire droite)
+   Branché sur les variables CSS de theme.css
+   ============================================================ */
+
+/* -------- Conteneur global -------- */
 .auth-container {
   display: flex;
-  min-height: calc(100vh - 72px);
+  min-height: 100vh;
 }
 
-/* ===== Left Decoration Panel ===== */
+/* ====================================================
+   Panneau gauche — décoration Bilanko
+   ==================================================== */
 .auth-decoration {
-  width: 45%;
-  background: linear-gradient(135deg, #2f1500 0%, #6e3900 50%, #8d4b00 100%);
+  width: 42%;
+  min-width: 320px;
+  background: linear-gradient(
+    145deg,
+    var(--bilanko-vert-fonce)    0%,
+    var(--bilanko-vert-bilanko)  55%,
+    #7FCBA3                      100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem 2rem;
+  padding: 3rem 2.5rem;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
-/* Subtle pattern overlay */
+/* Halo lumineux en overlay */
 .auth-decoration::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(255, 183, 125, 0.15) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(255, 220, 195, 0.1) 0%, transparent 50%);
+  background:
+    radial-gradient(circle at 15% 85%, rgba(255,255,255,0.12) 0%, transparent 55%),
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Grille de points décoratifs */
+.auth-decoration::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
   pointer-events: none;
 }
 
@@ -33,98 +58,134 @@
   max-width: 380px;
 }
 
+/* Illustration flottante */
 .auth-illustration {
-  width: 75%;
-  max-width: 280px;
+  width: 72%;
+  max-width: 260px;
   margin-bottom: 2rem;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3));
-  animation: floatIllustration 4s ease-in-out infinite;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.2));
+  animation: floatIllustration 4.5s ease-in-out infinite;
 }
 
 @keyframes floatIllustration {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* Logo marque */
+.auth-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(4px);
+}
+
+.auth-brand-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.auth-brand-text {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  letter-spacing: -0.3px;
 }
 
 .auth-decoration-title {
-  color: #ffdcc3;
-  font-size: 1.6rem;
+  color: #fff;
+  font-size: 1.65rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
   letter-spacing: -0.5px;
+  line-height: 1.25;
 }
 
 .auth-decoration-text {
-  color: rgba(255, 220, 195, 0.75);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
 }
 
-/* Feature badges */
+/* Badges features */
 .auth-decoration-features {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
   align-items: center;
 }
 
 .auth-feature {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  color: rgba(255, 220, 195, 0.85);
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.5rem 1.25rem;
-  border-radius: 24px;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: all 0.25s ease;
+  gap: 0.65rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease;
   width: fit-content;
 }
+
 .auth-feature:hover {
-  background: rgba(255, 255, 255, 0.14);
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateX(5px);
 }
 
 .auth-feature .material-icons {
-  font-size: 1.1rem;
-  color: #ffb77d;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.9);
 }
 
-/* ===== Right Form Panel ===== */
+/* ====================================================
+   Panneau droite — formulaire
+   ==================================================== */
 .auth-form-panel {
   flex: 1;
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 2rem;
-  background: #fff;
+  padding: 2.5rem 2rem;
+  background-color: var(--color-background);
+  overflow-y: auto;
 }
 
 .auth-form-wrapper {
   width: 100%;
-  max-width: 480px;
+  max-width: 460px;
 }
 
-/* ===== Responsive: Tablet (<992px) ===== */
+/* ====================================================
+   Responsive
+   ==================================================== */
 @media (max-width: 991.98px) {
   .auth-decoration {
     display: none;
-    width: 40%;
-    padding: 2rem 1.5rem;
   }
 }
 
-
-/* ===== Responsive: Mobile (<768px) ===== */
 @media (max-width: 767.98px) {
   .auth-container {
-    flex-direction: column;
-    min-height: auto;
+    min-height: 100vh;
   }
 
   .auth-form-panel {
-    padding: 1.5rem 1rem;
+    padding: 1.75rem 1.25rem;
+    align-items: flex-start;
   }
 }

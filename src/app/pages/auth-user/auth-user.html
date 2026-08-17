@@ -1,32 +1,49 @@
 <section class="auth-container">
+
+  <!-- ===== Panneau gauche – Décoration ===== -->
   <div class="auth-decoration">
     <div class="auth-decoration-content">
-      <img src="assets/images/authUser.svg" alt="image d'authentification" class="auth-illustration">
-      <h2 class="auth-decoration-title">Les Délices du Cameroun</h2>
+
+      <!-- Logo -->
+      <div class="auth-brand-logo">
+        <div class="auth-brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/>
+          </svg>
+        </div>
+        <span class="auth-brand-text">Bilanko</span>
+      </div>
+
+      <!-- Illustration -->
+      <img src="assets/images/authUser.svg" alt="Illustration authentification" class="auth-illustration">
+
+      <h2 class="auth-decoration-title">Gérez votre activité<br>en toute simplicité</h2>
       <p class="auth-decoration-text">
-        Votre plateforme de notation et de commande de plats camerounais authentiques
+        Catalogue, ventes, charges et documents — tout centralisé pour piloter votre business.
       </p>
+
       <div class="auth-decoration-features">
         <div class="auth-feature">
-          <span class="material-icons">restaurant_menu</span>
-          <span>Plats authentiques</span>
+          <span class="material-icons">inventory_2</span>
+          <span>Catalogue produits</span>
         </div>
         <div class="auth-feature">
-          <span class="material-icons">star</span>
-          <span>Notez vos favoris</span>
+          <span class="material-icons">point_of_sale</span>
+          <span>Suivi des ventes</span>
         </div>
         <div class="auth-feature">
-          <span class="material-icons">local_shipping</span>
-          <span>Livraison rapide</span>
+          <span class="material-icons">receipt_long</span>
+          <span>Gestion des charges</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Right form panel -->
+  <!-- ===== Panneau droit – Formulaire ===== -->
   <div class="auth-form-panel">
     <div class="auth-form-wrapper">
       <ng-content />
     </div>
   </div>
+
 </section>
