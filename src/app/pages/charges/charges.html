@@ -1,0 +1,62 @@
+<app-template>
+  <div class="page-header">
+    <div class="header-text">
+      <h1>Gestion des charges</h1>
+      <p>Consultez, recherchez et gérez l'ensemble de vos charges.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="isFilterModalOpen.set(true)">Filtre</button>
+      <button class="btn btn-primary" (click)="openAdd()">Ajouter</button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    @if (charges().length === 0) {
+      <div class="empty-state">Aucune charge trouvée.</div>
+    }
+    @if (charges().length > 0) {
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th>Libellé</th>
+            <th>Fournisseur</th>
+            <th class="align-right">Montant</th>
+            <th>Date</th>
+            <th class="align-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of charges(); track c.id) {
+            <tr>
+              <td>{{ c.label }}</td>
+              <td>{{ c.supplier }}</td>
+              <td class="align-right tabular-nums">{{ c.amount | number:'1.0-0':'fr-FR' }} FCFA</td>
+              <td>{{ c.date }}</td>
+              <td class="align-center">
+                <app-action-menu (action)="onChargeAction($event, c.id)"></app-action-menu>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+  @if (isAddModalOpen()) {
+    <div class="modal-overlay" (click)="closeAdd()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Ajouter une charge</h2>
+        </div>
+        <app-finance-form [kind]="'charge'" [initial]="editingCharge" (submit)="handleChargeSubmit($event)" (cancel)="closeAdd()"></app-finance-form>
+      </div>
+    </div>
+  }
+  @if (confirmDeleteId()) {
+    <app-confirm
+      [message]="'Voulez-vous vraiment supprimer cette charge ?'"
+      (confirm)="confirmDelete()"
+      (cancel)="cancelDelete()">
+    </app-confirm>
+  }
+</app-template>

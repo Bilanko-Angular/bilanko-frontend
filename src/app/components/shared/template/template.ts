@@ -6,7 +6,7 @@ import { Header } from "../header/header";
   selector: 'app-template',
   imports: [Aside, Header],
   templateUrl: './template.html',
-  styleUrl: './template.css',
+  styleUrls: ['./template.css'],
 })
 export class Template {
 

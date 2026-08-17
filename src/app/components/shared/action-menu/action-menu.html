@@ -1,0 +1,10 @@
+<div class="action-cell">
+  <button class="kebab-btn" (click)="toggle()" aria-label="Actions">⋮</button>
+  @if (open()) {
+    <div class="dropdown-menu">
+      <button class="dropdown-item" (click)="select('view')">Voir</button>
+      <button class="dropdown-item" (click)="select('edit')">Modifier</button>
+      <button class="dropdown-item danger" (click)="select('delete')">Supprimer</button>
+    </div>
+  }
+</div>

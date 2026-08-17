@@ -1,0 +1,11 @@
+<div class="confirm-backdrop">
+  <div class="confirm-dialog" role="dialog" aria-modal="true">
+    <div class="confirm-body">
+      <p>{{ message }}</p>
+    </div>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" (click)="onCancel()">{{ cancelLabel }}</button>
+      <button class="btn btn-primary" (click)="onConfirm()">{{ confirmLabel }}</button>
+    </div>
+  </div>
+</div>
