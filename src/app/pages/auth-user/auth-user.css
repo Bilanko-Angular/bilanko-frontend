@@ -1,191 +1,139 @@
-/* ============================================================
-   AUTH LAYOUT — Split view (décoration gauche / formulaire droite)
-   Branché sur les variables CSS de theme.css
-   ============================================================ */
+/* auth.component.css — s'appuie sur theme.css, ne redéfinit aucune couleur en dur */
 
-/* -------- Conteneur global -------- */
 .auth-container {
   display: flex;
   min-height: 100vh;
+  background-color: var(--color-background);
 }
 
-/* ====================================================
-   Panneau gauche — décoration Bilanko
-   ==================================================== */
+/* ---------- Panneau gauche : décoration ---------- */
 .auth-decoration {
-  width: 42%;
-  min-width: 320px;
-  background: linear-gradient(
-    145deg,
-    var(--bilanko-vert-fonce)    0%,
-    var(--bilanko-vert-bilanko)  55%,
-    #7FCBA3                      100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 2.5rem;
   position: relative;
+  flex: 1 1 45%;
+  display: flex;
+  align-items: flex-end;
   overflow: hidden;
-  flex-shrink: 0;
+  color: var(--color-on-brand);
 }
 
-/* Halo lumineux en overlay */
-.auth-decoration::before {
-  content: '';
+.auth-decoration-bg {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 15% 85%, rgba(255,255,255,0.12) 0%, transparent 55%),
-    radial-gradient(circle at 85% 15%, rgba(255,255,255,0.08) 0%, transparent 50%);
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Grille de points décoratifs */
-.auth-decoration::after {
-  content: '';
+/* Voile en vert Bilanko, plus dense en bas pour la lisibilité du texte,
+   plutôt qu'un aplat plat façon "template IA" */
+.auth-decoration-overlay {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
-  background-size: 28px 28px;
-  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(43, 43, 40, 0.35) 0%,
+    rgba(46, 95, 69, 0.55) 55%,
+    rgba(46, 95, 69, 0.92) 100%
+  );
 }
 
 .auth-decoration-content {
   position: relative;
   z-index: 1;
-  text-align: center;
-  max-width: 380px;
+  padding: 3rem 3rem 3.5rem;
+  max-width: 32rem;
 }
 
-/* Illustration flottante */
-.auth-illustration {
-  width: 72%;
-  max-width: 260px;
-  margin-bottom: 2rem;
-  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.2));
-  animation: floatIllustration 4.5s ease-in-out infinite;
-}
-
-@keyframes floatIllustration {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-12px); }
-}
-
-/* Logo marque */
-.auth-brand-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 2rem;
-  padding: 0.5rem 1rem;
-  background: rgba(255,255,255,0.12);
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.2);
-  backdrop-filter: blur(4px);
-}
-
-.auth-brand-icon {
-  width: 32px;
-  height: 32px;
-  background: rgba(255,255,255,0.25);
-  border-radius: 8px;
+.auth-brand {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: #fff;
+  gap: .6rem;
+  margin-bottom: 2.5rem;
 }
 
-.auth-brand-text {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #fff;
-  letter-spacing: -0.3px;
+.auth-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-base);
+  background-color: var(--color-on-brand);
+  color: var(--color-primary-active);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+}
+
+.auth-brand-name {
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.25rem;
+  letter-spacing: .01em;
 }
 
 .auth-decoration-title {
-  color: #fff;
-  font-size: 1.65rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.5px;
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.85rem;
   line-height: 1.25;
+  margin-bottom: .9rem;
 }
 
 .auth-decoration-text {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-weight: var(--font-weight-regular);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
   margin-bottom: 2.25rem;
 }
 
-/* Badges features */
-.auth-decoration-features {
+/* Liste façon "lignes de registre" plutôt que des cartes flottantes,
+   cohérent avec la charte (séparateurs fins, pas d'ombres) */
+.auth-feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.auth-feature-item {
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
   align-items: center;
+  gap: .75rem;
+  padding: .7rem 0;
+  font-size: .95rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
-.auth-feature {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.875rem;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.45rem 1.1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(6px);
-  transition: all 0.2s ease;
-  width: fit-content;
+.auth-feature-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
-.auth-feature:hover {
-  background: rgba(255, 255, 255, 0.18);
-  transform: translateX(5px);
+.auth-feature-item .material-icons {
+  font-size: 1.15rem;
+  color: var(--bilanko-ocre-marche, #C98A3D);
 }
 
-.auth-feature .material-icons {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.9);
-}
-
-/* ====================================================
-   Panneau droite — formulaire
-   ==================================================== */
+/* ---------- Panneau droit : formulaire ---------- */
 .auth-form-panel {
-  flex: 1;
+  flex: 1 1 60%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem 2rem;
   background-color: var(--color-background);
-  overflow-y: auto;
 }
 
 .auth-form-wrapper {
   width: 100%;
-  max-width: 460px;
+  max-width: 26rem;
 }
 
-/* ====================================================
-   Responsive
-   ==================================================== */
+/* ---------- Responsive : le panneau gauche disparaît sous 992px ---------- */
 @media (max-width: 991.98px) {
   .auth-decoration {
     display: none;
   }
-}
-
-@media (max-width: 767.98px) {
-  .auth-container {
-    min-height: 100vh;
-  }
 
   .auth-form-panel {
-    padding: 1.75rem 1.25rem;
-    align-items: flex-start;
+    flex: 1 1 100%;
   }
 }

@@ -1,45 +1,44 @@
 <section class="auth-container">
 
-  <!-- ===== Panneau gauche – Décoration ===== -->
   <div class="auth-decoration">
-    <div class="auth-decoration-content">
+    <img
+      src="assets/images/conexion/conexion.jpeg"
+      alt="Commerçant utilisant Bilanko dans sa boutique"
+      class="auth-decoration-bg"
+    >
+    <div class="auth-decoration-overlay"></div>
 
-      <!-- Logo -->
-      <div class="auth-brand-logo">
-        <div class="auth-brand-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/>
-          </svg>
-        </div>
-        <span class="auth-brand-text">Bilanko</span>
+    <div class="auth-decoration-content">
+      <div class="auth-brand">
+        <span class="auth-brand-mark">B</span>
+        <span class="auth-brand-name">Bilanko</span>
       </div>
 
-      <!-- Illustration -->
-      <img src="assets/images/authUser.svg" alt="Illustration authentification" class="auth-illustration">
-
-      <h2 class="auth-decoration-title">Gérez votre activité<br>en toute simplicité</h2>
+      <h2 class="auth-decoration-title">
+        Votre commerce, suivi comme un vrai registre
+      </h2>
       <p class="auth-decoration-text">
-        Catalogue, ventes, charges et documents — tout centralisé pour piloter votre business.
+        Stock, ventes, charges et marges au quotidien — et un dossier prêt
+        pour votre banque en quelques clics.
       </p>
 
-      <div class="auth-decoration-features">
-        <div class="auth-feature">
+      <ul class="auth-feature-list">
+        <li class="auth-feature-item">
           <span class="material-icons">inventory_2</span>
-          <span>Catalogue produits</span>
-        </div>
-        <div class="auth-feature">
-          <span class="material-icons">point_of_sale</span>
-          <span>Suivi des ventes</span>
-        </div>
-        <div class="auth-feature">
-          <span class="material-icons">receipt_long</span>
-          <span>Gestion des charges</span>
-        </div>
-      </div>
+          <span>Suivi du stock et des ventes</span>
+        </li>
+        <li class="auth-feature-item">
+          <span class="material-icons">trending_up</span>
+          <span>Calcul automatique des marges</span>
+        </li>
+        <li class="auth-feature-item">
+          <span class="material-icons">description</span>
+          <span>Relevé et bilan générés en PDF</span>
+        </li>
+      </ul>
     </div>
   </div>
 
-  <!-- ===== Panneau droit – Formulaire ===== -->
   <div class="auth-form-panel">
     <div class="auth-form-wrapper">
       <ng-content />
