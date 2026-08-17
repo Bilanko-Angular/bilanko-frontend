@@ -1,0 +1,168 @@
+/* ============================================================
+   ASIDE — Bilanko
+   Sidebar de navigation, utilise les variables de theme.css
+   ============================================================ */
+
+aside.bk-aside {
+  width: 256px;
+  min-width: 256px;
+  height: 100vh;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* -------- Brand / Logo -------- */
+.bk-aside__brand {
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.bk-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-base);
+  background-color: var(--color-primary);
+  color: var(--color-on-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.bk-brand-name {
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.bk-brand-tagline {
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+}
+
+/* -------- Séparateur -------- */
+.bk-aside__sep {
+  height: 1px;
+  background-color: var(--color-border);
+  flex-shrink: 0;
+}
+
+/* -------- Label de section -------- */
+.bk-aside__section-label {
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* -------- Items de navigation -------- */
+.bk-nav-item {
+  text-decoration: none;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-base);
+  transition: background 0.15s ease, color 0.15s ease;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.bk-nav-item:hover {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border-color: transparent;
+}
+
+.bk-nav-item.active {
+  background-color: var(--color-primary);
+  color: var(--color-on-brand);
+  font-weight: var(--font-weight-medium);
+  border-color: transparent;
+}
+
+.bk-nav-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  opacity: 0.8;
+  transition: opacity 0.15s ease;
+}
+
+.bk-nav-item:hover .bk-nav-item__icon,
+.bk-nav-item.active .bk-nav-item__icon {
+  opacity: 1;
+}
+
+.bk-nav-item__label {
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  flex-grow: 1;
+}
+
+/* Indicateur actif (petit point) */
+.bk-nav-item__indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-on-brand);
+  opacity: 0.7;
+}
+
+/* Badge sur item (ex: nb de ventes) */
+.bk-nav-badge {
+  font-size: 0.65rem;
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border-radius: 999px;
+  padding: 1px 7px;
+  font-weight: var(--font-weight-bold);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.bk-nav-item:hover .bk-nav-badge,
+.bk-nav-item.active .bk-nav-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: inherit;
+}
+
+/* -------- Footer de l'aside -------- */
+.bk-aside__footer {
+  flex-shrink: 0;
+  min-height: 60px;
+}
+
+.bk-avatar--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.bk-aside__logout-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-base);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s ease, background 0.15s ease;
+  border: 1px solid transparent !important;
+}
+
+.bk-aside__logout-btn:hover {
+  color: var(--color-negative);
+  background-color: var(--color-negative-subtle) !important;
+  border-color: transparent !important;
+}

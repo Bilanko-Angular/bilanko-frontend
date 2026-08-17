@@ -1,0 +1,10 @@
+main{
+  display: flex;
+  flex-direction: row;
+}
+
+.main-section{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
