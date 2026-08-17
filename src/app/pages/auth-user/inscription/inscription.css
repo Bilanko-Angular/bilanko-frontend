@@ -3,7 +3,7 @@
    Branché sur les variables CSS de theme.css + Bootstrap 5
    ============================================================ */
 
-/* -------- Logo mobile (visible seulement quand panneau gauche masqué) -------- */
+/* -------- Logo mobile -------- */
 .bk-auth-logo-sm {
   display: none;
   width: 40px;
@@ -16,9 +16,7 @@
 }
 
 @media (max-width: 991.98px) {
-  .bk-auth-logo-sm {
-    display: flex;
-  }
+  .bk-auth-logo-sm { display: flex; }
 }
 
 /* -------- Titres -------- */
@@ -103,7 +101,7 @@
   border: none !important;
   color: var(--color-text-muted);
   padding: 0 0.65rem;
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .bk-input-group:focus-within .bk-input-icon {
@@ -131,7 +129,7 @@
   font-size: 0.875rem;
 }
 
-/* -------- Messages d'erreur -------- */
+/* -------- Erreurs -------- */
 .bk-field-error {
   display: flex;
   align-items: center;
@@ -141,17 +139,21 @@
   color: var(--color-negative);
 }
 
-/* -------- Checklist mot de passe -------- */
+/* -------- Checklist mot de passe (spécifique à l'inscription) -------- */
 .bk-password-checklist {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
+  gap: 0.4rem 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
 }
 
 .bk-pwd-rule {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   font-size: 0.75rem;
   color: var(--color-text-muted);
   transition: color 0.15s ease;
@@ -213,7 +215,7 @@
   font-size: 1.1rem;
 }
 
-/* -------- Pied du formulaire -------- */
+/* -------- Pied de formulaire -------- */
 .bk-auth-footer-text {
   font-size: 0.875rem;
   color: var(--color-text-muted);

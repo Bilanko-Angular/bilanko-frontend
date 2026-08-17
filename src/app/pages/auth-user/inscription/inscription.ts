@@ -43,6 +43,7 @@ export class Inscription {
   hasLowerCase():    boolean { return /[a-z]/.test(this.password.value || ''); }
   hasNumber():       boolean { return /[0-9]/.test(this.password.value || ''); }
   hasSpecialChar():  boolean { return /[#?!@$%^&*-]/.test(this.password.value || ''); }
+  allCriteriaMet():  boolean { return this.hasMinLength() && this.hasUpperCase() && this.hasLowerCase() && this.hasNumber() && this.hasSpecialChar(); }
 
   /* ── Actions ─────────────────────────────────────────── */
   loginWithGoogle(): void {

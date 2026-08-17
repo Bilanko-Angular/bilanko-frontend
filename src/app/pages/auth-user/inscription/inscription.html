@@ -45,7 +45,8 @@
             id="name"
             class="form-control bk-input"
             placeholder="Votre nom"
-            formControlName="nom">
+            formControlName="nom"
+            autocomplete="family-name">
         </div>
         @if (nom.touched && nom.hasError('required')) {
           <div class="bk-field-error">Le nom est requis.</div>
@@ -63,7 +64,8 @@
             id="subname"
             class="form-control bk-input"
             placeholder="Votre prénom"
-            formControlName="prenom">
+            formControlName="prenom"
+            autocomplete="given-name">
         </div>
       </div>
     </div>
@@ -82,7 +84,8 @@
           id="email"
           class="form-control bk-input"
           placeholder="exemple&#64;email.com"
-          formControlName="email">
+          formControlName="email"
+          autocomplete="email">
       </div>
       @if (email.touched && email.hasError('required')) {
         <div class="bk-field-error">L'email est requis.</div>
@@ -94,9 +97,16 @@
 
     <!-- Mot de passe -->
     <div>
-      <label for="password" class="bk-form-label">
-        Mot de passe <span class="text-danger">*</span>
-      </label>
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <label for="password" class="bk-form-label mb-0">
+          Mot de passe <span class="text-danger">*</span>
+        </label>
+        @if (password.value) {
+          <span class="bk-auth-link" style="font-size: 0.8rem; cursor: default;">
+            {{ allCriteriaMet() ? '✓ Fort' : 'Critères ci-dessous' }}
+          </span>
+        }
+      </div>
       <div class="input-group bk-input-group">
         <span class="input-group-text bk-input-icon">
           <span class="material-icons fs-6">lock</span>
@@ -106,7 +116,8 @@
           id="password"
           class="form-control bk-input"
           placeholder="Créez un mot de passe fort"
-          formControlName="password">
+          formControlName="password"
+          autocomplete="new-password">
       </div>
 
       <!-- Checklist mot de passe -->
@@ -114,7 +125,7 @@
         <div class="bk-password-checklist mt-2">
           <span class="bk-pwd-rule" [class.ok]="hasMinLength()">
             <span class="material-icons">{{ hasMinLength() ? 'check_circle' : 'radio_button_unchecked' }}</span>
-            8 caractères
+            8 car.
           </span>
           <span class="bk-pwd-rule" [class.ok]="hasUpperCase()">
             <span class="material-icons">{{ hasUpperCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
@@ -130,7 +141,7 @@
           </span>
           <span class="bk-pwd-rule" [class.ok]="hasSpecialChar()">
             <span class="material-icons">{{ hasSpecialChar() ? 'check_circle' : 'radio_button_unchecked' }}</span>
-            Caractère spécial
+            Spécial
           </span>
         </div>
       }
@@ -150,7 +161,8 @@
           id="confirmPassword"
           class="form-control bk-input"
           placeholder="Répétez votre mot de passe"
-          formControlName="confirmPassword">
+          formControlName="confirmPassword"
+          autocomplete="new-password">
       </div>
       @if (confirmPassword.touched && confirmPassword.value && password.value && confirmPassword.value !== password.value) {
         <div class="bk-field-error">
