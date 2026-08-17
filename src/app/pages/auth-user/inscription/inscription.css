@@ -1,6 +1,4 @@
-/* ===== Inscription Form Styling ===== */
 
-/* Focus styles for input groups */
 .form-control:focus {
   box-shadow: none;
   border-color: var(--primary, #8d4b00);
@@ -84,4 +82,11 @@
 .auth-link:hover {
   color: #b15f00;
   text-decoration: underline;
+}
+.password-checklist{
+  display: flex;
+  flex-wrap: wrap;
+  justify-items: stretch;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
