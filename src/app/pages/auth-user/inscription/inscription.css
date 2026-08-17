@@ -1,0 +1,87 @@
+/* ===== Inscription Form Styling ===== */
+
+/* Focus styles for input groups */
+.form-control:focus {
+  box-shadow: none;
+  border-color: var(--primary, #8d4b00);
+}
+
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .form-control {
+  border-color: var(--primary, #8d4b00);
+}
+
+.input-group-text {
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  border-radius: 10px 0 0 10px;
+}
+
+.input-group:focus-within .input-group-text {
+  background-color: rgba(141, 75, 0, 0.04);
+}
+
+.form-control {
+  transition: border-color 0.2s ease;
+  border-radius: 0 10px 10px 0;
+  padding: 0.65rem 0.75rem;
+}
+
+/* Labels */
+.form-label {
+  font-size: 0.88rem;
+  color: #444;
+  margin-bottom: 0.35rem;
+}
+
+/* Submit button */
+.custom-submit-btn {
+  transition: all 0.3s ease;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px !important;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-submit-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(141, 75, 0, 0.25) !important;
+}
+
+.custom-submit-btn:not(:disabled):hover::before {
+  opacity: 1;
+}
+
+.custom-submit-btn:disabled {
+  opacity: 0.5;
+}
+
+/* Material icons alignment */
+.material-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Divider with text */
+.auth-link {
+  color: var(--primary, #8d4b00);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.auth-link:hover {
+  color: #b15f00;
+  text-decoration: underline;
+}

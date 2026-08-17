@@ -1,0 +1,89 @@
+<app-auth-user>
+  <div class="mb-4">
+    <h2 class="fw-bold mb-1" style="color: var(--primary); font-size: 1.75rem;">Créer un compte</h2>
+    <p class="text-muted mb-0">Rejoignez notre communauté gourmande </p>
+  </div>
+
+  <form (ngSubmit)="soumettre()" class="d-flex flex-column gap-3 needs-validation" [formGroup]="inscriptionForm">
+    <div class="row g-3">
+      <div class="col-12 col-sm-6">
+        <label for="name" class="form-label fw-semibold">Nom <span class="text-danger">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text bg-light text-muted border-end-0"><span class="material-icons fs-5">person</span></span>
+          <input type="text" id="name" name="nom" class="form-control border-start-0 ps-0" placeholder="Votre nom" required formGroupName="nom">
+        </div>
+      </div>
+      
+      <div class="col-12 col-sm-6">
+        <label for="subname" class="form-label fw-semibold">Prénom</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light text-muted border-end-0"><span class="material-icons fs-5">person_outline</span></span>
+          <input type="text" id="subname" name="subname" class="form-control border-start-0 ps-0" placeholder="Votre prénom" formGroupName="prenom">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+      <div class="input-group">
+        <span class="input-group-text bg-light text-muted border-end-0"><span class="material-icons fs-5">email</span></span>
+        <input type="email" id="email" name="email" class="form-control border-start-0 ps-0" placeholder="exemple@email.com" required formGroupName="email">
+      </div>
+    </div>
+
+<div>
+  <label for="password" class="form-label fw-semibold">Mot de passe <span class="text-danger">*</span></label>
+  <div class="input-group">
+    <span class="input-group-text bg-light text-muted border-end-0"><span class="material-icons fs-5">lock</span></span>
+    <input type="password" id="password" name="password" class="form-control border-start-0 ps-0" placeholder="Entrée votre mot de passe" required formControlName="password">
+  </div>
+
+    <div class="password-checklist mt-2">
+      <small class="d-flex align-items-center gap-1" [class.text-success]="hasMinLength()" [class.text-muted]="!hasMinLength()">
+        <span class="material-icons fs-6">{{ hasMinLength() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+        8 caractères minimum
+      </small>
+      <small class="d-flex align-items-center gap-1" [class.text-success]="hasUpperCase()" [class.text-muted]="!hasUpperCase()">
+        <span class="material-icons fs-6">{{ hasUpperCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+        Une majuscule
+      </small>
+      <small class="d-flex align-items-center gap-1" [class.text-success]="hasLowerCase()" [class.text-muted]="!hasLowerCase()">
+        <span class="material-icons fs-6">{{ hasLowerCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+        Une minuscule
+      </small>
+      <small class="d-flex align-items-center gap-1" [class.text-success]="hasNumber()" [class.text-muted]="!hasNumber()">
+        <span class="material-icons fs-6">{{ hasNumber() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+        Un chiffre
+      </small>
+      <small class="d-flex align-items-center gap-1" [class.text-success]="hasSpecialChar()" [class.text-muted]="!hasSpecialChar()">
+        <span class="material-icons fs-6">{{ hasSpecialChar() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+        Un caractère spécial (#?!&#64;$%^&amp;*-)
+      </small>
+    </div>
+  </div>
+
+    <div>
+      <label for="confirmPassword" class="form-label fw-semibold">Confirmer le mot de passe <span class="text-danger">*</span></label>
+      <div class="input-group">
+        <span class="input-group-text bg-light text-muted border-end-0"><span class="material-icons fs-5">lock_outline</span></span>
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control border-start-0 ps-0" placeholder="Confirmez votre mot de passe" required formGroupName="confirmPassword">
+      </div>
+      @if (confirmPassword && password && confirmPassword !== password) {
+        <div class="form-text text-danger mt-1 d-flex align-items-center">
+          <span class="material-icons fs-6 me-1">error_outline</span> Les mots de passe ne correspondent pas.
+        </div>
+      }
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg mt-2 w-100 shadow-sm d-flex justify-content-center align-items-center gap-2 custom-submit-btn" [disabled]="
+        inscriptionForm.invalid
+        ">
+      <span>Créer mon compte</span>
+      <span class="material-icons">arrow_forward</span>
+    </button>
+
+    <p class="text-center text-muted mt-2 mb-0" style="font-size: 0.9rem;">
+      Déjà un compte ? <a href="/connexion" class="auth-link">Se connecter</a>
+    </p>
+  </form>
+</app-auth-user>

@@ -1,0 +1,43 @@
+<app-auth-user>
+  <div class="mb-4">
+    <h2 class="fw-bold mb-1" style="color: var(--primary); font-size: 1.75rem;">Se connecter</h2>
+    <p class="text-muted mb-0">Connecter vus rapidement pour découvrir les nouveautés des chefs</p>
+  </div>
+
+  <form (ngSubmit)="soumettre($event)" class="d-flex flex-column gap-3 needs-validation" [formGroup]="connectionForm" novalidate>
+    <div>
+      <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+      <div class="input-group">
+        <span class="input-group-text bg-light text-muted border-end-0"><span class="material-icons fs-5" >email</span></span>
+        <input type="email" id="email" name="email" class="form-control border-start-0 ps-0" placeholder="exemple@email.com" required formControlName="email">
+      </div>
+      @if (email.touched && email.invalid) {   
+        @if (email.hasError('required')) {     
+          <small class="text-danger mt-1">L'email est requis.</small>   
+        } 
+        @else if (email.hasError('email')) {     
+          <small class="text-danger mt-1">Le format de l'email est invalide.</small>   
+        } 
+      } 
+    </div>
+
+    <div>
+      <label for="password" class="form-label fw-semibold">Mot de passe <span class="text-danger">*</span></label>
+      <div class="input-group">
+        <span class="input-group-text bg-light text-muted border-end-0"><span class="material-icons fs-5">lock</span></span>
+        <input type="password" id="password" name="password" class="form-control border-start-0 ps-0" placeholder="Entrée votre mot de passe" required formControlName="password">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg mt-2 w-100 shadow-sm d-flex justify-content-center align-items-center gap-2 custom-submit-btn" [disabled]="
+          connectionForm.invalid
+        ">
+      <span>Créer mon compte</span>
+      <span class="material-icons">arrow_forward</span>
+    </button>
+
+    <p class="text-center text-muted mt-2 mb-0" style="font-size: 0.9rem;">
+      Vous n'avez pas de compte ? <a href="/inscription" class="auth-link">S'inscrire</a>
+    </p>
+  </form>
+</app-auth-user>
