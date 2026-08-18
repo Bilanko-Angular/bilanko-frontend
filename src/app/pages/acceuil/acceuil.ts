@@ -5,7 +5,7 @@ import { Template } from "../../components/shared/template/template";
   selector: 'app-acceuil',
   imports: [Template],
   templateUrl: './acceuil.html',
-  styleUrl: './acceuil.css',
+  styleUrls: ['./acceuil.css'],
 })
 export class Acceuil {
 
