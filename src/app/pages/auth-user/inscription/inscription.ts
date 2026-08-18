@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 import { RouterLink } from '@angular/router';
 import { User } from '../../../models/person';
 import { AuthUser } from "../auth-user";
+import { AuthApiService } from '../../../service/api/auth/auth-api.service';
+
 
 @Component({
   selector: 'app-inscription',
@@ -12,13 +14,13 @@ import { AuthUser } from "../auth-user";
 })
 export class Inscription {
   private readonly fb = inject(FormBuilder);
-
+  private authApiService = inject(AuthApiService);
   readonly inscriptionForm = this.fb.group(
     {
       nom:             ['', [Validators.required, Validators.minLength(3)]],
       prenom:          [''],
       email:           ['', [Validators.required, Validators.email]],
-      password:        ['', [Validators.required, Validators.pattern("(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}")]],
+      password:        ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*\-]).{8,}$/)]],
       confirmPassword: ['',  Validators.required],
     },
     { validators: this.passwordsMatchValidator }
@@ -52,7 +54,12 @@ export class Inscription {
   }
 
   soumettre(): void {
-    if (this.inscriptionForm.invalid) return;
+    console.log("test")
+    if (this.inscriptionForm.invalid) {
+      this.inscriptionForm.markAllAsTouched(); // affiche les erreurs si l'utilisateur clique alors que c'est invalide
+      return;
+    }
+
     const formValue = this.inscriptionForm.value;
     const user: User = {
       nom:    formValue.nom    ?? '',
@@ -60,7 +67,6 @@ export class Inscription {
       email:  formValue.email  ?? '',
       password: formValue.password ?? '',
     };
-    console.log('Inscription :', user);
-    // TODO: appel au service d'authentification
+    this.authApiService.register(user);
   }
 }
