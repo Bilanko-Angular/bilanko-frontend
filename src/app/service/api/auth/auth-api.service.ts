@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment.development';
-import { UserRegisterDto } from '../../../models/DTO/UserDto';
+import { environment } from '../../../../environments/environment';
 import axios from 'axios';
 import { User } from '../../../models/person';
 import { UserMapper } from '../../../mapper/UserMapper';
