@@ -1,0 +1,284 @@
+/* ------------------------------------------------------------
+   1. Police — DM Sans (import à garder en tête de fichier)
+   ------------------------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap');
+
+/* ------------------------------------------------------------
+   2. Variables de marque — mode clair (valeurs de la charte)
+   ------------------------------------------------------------ */
+:root {
+  /* Couleurs brutes de la charte */
+  --bilanko-vert-bilanko: #63B78D;   /* marque, structure UI */
+  --bilanko-vert-fonce:   #2E5F45;   /* montant positif (signal financier) */
+  --bilanko-ocre-marche:  #C98A3D;   /* accent chaud, unique, avec parcimonie */
+  --bilanko-fond:         #FFFFFF;
+  --bilanko-alerte-rouge: #B23B3B;   /* montant négatif (signal financier) */
+  --bilanko-anthracite:   #2B2B28;
+
+  /* Nuances dérivées (hover / active / subtle) — calculées manuellement,
+     à ajuster si la charte fournit un jour des teintes officielles */
+  --bilanko-vert-bilanko-hover:  #549B78;
+  --bilanko-vert-bilanko-active: #468368;
+  --bilanko-vert-bilanko-subtle: #E6F4EE;
+  --bilanko-ocre-marche-subtle:  #F7EADA;
+  --bilanko-alerte-rouge-subtle: #F7E4E4;
+  --bilanko-vert-fonce-subtle:   #E4EEE8;
+
+  /* Rôles sémantiques — c'est CE NIVEAU qu'on branche sur Tailwind/Bootstrap */
+  --color-primary:            var(--bilanko-vert-bilanko);
+  --color-primary-hover:      var(--bilanko-vert-bilanko-hover);
+  --color-primary-active:     var(--bilanko-vert-bilanko-active);
+  --color-primary-subtle:     var(--bilanko-vert-bilanko-subtle);
+
+  --color-positive:         var(--bilanko-vert-fonce);
+  --color-positive-subtle:  var(--bilanko-vert-fonce-subtle);
+  --color-negative:         var(--bilanko-alerte-rouge);
+  --color-negative-subtle:  var(--bilanko-alerte-rouge-subtle);
+  --color-accent:           var(--bilanko-ocre-marche);
+  --color-accent-subtle:    var(--bilanko-ocre-marche-subtle);
+
+  --color-background:       var(--bilanko-fond);
+  --color-surface:          #FBFBF9;   /* cartes/inputs, très légèrement teinté */
+  --color-border:           #E4E2DC;   /* lignes de registre */
+  --color-text:             var(--bilanko-anthracite);
+  --color-text-muted:       #6B6B65;
+  --color-on-brand:         #FFFFFF;   /* texte sur fond --color-primary */
+
+  /* Typo */
+  --font-family-base: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;   /* montants, chiffres tabulaires */
+  --font-weight-bold: 700;     /* titres */
+  --font-feature-tabular: "tnum" 1, "lnum" 1;
+
+  /* Forme */
+  --radius-base: 5px;   /* 4–6px selon la charte : sobre, peu ludique */
+  --radius-stamp: 50%;  /* le tampon reste circulaire */
+}
+
+/* ------------------------------------------------------------
+   3. Mode sombre
+   Déclenché soit par la préférence système, soit par un attribut
+   manuel data-theme="dark" sur <html> (les deux se cumulent :
+   l'attribut manuel a priorité).
+   ------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary:            #7FCBA3;
+    --color-primary-hover:      #93D4B2;
+    --color-primary-active:     #6BB893;
+    --color-primary-subtle:     #234534;
+
+    --color-positive:         #5FA97D;
+    --color-positive-subtle:  #1E3A2A;
+    --color-negative:         #E08080;
+    --color-negative-subtle:  #402323;
+    --color-accent:           #DDA25E;
+    --color-accent-subtle:    #3D2F1E;
+
+    --color-background:       #1E1E1B;
+    --color-surface:          #2B2B28;
+    --color-border:           #3E3E38;
+    --color-text:             #F4F3EF;
+    --color-text-muted:       #B4B2AA;
+    --color-on-brand:         #1E1E1B;
+  }
+}
+
+[data-theme="dark"] {
+  --color-primary:            #7FCBA3;
+  --color-primary-hover:      #93D4B2;
+  --color-primary-active:     #6BB893;
+  --color-primary-subtle:     #234534;
+
+  --color-positive:         #5FA97D;
+  --color-positive-subtle:  #1E3A2A;
+  --color-negative:         #E08080;
+  --color-negative-subtle:  #402323;
+  --color-accent:           #DDA25E;
+  --color-accent-subtle:    #3D2F1E;
+
+  --color-background:       #1E1E1B;
+  --color-surface:          #2B2B28;
+  --color-border:           #3E3E38;
+  --color-text:             #F4F3EF;
+  --color-text-muted:       #B4B2AA;
+  --color-on-brand:         #1E1E1B;
+}
+
+[data-theme="light"] {
+  /* permet de forcer le clair même si le système est en sombre */
+  --color-primary:            var(--bilanko-vert-bilanko);
+  --color-primary-hover:      var(--bilanko-vert-bilanko-hover);
+  --color-primary-active:     var(--bilanko-vert-bilanko-active);
+  --color-primary-subtle:     var(--bilanko-vert-bilanko-subtle);
+  --color-positive:         var(--bilanko-vert-fonce);
+  --color-positive-subtle:  var(--bilanko-vert-fonce-subtle);
+  --color-negative:         var(--bilanko-alerte-rouge);
+  --color-negative-subtle:  var(--bilanko-alerte-rouge-subtle);
+  --color-accent:           var(--bilanko-ocre-marche);
+  --color-accent-subtle:    var(--bilanko-ocre-marche-subtle);
+  --color-background:       var(--bilanko-fond);
+  --color-surface:          #FBFBF9;
+  --color-border:           #E4E2DC;
+  --color-text:             var(--bilanko-anthracite);
+  --color-text-muted:       #6B6B65;
+  --color-on-brand:         #FFFFFF;
+}
+
+/* ------------------------------------------------------------
+   4. Base — appliquée globalement
+   ------------------------------------------------------------ */
+body {
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-regular);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color .15s ease, color .15s ease;
+}
+
+h1, h2, h3, h4, h5, h6,
+.bilanko-title {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Montants — chiffres tabulaires alignés à droite dans les listes */
+.bilanko-amount {
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: var(--font-feature-tabular);
+  text-align: right;
+}
+.bilanko-amount--positive { color: var(--color-positive); }
+.bilanko-amount--negative { color: var(--color-negative); }
+
+/* Lignes de registre — séparateurs fins, pas de cartes flottantes/ombres */
+.bilanko-ledger-list > * + * {
+  border-top: 1px solid var(--color-border);
+}
+.bilanko-ledger-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem 0;
+}
+
+/* Angles peu arrondis, cohérents partout */
+.bilanko-radius,
+button, input, select, textarea, .card, .btn {
+  border-radius: var(--radius-base);
+}
+
+/* Le tampon — élément signature, réservé aux documents officiels */
+.bilanko-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-stamp);
+  border: 2px solid currentColor;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+.bilanko-stamp--complete { color: var(--color-positive); }
+.bilanko-stamp--incomplete { color: var(--color-negative); }
+
+/* ============================================================
+   5. Surcharge Tailwind CSS
+   ============================================================ */
+
+/* --- Tailwind v4 (config CSS-first) ---
+   Si le projet utilise Tailwind v4, coller ce bloc @theme dans le
+   fichier CSS principal (celui qui contient @import "tailwindcss";).
+   Il fait pointer la palette "primary" de Tailwind sur nos variables :
+
+   @theme {
+     --color-primary:         var(--color-primary);
+     --color-primary-hover:   var(--color-primary-hover);
+     --color-primary-active:  var(--color-primary-active);
+     --color-primary-subtle:  var(--color-primary-subtle);
+     --color-positive:        var(--color-positive);
+     --color-negative:        var(--color-negative);
+     --color-accent:          var(--color-accent);
+     --font-sans:              var(--font-family-base);
+     --radius-DEFAULT:         var(--radius-base);
+   }
+
+   Ensuite les classes bg-primary, text-primary, border-primary,
+   ring-primary etc. utilisent automatiquement le Vert Bilanko
+   (et sa version sombre).
+*/
+
+/* --- Tailwind v3 (tailwind.config.js) ---
+   theme: {
+     extend: {
+       colors: {
+         primary: {
+           DEFAULT: 'var(--color-primary)',
+           hover:   'var(--color-primary-hover)',
+           active:  'var(--color-primary-active)',
+           subtle:  'var(--color-primary-subtle)',
+         },
+         positive: 'var(--color-positive)',
+         negative: 'var(--color-negative)',
+         accent:   'var(--color-accent)',
+       },
+       fontFamily: { sans: ['DM Sans', 'sans-serif'] },
+       borderRadius: { DEFAULT: 'var(--radius-base)' },
+     }
+   }
+
+   Filet de sécurité si vous ne pouvez pas toucher au config (classes
+   déjà compilées en dur) : surcharge directe des utilitaires générés.
+*/
+.bg-primary   { background-color: var(--color-primary) !important; }
+.text-primary { color: var(--color-primary) !important; }
+.border-primary { border-color: var(--color-primary) !important; }
+.ring-primary   { --tw-ring-color: var(--color-primary) !important; }
+.hover\:bg-primary:hover { background-color: var(--color-primary-hover) !important; }
+
+/* ============================================================
+   6. Surcharge Bootstrap 5.3+ (variables CSS natives)
+   ============================================================ */
+:root {
+  --bs-primary:            var(--color-primary);
+  --bs-primary-rgb:        99, 183, 141; /* équivalent RGB de #63B78D pour les utilitaires rgba() */
+  --bs-primary-text-emphasis: var(--color-primary-active);
+  --bs-primary-bg-subtle:  var(--color-primary-subtle);
+  --bs-primary-border-subtle: var(--color-primary);
+
+  --bs-success:            var(--color-positive);
+  --bs-danger:              var(--color-negative);
+  --bs-warning:              var(--color-accent);
+
+  --bs-body-font-family: var(--font-family-base);
+  --bs-body-bg:          var(--color-background);
+  --bs-body-color:       var(--color-text);
+  --bs-border-radius:    var(--radius-base);
+}
+
+/* En mode sombre, le RGB de --bs-primary-rgb doit suivre --color-primary
+   (127,203,163 pour #7FCBA3) : Bootstrap seul ne recalcule pas le RGB
+   depuis une variable, donc on le redéfinit dans les mêmes blocs. */
+@media (prefers-color-scheme: dark) {
+  :root { --bs-primary-rgb: 127, 203, 163; }
+}
+[data-theme="dark"] { --bs-primary-rgb: 127, 203, 163; }
+[data-theme="light"] { --bs-primary-rgb: 99, 183, 141; }
+
+/* Boutons Bootstrap .btn-primary : Bootstrap dérive déjà --bs-btn-*
+   de --bs-primary sur les builds récents ; si le projet utilise un
+   bundle CSS déjà compilé (variables non branchées), ce filet garantit
+   le rendu correct : */
+.btn-primary {
+  --bs-btn-bg: var(--color-primary) !important;
+  --bs-btn-border-color: var(--color-primary) !important;
+  --bs-btn-hover-bg: var(--color-primary-hover) !important;
+  --bs-btn-hover-border-color: var(--color-primary-hover) !important;
+  --bs-btn-active-bg: var(--color-primary-active) !important;
+  --bs-btn-color: var(--color-on-brand) !important;
+}
+.bg-primary   { background-color: var(--color-primary) !important; }
+.text-primary { color: var(--color-primary) !important; }
+.border-primary { border-color: var(--color-primary) !important; }
+.link-primary { color: var(--color-primary) !important; }
