@@ -8,7 +8,7 @@ import { UserMapper } from '../../../mapper/UserMapper';
   providedIn: 'root',
 })
 export class AuthApiService {
-  private apiUrl = environment.baseApiUrl + "auth";
+  private apiUrl = environment.baseApiUrl + "api/auth";
   async register(userData:User){
     const userDto = UserMapper.toRegisterDto(userData);
     axios.post(this.apiUrl+'/signup', userDto)
