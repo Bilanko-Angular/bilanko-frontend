@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-aside',
   imports: [],
   templateUrl: './aside.html',
-  styleUrl: './aside.css',
+  styleUrls: ['./aside.css'],
 })
 export class Aside {
 
