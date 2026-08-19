@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { AuthUser } from "../auth-user";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { User } from '../../../models/person';
+import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 
 @Component({
   selector: 'app-connexion',
@@ -16,6 +18,7 @@ export class Connexion {
     email:    ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
+  private readonly authStore = inject(AuthStoreService);
 
   /* ── Getters ─────────────────────────────────────────── */
   get email()    { return this.connectionForm.controls.email; }
@@ -27,9 +30,19 @@ export class Connexion {
     console.log('Connexion avec Google');
   }
 
-  soumettre(event: Event): void {
+  async soumettre(event: Event) {
     if (this.connectionForm.invalid) return;
-    console.log('Connexion :', this.connectionForm.value);
-    // TODO: appel au service d'authentification
+    const formValue = this.connectionForm.value;
+    const user: User = {
+      email:  formValue.email  ?? '',
+      password: formValue.password ?? '',
+    };
+    try {
+      await this.authStore.login(user);
+      console.log('Connexion réussie ! Token :', this.authStore.token());
+      // Plus tard, tu pourras ajouter une redirection ici avec le Router (ex: this.router.navigate(['/dashboard']))
+    } catch (error) {
+      console.error('Échec de la connexion', error);
+    }
   }
 }
