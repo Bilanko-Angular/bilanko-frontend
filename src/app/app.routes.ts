@@ -32,5 +32,13 @@ export const routes: Routes = [
   {
     path: "inscription",
     component:Inscription
+  },
+  {
+    path:"ventes",
+    component:SalesComponent
+  },
+  {
+    path:"charges",
+    component:ChargesComponent
   }
 ];
