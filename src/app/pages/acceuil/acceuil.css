@@ -1,101 +1,439 @@
+/* ============================================================
+   BILANKO — DASHBOARD
+   Interface professionnelle
+   Utilise les variables de theme.css
+   ============================================================ */
+
+
+/* ============================================================
+   CONTENEUR PRINCIPAL
+   ============================================================ */
+
 .bk-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 22px;
+  width: 100%;
+}
+
+
+/* ============================================================
+   EN-TÊTE
+   ============================================================ */
+
+.bk-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.bk-dashboard__eyebrow {
+  display: inline-block;
+  margin-bottom: 6px;
+
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+
+  color: var(--color-primary);
 }
 
 .bk-dashboard__header h1 {
   margin: 0;
-  font-size: 1.5rem;
+
+  font-size: clamp(1.6rem, 2vw, 2rem);
+  line-height: 1.15;
+
+  font-weight: 700;
+
   color: var(--color-text);
+  letter-spacing: -0.03em;
 }
 
 .bk-dashboard__header p {
-  margin: 4px 0 0;
+  margin: 7px 0 0;
+
   color: var(--color-text-muted);
+
+  font-size: 0.92rem;
 }
 
-/* --- Actions rapides --- */
+
+/* ============================================================
+   ACTIONS RAPIDES
+   ============================================================ */
+
 .bk-quick-actions {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
 }
 
+
+/* Carte */
+
 .bk-quick-action {
+  position: relative;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 16px;
-  background-color: var(--color-surface);
+
+  gap: 13px;
+
+  min-height: 78px;
+
+  padding: 14px 16px;
+
+  background: var(--color-surface);
+
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
+
+  border-radius: 7px;
+
   color: var(--color-text);
+
   text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  font-size: 0.85rem;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+
   cursor: pointer;
 }
 
+
+/* Hover */
+
 .bk-quick-action:hover {
+  transform: translateY(-2px);
+
   border-color: var(--color-primary);
-  background-color: var(--color-primary-subtle);
+
+  box-shadow:
+    0 8px 24px rgba(20, 40, 30, 0.08);
 }
 
-.bk-quick-action__icon {
-  font-size: 1.4rem;
-}
+
+/* Première action */
 
 .bk-quick-action--primary {
-  background-color: var(--color-primary);
+  background: var(--color-primary);
+
   border-color: var(--color-primary);
+
   color: var(--color-on-brand);
 }
 
 .bk-quick-action--primary:hover {
-  background-color: var(--color-primary-hover);
+  background: var(--color-primary-hover);
+
+  border-color: var(--color-primary-hover);
 }
 
-.bk-quick-action--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
 
-.bk-quick-action--disabled:hover {
-  border-color: var(--color-border);
-  background-color: var(--color-surface);
-}
+/* Icône */
 
-/* --- KPI --- */
-.bk-kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
+.bk-quick-action__icon {
+  width: 42px;
+  height: 42px;
 
-.bk-kpi-card {
+  flex: 0 0 42px;
+
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 20px;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: var(--color-primary-subtle);
+
+  color: var(--color-primary);
 }
 
-.bk-kpi-card__label {
-  font-size: 0.8rem;
+.bk-quick-action--primary
+.bk-quick-action__icon {
+  background: rgba(255, 255, 255, 0.16);
+
+  color: var(--color-on-brand);
+}
+
+.bk-quick-action__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+
+/* Contenu */
+
+.bk-quick-action__content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+.bk-quick-action__content strong {
+  font-size: 0.86rem;
+
+  font-weight: 650;
+}
+
+.bk-quick-action__content small {
+  font-size: 0.7rem;
+
   color: var(--color-text-muted);
 }
 
+.bk-quick-action--primary
+.bk-quick-action__content small {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+
+/* Flèche */
+
+.bk-quick-action__arrow {
+  font-size: 1.15rem;
+
+  opacity: 0.55;
+
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.bk-quick-action:hover
+.bk-quick-action__arrow {
+  transform: translateX(3px);
+
+  opacity: 1;
+}
+
+
+/* Actions non disponibles */
+
+.bk-quick-action--coming {
+  cursor: default;
+}
+
+.bk-quick-action--coming:hover {
+  transform: none;
+
+  border-color: var(--color-border);
+
+  box-shadow: none;
+}
+
+.bk-coming-badge {
+  position: absolute;
+
+  top: 9px;
+  right: 9px;
+
+  padding: 3px 7px;
+
+  border-radius: 999px;
+
+  background: var(--color-primary-subtle);
+
+  color: var(--color-primary);
+
+  font-size: 0.58rem;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+}
+
+
+/* ============================================================
+   KPI
+   ============================================================ */
+
+.bk-kpi-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+
+/* Carte KPI */
+
+.bk-kpi-card {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  padding: 18px;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: 7px;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.bk-kpi-card:hover {
+  transform: translateY(-2px);
+
+  border-color: color-mix(
+    in srgb,
+    var(--color-primary) 35%,
+    var(--color-border)
+  );
+
+  box-shadow:
+    0 8px 24px rgba(20, 40, 30, 0.06);
+}
+
+
+/* Ligne supérieure */
+
+.bk-kpi-card__top {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+/* Icône KPI */
+
+.bk-kpi-card__icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+}
+
+.bk-kpi-card__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+
+/* Couleurs */
+
+.bk-kpi-card__icon--green {
+  background: var(--color-primary-subtle);
+
+  color: var(--color-primary);
+}
+
+.bk-kpi-card__icon--orange {
+  background: rgba(201, 138, 61, 0.12);
+
+  color: var(--color-accent);
+}
+
+.bk-kpi-card__icon--dark {
+  background: rgba(46, 95, 69, 0.12);
+
+  color: var(--color-positive);
+}
+
+.bk-kpi-card__icon--soft {
+  background: rgba(99, 183, 141, 0.10);
+
+  color: var(--color-primary);
+}
+
+
+/* Petit indicateur */
+
+.bk-kpi-card__trend {
+  padding: 4px 7px;
+
+  border-radius: 999px;
+
+  background: var(--color-background);
+
+  color: var(--color-text-muted);
+
+  font-size: 0.62rem;
+
+  font-weight: 600;
+}
+
+.bk-kpi-card__trend--positive {
+  background: var(--color-primary-subtle);
+
+  color: var(--color-positive);
+}
+
+
+/* Label */
+
+.bk-kpi-card__label {
+  margin-top: 4px;
+
+  font-size: 0.76rem;
+
+  color: var(--color-text-muted);
+}
+
+
+/* Valeur */
+
 .bk-kpi-card__value {
-  font-size: 1.4rem;
-  font-weight: var(--font-weight-bold);
-  font-variant-numeric: tabular-nums;
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 5px;
+
   color: var(--color-text);
+
+  font-size: clamp(1.25rem, 2vw, 1.55rem);
+
+  line-height: 1.15;
+
+  font-weight: 750;
+
+  font-variant-numeric: tabular-nums;
+
+  letter-spacing: -0.025em;
+}
+
+.bk-kpi-card__value small {
+  font-size: 0.65rem;
+
+  font-weight: 600;
+
+  color: var(--color-text-muted);
+
+  letter-spacing: 0;
 }
 
 .bk-kpi-card__value--positive {
@@ -106,105 +444,351 @@
   color: var(--color-negative);
 }
 
-/* --- Colonnes ventes / charges --- */
+
+/* ============================================================
+   COLONNES
+   ============================================================ */
+
 .bk-dashboard__columns {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
+
   gap: 16px;
+
   align-items: start;
 }
 
+
+/* ============================================================
+   PANELS
+   ============================================================ */
+
 .bk-panel {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
+  min-width: 0;
+
   padding: 20px;
+
+  background: var(--color-surface);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: 7px;
 }
 
 .bk-panel__header {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 16px;
+}
+
+.bk-panel__eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 0.6rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.10em;
+
+  color: var(--color-primary);
 }
 
 .bk-panel__header h2 {
   margin: 0;
+
   font-size: 1rem;
+
+  font-weight: 700;
+
   color: var(--color-text);
 }
 
 .bk-panel__link {
-  font-size: 0.85rem;
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  flex-shrink: 0;
+
   color: var(--color-primary);
+
   text-decoration: none;
-  font-weight: var(--font-weight-medium);
+
+  font-size: 0.75rem;
+
+  font-weight: 650;
+
+  transition: gap 0.18s ease;
 }
 
 .bk-panel__link:hover {
-  text-decoration: underline;
+  gap: 8px;
 }
 
-.bk-empty {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
+.bk-panel__link span {
+  font-size: 1rem;
 }
 
-/* --- Tableau des ventes --- */
+
+/* ============================================================
+   TABLEAU
+   ============================================================ */
+
+.bk-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
 .bk-table {
   width: 100%;
+
   border-collapse: collapse;
-  font-size: 0.9rem;
+
+  font-size: 0.78rem;
 }
 
 .bk-table th {
+  padding: 9px 7px;
+
   text-align: left;
-  padding: 8px 4px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
+
+  border-bottom: 1px solid var(--color-border);
+
   color: var(--color-text-muted);
-  border-bottom: 2px solid var(--color-border);
+
+  font-size: 0.62rem;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.06em;
 }
 
 .bk-table td {
-  padding: 10px 4px;
+  padding: 12px 7px;
+
   border-bottom: 1px solid var(--color-border);
+
   color: var(--color-text);
+}
+
+.bk-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.bk-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.bk-table tbody tr:hover {
+  background: var(--color-primary-subtle);
 }
 
 .bk-table__num {
   text-align: right;
+
   font-variant-numeric: tabular-nums;
+
+  white-space: nowrap;
 }
 
 .bk-table__num--positive {
   color: var(--color-positive);
-  font-weight: var(--font-weight-medium);
+
+  font-weight: 650;
 }
 
-/* --- Liste des charges --- */
+
+/* Produit */
+
+.bk-product-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 130px;
+}
+
+.bk-product-dot {
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 7px;
+
+  border-radius: 50%;
+
+  background: var(--color-primary);
+}
+
+
+/* ============================================================
+   LISTE CHARGES
+   ============================================================ */
+
 .bk-list {
   list-style: none;
+
   margin: 0;
   padding: 0;
+
   display: flex;
+
   flex-direction: column;
-  gap: 8px;
+
+  gap: 0;
 }
 
 .bk-list__item {
   display: flex;
+
+  align-items: center;
+
   justify-content: space-between;
-  font-size: 0.9rem;
-  padding-bottom: 8px;
+
+  gap: 12px;
+
+  padding: 12px 0;
+
   border-bottom: 1px solid var(--color-border);
 }
 
-.bk-list__amount {
-  font-weight: var(--font-weight-medium);
-  font-variant-numeric: tabular-nums;
+.bk-list__item:last-child {
+  border-bottom: none;
 }
 
-.bk-list__amount--negative {
+.bk-charge-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 0;
+
+  color: var(--color-text);
+
+  font-size: 0.78rem;
+}
+
+.bk-charge-icon {
+  width: 30px;
+  height: 30px;
+
+  flex: 0 0 30px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: rgba(178, 59, 59, 0.08);
+
   color: var(--color-negative);
+}
+
+.bk-charge-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bk-list__amount {
+  flex-shrink: 0;
+
+  color: var(--color-negative);
+
+  font-size: 0.75rem;
+
+  font-weight: 650;
+
+  font-variant-numeric: tabular-nums;
+
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   ÉTAT VIDE
+   ============================================================ */
+
+.bk-empty {
+  padding: 25px 10px;
+
+  text-align: center;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.82rem;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .bk-quick-actions {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .bk-kpi-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .bk-dashboard__columns {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .bk-dashboard {
+    gap: 16px;
+  }
+
+  .bk-quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .bk-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bk-panel {
+    padding: 15px;
+  }
+
+  .bk-dashboard__header h1 {
+    font-size: 1.45rem;
+  }
+
+  .bk-table {
+    min-width: 520px;
+  }
+
 }
