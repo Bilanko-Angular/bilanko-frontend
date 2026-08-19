@@ -1,0 +1,210 @@
+.bk-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.bk-dashboard__header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-text);
+}
+
+.bk-dashboard__header p {
+  margin: 4px 0 0;
+  color: var(--color-text-muted);
+}
+
+/* --- Actions rapides --- */
+.bk-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.bk-quick-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  font-size: 0.85rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.bk-quick-action:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+.bk-quick-action__icon {
+  font-size: 1.4rem;
+}
+
+.bk-quick-action--primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-brand);
+}
+
+.bk-quick-action--primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.bk-quick-action--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bk-quick-action--disabled:hover {
+  border-color: var(--color-border);
+  background-color: var(--color-surface);
+}
+
+/* --- KPI --- */
+.bk-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.bk-kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+}
+
+.bk-kpi-card__label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.bk-kpi-card__value {
+  font-size: 1.4rem;
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.bk-kpi-card__value--positive {
+  color: var(--color-positive);
+}
+
+.bk-kpi-card__value--negative {
+  color: var(--color-negative);
+}
+
+/* --- Colonnes ventes / charges --- */
+.bk-dashboard__columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.bk-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 20px;
+}
+
+.bk-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.bk-panel__header h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.bk-panel__link {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+
+.bk-panel__link:hover {
+  text-decoration: underline;
+}
+
+.bk-empty {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* --- Tableau des ventes --- */
+.bk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.bk-table th {
+  text-align: left;
+  padding: 8px 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.bk-table td {
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.bk-table__num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bk-table__num--positive {
+  color: var(--color-positive);
+  font-weight: var(--font-weight-medium);
+}
+
+/* --- Liste des charges --- */
+.bk-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bk-list__item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bk-list__amount {
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.bk-list__amount--negative {
+  color: var(--color-negative);
+}

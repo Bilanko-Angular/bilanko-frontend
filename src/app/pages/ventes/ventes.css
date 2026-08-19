@@ -87,10 +87,8 @@
    TABLEAU "ESPRIT GRAND LIVRE"
    ========================================= */
 .table-container {
-  width: 100%;
-  overflow-x: auto;
+  overflow: visible;
 }
-
 .registry-table {
   width: 100%;
   border-collapse: collapse;
