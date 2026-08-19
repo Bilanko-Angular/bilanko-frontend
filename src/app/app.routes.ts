@@ -24,8 +24,7 @@ export const routes: Routes = [
   },
  {
   path:"catalogue",  component:CatalogueStocks
- }
-];
+ },
   {
     path: "connexion",
     component:Connexion

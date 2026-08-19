@@ -7,7 +7,8 @@ import { Produit } from '../models/produit';
 @Injectable({ providedIn: 'root' })
 export class ProduitService {
   private readonly http = inject(HttpClient);
-  private readonly url = `${environment.serverUrl}/api/produits.json`;
+  //Lien à modifier lors de l'intégration du backend
+  private readonly url = `/api/produits.json`;
 
   // LECTURE — httpResource expose isLoading() / error() / value()
   readonly catalogue = httpResource<Produit[]>(() => this.url);
