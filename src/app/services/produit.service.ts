@@ -11,7 +11,7 @@ export class ProduitService {
   private readonly platformId = inject(PLATFORM_ID);
 
   // Adaptez ce chemin selon le nom réel de votre fichier dans public/ (ex: '/plat.json')
-  private readonly url = '/api/plat.json';
+  private readonly url = '/api/produits.json';
 
   // LECTURE — httpResource ignore la requête lors du SSR/Prerender sur Vercel
   readonly catalogue = httpResource<Produit[]>(
