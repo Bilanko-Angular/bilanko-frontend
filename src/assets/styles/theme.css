@@ -71,26 +71,57 @@
     --color-on-brand:         #1E1E1B;
   }
 }
-
 [data-theme="dark"] {
-  --color-primary:            #7FCBA3;
-  --color-primary-hover:      #93D4B2;
-  --color-primary-active:     #6BB893;
-  --color-primary-subtle:     #234534;
 
-  --color-positive:         #5FA97D;
-  --color-positive-subtle:  #1E3A2A;
-  --color-negative:         #E08080;
-  --color-negative-subtle:  #402323;
-  --color-accent:           #DDA25E;
-  --color-accent-subtle:    #3D2F1E;
+  --color-primary: #72C99C;
 
-  --color-background:       #1E1E1B;
-  --color-surface:          #2B2B28;
-  --color-border:           #3E3E38;
-  --color-text:             #F4F3EF;
-  --color-text-muted:       #B4B2AA;
-  --color-on-brand:         #1E1E1B;
+  --color-primary-hover: #84D6AB;
+
+  --color-primary-active: #5FBA8C;
+
+  --color-primary-subtle: #173629;
+
+
+  --color-positive: #72C99C;
+
+  --color-positive-subtle: #173629;
+
+
+  --color-negative: #F27B7B;
+
+  --color-negative-subtle: #422525;
+
+
+  --color-accent: #D7A05E;
+
+  --color-accent-subtle: #3B2D1D;
+
+
+  /* Fond général */
+
+  --color-background: #101613;
+
+
+  /* Cartes */
+
+  --color-surface: #18201C;
+
+
+  /* Bordures */
+
+  --color-border: #2B3730;
+
+
+  /* Texte */
+
+  --color-text: #F0F5F2;
+
+  --color-text-muted: #A7B5AD;
+
+
+  /* Texte sur vert */
+
+  --color-on-brand: #0E1D15;
 }
 
 [data-theme="light"] {
@@ -266,3 +297,4 @@ button, input, select, textarea, .card, .btn {
 .text-primary { color: var(--color-primary) !important; }
 .border-primary { border-color: var(--color-primary) !important; }
 .link-primary { color: var(--color-primary) !important; }
+

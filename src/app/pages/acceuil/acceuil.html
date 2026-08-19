@@ -2,13 +2,15 @@
 
   <div class="bk-dashboard">
 
-    <!-- =====================================================
+
+    <!-- ======================================================
          EN-TÊTE
-    ====================================================== -->
+    ======================================================= -->
 
     <section class="bk-dashboard__header">
 
       <div>
+
         <span class="bk-dashboard__eyebrow">
           BILANKO • ACTIVITÉ
         </span>
@@ -18,30 +20,30 @@
         </h1>
 
         <p>
-          Voici une vue claire de l'activité de votre commerce.
+          Une vue simple et rapide de votre activité.
         </p>
+
       </div>
 
     </section>
 
 
-    <!-- =====================================================
+    <!-- ======================================================
          ACTIONS RAPIDES
-    ====================================================== -->
+    ======================================================= -->
 
     <section class="bk-quick-actions">
 
-      <!-- Ajouter une vente -->
+
+      <!-- VENTE -->
 
       <a
-        class="bk-quick-action bk-quick-action--primary"
-        routerLink="/ventes">
+        routerLink="/ventes"
+        class="bk-quick-action bk-quick-action--primary">
 
         <span class="bk-quick-action__icon">
 
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true">
+          <svg viewBox="0 0 24 24">
 
             <path
               d="M7 3h8l3 3v15H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
@@ -56,9 +58,11 @@
               stroke="currentColor"
               stroke-width="1.8"
               stroke-linecap="round"/>
+
           </svg>
 
         </span>
+
 
         <span class="bk-quick-action__content">
 
@@ -72,6 +76,7 @@
 
         </span>
 
+
         <span class="bk-quick-action__arrow">
           →
         </span>
@@ -79,17 +84,15 @@
       </a>
 
 
-      <!-- Ajouter une charge -->
+      <!-- CHARGE -->
 
       <a
-        class="bk-quick-action"
-        routerLink="/charges">
+        routerLink="/charges"
+        class="bk-quick-action">
 
         <span class="bk-quick-action__icon">
 
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true">
+          <svg viewBox="0 0 24 24">
 
             <rect
               x="4"
@@ -108,15 +111,10 @@
               stroke-width="1.8"
               stroke-linecap="round"/>
 
-            <path
-              d="M16 15v4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"/>
           </svg>
 
         </span>
+
 
         <span class="bk-quick-action__content">
 
@@ -130,6 +128,7 @@
 
         </span>
 
+
         <span class="bk-quick-action__arrow">
           →
         </span>
@@ -137,16 +136,15 @@
       </a>
 
 
-      <!-- Produits -->
+      <!-- CATALOGUE -->
 
-      <div
-        class="bk-quick-action bk-quick-action--coming">
+      <a
+        routerLink="/catalogue"
+        class="bk-quick-action">
 
         <span class="bk-quick-action__icon">
 
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true">
+          <svg viewBox="0 0 24 24">
 
             <path
               d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
@@ -161,9 +159,11 @@
               stroke="currentColor"
               stroke-width="1.8"
               stroke-linejoin="round"/>
+
           </svg>
 
         </span>
+
 
         <span class="bk-quick-action__content">
 
@@ -177,23 +177,23 @@
 
         </span>
 
-        <span class="bk-coming-badge">
-          Bientôt
+
+        <span class="bk-quick-action__arrow">
+          →
         </span>
 
-      </div>
+      </a>
 
 
-      <!-- Documents -->
+      <!-- DOCUMENTS -->
 
-      <div
-        class="bk-quick-action bk-quick-action--coming">
+      <a
+        routerLink="/documents"
+        class="bk-quick-action">
 
         <span class="bk-quick-action__icon">
 
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true">
+          <svg viewBox="0 0 24 24">
 
             <path
               d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
@@ -208,9 +208,11 @@
               stroke="currentColor"
               stroke-width="1.8"
               stroke-linecap="round"/>
+
           </svg>
 
         </span>
+
 
         <span class="bk-quick-action__content">
 
@@ -224,18 +226,19 @@
 
         </span>
 
-        <span class="bk-coming-badge">
-          Bientôt
+
+        <span class="bk-quick-action__arrow">
+          →
         </span>
 
-      </div>
+      </a>
 
     </section>
 
 
-    <!-- =====================================================
+    <!-- ======================================================
          KPI
-    ====================================================== -->
+    ======================================================= -->
 
     <section class="bk-kpi-grid">
 
@@ -247,25 +250,7 @@
         <div class="bk-kpi-card__top">
 
           <div class="bk-kpi-card__icon bk-kpi-card__icon--green">
-
-            <svg viewBox="0 0 24 24">
-
-              <path
-                d="M4 19V5M4 19h16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"/>
-
-              <path
-                d="m7 15 4-4 3 2 5-6"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"/>
-            </svg>
-
+            FCFA
           </div>
 
           <span class="bk-kpi-card__trend bk-kpi-card__trend--positive">
@@ -279,41 +264,26 @@
         </span>
 
         <strong class="bk-kpi-card__value">
+
           {{ chiffreAffaires() | number:'1.0-0':'fr-FR' }}
-          <small>FCFA</small>
+
+          <small>
+            FCFA
+          </small>
+
         </strong>
 
       </article>
 
 
-      <!-- Charges -->
+      <!-- CHARGES -->
 
       <article class="bk-kpi-card">
 
         <div class="bk-kpi-card__top">
 
           <div class="bk-kpi-card__icon bk-kpi-card__icon--orange">
-
-            <svg viewBox="0 0 24 24">
-
-              <rect
-                x="4"
-                y="6"
-                width="16"
-                height="12"
-                rx="2"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"/>
-
-              <path
-                d="M8 12h8"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"/>
-            </svg>
-
+            −
           </div>
 
           <span class="bk-kpi-card__trend">
@@ -327,31 +297,26 @@
         </span>
 
         <strong class="bk-kpi-card__value bk-kpi-card__value--negative">
+
           {{ totalCharges() | number:'1.0-0':'fr-FR' }}
-          <small>FCFA</small>
+
+          <small>
+            FCFA
+          </small>
+
         </strong>
 
       </article>
 
 
-      <!-- Marge -->
+      <!-- MARGE -->
 
       <article class="bk-kpi-card">
 
         <div class="bk-kpi-card__top">
 
           <div class="bk-kpi-card__icon bk-kpi-card__icon--dark">
-
-            <svg viewBox="0 0 24 24">
-
-              <path
-                d="M12 3v18M17 7.5c0-1.7-2.2-3-5-3s-5 1.3-5 3 2.2 3 5 3 5 1.3 5 3-2.2 3-5 3-5-1.3-5-3"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"/>
-            </svg>
-
+            +
           </div>
 
           <span class="bk-kpi-card__trend bk-kpi-card__trend--positive">
@@ -361,42 +326,33 @@
         </div>
 
         <span class="bk-kpi-card__label">
-          Marge
+          Marge simplifiée
         </span>
 
-        <strong class="bk-kpi-card__value bk-kpi-card__value--positive">
+        <strong
+          class="bk-kpi-card__value"
+          [class.bk-kpi-card__value--positive]="marge() >= 0"
+          [class.bk-kpi-card__value--negative]="marge() < 0">
+
           {{ marge() | number:'1.0-0':'fr-FR' }}
-          <small>FCFA</small>
+
+          <small>
+            FCFA
+          </small>
+
         </strong>
 
       </article>
 
 
-      <!-- Nombre de ventes -->
+      <!-- VENTES -->
 
       <article class="bk-kpi-card">
 
         <div class="bk-kpi-card__top">
 
           <div class="bk-kpi-card__icon bk-kpi-card__icon--soft">
-
-            <svg viewBox="0 0 24 24">
-
-              <path
-                d="M5 4h14v16H5z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linejoin="round"/>
-
-              <path
-                d="M8 8h8M8 12h8M8 16h5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"/>
-            </svg>
-
+            #
           </div>
 
           <span class="bk-kpi-card__trend">
@@ -410,8 +366,13 @@
         </span>
 
         <strong class="bk-kpi-card__value">
+
           {{ nombreVentes() }}
-          <small>ventes</small>
+
+          <small>
+            ventes
+          </small>
+
         </strong>
 
       </article>
@@ -419,23 +380,23 @@
     </section>
 
 
-    <!-- =====================================================
+    <!-- ======================================================
          GRAPHIQUE
-    ====================================================== -->
+    ======================================================= -->
 
     <app-evolution-chart></app-evolution-chart>
 
 
-    <!-- =====================================================
-         DERNIÈRES ACTIVITÉS
-    ====================================================== -->
+    <!-- ======================================================
+         ACTIVITÉS
+    ======================================================= -->
 
     <section class="bk-dashboard__columns">
 
 
       <!-- VENTES -->
 
-      <article class="bk-panel bk-panel--table">
+      <article class="bk-panel">
 
         <div class="bk-panel__header">
 
@@ -469,10 +430,7 @@
             Aucune vente pour le moment.
           </div>
 
-        }
-
-
-        @if (dernieresVentes().length > 0) {
+        } @else {
 
           <div class="bk-table-wrapper">
 
@@ -512,17 +470,13 @@
                   <tr>
 
                     <td>
-
                       <div class="bk-product-cell">
 
                         <span class="bk-product-dot"></span>
 
-                        <span>
-                          {{ vente.product }}
-                        </span>
+                        {{ vente.product }}
 
                       </div>
-
                     </td>
 
                     <td>
@@ -536,6 +490,7 @@
                     <td class="bk-table__num bk-table__num--positive">
 
                       {{ vente.totalAmount | number:'1.0-0':'fr-FR' }}
+
                       FCFA
 
                     </td>
@@ -591,10 +546,7 @@
             Aucune charge enregistrée.
           </div>
 
-        }
-
-
-        @if (dernieresCharges().length > 0) {
+        } @else {
 
           <ul class="bk-list">
 
@@ -608,25 +560,7 @@
                 <div class="bk-charge-info">
 
                   <span class="bk-charge-icon">
-
-                    <svg viewBox="0 0 24 24">
-
-                      <path
-                        d="M5 5h14v14H5z"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linejoin="round"/>
-
-                      <path
-                        d="M8 9h8M8 13h5"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"/>
-
-                    </svg>
-
+                    −
                   </span>
 
                   <span>
@@ -636,8 +570,11 @@
                 </div>
 
                 <strong class="bk-list__amount">
+
                   -{{ charge.amount | number:'1.0-0':'fr-FR' }}
+
                   FCFA
+
                 </strong>
 
               </li>

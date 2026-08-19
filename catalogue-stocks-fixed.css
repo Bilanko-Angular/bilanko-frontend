@@ -1,0 +1,465 @@
+/* ============================================================
+   Catalogue & Stocks — Page Complète
+   ============================================================ */
+
+/* --- En-tête de la page --- */
+.bk-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-primary);
+  gap: 1.5rem;
+}
+
+.bk-page-title {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.bk-page-subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  max-width: 500px;
+  line-height: 1.5;
+}
+
+.bk-page-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* --- Boutons généraux --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius-base);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btn-outline {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+.btn-outline:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-on-brand);
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: var(--font-weight-bold);
+  padding: 0.65rem 1.25rem;
+}
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn .icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+/* --- Carte principale --- */
+.bk-card {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.bk-toolbar {
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.bk-search-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.bk-search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.bk-search {
+  width: 100%;
+  padding: 0.65rem 0.75rem 0.65rem 2.35rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.bk-search::placeholder {
+  color: var(--color-text-muted);
+}
+.bk-search:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+  background: var(--color-background);
+}
+
+/* --- Tableau --- */
+.bk-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bk-table thead th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-bold);
+  padding: 0.85rem 1rem;
+  border-bottom: 2px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.bk-table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  vertical-align: middle;
+}
+
+.bk-table tbody tr {
+  transition: background-color 0.1s ease;
+}
+
+.bk-table tbody tr:hover {
+  background: var(--color-primary-subtle);
+}
+
+.align-center {
+  text-align: center;
+}
+.align-right {
+  text-align: right;
+}
+
+.bk-ref {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.35rem;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+}
+
+.bk-badge-categorie {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.02em;
+}
+
+/* --- Statuts stock --- */
+.bk-stock {
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.bk-stock small {
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.03em;
+}
+.bk-stock--ok {
+  color: var(--color-text);
+}
+.bk-stock--warning {
+  color: var(--color-accent);
+}
+.bk-stock--error {
+  color: var(--color-negative);
+}
+
+/* --- Montants --- */
+.bk-amount {
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.bk-amount--positive {
+  color: var(--color-positive);
+}
+.bk-amount--negative {
+  color: var(--color-negative);
+}
+
+/* --- Actions (boutons icônes) --- */
+.bk-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  margin: 0 0.25rem;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+.bk-icon-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  transform: translateY(-2px);
+}
+.bk-icon-btn--danger {
+  color: var(--color-text-muted);
+}
+.bk-icon-btn--danger:hover {
+  border-color: var(--color-negative);
+  color: var(--color-negative);
+  background: var(--color-negative-subtle);
+}
+
+/* --- États --- */
+.bk-state-msg {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+.bk-state-msg--error {
+  color: var(--color-negative);
+}
+
+/* --- Bandeau total --- */
+.bk-total-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--color-positive-subtle);
+  border-left: 4px solid var(--color-positive);
+  border-radius: var(--radius-base);
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-medium);
+}
+.bk-total-banner strong {
+  color: var(--color-positive);
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Pagination --- */
+.bk-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.bk-pagination-info {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.bk-pagination-controls {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.bk-page-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-medium);
+  transition: all 0.15s ease;
+}
+.bk-page-btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+.bk-page-btn.actif {
+  background: var(--color-primary);
+  color: var(--color-on-brand);
+  border-color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+.bk-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   Responsive Design
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .bk-page-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .bk-page-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .bk-page-title {
+    font-size: 1.5rem;
+  }
+
+  .bk-page-header {
+    padding-bottom: 1rem;
+  }
+
+  .bk-card {
+    padding: 1rem;
+  }
+
+  .bk-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bk-search-wrapper {
+    max-width: 100%;
+  }
+
+  .bk-table {
+    font-size: 0.8rem;
+  }
+
+  .bk-table thead th {
+    padding: 0.6rem 0.5rem;
+  }
+
+  .bk-table tbody td {
+    padding: 0.7rem 0.5rem;
+  }
+
+  .bk-icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .bk-pagination {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .bk-pagination-info {
+    text-align: center;
+  }
+
+  .bk-pagination-controls {
+    justify-content: center;
+  }
+
+  .bk-page-actions {
+    width: 100%;
+  }
+
+  .btn {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bk-page-title {
+    font-size: 1.25rem;
+  }
+
+  .bk-page-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .bk-card {
+    padding: 0.75rem;
+  }
+
+  .bk-table tbody td {
+    padding: 0.5rem;
+  }
+
+  .bk-page-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 0.25rem;
+  }
+
+  .bk-total-banner {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+    align-items: center;
+    border-left: none;
+    border-top: 4px solid var(--color-positive);
+  }
+}

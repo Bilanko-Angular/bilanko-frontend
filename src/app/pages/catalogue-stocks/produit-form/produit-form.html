@@ -1,0 +1,35 @@
+<div class="bilanko-form-overlay" (click)="annuler.emit()">
+  <form class="bilanko-form-card" (click)="$event.stopPropagation()" (ngSubmit)="onSubmit()">
+    <div class="bilanko-form-header">
+      <h3>{{ produitInitial() ? '✎ Modifier le produit' : '+ Nouveau produit' }}</h3>
+      <button type="button" class="bilanko-form-close" (click)="annuler.emit()" title="Fermer">✕</button>
+    </div>
+
+  <label>Référence
+    <input [(ngModel)]="reference" name="reference" required />
+  </label>
+  <label>Nom du produit
+    <input [(ngModel)]="nom" name="nom" required />
+  </label>
+  <label>Catégorie
+    <input [(ngModel)]="categorie" name="categorie" required />
+  </label>
+  <label>Prix d'achat (FCFA)
+    <input type="number" [(ngModel)]="prixAchat" name="prixAchat" min="0" />
+  </label>
+  <label>Prix de vente (FCFA)
+    <input type="number" [(ngModel)]="prixVente" name="prixVente" min="0" />
+  </label>
+  <label>Quantité en stock
+    <input type="number" [(ngModel)]="quantiteStock" name="quantiteStock" min="0" />
+  </label>
+  <label>Seuil d'alerte
+    <input type="number" [(ngModel)]="seuilAlerte" name="seuilAlerte" min="0" />
+  </label>
+
+    <div class="bilanko-form-actions">
+      <button type="button" class="btn btn-outline" (click)="annuler.emit()">Annuler</button>
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+  </form>
+</div>
