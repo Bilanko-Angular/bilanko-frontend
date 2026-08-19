@@ -1,5 +1,4 @@
-// src/environments/environment.development.ts
 export const environment = {
   production: false,
-  serverUrl: '',
+  baseApiUrl: 'http://localhost:8080/api/'
 };

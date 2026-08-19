@@ -1,0 +1,139 @@
+/* auth.component.css — s'appuie sur theme.css, ne redéfinit aucune couleur en dur */
+
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+/* ---------- Panneau gauche : décoration ---------- */
+.auth-decoration {
+  position: relative;
+  flex: 1 1 45%;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  color: var(--color-on-brand);
+}
+
+.auth-decoration-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Voile en vert Bilanko, plus dense en bas pour la lisibilité du texte,
+   plutôt qu'un aplat plat façon "template IA" */
+.auth-decoration-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(43, 43, 40, 0.35) 0%,
+    rgba(46, 95, 69, 0.55) 55%,
+    rgba(46, 95, 69, 0.92) 100%
+  );
+}
+
+.auth-decoration-content {
+  position: relative;
+  z-index: 1;
+  padding: 3rem 3rem 3.5rem;
+  max-width: 32rem;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: 2.5rem;
+}
+
+.auth-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-base);
+  background-color: var(--color-on-brand);
+  color: var(--color-primary-active);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+}
+
+.auth-brand-name {
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.25rem;
+  letter-spacing: .01em;
+}
+
+.auth-decoration-title {
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.85rem;
+  line-height: 1.25;
+  margin-bottom: .9rem;
+}
+
+.auth-decoration-text {
+  font-weight: var(--font-weight-regular);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 2.25rem;
+}
+
+/* Liste façon "lignes de registre" plutôt que des cartes flottantes,
+   cohérent avec la charte (séparateurs fins, pas d'ombres) */
+.auth-feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.auth-feature-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .7rem 0;
+  font-size: .95rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.auth-feature-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.auth-feature-item .material-icons {
+  font-size: 1.15rem;
+  color: var(--bilanko-ocre-marche, #C98A3D);
+}
+
+/* ---------- Panneau droit : formulaire ---------- */
+.auth-form-panel {
+  flex: 1 1 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 26rem;
+}
+
+/* ---------- Responsive : le panneau gauche disparaît sous 992px ---------- */
+@media (max-width: 991.98px) {
+  .auth-decoration {
+    display: none;
+  }
+
+  .auth-form-panel {
+    flex: 1 1 100%;
+  }
+}

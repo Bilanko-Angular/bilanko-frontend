@@ -1,0 +1,192 @@
+<app-auth-user>
+
+  <!-- En-tête -->
+  <div class="mb-4">
+    <div class="bk-auth-logo-sm mb-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/>
+      </svg>
+    </div>
+    <h1 class="bk-auth-title">Créer un compte</h1>
+    <p class="bk-auth-subtitle">Rejoignez Bilanko et pilotez votre activité</p>
+  </div>
+
+  <!-- Bouton Google -->
+  <button type="button" class="btn bk-btn-google w-100 mb-3" (click)="loginWithGoogle()">
+    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+      <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+      <path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+      <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+    </svg>
+    <span>S'inscrire avec Google</span>
+  </button>
+
+  <!-- Séparateur -->
+  <div class="bk-divider mb-3">
+    <span>ou créez votre compte</span>
+  </div>
+
+  <!-- Formulaire -->
+  <form (ngSubmit)="soumettre()" [formGroup]="inscriptionForm" novalidate class="d-flex flex-column gap-3">
+
+    <!-- Nom / Prénom -->
+    <div class="row g-3">
+      <div class="col-12 col-sm-6">
+        <label for="name" class="bk-form-label">
+          Nom <span class="text-danger">*</span>
+        </label>
+        <div class="input-group bk-input-group">
+          <span class="input-group-text bk-input-icon">
+            <span class="material-icons fs-6">person</span>
+          </span>
+          <input
+            type="text"
+            id="name"
+            class="form-control bk-input"
+            placeholder="Votre nom"
+            formControlName="nom"
+            autocomplete="family-name">
+        </div>
+        @if (nom.touched && nom.hasError('required')) {
+          <div class="bk-field-error">Le nom est requis.</div>
+        }
+      </div>
+
+      <div class="col-12 col-sm-6">
+        <label for="subname" class="bk-form-label">Prénom</label>
+        <div class="input-group bk-input-group">
+          <span class="input-group-text bk-input-icon">
+            <span class="material-icons fs-6">person_outline</span>
+          </span>
+          <input
+            type="text"
+            id="subname"
+            class="form-control bk-input"
+            placeholder="Votre prénom"
+            formControlName="prenom"
+            autocomplete="given-name">
+        </div>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email" class="bk-form-label">
+        Email <span class="text-danger">*</span>
+      </label>
+      <div class="input-group bk-input-group">
+        <span class="input-group-text bk-input-icon">
+          <span class="material-icons fs-6">email</span>
+        </span>
+        <input
+          type="email"
+          id="email"
+          class="form-control bk-input"
+          placeholder="exemple&#64;email.com"
+          formControlName="email"
+          autocomplete="email">
+      </div>
+      @if (email.touched && email.hasError('required')) {
+        <div class="bk-field-error">L'email est requis.</div>
+      }
+      @else if (email.touched && email.hasError('email')) {
+        <div class="bk-field-error">Format d'email invalide.</div>
+      }
+    </div>
+
+    <!-- Mot de passe -->
+    <div>
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <label for="password" class="bk-form-label mb-0">
+          Mot de passe <span class="text-danger">*</span>
+        </label>
+        @if (password.value) {
+          <span class="bk-auth-link" style="font-size: 0.8rem; cursor: default;">
+            {{ allCriteriaMet() ? '✓ Fort' : 'Critères ci-dessous' }}
+          </span>
+        }
+      </div>
+      <div class="input-group bk-input-group">
+        <span class="input-group-text bk-input-icon">
+          <span class="material-icons fs-6">lock</span>
+        </span>
+        <input
+          type="password"
+          id="password"
+          class="form-control bk-input"
+          placeholder="Créez un mot de passe fort"
+          formControlName="password"
+          autocomplete="new-password">
+      </div>
+
+      <!-- Checklist mot de passe -->
+      @if (password.value) {
+        <div class="bk-password-checklist mt-2">
+          <span class="bk-pwd-rule" [class.ok]="hasMinLength()">
+            <span class="material-icons">{{ hasMinLength() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+            8 car.
+          </span>
+          <span class="bk-pwd-rule" [class.ok]="hasUpperCase()">
+            <span class="material-icons">{{ hasUpperCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+            Majuscule
+          </span>
+          <span class="bk-pwd-rule" [class.ok]="hasLowerCase()">
+            <span class="material-icons">{{ hasLowerCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+            Minuscule
+          </span>
+          <span class="bk-pwd-rule" [class.ok]="hasNumber()">
+            <span class="material-icons">{{ hasNumber() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+            Chiffre
+          </span>
+          <span class="bk-pwd-rule" [class.ok]="hasSpecialChar()">
+            <span class="material-icons">{{ hasSpecialChar() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+            Spécial
+          </span>
+        </div>
+      }
+    </div>
+
+    <!-- Confirmer mot de passe -->
+    <div>
+      <label for="confirmPassword" class="bk-form-label">
+        Confirmer le mot de passe <span class="text-danger">*</span>
+      </label>
+      <div class="input-group bk-input-group">
+        <span class="input-group-text bk-input-icon">
+          <span class="material-icons fs-6">lock_outline</span>
+        </span>
+        <input
+          type="password"
+          id="confirmPassword"
+          class="form-control bk-input"
+          placeholder="Répétez votre mot de passe"
+          formControlName="confirmPassword"
+          autocomplete="new-password">
+      </div>
+      @if (confirmPassword.touched && confirmPassword.value && password.value && confirmPassword.value !== password.value) {
+        <div class="bk-field-error">
+          <span class="material-icons fs-6 me-1">error_outline</span>
+          Les mots de passe ne correspondent pas.
+        </div>
+      }
+    </div>
+
+    <!-- Bouton soumettre -->
+    <button
+      type="submit"
+      class="btn bk-btn-submit w-100 mt-1"
+      [disabled]="inscriptionForm.invalid">
+      <span>Créer mon compte</span>
+      <span class="material-icons">arrow_forward</span>
+    </button>
+
+    <!-- Lien connexion -->
+    <p class="text-center bk-auth-footer-text mb-0">
+      Déjà un compte ?
+      <a routerLink="/connexion" class="bk-auth-link">Se connecter</a>
+    </p>
+
+  </form>
+
+</app-auth-user>
