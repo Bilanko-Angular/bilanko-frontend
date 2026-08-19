@@ -1,12 +1,12 @@
-import { UserRegisterDto } from "../models/DTO/UserDto";
+import { UserLoginDto, UserRegisterDto } from "../models/DTO/UserDto";
 import { User } from "../models/person";
 
 export class UserMapper {
   static toRegisterDto(user: User): UserRegisterDto {
     return {
-      name: user.nom,
+      name: user.nom ?? '',
       subname: user.subname ?? '',
-      email: user.email,
+      email: user.email ?? '',
       password: user.password ?? '',
     };
   }
@@ -19,4 +19,12 @@ export class UserMapper {
       email: dto.email,
     };
   }
+
+  static toLoginDto(user: User): UserLoginDto {
+    return {
+      email: user.email ?? '',
+      password: user.password ?? '',
+    };
+  }
+
 }
