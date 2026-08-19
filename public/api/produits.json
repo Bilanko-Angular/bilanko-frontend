@@ -1,0 +1,22 @@
+[
+  {
+    "id": "p1",
+    "reference": "REF-001",
+    "nom": "MacBook Pro 16\" M3 Max",
+    "categorie": "Informatique",
+    "prixAchat": 200000,
+    "prixVente": 250000,
+    "quantiteStock": 45,
+    "seuilAlerte": 10
+  },
+  {
+    "id": "p2",
+    "reference": "REF-045",
+    "nom": "Onduleur APC Smart-UPS",
+    "categorie": "Énergie",
+    "prixAchat": 35000,
+    "prixVente": 45000,
+    "quantiteStock": 4,
+    "seuilAlerte": 5
+  }
+]

@@ -2,6 +2,9 @@ import { Routes } from '@angular/router';
 import { Acceuil } from './pages/acceuil/acceuil';
 import { SalesComponent } from './pages/ventes/ventes';
 import { ChargesComponent } from './pages/charges/charges';
+import path from 'path';
+import { Component } from '@angular/core';
+import { CatalogueStocks } from './pages/catalogue-stocks/catalogue-stocks';
 import { Connexion } from './pages/auth-user/connexion/connexion';
 import { Inscription } from './pages/auth-user/inscription/inscription';
 
@@ -19,6 +22,10 @@ export const routes: Routes = [
     path: "charges",
     component: ChargesComponent
   },
+ {
+  path:"catalogue",  component:CatalogueStocks
+ }
+];
   {
     path: "connexion",
     component:Connexion

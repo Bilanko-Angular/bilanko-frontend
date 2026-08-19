@@ -1,8 +1,6 @@
-/* ============================================================
-   ASIDE — Bilanko
+/*ASIDE — Bilanko
    Sidebar de navigation, utilise les variables de theme.css
-   ============================================================ */
-
+*/
 aside.bk-aside {
   width: 256px;
   min-width: 256px;
