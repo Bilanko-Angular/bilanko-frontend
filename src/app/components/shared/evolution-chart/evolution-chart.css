@@ -1,0 +1,25 @@
+.bk-chart-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bk-chart-card h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.bk-chart-card__canvas-wrapper {
+  position: relative;
+  height: 300px;
+}
+
+.bk-chart-card__canvas-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}

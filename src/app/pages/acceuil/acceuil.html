@@ -1,3 +1,112 @@
 <app-template>
-    <p>acceuil works!</p>
+  <div class="bk-dashboard">
+
+    <div class="bk-dashboard__header">
+      <h1>Tableau de bord</h1>
+      <p>Vue d'ensemble de votre activité</p>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="bk-quick-actions">
+      <a class="bk-quick-action bk-quick-action--primary" routerLink="/ventes">
+        <span class="bk-quick-action__icon">🧾</span>
+        <span>Ajouter une vente</span>
+      </a>
+      <a class="bk-quick-action" routerLink="/charges">
+        <span class="bk-quick-action__icon">💸</span>
+        <span>Ajouter une charge</span>
+      </a>
+      <span class="bk-quick-action bk-quick-action--disabled" title="Module pas encore disponible">
+        <span class="bk-quick-action__icon">📦</span>
+        <span>Ajouter un produit</span>
+      </span>
+      <span class="bk-quick-action bk-quick-action--disabled" title="Module pas encore disponible">
+        <span class="bk-quick-action__icon">📄</span>
+        <span>Générer un document</span>
+      </span>
+    </div>
+
+    <!-- Cartes KPI -->
+    <div class="bk-kpi-grid">
+      <div class="bk-kpi-card">
+        <span class="bk-kpi-card__label">Chiffre d'affaires</span>
+        <span class="bk-kpi-card__value">{{ chiffreAffaires() | number:'1.0-0':'fr-FR' }} FCFA</span>
+      </div>
+
+      <div class="bk-kpi-card">
+        <span class="bk-kpi-card__label">Charges</span>
+        <span class="bk-kpi-card__value bk-kpi-card__value--negative">{{ totalCharges() | number:'1.0-0':'fr-FR' }} FCFA</span>
+      </div>
+
+      <div class="bk-kpi-card">
+        <span class="bk-kpi-card__label">Marge</span>
+        <span class="bk-kpi-card__value bk-kpi-card__value--positive">{{ marge() | number:'1.0-0':'fr-FR' }} FCFA</span>
+      </div>
+    </div>
+
+    <app-evolution-chart></app-evolution-chart>
+
+    <!-- Deux colonnes -->
+    <div class="bk-dashboard__columns">
+
+      <div class="bk-panel bk-panel--table">
+        <div class="bk-panel__header">
+          <h2>Ventes récentes</h2>
+          <a routerLink="/ventes" class="bk-panel__link">Voir tout</a>
+        </div>
+
+        @if (dernieresVentes().length === 0) {
+          <p class="bk-empty">Aucune vente pour le moment.</p>
+        }
+        @if (dernieresVentes().length > 0) {
+          <table class="bk-table">
+            <thead>
+              <tr>
+                <th>Produit</th>
+                <th>Client</th>
+                <th class="bk-table__num">Qté</th>
+                <th class="bk-table__num">Montant</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (vente of dernieresVentes(); track vente.id) {
+                <tr>
+                  <td>{{ vente.product }}</td>
+                  <td>{{ vente.client || '—' }}</td>
+                  <td class="bk-table__num">{{ vente.quantity }}</td>
+                  <td class="bk-table__num bk-table__num--positive">
+                    {{ vente.totalAmount | number:'1.0-0':'fr-FR' }} FCFA
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+
+      <div class="bk-panel">
+        <div class="bk-panel__header">
+          <h2>Charges récentes</h2>
+          <a routerLink="/charges" class="bk-panel__link">Voir tout</a>
+        </div>
+
+        @if (dernieresCharges().length === 0) {
+          <p class="bk-empty">Aucune charge enregistrée.</p>
+        }
+        @if (dernieresCharges().length > 0) {
+          <ul class="bk-list">
+            @for (charge of dernieresCharges(); track charge.id) {
+              <li class="bk-list__item">
+                <span>{{ charge.label }}</span>
+                <span class="bk-list__amount bk-list__amount--negative">
+                  {{ charge.amount | number:'1.0-0':'fr-FR' }} FCFA
+                </span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
+    </div>
+  </div>
 </app-template>
