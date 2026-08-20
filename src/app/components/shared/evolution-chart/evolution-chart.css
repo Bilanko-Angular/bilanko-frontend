@@ -14,10 +14,7 @@
   color: var(--color-text);
 }
 
-.bk-chart-card__canvas-wrapper {
-  position: relative;
-  height: 300px;
-}
+
 
 .bk-chart-card__canvas-wrapper canvas {
   width: 100% !important;

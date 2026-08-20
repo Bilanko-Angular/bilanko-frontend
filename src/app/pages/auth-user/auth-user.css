@@ -1,47 +1,53 @@
-/* auth.component.css — s'appuie sur theme.css, ne redéfinit aucune couleur en dur */
+/* src/app/pages/auth-user/auth-user.css */
+* {
+  box-sizing: border-box;
+}
 
 .auth-container {
   display: flex;
   min-height: 100vh;
   background-color: var(--color-background);
+  width: 100%;
+  overflow: hidden;
 }
 
 /* ---------- Panneau gauche : décoration ---------- */
 .auth-decoration {
   position: relative;
-  flex: 1 1 45%;
+  flex: 0 0 45%;
+  width: 45%;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   overflow: hidden;
   color: var(--color-on-brand);
+  background: linear-gradient(150deg,
+    var(--bilanko-vert-fonce) 0%,
+    var(--bilanko-vert-bilanko) 60%,
+    #7FCBA3 100%);
+  min-height: 100vh;
 }
 
-.auth-decoration-bg {
+.auth-decoration::before {
+  content: '';
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+  background-size: 26px 26px;
+  pointer-events: none;
 }
 
-/* Voile en vert Bilanko, plus dense en bas pour la lisibilité du texte,
-   plutôt qu'un aplat plat façon "template IA" */
 .auth-decoration-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(43, 43, 40, 0.35) 0%,
-    rgba(46, 95, 69, 0.55) 55%,
-    rgba(46, 95, 69, 0.92) 100%
-  );
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.10) 0%, transparent 55%);
 }
 
 .auth-decoration-content {
   position: relative;
   z-index: 1;
-  padding: 3rem 3rem 3.5rem;
+  padding: 3rem 2.5rem;
   max-width: 32rem;
+  width: 100%;
 }
 
 .auth-brand {
@@ -55,40 +61,40 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: var(--radius-base);
-  background-color: var(--color-on-brand);
-  color: var(--color-primary-active);
-  font-family: var(--font-family-base);
-  font-weight: var(--font-weight-bold);
+  background-color: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  flex-shrink: 0;
 }
 
 .auth-brand-name {
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-bold);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   letter-spacing: .01em;
+  color: #fff;
 }
 
 .auth-decoration-title {
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-bold);
-  font-size: 1.85rem;
+  font-size: 1.8rem;
   line-height: 1.25;
-  margin-bottom: .9rem;
+  margin-bottom: .8rem;
+  color: #fff;
 }
 
 .auth-decoration-text {
   font-weight: var(--font-weight-regular);
-  font-size: 1rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.88);
-  margin-bottom: 2.25rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2rem;
 }
 
-/* Liste façon "lignes de registre" plutôt que des cartes flottantes,
-   cohérent avec la charte (séparateurs fins, pas d'ombres) */
 .auth-feature-list {
   list-style: none;
   margin: 0;
@@ -98,9 +104,10 @@
 .auth-feature-item {
   display: flex;
   align-items: center;
-  gap: .75rem;
+  gap: .8rem;
   padding: .7rem 0;
-  font-size: .95rem;
+  font-size: .9rem;
+  color: #fff;
   border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
@@ -108,32 +115,177 @@
   border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
-.auth-feature-item .material-icons {
-  font-size: 1.15rem;
-  color: var(--bilanko-ocre-marche, #C98A3D);
+.auth-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  flex-shrink: 0;
 }
 
 /* ---------- Panneau droit : formulaire ---------- */
 .auth-form-panel {
-  flex: 1 1 60%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-background);
+  padding: 2rem;
+  width: 55%;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
 .auth-form-wrapper {
   width: 100%;
   max-width: 26rem;
+  position: relative;
+  padding-top: 1.5rem;
 }
 
-/* ---------- Responsive : le panneau gauche disparaît sous 992px ---------- */
+/* Bouton de thème */
+.auth-theme-toggle {
+  position: absolute;
+  top: -0.5rem;
+  right: 0;
+  z-index: 10;
+}
+
+.bk-theme-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.bk-theme-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(99, 183, 141, 0.15);
+}
+
+.bk-theme-btn:active {
+  transform: scale(0.95);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablettes et petits écrans */
+@media (max-width: 1024px) {
+  .auth-decoration-title {
+    font-size: 1.5rem;
+  }
+  
+  .auth-decoration-text {
+    font-size: 0.85rem;
+  }
+  
+  .auth-decoration-content {
+    padding: 2.5rem 2rem;
+  }
+  
+  .auth-feature-item {
+    font-size: 0.8rem;
+    padding: 0.5rem 0;
+  }
+}
+
+/* Mobiles et tablettes en portrait */
 @media (max-width: 991.98px) {
+  .auth-container {
+    flex-direction: column;
+  }
+  
   .auth-decoration {
+    flex: 0 0 auto;
+    width: 100%;
+    min-height: auto;
+    padding: 1.5rem 0;
     display: none;
   }
-
+  
   .auth-form-panel {
-    flex: 1 1 100%;
+    width: 100%;
+    min-height: 100vh;
+    padding: 1.5rem 1rem;
+    align-items: flex-start;
+    padding-top: 2.5rem;
+  }
+  
+  .auth-form-wrapper {
+    max-width: 100%;
+    padding-top: 1rem;
+  }
+  
+  .auth-theme-toggle {
+    top: -0.8rem;
+    right: 0.5rem;
+  }
+  
+  .bk-theme-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Petits mobiles */
+@media (max-width: 480px) {
+  .auth-form-panel {
+    padding: 1rem 0.75rem;
+    padding-top: 2rem;
+  }
+  
+  .auth-theme-toggle {
+    top: -0.5rem;
+    right: 0;
+  }
+  
+  .bk-theme-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .bk-theme-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 360px) {
+  .auth-form-panel {
+    padding: 0.75rem 0.5rem;
+    padding-top: 1.5rem;
+  }
+  
+  .auth-theme-toggle {
+    top: -0.3rem;
+    right: 0;
+  }
+  
+  .bk-theme-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .bk-theme-btn svg {
+    width: 14px;
+    height: 14px;
   }
 }
