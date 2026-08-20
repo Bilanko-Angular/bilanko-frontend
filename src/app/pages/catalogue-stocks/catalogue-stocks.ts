@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, DestroyRef } from '@angular/core';
+import { Component, inject, signal, computed, effect, DestroyRef } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -6,6 +6,8 @@ import { ProduitService } from '../../services/produit.service';
 import { ProduitForm } from './produit-form/produit-form';
 import { Produit } from '../../models/produit';
 import { Template } from '../../components/shared/template/template';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 type StatutStock = 'ok' | 'warning' | 'error';
 
@@ -32,7 +34,7 @@ export class CatalogueStocks {
   readonly pageCourante = signal(1);
   readonly parPage = 5;
 
-  // --- Modale ajout/édition ---
+  // --- Modale ajout/edition ---
   readonly afficherFormulaire = signal(false);
   readonly produitEnEdition = signal<Produit | undefined>(undefined);
 
@@ -41,7 +43,6 @@ export class CatalogueStocks {
 
   readonly Math = Math;
 
-  // Catégories réellement présentes dans le catalogue, déduites automatiquement
   readonly categories = computed(() => {
     const liste = this.catalogue.value() ?? [];
     return Array.from(new Set(liste.map((p) => p.categorie))).sort();
@@ -54,7 +55,10 @@ export class CatalogueStocks {
     const liste = this.catalogue.value() ?? [];
 
     return liste.filter((p) => {
-      const matchTerme = !terme || p.nom.toLowerCase().includes(terme) || p.reference.toLowerCase().includes(terme);
+      const matchTerme =
+        !terme ||
+        p.nom.toLowerCase().includes(terme) ||
+        p.reference.toLowerCase().includes(terme);
       const matchCategorie = !categorie || p.categorie === categorie;
       const matchStatut = statut === 'tous' || this.statutStock(p) === statut;
       return matchTerme && matchCategorie && matchStatut;
@@ -75,8 +79,23 @@ export class CatalogueStocks {
   );
 
   readonly valorisationTotale = computed(() =>
-    this.produitsFiltres().reduce((total, p) => total + p.quantiteStock * p.prixAchat, 0)
+    this.produitsFiltres().reduce(
+      (total, p) => total + p.quantiteStock * p.prixAchat,
+      0
+    )
   );
+
+  constructor() {
+    // Recale toujours la page courante dans les bornes valides :
+    // - quand un produit est ajouté, le nombre de pages augmente et "Suivant" devient utilisable
+    // - quand un filtre/une recherche réduit la liste, on évite de rester bloqué sur une page vide
+    effect(() => {
+      const total = this.nombrePages();
+      if (this.pageCourante() > total) {
+        this.pageCourante.set(total);
+      }
+    });
+  }
 
   statutStock(p: Produit): StatutStock {
     if (p.quantiteStock === 0) return 'error';
@@ -84,9 +103,24 @@ export class CatalogueStocks {
     return 'ok';
   }
 
-  // --- Filtres ---
+  // --- Recherche & Filtres ---
+  onRechercheChange(valeur: string) {
+    this.recherche.set(valeur);
+    this.pageCourante.set(1);
+  }
+
   toggleFiltres() {
     this.afficherFiltres.update((v) => !v);
+  }
+
+  onFiltreCategorieChange(valeur: string) {
+    this.filtreCategorie.set(valeur);
+    this.pageCourante.set(1);
+  }
+
+  onFiltreStatutChange(valeur: 'tous' | StatutStock) {
+    this.filtreStatut.set(valeur);
+    this.pageCourante.set(1);
   }
 
   reinitialiserFiltres() {
@@ -95,27 +129,45 @@ export class CatalogueStocks {
     this.pageCourante.set(1);
   }
 
-  // --- Export CSV ---
+  // --- Export PDF ---
   exporter() {
     const liste = this.produitsFiltres();
     if (liste.length === 0) return;
 
-    const entetes = ['Référence', 'Nom', 'Catégorie', 'Quantité en stock', 'Seuil alerte', "Prix d'achat (FCFA)"];
-    const lignes = liste.map((p) =>
-      [p.reference, p.nom, p.categorie, p.quantiteStock, p.seuilAlerte, p.prixAchat].join(';')
-    );
-    const contenu = [entetes.join(';'), ...lignes].join('\n');
+    const doc = new jsPDF();
+    const dateStr = new Date().toLocaleDateString('fr-FR');
 
-    const blob = new Blob(['\uFEFF' + contenu], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const lien = document.createElement('a');
-    lien.href = url;
-    lien.download = `catalogue-bilanko-${new Date().toISOString().split('T')[0]}.csv`;
-    lien.click();
-    URL.revokeObjectURL(url);
+    doc.setFontSize(16);
+    doc.setTextColor(15, 23, 42);
+    doc.text('Bilanko — Catalogue & Stocks', 14, 20);
+
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Generer le : ${dateStr} | Total : ${liste.length} produit(s)`, 14, 27);
+
+    const colonnes = ['Reference', 'Nom du produit', 'Categorie', 'Qte', 'Seuil', 'Prix Achat (FCFA)'];
+    const donnees = liste.map((p) => [
+      p.reference,
+      p.nom,
+      p.categorie,
+      p.quantiteStock.toString(),
+      p.seuilAlerte.toString(),
+      p.prixAchat.toLocaleString('fr-FR'),
+    ]);
+
+    autoTable(doc, {
+      startY: 35,
+      head: [colonnes],
+      body: donnees,
+      theme: 'striped',
+      headStyles: { fillColor: [16, 185, 129] },
+      styles: { fontSize: 9 },
+    });
+
+    doc.save(`catalogue-bilanko-${dateStr.replace(/\//g, '-')}.pdf`);
   }
 
-  // --- Ajout / édition ---
+  // --- Ajout / edition ---
   ouvrirCreation() {
     this.produitEnEdition.set(undefined);
     this.afficherFormulaire.set(true);
@@ -138,14 +190,13 @@ export class CatalogueStocks {
 
     requete.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
-        this.catalogue.reload();
         this.fermerFormulaire();
       },
       error: (e) => console.error('Erreur enregistrement produit :', e),
     });
   }
 
-  // --- Suppression avec confirmation ---
+  // --- Suppression ---
   demanderSuppression(p: Produit) {
     this.produitASupprimer.set(p);
   }
@@ -163,9 +214,9 @@ export class CatalogueStocks {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.catalogue.reload();
           this.produitASupprimer.set(undefined);
         },
+        error: (e) => console.error('Erreur suppression produit :', e),
       });
   }
 

@@ -1,3 +1,4 @@
+// src/app/models/document-fiscal.ts
 export type TypeDocumentFiscal = 'bilan' | 'compte-resultat' | 'liasse-fiscale' | 'grand-livre';
 
 export interface DocumentFiscalOption {

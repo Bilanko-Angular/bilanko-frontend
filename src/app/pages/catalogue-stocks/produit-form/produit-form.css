@@ -1,94 +1,163 @@
 .bilanko-form-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 200;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  z-index: 1000;
+  padding: 20px;
 }
 
 .bilanko-form-card {
-  background: var(--color-background);
-  border-radius: var(--radius-base);
-  padding: 1.5rem;
   width: 100%;
-  max-width: 560px;
+  max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 24px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
 .bilanko-form-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
 }
+
 .bilanko-form-header h3 {
-  font-size: 1.1rem;
+  margin: 0;
+  font-size: 1.25rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
 }
 
 .bilanko-form-close {
-  width: 30px;
-  height: 30px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-base);
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
   border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border-radius: var(--radius-base);
   color: var(--color-text-muted);
   cursor: pointer;
-  transition: all .15s ease;
+  transition: all 0.2s ease;
 }
+
 .bilanko-form-close:hover {
-  border-color: var(--color-negative);
   color: var(--color-negative);
-  background: var(--color-negative-subtle);
+  border-color: var(--color-negative);
 }
 
 .bilanko-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem 1.25rem;
-}
-
-@media (max-width: 520px) {
-  .bilanko-form-grid { grid-template-columns: 1fr; }
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .bilanko-form-grid label {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.8rem;
+  gap: 6px;
+  font-size: 0.75rem;
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .bilanko-form-grid input {
-  padding: 0.6rem 0.75rem;
+  height: 40px;
+  padding: 0 12px;
+  background-color: var(--color-background);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-base);
-  font-size: 0.9rem;
   color: var(--color-text);
-  background: var(--color-surface);
-}
-.bilanko-form-grid input:focus {
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-regular);
+  text-transform: none;
+  letter-spacing: normal;
   outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bilanko-form-grid input:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+.bilanko-form-grid input.ng-invalid.ng-touched {
+  border-color: var(--color-negative);
+}
+
+.bilanko-form-error {
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-regular);
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--color-negative);
 }
 
 .bilanko-form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
+  gap: 12px;
+  padding-top: 16px;
   border-top: 1px solid var(--color-border);
+}
+
+/* Boutons (dupliqués ici car le CSS de catalogue-stocks.ts ne s'applique
+   pas à ce composant : Angular isole le style par composant) */
+.bk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 110px;
+  padding: 10px 20px;
+  border-radius: var(--radius-base);
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.bk-btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-on-brand);
+}
+
+.bk-btn--primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.bk-btn--primary:disabled {
+  background-color: var(--color-primary);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bk-btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+
+.bk-btn--ghost:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+@media (max-width: 560px) {
+  .bilanko-form-grid {
+    grid-template-columns: 1fr;
+  }
 }
