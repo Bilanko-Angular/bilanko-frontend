@@ -52,64 +52,7 @@
   pointer-events: none;
 }
 
-.cta-title {
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 0.75rem;
-  line-height: 1.25;
-  position: relative;
-}
 
-.cta-subtitle {
-  font-size: 1.05rem;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 2rem;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-  position: relative;
-}
-
-.btn-cta-primary {
-  background: #fff;
-  color: #059669;
-  font-weight: 700;
-  font-size: 1rem;
-  padding: 0.9rem 2.2rem;
-  border-radius: 10px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  position: relative;
-}
-
-.btn-cta-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  color: #047857;
-}
-
-.cta-perks {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 1.5rem;
-  position: relative;
-}
-
-.cta-perk {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.6);
-  font-weight: 500;
-}
 
 .cta-perk-icon {
   color: #6EE7B7;

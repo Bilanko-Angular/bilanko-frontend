@@ -3,29 +3,7 @@
   display: block;
 }
 
-.section-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  color: #059669;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.35rem 1rem;
-  border-radius: 100px;
-  margin-bottom: 1rem;
-}
 
-.section-title {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 800;
-  color: #111827;
-  line-height: 1.2;
-  margin-bottom: 0.75rem;
-}
 
 .hiw-section {
   padding: 6rem 0;
@@ -104,17 +82,3 @@
   z-index: 0;
 }
 
-.step-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 0.5rem;
-}
-
-.step-desc {
-  font-size: 0.9rem;
-  color: #6B7280;
-  line-height: 1.65;
-  max-width: 240px;
-  margin: 0 auto;
-}
