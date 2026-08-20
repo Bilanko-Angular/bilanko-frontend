@@ -1,0 +1,23 @@
+/* ============================================================
+   BILANKO — CONFIGURATION & SYNCHRONISATION TAILWIND CSS
+   ============================================================ */
+
+/* Config Tailwind v4 (@theme) */
+@theme {
+  --color-primary:         var(--color-primary);
+  --color-primary-hover:   var(--color-primary-hover);
+  --color-primary-active:  var(--color-primary-active);
+  --color-primary-subtle:  var(--color-primary-subtle);
+  --color-positive:        var(--color-positive);
+  --color-negative:        var(--color-negative);
+  --color-accent:          var(--color-accent);
+  --font-sans:             var(--font-family-base);
+  --radius-DEFAULT:        var(--radius-base);
+}
+
+/* Surcharges directes d'utilitaires */
+.bg-primary              { background-color: var(--color-primary) !important; }
+.text-primary            { color: var(--color-primary) !important; }
+.border-primary          { border-color: var(--color-primary) !important; }
+.ring-primary            { --tw-ring-color: var(--color-primary) !important; }
+.hover\:bg-primary:hover { background-color: var(--color-primary-hover) !important; }

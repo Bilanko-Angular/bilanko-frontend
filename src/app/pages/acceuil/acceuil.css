@@ -1,90 +1,45 @@
-/* ============================================================
-   BILANKO — DASHBOARD
-   VERSION COMPACTE
-   ============================================================ */
-
 .bk-dashboard {
-
   width: 100%;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 14px;
-
 }
 
 
-/* ============================================================
-   EN-TÊTE
-   ============================================================ */
-
 .bk-dashboard__header {
-
   display: flex;
-
   align-items: flex-start;
-
 }
 
 
 .bk-dashboard__eyebrow {
-
   display: block;
-
   margin-bottom: 3px;
-
   color: var(--color-primary);
-
   font-size: .62rem;
-
   font-weight: 700;
-
   letter-spacing: .10em;
-
 }
 
 
 .bk-dashboard__header h1 {
-
   margin: 0;
-
   color: var(--color-text);
-
   font-size: 1.55rem;
-
   line-height: 1.15;
-
   font-weight: 700;
-
 }
-
 
 .bk-dashboard__header p {
-
   margin: 4px 0 0;
-
   color: var(--color-text-muted);
-
   font-size: .78rem;
-
 }
 
-
-/* ============================================================
-   ACTIONS
-   ============================================================ */
-
 .bk-quick-actions {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
+  grid-template-columns:repeat(4, minmax(0, 1fr));
   gap: 10px;
-
 }
 
 
