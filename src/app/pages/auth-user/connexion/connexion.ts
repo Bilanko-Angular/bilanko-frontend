@@ -3,7 +3,6 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
-import { RouterLink } from '@angular/router';
 import { User } from '../../../models/person';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 
