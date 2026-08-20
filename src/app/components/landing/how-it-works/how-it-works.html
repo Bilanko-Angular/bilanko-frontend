@@ -1,0 +1,22 @@
+<section class="py-5 bg-light border-top border-bottom" id="comment-ca-marche">
+  <div class="container py-4">
+    <div class="mb-5" appAnimateOnScroll>
+      <span class="badge text-success bg-success-subtle border border-success mb-2 px-3 py-2 text-uppercase">Comment ça marche</span>
+      <h2 class="display-6 fw-bold">Trois étapes, et votre dossier est prêt</h2>
+    </div>
+
+    <div class="row g-4">
+      @for (step of steps; track step.stepNumber; let i = $index) {
+        <div class="col-md-4" appAnimateOnScroll [appAnimateOnScrollDelay]="i * 150">
+          <div class="position-relative pe-md-4">
+            <div class="step-num rounded-circle border border-2 border-primary text-primary fw-bold d-flex align-items-center justify-content-center mb-3 bg-white" style="width: 44px; height: 44px; font-size: 1.1rem;">
+              {{ step.stepNumber }}
+            </div>
+            <h3 class="h5 fw-bold mb-2">{{ step.title }}</h3>
+            <p class="text-muted fs-6 mb-0">{{ step.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
