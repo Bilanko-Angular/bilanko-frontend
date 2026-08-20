@@ -7,6 +7,7 @@ import { CatalogueStocks } from './pages/catalogue-stocks/catalogue-stocks';
 import { Connexion } from './pages/auth-user/connexion/connexion';
 import { Inscription } from './pages/auth-user/inscription/inscription';
 import { MotDePasseOublie } from './pages/auth-user/mot-de-passe-oublie/mot-de-passe-oublie';
+import { BanqueFiscalite } from './pages/banque-fiscalite/banque-fiscalite';
 
 export const routes: Routes = [
   { path: '', component: Acceuil },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'connexion', component: Connexion },
   { path: 'inscription', component: Inscription },
   { path: 'mot-de-passe-oublie', component: MotDePasseOublie },
+  {path: 'banque-fiscalite', component:BanqueFiscalite},
   { path: '**', redirectTo: '' }
 ];
