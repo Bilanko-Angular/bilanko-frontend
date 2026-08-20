@@ -1,22 +1,30 @@
-<section class="py-5 bg-light border-top border-bottom" id="comment-ca-marche">
-  <div class="container py-4">
-    <div class="mb-5" appAnimateOnScroll>
-      <span class="badge text-success bg-success-subtle border border-success mb-2 px-3 py-2 text-uppercase">Comment ça marche</span>
-      <h2 class="display-6 fw-bold">Trois étapes, et votre dossier est prêt</h2>
+<section class="hiw-section" id="comment-ca-marche">
+  <div class="container position-relative">
+
+    <!-- Header -->
+    <div class="text-center mb-5" appAnimateOnScroll>
+      <span class="section-badge">✦ Comment ça marche</span>
+      <h2 class="section-title">Trois étapes,<br>et votre dossier est prêt</h2>
     </div>
 
-    <div class="row g-4">
-      @for (step of steps; track step.stepNumber; let i = $index) {
-        <div class="col-md-4" appAnimateOnScroll [appAnimateOnScrollDelay]="i * 150">
-          <div class="position-relative pe-md-4">
-            <div class="step-num rounded-circle border border-2 border-primary text-primary fw-bold d-flex align-items-center justify-content-center mb-3 bg-white" style="width: 44px; height: 44px; font-size: 1.1rem;">
-              {{ step.stepNumber }}
+    <!-- Steps -->
+    <div class="row g-0 justify-content-center">
+      @for (step of steps; track step.stepNumber; let i = $index; let last = $last) {
+        <div class="col-md-4 position-relative" appAnimateOnScroll [appAnimateOnScrollDelay]="i * 180">
+          <div class="step-card">
+            <div class="step-number-wrap">
+              <div class="step-number">{{ step.stepNumber }}</div>
             </div>
-            <h3 class="h5 fw-bold mb-2">{{ step.title }}</h3>
-            <p class="text-muted fs-6 mb-0">{{ step.description }}</p>
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-desc">{{ step.description }}</p>
           </div>
+          <!-- Connector line (not on last step) -->
+          @if (!last) {
+            <div class="d-none d-md-block step-connector"></div>
+          }
         </div>
       }
     </div>
+
   </div>
 </section>

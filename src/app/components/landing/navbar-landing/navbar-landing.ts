@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { animate, stagger } from 'animejs';
+import { AnimateOnScrollDirective } from '../../../directive/animate-on-scroll.directive';
 
 @Component({
   selector: 'app-navbar-landing',
@@ -7,5 +9,13 @@ import { Component } from '@angular/core';
   styleUrl: './navbar-landing.css',
 })
 export class NavbarLanding {
+  @ViewChild('navRef') navRef!: ElementRef;
 
+  @HostListener('window:scroll')
+  onScroll() {
+    const nav = this.navRef?.nativeElement;
+    if (nav) {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }
+  }
 }

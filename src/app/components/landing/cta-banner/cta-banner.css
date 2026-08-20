@@ -1,0 +1,117 @@
+/* ── CTA Banner Section ────────────────────────────────── */
+:host {
+  display: block;
+}
+
+.cta-section {
+  padding: 5rem 0;
+  background: #fff;
+}
+
+.cta-card {
+  position: relative;
+  background: linear-gradient(135deg, #064E3B 0%, #065F46 50%, #047857 100%);
+  border-radius: 24px;
+  padding: 4rem 3rem;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(6, 78, 59, 0.35);
+}
+
+/* Decorative circles */
+.cta-card::before,
+.cta-card::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.cta-card::before {
+  width: 400px;
+  height: 400px;
+  background: #6EE7B7;
+  top: -150px;
+  right: -80px;
+}
+
+.cta-card::after {
+  width: 280px;
+  height: 280px;
+  background: #34D399;
+  bottom: -100px;
+  left: -60px;
+}
+
+.cta-dot-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.cta-title {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+  position: relative;
+}
+
+.cta-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 2rem;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  position: relative;
+}
+
+.btn-cta-primary {
+  background: #fff;
+  color: #059669;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.9rem 2.2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.btn-cta-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  color: #047857;
+}
+
+.cta-perks {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  position: relative;
+}
+
+.cta-perk {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+}
+
+.cta-perk-icon {
+  color: #6EE7B7;
+  font-size: 1rem;
+}

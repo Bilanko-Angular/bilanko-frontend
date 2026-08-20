@@ -1,81 +1,120 @@
-<header class="hero py-5">
-  <div class="container">
+<section class="hero-section">
+  <!-- Decorative blobs -->
+  <div class="hero-blob hero-blob--1"></div>
+  <div class="hero-blob hero-blob--2"></div>
+  <div class="hero-blob hero-blob--3"></div>
+
+  <div class="container position-relative">
     <div class="row align-items-center gy-5">
-      
+
+      <!-- ── Left: Text ── -->
       <div class="col-lg-6" appAnimateOnScroll>
-        <span class="eyebrow badge text-success bg-success-subtle border border-success mb-3 px-3 py-2 text-uppercase fw-semibold">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
           Gestion &amp; documents bancaires
-        </span>
-        <h1 class="display-4 fw-bold mb-3 lh-sm">
-          Vos ventes deviennent un <em class="text-primary style-normal">dossier de prêt</em> prêt à déposer
+        </div>
+
+        <h1 class="hero-title">
+          Vos ventes deviennent un <em>dossier de prêt</em> prêt à déposer
         </h1>
-        <p class="lead text-muted mb-4 fs-6">
+
+        <p class="hero-subtitle">
           Bilanko suit votre stock et vos ventes au quotidien, puis génère automatiquement les relevés et bilans que votre banque vous demande.
         </p>
-        <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-          <a href="#" class="btn btn-primary btn-lg fw-semibold px-4">Créer mon compte gratuitement</a>
-          <a href="#comment-ca-marche" class="btn btn-outline-secondary btn-lg fw-semibold px-4">Voir comment ça marche</a>
+
+        <div class="hero-cta-group">
+          <a href="#" class="btn-hero-primary">
+            Créer mon compte gratuitement
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#comment-ca-marche" class="btn-hero-secondary">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/>
+            </svg>
+            Voir comment ça marche
+          </a>
         </div>
-        <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
-          <span><i class="bi bi-star-fill text-primary me-1"></i> Gratuit pour commencer</span>
-          <span><i class="bi bi-shield-check text-primary me-1"></i> Sans engagement</span>
-          <span><i class="bi bi-clock-history text-primary me-1"></i> Configuré en 5 minutes</span>
+
+        <div class="hero-trust-row">
+          <div class="hero-trust-item">
+            <span class="trust-icon">✓</span> Gratuit pour commencer
+          </div>
+          <div class="hero-trust-item">
+            <span class="trust-icon">✓</span> Sans engagement
+          </div>
+          <div class="hero-trust-item">
+            <span class="trust-icon">⚡</span> Configuré en 5 minutes
+          </div>
         </div>
       </div>
 
-      <div class="col-lg-6">
-        <div class="hero-visual position-relative d-flex justify-content-center" #heroVisual>
-          <div class="hero-visual-stack w-100" style="max-width: 400px;">
-            <div class="ghost-card ghost-card--left"></div>
-            <div class="ghost-card ghost-card--right"></div>
+      <!-- ── Right: Dashboard Mock ── -->
+      <div class="col-lg-6 d-flex justify-content-center">
+        <div class="hero-visual-float" #heroVisual>
 
-            <div class="dashboard-card bg-white p-2 rounded-4 shadow-lg position-relative">
-              <div class="dashboard-badge-top position-absolute top-0 start-0 m-3 d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-dark bg-opacity-75 text-white small">
-                <span class="live-dot"></span> Mise à jour en direct
+          <!-- Ghost cards depth effect -->
+          <div class="ghost-card ghost-card--left"></div>
+          <div class="ghost-card ghost-card--right"></div>
+
+          <!-- Main card -->
+          <div class="dashboard-card">
+
+            <!-- Header gradient bar -->
+            <div class="dashboard-header-bar">
+              <div class="dashboard-dots">
+                <span style="background:#f87171;"></span>
+                <span style="background:#fbbf24;"></span>
+                <span style="background:#34d399;"></span>
               </div>
 
-              <div class="dashboard-mock rounded-3 p-3 text-white">
-                <div class="dashboard-mock-bar d-flex gap-1 mb-3">
-                  <span class="rounded-circle bg-white bg-opacity-25" style="width:8px;height:8px;"></span>
-                  <span class="rounded-circle bg-white bg-opacity-25" style="width:8px;height:8px;"></span>
-                  <span class="rounded-circle bg-white bg-opacity-25" style="width:8px;height:8px;"></span>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="live-badge">
+                  <span class="live-dot"></span> Mise à jour en direct
                 </div>
-                
-                <div class="row g-2 mb-3">
-                  <div class="col-6">
-                    <div class="bg-white bg-opacity-10 border border-white border-opacity-10 rounded p-2">
-                      <small class="text-white-50 text-uppercase d-block" style="font-size: 0.65rem;">Ventes du jour</small>
-                      <span class="fw-bold text-emerald">+42 300 FCFA</span>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="bg-white bg-opacity-10 border border-white border-opacity-10 rounded p-2">
-                      <small class="text-white-50 text-uppercase d-block" style="font-size: 0.65rem;">Stock restant</small>
-                      <span class="fw-bold">1 284 art.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="dashboard-mock-chart d-flex align-items-end gap-2" style="height: 90px;" #chartContainer>
-                  <i class="chart-bar bg-success rounded-top opacity-75" style="height: 38%; flex: 1;"></i>
-                  <i class="chart-bar bg-success rounded-top opacity-75" style="height: 55%; flex: 1;"></i>
-                  <i class="chart-bar bg-success rounded-top opacity-75" style="height: 46%; flex: 1;"></i>
-                  <i class="chart-bar bg-success rounded-top opacity-75" style="height: 70%; flex: 1;"></i>
-                  <i class="chart-bar bg-emerald rounded-top" style="height: 100%; flex: 1;"></i>
-                  <i class="chart-bar bg-success rounded-top opacity-75" style="height: 64%; flex: 1;"></i>
-                  <i class="chart-bar bg-success rounded-top opacity-75" style="height: 82%; flex: 1;"></i>
-                </div>
+                <span style="font-size:0.7rem; color:rgba(255,255,255,0.45);">Août 2026</span>
               </div>
 
-              <div class="dashboard-badge-bottom bg-white rounded-3 p-3 shadow-sm mt-n3 mx-2 position-relative">
-                <span class="badge text-success bg-success-subtle border border-success rounded-pill mb-2">Fiable &amp; à jour</span>
-                <p class="fw-bold m-0 text-dark">Votre activité suivie chaque jour, prête pour votre banque.</p>
+              <div class="stat-row">
+                <div class="stat-box">
+                  <span class="stat-label">Ventes du jour</span>
+                  <span class="stat-value stat-value--green">+42 300 FCFA</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label">Stock restant</span>
+                  <span class="stat-value">1 284 art.</span>
+                </div>
               </div>
             </div>
+
+            <!-- Chart body -->
+            <div class="dashboard-body">
+              <p class="chart-title">Ventes — 7 derniers jours</p>
+              <div class="chart-area" #chartContainer>
+                <i class="chart-bar" style="height: 38%;"></i>
+                <i class="chart-bar" style="height: 55%;"></i>
+                <i class="chart-bar" style="height: 46%;"></i>
+                <i class="chart-bar" style="height: 70%;"></i>
+                <i class="chart-bar active" style="height: 100%;"></i>
+                <i class="chart-bar" style="height: 64%;"></i>
+                <i class="chart-bar" style="height: 82%;"></i>
+              </div>
+            </div>
+
+            <!-- Insight card -->
+            <div class="insight-card">
+              <div class="insight-icon">📊</div>
+              <div>
+                <span class="insight-label">Rapport disponible</span>
+                <p class="insight-text mb-0">Votre activité suivie chaque jour, prête pour votre banque.</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
     </div>
   </div>
-</header>
+</section>
