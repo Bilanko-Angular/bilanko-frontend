@@ -1,9 +1,4 @@
-// src/app/services/theme.service.ts
-//
-// Gère le mode clair/sombre de toute l'application en s'appuyant sur les
-// variables déjà définies dans assets/styles/theme.css (blocs
-// [data-theme="dark"] et [data-theme="light"]). Il suffit de poser
-// l'attribut data-theme sur <html> pour que tout le thème change.
+
 
 import { Injectable, signal, effect, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';

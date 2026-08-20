@@ -3,6 +3,9 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
+import { RouterLink } from '@angular/router';
+import { User } from '../../../models/person';
+import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 
 @Component({
   selector: 'app-connexion',
@@ -19,6 +22,7 @@ export class Connexion {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
+  private readonly authStore = inject(AuthStoreService);
 
   isLoading = false;
   loginError = '';
@@ -33,10 +37,9 @@ export class Connexion {
     this.router.navigate(['/']);
   }
 
-  /* ── Soumission du formulaire ── */
-  soumettre(event: Event): void {
+  async soumettre(event: Event): Promise<void> {
     event.preventDefault();
-    
+
     if (this.connectionForm.invalid) {
       this.connectionForm.markAllAsTouched();
       return;
@@ -45,12 +48,21 @@ export class Connexion {
     this.isLoading = true;
     this.loginError = '';
 
-    // Simuler une requête API
-    setTimeout(() => {
-      this.isLoading = false;
-      console.log('Connexion :', this.connectionForm.value);
-      // Redirection vers la page d'accueil
+    const formValue = this.connectionForm.value;
+    const user: User = {
+      email: formValue.email ?? '',
+      password: formValue.password ?? '',
+    };
+
+    try {
+      await this.authStore.login(user);
+      console.log('Connexion réussie ! Token :', this.authStore.token());
       this.router.navigate(['/']);
-    }, 800);
+    } catch (error: any) {
+      console.error('Échec de la connexion', error);
+      this.loginError = error?.message || 'Identifiants incorrects ou erreur serveur.';
+    } finally {
+      this.isLoading = false;
+    }
   }
 }

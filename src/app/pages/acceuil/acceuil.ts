@@ -17,7 +17,6 @@ import { ChargesService } from '../../services/charges.service';
 
 import { EvolutionChart } from '../../components/shared/evolution-chart/evolution-chart';
 
-
 @Component({
   selector: 'app-acceuil',
   standalone: true,
@@ -28,11 +27,8 @@ import { EvolutionChart } from '../../components/shared/evolution-chart/evolutio
     RouterLink,
     EvolutionChart
   ],
-
   templateUrl: './acceuil.html',
-
   styleUrls: ['./acceuil.css'],
-
   changeDetection:
     ChangeDetectionStrategy.OnPush
 })
