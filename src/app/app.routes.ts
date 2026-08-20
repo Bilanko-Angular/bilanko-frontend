@@ -7,9 +7,11 @@ import { CatalogueStocks } from './pages/catalogue-stocks/catalogue-stocks';
 import { Connexion } from './pages/auth-user/connexion/connexion';
 import { Inscription } from './pages/auth-user/inscription/inscription';
 import { MotDePasseOublie } from './pages/auth-user/mot-de-passe-oublie/mot-de-passe-oublie';
+import { Landing } from './pages/landing/landing';
 
 export const routes: Routes = [
-  { path: '', component: Acceuil },
+  { path: '', component: Landing },
+  { path: 'dashboard', component: Acceuil },
   { path: 'catalogue', component: CatalogueStocks },
   { path: 'ventes', component: SalesComponent },
   { path: 'charges', component: ChargesComponent },
