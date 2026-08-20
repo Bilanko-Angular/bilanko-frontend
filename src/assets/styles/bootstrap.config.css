@@ -1,13 +1,8 @@
-/* ============================================================
-   BILANKO — CONFIGURATION & SYNCHRONISATION BOOTSTRAP 5.3+
-   ============================================================ */
-
-/* 1. Mappage pour le Thème Clair (Default) */
 :root,
 [data-theme="light"],
 [data-bs-theme="light"] {
   --bs-primary:                var(--color-primary);
-  --bs-primary-rgb:            99, 183, 141;
+  --bs-primary-rgb:            16, 185, 129;
   --bs-primary-text-emphasis:  var(--color-primary-active);
   --bs-primary-bg-subtle:      var(--color-primary-subtle);
   --bs-primary-border-subtle:  var(--color-primary);
@@ -24,7 +19,6 @@
   --bs-border-color:           var(--color-border);
   --bs-border-radius:          var(--radius-base);
 
-  /* Menus déroulants, Cartes & Listes */
   --bs-dropdown-bg:            var(--color-surface);
   --bs-dropdown-color:         var(--color-text);
   --bs-dropdown-border-color:  var(--color-border);
@@ -41,10 +35,9 @@
   --bs-list-group-action-hover-bg: var(--color-primary-subtle);
 }
 
-/* 2. Mappage pour le Thème Sombre */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bs-primary-rgb:            127, 203, 163;
+    --bs-primary-rgb:            52, 211, 153;
     --bs-body-bg:                var(--color-background);
     --bs-body-color:             var(--color-text);
     --bs-secondary-bg:           var(--color-surface);
@@ -65,7 +58,7 @@
 [data-theme="dark"],
 [data-bs-theme="dark"] {
   --bs-primary:                var(--color-primary);
-  --bs-primary-rgb:            127, 203, 163;
+  --bs-primary-rgb:            52, 211, 153;
   --bs-primary-text-emphasis:  var(--color-primary-active);
   --bs-primary-bg-subtle:      var(--color-primary-subtle);
   --bs-primary-border-subtle:  var(--color-primary);
@@ -96,7 +89,6 @@
   --bs-list-group-action-hover-bg: var(--color-primary-subtle);
 }
 
-/* 3. Surcharges directes de composants (Boutons et Formulaires) */
 .btn-primary {
   --bs-btn-bg: var(--color-primary) !important;
   --bs-btn-border-color: var(--color-primary) !important;
@@ -119,7 +111,6 @@
 .border-primary { border-color: var(--color-primary) !important; }
 .link-primary   { color: var(--color-primary) !important; }
 
-/* Inclusions des champs de formulaire et dropdowns */
 .form-control,
 .form-select,
 .input-group-text {
