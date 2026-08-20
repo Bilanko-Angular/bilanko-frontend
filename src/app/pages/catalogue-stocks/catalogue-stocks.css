@@ -1,165 +1,123 @@
-/* ============================================================
-   Catalogue & Stocks — Page Complète
-   ============================================================ */
-
-/* --- En-tête de la page --- */
 .bk-page-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2.5rem;
-  gap: 1.5rem;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-subtle) 100%);
-  padding: 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(99, 183, 141, 0.15);
-  border: 1px solid rgba(99, 183, 141, 0.2);
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+  background-color: var(--color-primary-subtle);
 }
 
 .bk-page-title {
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  margin: 0;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .bk-page-subtitle {
   color: var(--color-text-muted);
-  font-size: 1rem;
-  margin-top: 0.65rem;
-  max-width: 500px;
-  line-height: 1.6;
-  font-weight: var(--font-weight-regular);
+  font-size: 0.875rem;
+  margin-top: 0.35rem;
+  max-width: 480px;
 }
 
 .bk-page-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.6rem;
   flex-wrap: wrap;
-  justify-content: flex-end;
 }
 
-/* --- Boutons généraux --- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1.1rem;
-  border-radius: var(--radius-base);
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
+/* --- Panneau de filtres --- */
+.bk-filter-wrapper { position: relative; }
+
+.bk-filter-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  background: var(--color-background);
   border: 1px solid var(--color-border);
-  white-space: nowrap;
-  transition: all 0.15s ease;
+  border-radius: var(--radius-base);
+  padding: 1rem;
+  width: 260px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
 }
 
-.btn-outline {
+.bk-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+}
+
+.bk-filter-field select {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
   background: var(--color-surface);
   color: var(--color-text);
-}
-.btn-outline:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  background: var(--color-primary-subtle);
-}
-.btn-outline:active {
-  transform: scale(0.97);
+  font-size: 0.85rem;
 }
 
-.btn-primary {
-  background: var(--color-primary);
-  color: var(--color-on-brand);
+.bk-filter-reset {
+  align-self: flex-start;
+  background: none;
   border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-weight: var(--font-weight-bold);
-  padding: 0.6rem 1.25rem;
-}
-.btn-primary:hover {
-  background: var(--color-primary-hover);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
-}
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn .icon {
-  display: inline-flex;
-  align-items: center;
-  font-size: 1rem;
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
 }
 
 /* --- Carte principale --- */
 .bk-card {
   background: var(--color-background);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.3s ease;
+  border-radius: var(--radius-base);
+  padding: 1.5rem;
 }
 
-.bk-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
-
-.bk-toolbar {
-  margin-bottom: 1.5rem;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
+.bk-toolbar { margin-bottom: 1.25rem; }
 
 .bk-search-wrapper {
   position: relative;
-  max-width: 400px;
-  flex: 1;
+  max-width: 380px;
 }
-
 .bk-search-icon {
   position: absolute;
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   color: var(--color-text-muted);
-  font-size: 0.85rem;
 }
-
 .bk-search {
   width: 100%;
-  padding: 0.65rem 0.75rem 0.65rem 2.25rem;
+  padding: 0.6rem 0.75rem 0.6rem 2.1rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-base);
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 0.875rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.bk-search::placeholder {
-  color: var(--color-text-muted);
 }
 .bk-search:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-subtle);
-  background: var(--color-background);
 }
 
 /* --- Tableau --- */
+.bk-table-scroll { overflow-x: auto; }
+
 .bk-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1rem 0;
+  min-width: 640px;
 }
 
 .bk-table thead th {
@@ -169,43 +127,32 @@
   letter-spacing: 0.04em;
   color: var(--color-text-muted);
   font-weight: var(--font-weight-bold);
-  padding: 1rem;
-  border-bottom: 2px solid var(--color-primary);
-  background: linear-gradient(135deg, var(--color-primary-subtle) 0%, var(--color-surface) 100%);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .bk-table tbody td {
   padding: 1rem;
-  border-bottom: 1px solid var(--color-border);
-  font-size: 0.9rem;
-  color: var(--color-text);
-  vertical-align: middle;
-}
-
-.bk-table tbody tr {
-  transition: all 0.15s ease;
-  padding: 0.85rem 0.75rem;
   border-bottom: 1px solid var(--color-border);
   font-size: 0.875rem;
   color: var(--color-text);
   vertical-align: middle;
 }
 
-.bk-badge-categorie {
-  display: inline-block;
-  padding: 0.4rem 0.9rem;
-  border-radius: 20px;
-  background: linear-gradient(135deg, var(--color-accent-subtle) 0%, var(--color-background) 100%);
-  color: var(--color-accent);
-  font-size: 0.7rem;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.03em;
-  border: 1px solid var(--color-accent);
+.bk-table tbody tr:hover { background: var(--color-primary-subtle); }
+
+.align-center { text-align: center; }
+.align-right { text-align: right; }
+
+.bk-ref {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  margin-top: 3px;
 }
 
 .bk-badge-categorie {
   display: inline-block;
-  padding: 0.2rem 0.65rem;
+  padding: 0.25rem 0.7rem;
   border-radius: 999px;
   background: var(--color-primary-subtle);
   color: var(--color-primary);
@@ -213,7 +160,6 @@
   font-weight: var(--font-weight-medium);
 }
 
-/* --- Statuts stock, alignés sur la charte financière --- */
 .bk-stock {
   font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
@@ -224,59 +170,62 @@
   text-transform: uppercase;
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.03em;
+  margin-top: 2px;
 }
 .bk-stock--ok { color: var(--color-text); }
 .bk-stock--warning { color: var(--color-accent); }
 .bk-stock--error { color: var(--color-negative); }
 
-/* --- Montants --- */
 .bk-amount {
-  font-weight:6px;
-  height: 36px;
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+/* --- Boutons d'action : taille FIXE, jamais de scale au survol --- */
+.bk-actions-cell {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.bk-icon-btn {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-base);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   color: var(--color-text-muted);
   cursor: pointer;
-  margin: 0 0.25rem;
-  font-size: 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
+  padding: 0;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.bk-icon-btn svg {
+  width: 15px;
+  height: 15px;
+  display: block;
 }
 .bk-icon-btn:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
   background: var(--color-primary-subtle);
-  transform: translateY(-2px);
-}
-.bk-icon-btn--danger {
-  color: var(--color-text-mutedrface);
-  color: var(--color-text-muted);
-  cursor: pointer;
-  margin: 0 2px;
-  transition: all 0.15s ease;
-}
-.bk-icon-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
 }
 .bk-icon-btn--danger:hover {
   border-color: var(--color-negative);
   color: var(--color-negative);
-  background: v.5rem;
-  padding: 1.1rem 1.25rem;
-  background: var(--color-positive-subtle);
-  border-left: 4px solid var(--color-positive);
-  border-radius: var(--radius-base);
-  font-size: 0.95rem;
-  font-weight: var(--font-weight-medium);
+  background: var(--color-negative-subtle);
 }
-.bk-total-banner strong {
-  color: var(--color-positive);
-  font-size: 1.2rem;
-  font-weight: var(--font-weight-bold)
+
+/* --- États --- */
+.bk-state-msg {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 .bk-state-msg--error { color: var(--color-negative); }
 
@@ -285,8 +234,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
-  padding: 0.9rem 1rem;
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
   background: var(--color-positive-subtle);
   border-radius: var(--radius-base);
   font-size: 0.9rem;
@@ -302,21 +251,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
-
-.bk-pagination-info {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-}
-
-.bk-pagination-controls {
-  display: flex;
-  gap: 0.3rem;
-}
-
+.bk-pagination-info { font-size: 0.8rem; color: var(--color-text-muted); }
+.bk-pagination-controls { display: flex; gap: 0.3rem; }
 .bk-page-btn {
   width: 32px;
   height: 32px;
@@ -326,6 +266,7 @@
   color: var(--color-text);
   cursor: pointer;
   font-size: 0.8rem;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
 }
 .bk-page-btn:hover:not(:disabled) {
   border-color: var(--color-primary);
@@ -336,9 +277,49 @@
   color: var(--color-on-brand);
   border-color: var(--color-primary);
 }
-.bk-page-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+.bk-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* --- Modale de confirmation de suppression --- */
+.bk-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.bk-confirm-card {
+  background: var(--color-background);
+  border-radius: var(--radius-base);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+}
+.bk-confirm-card h3 {
+  font-size: 1.05rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: 0.6rem;
+}
+.bk-confirm-card p {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+.bk-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
 }
 
-/* --- Formulaire modal (réutilisé de produit-form.css) --- */
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .bk-page-header { flex-direction: column; align-items: stretch; }
+  .bk-card { padding: 1rem; }
+  .bk-total-banner { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .bk-pagination { flex-direction: column; align-items: flex-start; }
+}

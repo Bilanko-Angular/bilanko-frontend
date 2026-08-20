@@ -5,6 +5,7 @@ import { ChargesComponent } from './pages/charges/charges';
 import path from 'path';
 import { Component } from '@angular/core';
 import { CatalogueStocks } from './pages/catalogue-stocks/catalogue-stocks';
+import { BanqueFiscalite } from './pages/banque-fiscalite/banque-fiscalite';
 
 export const routes: Routes = [
   {
@@ -22,5 +23,6 @@ export const routes: Routes = [
   },
  {
   path:"catalogue",  component:CatalogueStocks
- }
+ },
+ { path: 'banque-fiscalite', component: BanqueFiscalite },
 ];

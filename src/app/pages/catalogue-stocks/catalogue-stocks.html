@@ -1,19 +1,52 @@
-<!-- src/app/pages/catalogue-stocks/catalogue-stocks.html -->
 <app-template>
   <div class="bk-page-header">
     <div>
       <h2 class="bk-page-title">Catalogue & Stocks</h2>
-      <p class="bk-page-subtitle">Gestion détaillée de l'inventaire et des valorisations.</p>
+      <p class="bk-page-subtitle">Gestion de l'inventaire. Le prix de vente et la marge se calculent depuis le module Ventes.</p>
     </div>
+
     <div class="bk-page-actions">
-      <button class="btn btn-outline" (click)="ouvrirFiltres()" title="Ouvrir les filtres avancés">
-        <span class="icon">☰</span> Filtres
+      <div class="bk-filter-wrapper">
+        <button class="btn btn-outline" [class.actif]="afficherFiltres()" (click)="toggleFiltres()">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="15" height="15"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/></svg>
+          Filtres
+        </button>
+
+        @if (afficherFiltres()) {
+          <div class="bk-filter-panel">
+            <label class="bk-filter-field">
+              Catégorie
+              <select [ngModel]="filtreCategorie()" (ngModelChange)="filtreCategorie.set($event)">
+                <option value="">Toutes</option>
+                @for (c of categories(); track c) {
+                  <option [value]="c">{{ c }}</option>
+                }
+              </select>
+            </label>
+
+            <label class="bk-filter-field">
+              Statut du stock
+              <select [ngModel]="filtreStatut()" (ngModelChange)="filtreStatut.set($event)">
+                <option value="tous">Tous</option>
+                <option value="ok">En stock</option>
+                <option value="warning">Sous le seuil</option>
+                <option value="error">Rupture</option>
+              </select>
+            </label>
+
+            <button class="bk-filter-reset" (click)="reinitialiserFiltres()">Réinitialiser</button>
+          </div>
+        }
+      </div>
+
+      <button class="btn btn-outline" (click)="exporter()">
+        <svg viewBox="0 0 16 16" fill="currentColor" width="15" height="15"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+        Exporter
       </button>
-      <button class="btn btn-outline" (click)="exporter()" title="Exporter les données en CSV">
-        <span class="icon">⬇</span> Exporter
-      </button>
-      <button class="btn btn-primary" (click)="ouvrirCreation()" title="Créer un nouveau produit">
-        <span class="icon">+</span> Ajouter
+
+      <button class="btn btn-primary" (click)="ouvrirCreation()">
+        <svg viewBox="0 0 16 16" fill="currentColor" width="15" height="15"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/></svg>
+        Ajouter
       </button>
     </div>
   </div>
@@ -21,7 +54,7 @@
   <div class="bk-card">
     <div class="bk-toolbar">
       <div class="bk-search-wrapper">
-        <span class="bk-search-icon">🔍</span>
+        <svg class="bk-search-icon" viewBox="0 0 16 16" fill="currentColor" width="15" height="15"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/></svg>
         <input
           class="bk-search"
           type="text"
@@ -37,51 +70,55 @@
     } @else if (catalogue.error()) {
       <p class="bk-state-msg bk-state-msg--error">Impossible de charger le catalogue depuis le serveur.</p>
     } @else {
-      <table class="bk-table">
-        <thead>
-          <tr>
-            <th>Nom du produit & réf.</th>
-            <th>Catégorie</th>
-            <th class="align-center">Qté en stock</th>
-            <th class="align-center">Seuil alerte</th>
-            <th class="align-right">Marge unitaire (FCFA)</th>
-            <th class="align-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (p of produitsPage(); track p.id) {
+      <div class="bk-table-scroll">
+        <table class="bk-table">
+          <thead>
             <tr>
-              <td>
-                <strong>{{ p.nom }}</strong>
-                <div class="bk-ref">RÉF : {{ p.reference }}</div>
-              </td>
-              <td><span class="bk-badge-categorie">{{ p.categorie }}</span></td>
-              <td class="align-center">
-                <span [class]="'bk-stock bk-stock--' + statutStock(p)">
-                  {{ p.quantiteStock }}
-                  @if (statutStock(p) === 'warning') { <small>warning</small> }
-                  @if (statutStock(p) === 'error') { <small>rupture</small> }
-                </span>
-              </td>
-              <td class="align-center bk-text-muted">{{ p.seuilAlerte }}</td>
-              <td class="align-right bk-amount"
-                  [class.bk-amount--positive]="margeUnitaire(p) >= 0"
-                  [class.bk-amount--negative]="margeUnitaire(p) < 0">
-                {{ margeUnitaire(p) | currency:'XAF':'symbol':'1.0-0' }}
-              </td>
-              <td class="align-center">
-                <button class="bk-icon-btn" (click)="ouvrirEdition(p)" title="Modifier">✎</button>
-                <button class="bk-icon-btn bk-icon-btn--danger" (click)="supprimer(p)" title="Supprimer">🗑</button>
-              </td>
+              <th>Nom du produit & réf.</th>
+              <th>Catégorie</th>
+              <th class="align-center">Qté en stock</th>
+              <th class="align-center">Seuil alerte</th>
+              <th class="align-right">Prix d'achat</th>
+              <th class="align-center">Actions</th>
             </tr>
-          } @empty {
-            <tr><td colspan="6" class="bk-state-msg">Aucun produit ne correspond à votre recherche.</td></tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (p of produitsPage(); track p.id) {
+              <tr>
+                <td>
+                  <strong>{{ p.nom }}</strong>
+                  <div class="bk-ref">RÉF : {{ p.reference }}</div>
+                </td>
+                <td><span class="bk-badge-categorie">{{ p.categorie }}</span></td>
+                <td class="align-center">
+                  <span [class]="'bk-stock bk-stock--' + statutStock(p)">
+                    {{ p.quantiteStock }}
+                    @if (statutStock(p) === 'warning') { <small>seuil bas</small> }
+                    @if (statutStock(p) === 'error') { <small>rupture</small> }
+                  </span>
+                </td>
+                <td class="align-center bk-text-muted">{{ p.seuilAlerte }}</td>
+                <td class="align-right bk-amount">{{ p.prixAchat | currency:'XAF':'symbol':'1.0-0' }}</td>
+                <td class="align-center">
+                  <div class="bk-actions-cell">
+                    <button class="bk-icon-btn" (click)="ouvrirEdition(p)" title="Modifier">
+                      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
+                    </button>
+                    <button class="bk-icon-btn bk-icon-btn--danger" (click)="demanderSuppression(p)" title="Supprimer">
+                      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6" class="bk-state-msg">Aucun produit ne correspond à votre recherche.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
 
       <div class="bk-total-banner">
-        <span>Valorisation totale du stock (marge)</span>
+        <span>Valeur totale du stock (au prix d'achat)</span>
         <strong>{{ valorisationTotale() | currency:'XAF':'symbol':'1.0-0' }}</strong>
       </div>
 
@@ -94,11 +131,7 @@
         <div class="bk-pagination-controls">
           <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="pageCourante() === 1">‹</button>
           @for (n of pagesAffichees(); track n) {
-            <button
-              class="bk-page-btn"
-              [class.actif]="n === pageCourante()"
-              (click)="allerAPage(n)"
-            >{{ n }}</button>
+            <button class="bk-page-btn" [class.actif]="n === pageCourante()" (click)="allerAPage(n)">{{ n }}</button>
           }
           <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="pageCourante() === nombrePages()">›</button>
         </div>
@@ -113,4 +146,17 @@
     (enregistrer)="onEnregistrer($event)"
     (annuler)="fermerFormulaire()"
   />
+}
+
+@if (produitASupprimer(); as p) {
+  <div class="bk-confirm-overlay" (click)="annulerSuppression()">
+    <div class="bk-confirm-card" (click)="$event.stopPropagation()">
+      <h3>Supprimer ce produit ?</h3>
+      <p>« <strong>{{ p.nom }}</strong> » (réf. {{ p.reference }}) sera définitivement retiré du catalogue. Cette action est irréversible.</p>
+      <div class="bk-confirm-actions">
+        <button class="btn btn-outline" (click)="annulerSuppression()">Annuler</button>
+        <button class="btn btn-danger" (click)="confirmerSuppression()">Supprimer</button>
+      </div>
+    </div>
+  </div>
 }
