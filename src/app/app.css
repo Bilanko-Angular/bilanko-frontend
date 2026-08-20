@@ -1,11 +1,20 @@
 .layout {
   display: flex;
   height: 100vh;
-  
+  background-color: var(--color-background);
 }
 
-.layout main {
+.layout .main-section {
   flex: 1;
-  min-width: 0;      /* évite que le contenu déborde et casse le flex */
-  overflow-y: auto;   /* le scroll se fait dans main, pas sur toute la page */
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+}
+
+.layout .content {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  background-color: var(--color-background);
 }

@@ -1,12 +1,94 @@
-/* Minimal styles mirroring ventes for consistency */
-:host { display: block; }
-.page-header { display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; margin-bottom:1.5rem }
-.header-actions { display:flex; gap:0.75rem }
-.table-container {
-  overflow: visible;
+:host { display: block; background-color: var(--color-background); }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
-.registry-table { width:100%; border-collapse:collapse }
-.registry-table th, .registry-table td { padding:0.8rem; border-bottom:1px solid #E5E5E5 }
-.empty-state { padding:2rem; text-align:center; color:#666 }
-.kebab-btn { background:none; border:none; cursor:pointer }
-.dropdown-menu { position:absolute; background:#fff; border:1px solid #E5E5E5; border-radius:4px; box-shadow:0 6px 18px rgba(0,0,0,0.06) }
+.page-header h1 { color: var(--color-text); margin: 0 0 0.4rem 0; font-size: 1.5rem; }
+.page-header p { color: var(--color-text-muted); margin: 0; }
+
+.header-actions { display: flex; gap: 0.75rem; }
+
+.table-container { overflow: visible; }
+
+.registry-table { width: 100%; border-collapse: collapse; }
+.registry-table th,
+.registry-table td {
+  padding: 0.9rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  text-align: left;
+  font-size: 0.9rem;
+}
+.registry-table thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text);
+}
+.registry-table tbody tr:hover { background-color: var(--color-primary-subtle); }
+
+.align-right { text-align: right; }
+.align-center { text-align: center; }
+.tabular-nums { font-variant-numeric: tabular-nums; }
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-base);
+}
+
+.kebab-btn { background: none; border: none; cursor: pointer; color: var(--color-text-muted); }
+.kebab-btn:hover { color: var(--color-text); }
+
+.dropdown-menu {
+  position: absolute;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-base);
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+.btn-primary { background: var(--color-primary); color: var(--color-on-brand); }
+.btn-primary:hover { background: var(--color-primary-hover); }
+.btn-secondary { background: var(--color-surface); color: var(--color-text); border-color: var(--color-border); }
+.btn-secondary:hover { background: var(--color-primary-subtle); }
+
+/* --- Modale, alignée sur celle de ventes.css --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 1rem;
+}
+.modal-content {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 500px;
+  color: var(--color-text);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.modal-header h2 { margin: 0; color: var(--color-text); font-size: 1.2rem; }

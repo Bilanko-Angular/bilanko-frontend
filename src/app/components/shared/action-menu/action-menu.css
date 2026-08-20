@@ -1,5 +1,34 @@
 .action-cell { position: relative; display: inline-block; }
-.kebab-btn { background:none; border:none; font-size:1.2rem; cursor:pointer; padding:0 0.5rem; }
-.dropdown-menu { position: absolute; right: 0; top: 100%; background:#fff; border:1px solid #E5E5E5; border-radius:4px; min-width:140px; box-shadow:0 6px 18px rgba(0,0,0,0.06); z-index:100; }
-.dropdown-item { display:block; width:100%; text-align:left; background:none; border:none; padding:0.6rem 0.9rem; cursor:pointer; }
-.dropdown-item.danger { color:#B23B3B }
+.kebab-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  color: var(--color-text-muted);
+}
+.kebab-btn:hover { color: var(--color-text); }
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  min-width: 140px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  z-index: 100;
+}
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  color: var(--color-text);
+}
+.dropdown-item:hover { background: var(--color-primary-subtle); }
+.dropdown-item.danger { color: var(--color-negative); }

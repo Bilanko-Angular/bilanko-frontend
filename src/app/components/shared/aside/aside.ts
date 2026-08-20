@@ -1,5 +1,7 @@
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-aside',
   imports: [RouterLink, RouterLinkActive],
@@ -7,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./aside.css'],
 })
 export class Aside {
+  private readonly router = inject(Router);
 
+  logout(): void {
+    this.router.navigate(['/connexion']);
+  }
 }

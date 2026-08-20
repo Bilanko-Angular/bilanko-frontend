@@ -1,23 +1,17 @@
-/* =========================================
-   STRUCTURE GÉNÉRALE & TYPOGRAPHIE
-   ========================================= */
+
 :host {
-  font-family: 'DM Sans', sans-serif;
-  color: #2B2B28;       /* Anthracite */
-  background-color: #FFFFFF; /* Fond blanc */
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background-color: var(--color-background);
   padding: 0;
   display: block;
 }
 
-/* Classe utilitaire pour forcer l'alignement des chiffres */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
 }
 
-/* =========================================
-   EN-TÊTE DE LA PAGE
-   ========================================= */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -29,141 +23,107 @@
 
 .page-header h1 {
   font-weight: 700;
-  font-size: 1.8rem;
-  margin: 0 0 0.5rem 0;
-  color: #2B2B28;
+  font-size: 1.5rem;
+  margin: 0 0 0.4rem 0;
+  color: var(--color-text);
 }
 
 .page-header p {
   font-weight: 400;
-  font-size: 0.95rem;
-  color: #666666;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
   margin: 0;
   max-width: 500px;
 }
 
-.header-actions {
-  display: flex;
-  gap: 0.75rem;
-}
+.header-actions { display: flex; gap: 0.75rem; }
 
-/* =========================================
-   BOUTONS
-   ========================================= */
 .btn {
   padding: 0.6rem 1.2rem;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: var(--radius-base);
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 }
 
 .btn-primary {
-  background-color: #63B78D; /* Vert Bilanko */
-  color: #FFFFFF;
+  background-color: var(--color-primary);
+  color: var(--color-on-brand);
 }
-
-.btn-primary:hover {
-  background-color: #54a17c; /* darken(#63B78D, 5%) */
-}
+.btn-primary:hover { background-color: var(--color-primary-hover); }
 
 .btn-secondary {
-  background-color: transparent;
-  color: #2B2B28;
-  border-color: #cccccc;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
 }
+.btn-secondary:hover { background-color: var(--color-primary-subtle); }
 
-.btn-secondary:hover {
-  background-color: #F9F9F9;
-}
-
-/* =========================================
-   TABLEAU "ESPRIT GRAND LIVRE"
-   ========================================= */
-.table-container {
-  overflow: visible;
-}
-.registry-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+.table-container { overflow: visible; }
+.registry-table { width: 100%; border-collapse: collapse; }
 
 .registry-table th,
 .registry-table td {
-  padding: 1rem 0.75rem;
-  border-bottom: 1px solid #E5E5E5;
+  padding: 0.9rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
   text-align: left;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   vertical-align: middle;
+  color: var(--color-text);
 }
 
 .registry-table thead th {
-  font-weight: 500;
-  color: #666666;
-  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
   text-transform: uppercase;
-  border-bottom: 2px solid #2B2B28;
+  border-bottom: 2px solid var(--color-text);
 }
 
-.registry-table tbody tr:hover {
-  background-color: #F9F9F9;
-}
+.registry-table tbody tr:hover { background-color: var(--color-primary-subtle); }
 
 .align-left { text-align: left; }
 .align-center { text-align: center; }
 .align-right { text-align: right; }
 
-.amount-positive {
-  color: #2E5F45; /* Vert Foncé */
-  font-weight: 500;
-}
+.amount-positive { color: var(--color-positive); font-weight: 500; }
 
 .empty-state {
   padding: 3rem;
   text-align: center;
-  color: #666666;
-  border: 1px dashed #cccccc;
-  border-radius: 4px;
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-base);
 }
 
-/* =========================================
-   MENU D'ACTIONS (3 points verticaux)
-   ========================================= */
-.action-cell {
-  position: relative;
-  display: inline-block;
-}
+.action-cell { position: relative; display: inline-block; }
 
 .kebab-btn {
   background: none;
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #666666;
+  color: var(--color-text-muted);
   padding: 0 0.5rem;
-  line-height: 1;
 }
-
-.kebab-btn:hover {
-  color: #2B2B28;
-}
+.kebab-btn:hover { color: var(--color-text); }
 
 .dropdown-menu {
   position: absolute;
   right: 100%;
   top: 0;
-  background-color: #FFFFFF;
-  border: 1px solid #E5E5E5;
-  border-radius: 4px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
   min-width: 120px;
   z-index: 10;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 
 .dropdown-item {
@@ -176,57 +136,50 @@
   cursor: pointer;
   font-family: inherit;
   font-size: 0.9rem;
-  color: #2B2B28;
+  color: var(--color-text);
 }
+.dropdown-item:hover { background-color: var(--color-primary-subtle); }
+.dropdown-item.danger { color: var(--color-negative); }
 
-.dropdown-item:hover {
-  background-color: #F9F9F9;
-}
-
-.dropdown-item.danger {
-  color: #B23B3B; /* Alerte Rouge */
-}
-
-/* =========================================
-   MODALES (Pop-ups)
-   ========================================= */
+/* --- Modales : plus AUCUNE couleur en dur ici --- */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(43, 43, 40, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
+  padding: 1rem;
 }
 
 .modal-content {
-  background-color: #FFFFFF;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   width: 100%;
   max-width: 500px;
+  color: var(--color-text);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
-
-.modal-content.modal-small {
-  max-width: 400px;
-}
+.modal-content.modal-small { max-width: 400px; }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #2B2B28;
+  color: var(--color-text);
 }
 
 .close-btn {
@@ -234,63 +187,42 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #666666;
+  color: var(--color-text-muted);
   line-height: 1;
 }
+.close-btn:hover { color: var(--color-text); }
 
-.close-btn:hover {
-  color: #2B2B28;
-}
+.modal-form { padding: 1.5rem; }
 
-.modal-form {
-  padding: 1.5rem;
-}
-
-/* =========================================
-   FORMULAIRES
-   ========================================= */
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
+.form-group { margin-bottom: 1.25rem; }
 .form-group label {
   display: block;
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: #2B2B28;
+  color: var(--color-text);
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
   padding: 0.7rem;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
   font-family: inherit;
   font-size: 1rem;
-  background-color: #FFFFFF;
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
-
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #63B78D; /* Vert Bilanko */
+  border-color: var(--color-primary);
 }
 
-.error-text {
-  display: block;
-  color: #B23B3B;
-  font-size: 0.85rem;
-  margin-top: 0.4rem;
-}
+.error-text { display: block; color: var(--color-negative); font-size: 0.85rem; margin-top: 0.4rem; }
 
-.checkbox-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
+.checkbox-group { display: flex; flex-direction: column; gap: 0.5rem; }
 .checkbox-group .checkbox-label {
   display: flex;
   align-items: center;
@@ -298,6 +230,7 @@
   font-weight: 400;
   cursor: pointer;
   font-size: 0.95rem;
+  color: var(--color-text);
 }
 
 .modal-actions {
