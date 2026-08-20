@@ -1,0 +1,202 @@
+<!-- src/app/pages/auth-user/inscription/inscription.html -->
+<app-auth-user>
+  <div class="auth-content">
+    <!-- En-tête -->
+    <div class="auth-header">
+      <h1 class="bk-auth-title">Créer un compte</h1>
+      <p class="bk-auth-subtitle">Rejoignez Bilanko et pilotez votre activité</p>
+    </div>
+
+    <!-- Message de succès -->
+    @if (registerSuccess) {
+      <div class="bk-auth-success">
+        <span class="material-icons">check_circle</span>
+        <div>
+          <strong>Compte créé avec succès !</strong>
+          <p>Redirection vers la page de connexion...</p>
+        </div>
+      </div>
+    }
+
+    <!-- Erreur -->
+    @if (registerError) {
+      <div class="bk-auth-error">
+        <span class="material-icons">error_outline</span>
+        {{ registerError }}
+      </div>
+    }
+
+    @if (!registerSuccess) {
+      <!-- Formulaire -->
+      <form (ngSubmit)="soumettre()" [formGroup]="inscriptionForm" novalidate>
+        <div class="bk-form-row">
+          <div class="bk-form-group">
+            <label for="nom" class="bk-form-label">Nom</label>
+            <div class="input-group bk-input-group">
+              <span class="input-group-text bk-input-icon">
+                <span class="material-icons fs-6">person</span>
+              </span>
+              <input
+                type="text"
+                id="nom"
+                class="form-control bk-input"
+                placeholder="Votre nom"
+                formControlName="nom"
+                autocomplete="family-name">
+            </div>
+            @if (nom.touched && nom.hasError('required')) {
+              <div class="bk-field-error">
+                <span class="material-icons">error_outline</span>
+                Le nom est requis.
+              </div>
+            }
+          </div>
+
+          <div class="bk-form-group">
+            <label for="prenom" class="bk-form-label">Prénom</label>
+            <div class="input-group bk-input-group">
+              <span class="input-group-text bk-input-icon">
+                <span class="material-icons fs-6">person_outline</span>
+              </span>
+              <input
+                type="text"
+                id="prenom"
+                class="form-control bk-input"
+                placeholder="Votre prénom"
+                formControlName="prenom"
+                autocomplete="given-name">
+            </div>
+          </div>
+        </div>
+
+        <div class="bk-form-group">
+          <label for="email" class="bk-form-label">Email</label>
+          <div class="input-group bk-input-group">
+            <span class="input-group-text bk-input-icon">
+              <span class="material-icons fs-6">email</span>
+            </span>
+            <input
+              type="email"
+              id="email"
+              class="form-control bk-input"
+              placeholder="exemple@email.com"
+              formControlName="email"
+              autocomplete="email">
+          </div>
+          @if (email.touched && email.hasError('required')) {
+            <div class="bk-field-error">
+              <span class="material-icons">error_outline</span>
+              L'email est requis.
+            </div>
+          }
+          @if (email.touched && email.hasError('email')) {
+            <div class="bk-field-error">
+              <span class="material-icons">error_outline</span>
+              Format d'email invalide.
+            </div>
+          }
+        </div>
+
+        <div class="bk-form-group">
+          <label for="password" class="bk-form-label">Mot de passe</label>
+          <div class="input-group bk-input-group">
+            <span class="input-group-text bk-input-icon">
+              <span class="material-icons fs-6">lock</span>
+            </span>
+            <input
+              type="password"
+              id="password"
+              class="form-control bk-input"
+              placeholder="Créez un mot de passe fort"
+              formControlName="password"
+              autocomplete="new-password">
+          </div>
+          @if (password.touched && password.hasError('required')) {
+            <div class="bk-field-error">
+              <span class="material-icons">error_outline</span>
+              Le mot de passe est requis.
+            </div>
+          }
+          @if (password.touched && password.hasError('pattern')) {
+            <div class="bk-field-error">
+              <span class="material-icons">error_outline</span>
+              8 caractères, majuscule, minuscule, chiffre et caractère spécial.
+            </div>
+          }
+
+          <!-- Checklist mot de passe -->
+          @if (password.value) {
+            <div class="bk-password-checklist">
+              <span class="bk-pwd-rule" [class.ok]="hasMinLength()">
+                <span class="material-icons">{{ hasMinLength() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+                8 caractères
+              </span>
+              <span class="bk-pwd-rule" [class.ok]="hasUpperCase()">
+                <span class="material-icons">{{ hasUpperCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+                Majuscule
+              </span>
+              <span class="bk-pwd-rule" [class.ok]="hasLowerCase()">
+                <span class="material-icons">{{ hasLowerCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+                Minuscule
+              </span>
+              <span class="bk-pwd-rule" [class.ok]="hasNumber()">
+                <span class="material-icons">{{ hasNumber() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+                Chiffre
+              </span>
+              <span class="bk-pwd-rule" [class.ok]="hasSpecialChar()">
+                <span class="material-icons">{{ hasSpecialChar() ? 'check_circle' : 'radio_button_unchecked' }}</span>
+                Spécial
+              </span>
+            </div>
+          }
+        </div>
+
+        <div class="bk-form-group">
+          <label for="confirmPassword" class="bk-form-label">Confirmer le mot de passe</label>
+          <div class="input-group bk-input-group">
+            <span class="input-group-text bk-input-icon">
+              <span class="material-icons fs-6">lock_outline</span>
+            </span>
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-control bk-input"
+              placeholder="Répétez votre mot de passe"
+              formControlName="confirmPassword"
+              autocomplete="new-password">
+          </div>
+          @if (confirmPassword.touched && inscriptionForm.hasError('passwordMismatch')) {
+            <div class="bk-field-error">
+              <span class="material-icons">error_outline</span>
+              Les mots de passe ne correspondent pas.
+            </div>
+          }
+          @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+            <div class="bk-field-error">
+              <span class="material-icons">error_outline</span>
+              Veuillez confirmer votre mot de passe.
+            </div>
+          }
+        </div>
+
+        <button
+          type="submit"
+          class="btn bk-btn-submit w-100"
+          [disabled]="inscriptionForm.invalid || isLoading">
+          @if (isLoading) {
+            <span class="bk-spinner"></span>
+            <span>Inscription...</span>
+          } @else {
+            <span>Créer mon compte</span>
+            <span class="material-icons">arrow_forward</span>
+          }
+        </button>
+
+        <p class="text-center bk-auth-footer">
+          Déjà un compte ?
+          <a routerLink="/connexion" class="bk-auth-link">Se connecter</a>
+        </p>
+      </form>
+    }
+  </div>
+</app-auth-user>

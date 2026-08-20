@@ -1,12 +1,13 @@
 import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
-import type { Sale } from '../../models/finance';
+import type { Sale , Charge } from '../../models/finance';
 import { Template } from "../../components/shared/template/template"; // Import ciblé pour de meilleures performances
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { FinanceForm } from '../../components/shared/finance-form/finance-form';
 import { SalesService } from '../../services/sales.service';
+
 
 
 
@@ -100,15 +101,14 @@ export class SalesComponent {
     this.closeAddModal();
   }
 
-  // Handler used by template to receive emitted Sale/Charge from shared form
-  handleSaleSubmit(payload: Sale | any) {
-    const sale = payload as Sale;
-    if (this.editingSale) {
-      this.salesService.update(this.editingSale.id, sale);
-      this.editingSale = null;
-    } else {
-      this.salesService.add(sale);
-    }
-    this.closeAddModal();
+  handleSaleSubmit(payload: Sale | Charge) {
+  const sale = payload as Sale;
+  if (this.editingSale) {
+    this.salesService.update(this.editingSale.id, sale);
+    this.editingSale = null;
+  } else {
+    this.salesService.add(sale);
   }
+  this.closeAddModal();
+}
 }

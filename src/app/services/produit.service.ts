@@ -1,18 +1,25 @@
 // src/app/services/produit.service.ts
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, httpResource } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { Produit } from '../models/produit';
 
 @Injectable({ providedIn: 'root' })
 export class ProduitService {
   private readonly http = inject(HttpClient);
-  private readonly url = `${environment.serverUrl}/api/produits.json`;
+  private readonly platformId = inject(PLATFORM_ID);
 
-  // LECTURE — httpResource expose isLoading() / error() / value()
-  readonly catalogue = httpResource<Produit[]>(() => this.url);
+  // Adaptez ce chemin selon le nom réel de votre fichier dans public/ (ex: '/plat.json')
+  private readonly url = '/api/produits.json';
 
-  // ÉCRITURES — HttpClient direct (httpResource ne sert qu'à lire)
+  // LECTURE — httpResource ignore la requête lors du SSR/Prerender sur Vercel
+  readonly catalogue = httpResource<Produit[]>(
+    () => (isPlatformBrowser(this.platformId) ? this.url : undefined),
+    { defaultValue: [] }
+  );
+
+  // ÉCRITURES — Exécutées uniquement sur le client lors des interactions utilisateur
   ajouter(produit: Omit<Produit, 'id'>) {
     return this.http.post<Produit>(this.url, produit);
   }

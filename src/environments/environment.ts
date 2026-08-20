@@ -1,5 +1,4 @@
-// src/environments/environment.ts
 export const environment = {
   production: true,
-  serverUrl: '',
+  baseApiUrl: 'https://bilanko-backend-production.up.railway.app/'
 };
