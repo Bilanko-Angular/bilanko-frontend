@@ -73,12 +73,11 @@
     </svg>
     <input
       type="text"
-      [placeholder]="Rechercher un produit + '...'"
+      [placeholder]="'Rechercher un produit' + '...'"
       [ngModel]="recherche()"
       (ngModelChange)="onRechercheChange($event)"
     />
   </div>
-</div>
 
     @if (catalogue.isLoading()) {
       <p class="bk-state-msg">{{ prefs.t().loggingIn }}</p>
@@ -154,7 +153,7 @@
         <span>{{ prefs.t().totalStockValue }}</span>
         <strong>{{ valorisationTotale() | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
       </div>
-    </div>
+    }
 
     @if (nombrePages() >= 1) {
       <div class="bk-pagination">
@@ -169,7 +168,7 @@
             class="bk-btn bk-btn--ghost" 
             [disabled]="pageCourante() === 1" 
             (click)="pagePrecedente()">
-            {{ prefs.t().previous || 'Précédent' }}
+             Précédent
           </button>
 
           <div class="bk-pagination-pages">
@@ -188,7 +187,7 @@
             class="bk-btn bk-btn--ghost" 
             [disabled]="pageCourante() === nombrePages()" 
             (click)="pageSuivante()">
-            {{ prefs.t().next || 'Suivant' }}
+              Suivant
           </button>
         </div>
       </div>

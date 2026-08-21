@@ -105,6 +105,10 @@ export class CatalogueStocks {
     return 'ok';
   }
 
+  margeUnitaire(p: Produit): number {
+    return (p.prixVente || 0) - (p.prixAchat || 0);
+  }
+
   // --- Recherche & Filtres ---
   onRechercheChange(valeur: string) {
     this.recherche.set(valeur);
@@ -233,5 +237,4 @@ export class CatalogueStocks {
     this.pageCourante.set(n);
   }
 
-  readonly Math = Math;
 }

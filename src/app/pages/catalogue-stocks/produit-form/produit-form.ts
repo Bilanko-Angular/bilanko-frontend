@@ -24,6 +24,7 @@ export class ProduitForm {
   readonly quantiteStock = signal(0);
   readonly seuilAlerte = signal(5);
   readonly prixAchat = signal(0);
+  readonly prixVente = signal(0);
 
   constructor() {
     effect(() => {
@@ -35,6 +36,7 @@ export class ProduitForm {
         this.quantiteStock.set(p.quantiteStock);
         this.seuilAlerte.set(p.seuilAlerte);
         this.prixAchat.set(p.prixAchat);
+        this.prixVente.set(p.prixVente);
       } else {
         this.reinitialiser();
       }
@@ -57,6 +59,7 @@ export class ProduitForm {
       quantiteStock: Number(this.quantiteStock()),
       seuilAlerte: Number(this.seuilAlerte()),
       prixAchat: Number(this.prixAchat()),
+      prixVente: Number(this.prixVente()),
     });
   }
 
@@ -71,5 +74,6 @@ export class ProduitForm {
     this.quantiteStock.set(0);
     this.seuilAlerte.set(5);
     this.prixAchat.set(0);
+    this.prixVente.set(0);
   }
 }

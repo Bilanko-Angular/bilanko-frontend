@@ -23,6 +23,7 @@ export class ProduitService {
       quantiteStock: 45,
       seuilAlerte: 10,
       prixAchat: 2200000,
+      prixVente: 3000000,
     },
     {
       id: '2',
@@ -32,6 +33,7 @@ export class ProduitService {
       quantiteStock: 4,
       seuilAlerte: 5,
       prixAchat: 450000,
+      prixVente: 600000,
     },
   ]);
 
