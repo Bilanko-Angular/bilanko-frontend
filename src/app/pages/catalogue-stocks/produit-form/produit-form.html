@@ -1,7 +1,7 @@
 <div class="bilanko-form-overlay" (click)="annuler.emit()">
   <form class="bilanko-form-card" #produitForm="ngForm" (click)="$event.stopPropagation()" (ngSubmit)="onSubmit(produitForm)">
     <div class="bilanko-form-header">
-      <h3>{{ produitInitial ? prefs.t().editProduct : prefs.t().newProduct }}</h3>
+      <h3>{{ produit() ? prefs.t().editProduct : prefs.t().newProduct }}</h3>
       <button type="button" class="bilanko-form-close" (click)="annuler.emit()" [title]="prefs.t().close">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
