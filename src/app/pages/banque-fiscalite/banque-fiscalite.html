@@ -1,0 +1,136 @@
+<app-template>
+  <div class="bk-page-header">
+    <div>
+      <h2 class="bk-page-title">Banque & Fiscalité</h2>
+      <p class="bk-page-subtitle">Générez en quelques étapes un dossier PDF prêt pour votre banque ou l'administration fiscale.</p>
+    </div>
+  </div>
+
+  <div class="bk-stepper">
+    <button class="bk-step" [class.actif]="etape() === 1" [class.fait]="etape() > 1" (click)="allerA(1)">
+      <span class="bk-step-num">1</span> Objectif
+    </button>
+    <span class="bk-step-line"></span>
+    <button class="bk-step" [class.actif]="etape() === 2" [class.fait]="etape() > 2" (click)="allerA(2)">
+      <span class="bk-step-num">2</span> Documents
+    </button>
+    <span class="bk-step-line"></span>
+    <button class="bk-step" [class.actif]="etape() === 3" (click)="allerA(3)">
+      <span class="bk-step-num">3</span> Période
+    </button>
+  </div>
+
+  <div class="bk-layout-split">
+    <div class="bk-card bk-step-card">
+      @switch (etape()) {
+        @case (1) {
+          <h3>Quel est l'objectif de votre dossier ?</h3>
+          <p class="bk-hint">Bilanko prépare les mêmes documents pour un prêt bancaire ou une démarche fiscale — le contenu s'adapte selon votre sélection à l'étape suivante.</p>
+          <div class="bk-objectif-grid">
+            <div class="bk-objectif-card">
+              <strong>Prêt bancaire</strong>
+              <span>Bilan + relevé d'activité, format standard pour un agent de crédit.</span>
+            </div>
+            <div class="bk-objectif-card">
+              <strong>Démarche fiscale</strong>
+              <span>Liasse fiscale + grand livre, conformes aux exigences de forme.</span>
+            </div>
+          </div>
+          <div class="bk-form-actions">
+            <span></span>
+            <button class="btn btn-primary" (click)="etapeSuivante()">Continuer</button>
+          </div>
+        }
+
+        @case (2) {
+          <h3>Sélection des pièces</h3>
+          <p class="bk-hint">Cochez les documents requis pour votre dossier.</p>
+
+          <div class="bk-doc-list">
+            @for (doc of documentsDisponibles; track doc.id) {
+              <label class="bk-doc-row" [class.selectionne]="estSelectionne(doc.id)">
+                <input type="checkbox" [checked]="estSelectionne(doc.id)" (change)="toggleDocument(doc.id)" />
+                <span class="bk-doc-check"></span>
+                <span class="bk-doc-text">
+                  <strong>{{ doc.titre }}</strong>
+                  <small>{{ doc.description }}</small>
+                </span>
+              </label>
+            }
+          </div>
+
+          <h4 class="bk-subheading">Format de sortie</h4>
+          <div class="bk-format-group">
+            <label class="bk-format-option" [class.selectionne]="format() === 'A4'">
+              <input type="radio" name="format" [checked]="format() === 'A4'" (change)="format.set('A4')" />
+              Format Standard (A4)
+            </label>
+            <label class="bk-format-option" [class.selectionne]="format() === 'Legal'">
+              <input type="radio" name="format" [checked]="format() === 'Legal'" (change)="format.set('Legal')" />
+              Format Légal
+            </label>
+          </div>
+
+          <div class="bk-form-actions">
+            <button class="btn btn-outline" (click)="etapePrecedente()">Retour</button>
+            <button class="btn btn-primary" [disabled]="!peutContinuerEtape2()" (click)="etapeSuivante()">Continuer</button>
+          </div>
+        }
+
+        @case (3) {
+          <h3>Période concernée</h3>
+          <p class="bk-hint">Choisissez la période exacte que doit couvrir votre dossier.</p>
+
+          <div class="bk-date-grid">
+            <label>Du
+              <input type="date" [ngModel]="periodeDebut()" (ngModelChange)="periodeDebut.set($event)" />
+            </label>
+            <label>Au
+              <input type="date" [ngModel]="periodeFin()" (ngModelChange)="periodeFin.set($event)" />
+            </label>
+          </div>
+
+          @if (erreurGeneration()) {
+            <p class="bk-error-msg">{{ erreurGeneration() }}</p>
+          }
+
+          <div class="bk-form-actions">
+            <button class="btn btn-outline" (click)="etapePrecedente()">Retour</button>
+            <button class="btn btn-primary" [disabled]="!peutGenerer() || genereEnCours()" (click)="genererDossier()">
+              @if (genereEnCours()) { Génération… } @else { Générer le dossier PDF }
+            </button>
+          </div>
+        }
+      }
+    </div>
+
+    <aside class="bk-card bk-summary-card">
+      <h4>Récapitulatif</h4>
+
+      @if (documentsChoisis().length === 0) {
+        <p class="bk-hint">Aucun document sélectionné pour l'instant.</p>
+      } @else {
+        <ul class="bk-summary-list">
+          @for (doc of documentsChoisis(); track doc.id) {
+            <li>{{ doc.titre }}</li>
+          }
+        </ul>
+      }
+
+      <div class="bk-summary-row">
+        <span>Format</span>
+        <strong>{{ format() === 'A4' ? 'A4' : 'Légal' }}</strong>
+      </div>
+      <div class="bk-summary-row">
+        <span>Période</span>
+        <strong>
+          @if (periodeDebut() && periodeFin()) {
+            {{ periodeDebut() }} → {{ periodeFin() }}
+          } @else {
+            Non définie
+          }
+        </strong>
+      </div>
+    </aside>
+  </div>
+</app-template>

@@ -90,7 +90,7 @@ export class Header {
 
 
     const produits =
-      this.produits.hasValue()
+      this.produits.value()
         ? this.produits.value()
         : [];
 

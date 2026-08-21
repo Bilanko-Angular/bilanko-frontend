@@ -1,35 +1,123 @@
 <div class="bilanko-form-overlay" (click)="annuler.emit()">
-  <form class="bilanko-form-card" (click)="$event.stopPropagation()" (ngSubmit)="onSubmit()">
+  <form class="bilanko-form-card" #produitForm="ngForm" (click)="$event.stopPropagation()" (ngSubmit)="onSubmit(produitForm)">
     <div class="bilanko-form-header">
-      <h3>{{ produitInitial() ? prefs.t().editProduct : prefs.t().newProduct }}</h3>
-      <button type="button" class="bilanko-form-close" (click)="annuler.emit()" [title]="prefs.t().close">✕</button>
+      <h3>{{ produitInitial ? prefs.t().editProduct : prefs.t().newProduct }}</h3>
+      <button type="button" class="bilanko-form-close" (click)="annuler.emit()" [title]="prefs.t().close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
 
-    <label>{{ prefs.t().reference }}
-      <input [(ngModel)]="reference" name="reference" required />
-    </label>
-    <label>{{ prefs.t().productName }}
-      <input [(ngModel)]="nom" name="nom" required />
-    </label>
-    <label>{{ prefs.t().category }}
-      <input [(ngModel)]="categorie" name="categorie" required />
-    </label>
-    <label>{{ prefs.t().purchasePrice }}
-      <input type="number" [(ngModel)]="prixAchat" name="prixAchat" min="0" />
-    </label>
-    <label>{{ prefs.t().sellingPrice }}
-      <input type="number" [(ngModel)]="prixVente" name="prixVente" min="0" />
-    </label>
-    <label>{{ prefs.t().stockQuantity }}
-      <input type="number" [(ngModel)]="quantiteStock" name="quantiteStock" min="0" />
-    </label>
-    <label>{{ prefs.t().alertThreshold }}
-      <input type="number" [(ngModel)]="seuilAlerte" name="seuilAlerte" min="0" />
-    </label>
+    <div class="bilanko-form-grid">
+      <label>
+        {{ prefs.t().reference }}
+        <input
+          [(ngModel)]="reference"
+          name="reference"
+          #referenceRef="ngModel"
+          placeholder="ex: REF-001"
+          required
+          minlength="2"
+        />
+        @if (referenceRef.invalid && referenceRef.touched) {
+          <span class="bilanko-form-error">La référence est obligatoire (2 caractères min.).</span>
+        }
+      </label>
+
+      <label>
+        {{ prefs.t().productName }}
+        <input
+          [(ngModel)]="nom"
+          name="nom"
+          #nomRef="ngModel"
+          placeholder="ex: MacBook Pro 16"
+          required
+          minlength="2"
+        />
+        @if (nomRef.invalid && nomRef.touched) {
+          <span class="bilanko-form-error">Le nom du produit est obligatoire.</span>
+        }
+      </label>
+
+      <label>
+        {{ prefs.t().category }}
+        <input
+          [(ngModel)]="categorie"
+          name="categorie"
+          #categorieRef="ngModel"
+          placeholder="ex: Informatique"
+          required
+        />
+        @if (categorieRef.invalid && categorieRef.touched) {
+          <span class="bilanko-form-error">La catégorie est obligatoire.</span>
+        }
+      </label>
+
+      <label>
+        {{ prefs.t().purchasePrice }}
+        <input
+          type="number"
+          [(ngModel)]="prixAchat"
+          name="prixAchat"
+          #prixRef="ngModel"
+          min="1"
+          required
+        />
+        @if (prixRef.invalid && prixRef.touched) {
+          <span class="bilanko-form-error">Indiquez un prix d'achat supérieur à 0.</span>
+        }
+      </label>
+
+      <label>
+        {{ prefs.t().sellingPrice }}
+        <input
+          type="number"
+          [(ngModel)]="prixVente"
+          name="prixVente"
+          #prixVenteRef="ngModel"
+          min="0"
+          required
+        />
+      </label>
+
+      <label>
+        {{ prefs.t().stockQuantity }}
+        <input
+          type="number"
+          [(ngModel)]="quantiteStock"
+          name="quantiteStock"
+          #qteRef="ngModel"
+          min="0"
+          required
+        />
+        @if (qteRef.invalid && qteRef.touched) {
+          <span class="bilanko-form-error">La quantité doit être 0 ou plus.</span>
+        }
+      </label>
+
+      <label>
+        {{ prefs.t().alertThreshold }}
+        <input
+          type="number"
+          [(ngModel)]="seuilAlerte"
+          name="seuilAlerte"
+          #seuilRef="ngModel"
+          min="0"
+          required
+        />
+        @if (seuilRef.invalid && seuilRef.touched) {
+          <span class="bilanko-form-error">Le seuil d'alerte doit être 0 ou plus.</span>
+        }
+      </label>
+    </div>
 
     <div class="bilanko-form-actions">
-      <button type="button" class="btn btn-outline" (click)="annuler.emit()">{{ prefs.t().cancel }}</button>
-      <button type="submit" class="btn btn-primary">{{ prefs.t().save }}</button>
+      <button type="button" class="bk-btn bk-btn--ghost" (click)="annuler.emit()">{{ prefs.t().cancel }}</button>
+      <button type="submit" class="bk-btn bk-btn--primary" [disabled]="produitForm.invalid">
+        {{ prefs.t().save }}
+      </button>
     </div>
   </form>
 </div>
