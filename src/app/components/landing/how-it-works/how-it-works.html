@@ -1,0 +1,30 @@
+<section class="hiw-section" id="comment-ca-marche">
+  <div class="container position-relative">
+
+    <!-- Header -->
+    <div class="text-center mb-5" appAnimateOnScroll>
+      <span class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-success bg-opacity-10 border border-success border-opacity-25 text-success fw-bold text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 0.08em;">✦ Comment ça marche</span>
+      <h2 class="display-6 fw-bold text-dark mb-3 lh-sm">Trois étapes,<br>et votre dossier est prêt</h2>
+    </div>
+
+    <!-- Steps -->
+    <div class="row g-0 justify-content-center">
+      @for (step of steps; track step.stepNumber; let i = $index; let last = $last) {
+        <div class="col-md-4 position-relative" appAnimateOnScroll [appAnimateOnScrollDelay]="i * 180">
+          <div class="step-card">
+            <div class="step-number-wrap">
+              <div class="step-number">{{ step.stepNumber }}</div>
+            </div>
+            <h3 class="h5 fw-bold text-dark mb-2">{{ step.title }}</h3>
+            <p class="text-secondary mx-auto mb-0" style="font-size: 0.9rem; line-height: 1.65; max-width: 240px;">{{ step.description }}</p>
+          </div>
+          <!-- Connector line (not on last step) -->
+          @if (!last) {
+            <div class="d-none d-md-block step-connector"></div>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+</section>
