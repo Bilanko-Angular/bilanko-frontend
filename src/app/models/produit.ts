@@ -4,7 +4,6 @@ export interface Produit {
   nom: string;
   categorie: string;
   prixAchat: number;
-  prixVente: number;
   quantiteStock: number;
   seuilAlerte: number;
 }
