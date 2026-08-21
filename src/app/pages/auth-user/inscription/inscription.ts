@@ -1,8 +1,8 @@
-// src/app/pages/auth-user/inscription/inscription.ts
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
+import { PreferencesService } from '../../../services/preferences';
 
 @Component({
   selector: 'app-inscription',
@@ -14,6 +14,7 @@ import { AuthUser } from "../auth-user";
 export class Inscription {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  protected readonly prefs = inject(PreferencesService);
 
   isLoading = false;
   registerError = '';
@@ -42,18 +43,12 @@ export class Inscription {
   get password() { return this.inscriptionForm.controls.password; }
   get confirmPassword() { return this.inscriptionForm.controls.confirmPassword; }
 
-  /* Checklist mot de passe */
   hasMinLength(): boolean { return (this.password.value || '').length >= 8; }
   hasUpperCase(): boolean { return /[A-Z]/.test(this.password.value || ''); }
   hasLowerCase(): boolean { return /[a-z]/.test(this.password.value || ''); }
   hasNumber(): boolean { return /[0-9]/.test(this.password.value || ''); }
   hasSpecialChar(): boolean { return /[#?!@$%^&*-]/.test(this.password.value || ''); }
-  allCriteriaMet(): boolean {
-    return this.hasMinLength() && this.hasUpperCase() && this.hasLowerCase() &&
-           this.hasNumber() && this.hasSpecialChar();
-  }
 
-  /* ── Soumission du formulaire ── */
   soumettre(): void {
     if (this.inscriptionForm.invalid) {
       this.inscriptionForm.markAllAsTouched();
@@ -64,13 +59,11 @@ export class Inscription {
     this.registerError = '';
     this.registerSuccess = false;
 
-    // Simuler une requête API
     setTimeout(() => {
       this.isLoading = false;
       this.registerSuccess = true;
       console.log('Inscription réussie :', this.inscriptionForm.value);
-      
-      // Redirection vers la page de connexion après 1.5 secondes
+
       setTimeout(() => {
         this.router.navigate(['/connexion']);
       }, 1500);

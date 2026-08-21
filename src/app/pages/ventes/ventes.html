@@ -1,52 +1,43 @@
+<!-- src/app/pages/ventes/ventes.html -->
 <app-template>
-
-  <!-- =========================================
-      EN-TÊTE DE LA PAGE
-      ========================================= -->
   <div class="page-header">
     <div class="header-text">
-      <h1>Gestion des ventes</h1>
-      <p>Consultez, recherchez et gérez l'ensemble de vos ventes.</p>
+      <h1>{{ prefs.t().salesManagement }}</h1>
+      <p>{{ prefs.t().salesManagementDesc }}</p>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary" (click)="openFilterModal()" aria-label="Ouvrir les filtres">Filtre</button>
-      <button class="btn btn-primary" (click)="openAddModal()" aria-label="Ajouter">Ajouter</button>
+      <button class="btn btn-secondary" (click)="openFilterModal()">{{ prefs.t().filter }}</button>
+      <button class="btn btn-primary" (click)="openAddModal()">{{ prefs.t().add }}</button>
     </div>
   </div>
 
-  <!-- =========================================
-      TABLEAU DES VENTES
-      ========================================= -->
   <div class="table-container">
-    
     @if (sales().length === 0) {
       <div class="empty-state">
-        <p>Aucune vente enregistrée ce mois — ajoutez votre première vente.</p>
+        <p>{{ prefs.t().noSalesRecorded }}</p>
       </div>
-    } 
-    
+    }
     @if (sales().length > 0) {
       <table class="registry-table">
         <thead>
           <tr>
-            <th class="align-left">Date</th>
-            <th class="align-left">Produit</th>
-            <th class="align-center">Qté</th>
-            <th class="align-right">Prix unitaire</th>
-            <th class="align-right">Montant total</th>
-            <th class="align-left">Client</th>
-            <th class="align-center">Actions</th>
+            <th class="align-left">{{ prefs.t().date }}</th>
+            <th class="align-left">{{ prefs.t().product }}</th>
+            <th class="align-center">{{ prefs.t().quantity }}</th>
+            <th class="align-right">{{ prefs.t().unitPrice }}</th>
+            <th class="align-right">{{ prefs.t().totalAmount }}</th>
+            <th class="align-left">{{ prefs.t().client }}</th>
+            <th class="align-center">{{ prefs.t().actions }}</th>
           </tr>
         </thead>
         <tbody>
           @for (sale of sales(); track sale.id) {
             <tr>
-              <td class="align-left">{{ sale.date }}</td>
+              <td class="align-left">{{ sale.date | date: prefs.angularDateFormat() }}</td>
               <td class="align-left">{{ sale.product }}</td>
               <td class="align-center tabular-nums">{{ sale.quantity }}</td>
-              <!-- Utilisation du pipe DecimalPipe (renommé 'number') -->
-              <td class="align-right tabular-nums">{{ sale.unitPrice | number:'1.0-0':'fr-FR' }} FCFA</td>
-              <td class="align-right tabular-nums amount-positive">{{ sale.totalAmount | number:'1.0-0':'fr-FR' }} FCFA</td>
+              <td class="align-right tabular-nums">{{ sale.unitPrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td class="align-right tabular-nums amount-positive">{{ sale.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
               <td class="align-left">{{ sale.client }}</td>
               <td class="align-center">
                 <app-action-menu (action)="onRowAction($event, sale.id)"></app-action-menu>
@@ -58,59 +49,52 @@
     }
   </div>
 
-  <!-- =========================================
-      MODALE D'AJOUT
-      ========================================= -->
+  <!-- Modal Ajout -->
   @if (isAddModalOpen()) {
     <div class="modal-overlay" (click)="closeAddModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>Ajouter une vente</h2>
-          <button class="close-btn" (click)="closeAddModal()" aria-label="Fermer">×</button>
+          <h2>{{ prefs.t().addASale }}</h2>
+          <button class="close-btn" (click)="closeAddModal()">×</button>
         </div>
-
         <app-finance-form [kind]="'sale'" [initial]="editingSale" (submit)="handleSaleSubmit($event)" (cancel)="closeAddModal()"></app-finance-form>
       </div>
     </div>
   }
 
-  <!-- =========================================
-      MODALE DE FILTRE
-      ========================================= -->
+  <!-- Modal Filtre -->
   @if (isFilterModalOpen()) {
     <div class="modal-overlay" (click)="closeFilterModal()">
       <div class="modal-content modal-small" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>Filtrer les ventes</h2>
-          <button class="close-btn" (click)="closeFilterModal()" aria-label="Fermer">×</button>
+          <h2>{{ prefs.t().filterSales }}</h2>
+          <button class="close-btn" (click)="closeFilterModal()">×</button>
         </div>
-
         <div class="modal-form">
           <div class="form-group">
-            <label for="search">Recherche</label>
-            <input type="text" id="search" placeholder="Nom du produit ou du client">
+            <label for="search">{{ prefs.t().search }}</label>
+            <input type="text" id="search" placeholder="{{ prefs.t().product }} {{ prefs.t().or }} {{ prefs.t().client }}">
           </div>
-
           <div class="form-group">
-            <label>Période</label>
+            <label>{{ prefs.t().period }}</label>
             <div class="checkbox-group">
-              <label class="checkbox-label"><input type="checkbox" name="period" value="today"> Aujourd'hui</label>
-              <label class="checkbox-label"><input type="checkbox" name="period" value="week"> Cette semaine</label>
-              <label class="checkbox-label"><input type="checkbox" name="period" value="month"> Ce mois-ci</label>
+              <label class="checkbox-label"><input type="checkbox" name="period" value="today"> {{ prefs.t().today }}</label>
+              <label class="checkbox-label"><input type="checkbox" name="period" value="week"> {{ prefs.t().thisWeek }}</label>
+              <label class="checkbox-label"><input type="checkbox" name="period" value="month"> {{ prefs.t().thisMonth }}</label>
             </div>
           </div>
-
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" (click)="closeFilterModal()">Réinitialiser</button>
-            <button type="button" class="btn btn-primary" (click)="closeFilterModal()">Appliquer</button>
+            <button type="button" class="btn btn-secondary" (click)="closeFilterModal()">{{ prefs.t().reset }}</button>
+            <button type="button" class="btn btn-primary" (click)="closeFilterModal()">{{ prefs.t().apply }}</button>
           </div>
         </div>
       </div>
     </div>
   }
+
   @if (confirmDeleteId()) {
     <app-confirm
-      [message]="'Voulez-vous vraiment supprimer cette vente ? Le stock sera recrédité.'"
+      [message]="prefs.t().confirmDeleteSale"
       (confirm)="confirmDelete()"
       (cancel)="cancelDelete()">
     </app-confirm>

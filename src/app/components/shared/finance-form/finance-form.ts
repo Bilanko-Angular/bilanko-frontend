@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import type { Sale, Charge } from '../../../models/finance';
+import { PreferencesService } from '../../../services/preferences';
 
 @Component({
   selector: 'app-finance-form',
@@ -17,6 +18,7 @@ export class FinanceForm {
   @Output() cancel = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
+  protected readonly prefs = inject(PreferencesService);
 
   form = this.fb.group({
     // Sale fields

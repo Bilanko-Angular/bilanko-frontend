@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { signal } from '@angular/core';
+import { PreferencesService } from '../../../services/preferences';
 
 @Component({
   selector: 'app-action-menu',
@@ -10,6 +11,7 @@ import { signal } from '@angular/core';
   styleUrls: ['./action-menu.css']
 })
 export class ActionMenu {
+  protected readonly prefs = inject(PreferencesService);
   open = signal(false);
   @Output() action = new EventEmitter<string>();
 

@@ -190,3 +190,37 @@ p, span, label, strong, small, li {
   color: var(--color-text);
   background-color: var(--color-surface);
 }
+
+
+
+/* src/assets/styles/theme.css - Ajouter à la fin */
+
+/* ============================================================
+   MODE COMPACT — réduit réellement les espaces
+   ============================================================ */
+[data-compact="true"] .bk-card,
+[data-compact="true"] .bk-settings__content,
+[data-compact="true"] .content {
+  padding: 0.85rem !important;
+}
+
+[data-compact="true"] .bk-table tbody td,
+[data-compact="true"] .bk-table thead th,
+[data-compact="true"] .registry-table td,
+[data-compact="true"] .registry-table th {
+  padding: 0.5rem 0.6rem !important;
+}
+
+[data-compact="true"] .bk-dashboard {
+  gap: 8px !important;
+}
+
+[data-compact="true"] .bk-kpi-card,
+[data-compact="true"] .bk-panel {
+  padding: 8px !important;
+}
+
+[data-compact="true"] .bk-quick-action {
+  min-height: 48px !important;
+  padding: 6px 10px !important;
+}

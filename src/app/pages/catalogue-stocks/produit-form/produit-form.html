@@ -1,8 +1,8 @@
 <div class="bilanko-form-overlay" (click)="annuler.emit()">
   <form class="bilanko-form-card" #produitForm="ngForm" (click)="$event.stopPropagation()" (ngSubmit)="onSubmit(produitForm)">
     <div class="bilanko-form-header">
-      <h3>{{ produit() ? 'Modifier le produit' : 'Nouveau produit' }}</h3>
-      <button type="button" class="bilanko-form-close" (click)="annuler.emit()" title="Fermer">
+      <h3>{{ produitInitial ? prefs.t().editProduct : prefs.t().newProduct }}</h3>
+      <button type="button" class="bilanko-form-close" (click)="annuler.emit()" [title]="prefs.t().close">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -12,7 +12,7 @@
 
     <div class="bilanko-form-grid">
       <label>
-        Référence
+        {{ prefs.t().reference }}
         <input
           [(ngModel)]="reference"
           name="reference"
@@ -27,7 +27,7 @@
       </label>
 
       <label>
-        Nom du produit
+        {{ prefs.t().productName }}
         <input
           [(ngModel)]="nom"
           name="nom"
@@ -42,7 +42,7 @@
       </label>
 
       <label>
-        Catégorie
+        {{ prefs.t().category }}
         <input
           [(ngModel)]="categorie"
           name="categorie"
@@ -56,7 +56,7 @@
       </label>
 
       <label>
-        Prix d'achat (FCFA)
+        {{ prefs.t().purchasePrice }}
         <input
           type="number"
           [(ngModel)]="prixAchat"
@@ -71,7 +71,19 @@
       </label>
 
       <label>
-        Quantité en stock
+        {{ prefs.t().sellingPrice }}
+        <input
+          type="number"
+          [(ngModel)]="prixVente"
+          name="prixVente"
+          #prixVenteRef="ngModel"
+          min="0"
+          required
+        />
+      </label>
+
+      <label>
+        {{ prefs.t().stockQuantity }}
         <input
           type="number"
           [(ngModel)]="quantiteStock"
@@ -86,7 +98,7 @@
       </label>
 
       <label>
-        Seuil d'alerte
+        {{ prefs.t().alertThreshold }}
         <input
           type="number"
           [(ngModel)]="seuilAlerte"
@@ -102,9 +114,9 @@
     </div>
 
     <div class="bilanko-form-actions">
-      <button type="button" class="bk-btn bk-btn--ghost" (click)="annuler.emit()">Annuler</button>
+      <button type="button" class="bk-btn bk-btn--ghost" (click)="annuler.emit()">{{ prefs.t().cancel }}</button>
       <button type="submit" class="bk-btn bk-btn--primary" [disabled]="produitForm.invalid">
-        Enregistrer
+        {{ prefs.t().save }}
       </button>
     </div>
   </form>

@@ -1,6 +1,7 @@
-import { Component, input, output, effect, signal } from '@angular/core';
+import { Component, input, output, effect, signal, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Produit } from '../../../models/produit';
+import { PreferencesService } from '../../../services/preferences';
 
 @Component({
   selector: 'app-produit-form',
@@ -10,6 +11,7 @@ import { Produit } from '../../../models/produit';
   styleUrl: './produit-form.css',
 })
 export class ProduitForm {
+  protected readonly prefs = inject(PreferencesService);
   // Entrées/Sorties Signals modernes (Compatible Angular 17.1+)
   readonly produit = input<Produit | undefined>(undefined);
   readonly enregistrer = output<Omit<Produit, 'id'>>();

@@ -14,6 +14,7 @@ import { ProduitService } from '../../../services/produit.service';
 import { SalesService } from '../../../services/sales.service';
 
 import type { Produit } from '../../../models/produit';
+import { PreferencesService } from '../../../services/preferences';
 import type { Sale } from '../../../models/finance';
 
 
@@ -54,6 +55,8 @@ export class Header {
 
   private readonly salesService =
     inject(SalesService);
+
+   protected readonly prefs = inject(PreferencesService);
 
 
   // ============================================================
