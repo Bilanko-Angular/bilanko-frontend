@@ -1,0 +1,30 @@
+<section class="features-section" id="fonctionnalites">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="mb-5" appAnimateOnScroll>
+      <span class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-success bg-opacity-10 border border-success border-opacity-25 text-success fw-bold text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 0.08em;">✦ Fonctionnalités</span>
+      <h2 class="display-6 fw-bold text-dark mb-3 lh-sm">Tout ce qu'il faut pour tenir<br>votre commerce à jour</h2>
+      <p class="lead text-secondary mb-0" style="max-width: 540px;">Trois piliers simples, pensés pour le quotidien d'un petit commerce.</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="row g-4">
+      @for (feature of features; track feature.title; let i = $index) {
+        <div class="col-md-4" appAnimateOnScroll [appAnimateOnScrollDelay]="i * 150">
+          <div class="feature-card">
+            <div class="feature-icon-wrap">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="feature.svgPath" />
+              </svg>
+            </div>
+            <h3 class="h5 fw-bold text-dark mb-2">{{ feature.title }}</h3>
+            <p class="text-secondary mb-0" style="font-size: 0.9rem; line-height: 1.65;">{{ feature.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</section>
