@@ -3,33 +3,33 @@
   @if (isSale()) {
     <div class="bk-form-grid">
       <div class="bk-form-group bk-form-group--full">
-        <label for="product">Produit <span class="bk-required">*</span></label>
-        <input id="product" formControlName="product" placeholder="Ex : Sac de riz 25kg" />
+        <label for="product">{{ prefs.t().product }} <span class="bk-required">*</span></label>
+        <input id="product" formControlName="product" [placeholder]="prefs.t().productPlaceholder" />
         @if (form.get('product')?.touched && form.get('product')?.invalid) {
-          <span class="bk-field-error">Le nom du produit est requis.</span>
+          <span class="bk-field-error">{{ prefs.t().product }} {{ prefs.t().requiredField }}</span>
         }
       </div>
 
       <div class="bk-form-group">
-        <label for="quantity">Quantité <span class="bk-required">*</span></label>
+        <label for="quantity">{{ prefs.t().quantity }} <span class="bk-required">*</span></label>
         <input id="quantity" type="number" min="1" formControlName="quantity" />
         @if (form.get('quantity')?.touched && form.get('quantity')?.invalid) {
-          <span class="bk-field-error">Quantité invalide.</span>
+          <span class="bk-field-error">{{ prefs.t().invalidQuantity }}</span>
         }
       </div>
 
       <div class="bk-form-group">
-        <label for="unitPrice">Prix unitaire (FCFA)</label>
+        <label for="unitPrice">{{ prefs.t().unitPrice }} ({{ prefs.t().fcfa }})</label>
         <input id="unitPrice" type="number" min="0" formControlName="unitPrice" />
       </div>
 
       <div class="bk-form-group bk-form-group--full">
-        <label for="client">Client</label>
-        <input id="client" formControlName="client" placeholder="Client comptant si vide" />
+        <label for="client">{{ prefs.t().client }}</label>
+        <input id="client" formControlName="client" [placeholder]="prefs.t().clientCashIfEmpty" />
       </div>
 
       <div class="bk-form-group bk-form-group--full">
-        <label for="date">Date</label>
+        <label for="date">{{ prefs.t().date }}</label>
         <input id="date" type="date" formControlName="date" />
       </div>
     </div>
@@ -38,40 +38,40 @@
   @if (!isSale()) {
     <div class="bk-form-grid">
       <div class="bk-form-group bk-form-group--full">
-        <label for="label">Libellé <span class="bk-required">*</span></label>
-        <input id="label" formControlName="label" placeholder="Ex : Transport, Électricité..." />
+        <label for="label">{{ prefs.t().label }} <span class="bk-required">*</span></label>
+        <input id="label" formControlName="label" [placeholder]="prefs.t().chargeLabelPlaceholder" />
         @if (form.get('label')?.touched && form.get('label')?.invalid) {
-          <span class="bk-field-error">Le libellé est requis.</span>
+          <span class="bk-field-error">{{ prefs.t().label }} {{ prefs.t().requiredField }}</span>
         }
       </div>
 
       <div class="bk-form-group">
-        <label for="amount">Montant (FCFA) <span class="bk-required">*</span></label>
+        <label for="amount">{{ prefs.t().amount }} ({{ prefs.t().fcfa }}) <span class="bk-required">*</span></label>
         <input id="amount" type="number" min="0" formControlName="amount" />
         @if (form.get('amount')?.touched && form.get('amount')?.invalid) {
-          <span class="bk-field-error">Montant invalide.</span>
+          <span class="bk-field-error">{{ prefs.t().invalidAmount }}</span>
         }
       </div>
 
       <div class="bk-form-group">
-        <label for="supplier">Fournisseur</label>
-        <input id="supplier" formControlName="supplier" placeholder="Optionnel" />
+        <label for="supplier">{{ prefs.t().supplier }}</label>
+        <input id="supplier" formControlName="supplier" [placeholder]="prefs.t().optional" />
       </div>
 
       <div class="bk-form-group bk-form-group--full">
-        <label for="date2">Date</label>
+        <label for="date2">{{ prefs.t().date }}</label>
         <input id="date2" type="date" formControlName="date" />
       </div>
 
       <div class="bk-form-group bk-form-group--full">
-        <label for="notes">Notes</label>
-        <input id="notes" formControlName="notes" placeholder="Optionnel" />
+        <label for="notes">{{ prefs.t().notes }}</label>
+        <input id="notes" formControlName="notes" [placeholder]="prefs.t().optional" />
       </div>
     </div>
   }
 
   <div class="bk-form-actions">
-    <button type="button" class="bk-btn bk-btn--outline" (click)="onCancel()">Annuler</button>
-    <button type="submit" class="bk-btn bk-btn--primary">Enregistrer</button>
+    <button type="button" class="bk-btn bk-btn--outline" (click)="onCancel()">{{ prefs.t().cancel }}</button>
+    <button type="submit" class="bk-btn bk-btn--primary">{{ prefs.t().save }}</button>
   </div>
 </form>

@@ -6,6 +6,7 @@ import { ProduitService } from '../../services/produit.service';
 import { ProduitForm } from './produit-form/produit-form';
 import { Produit } from '../../models/produit';
 import { Template } from '../../components/shared/template/template';
+import { PreferencesService } from '../../services/preferences';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -19,6 +20,7 @@ type StatutStock = 'ok' | 'warning' | 'error';
   styleUrl: './catalogue-stocks.css',
 })
 export class CatalogueStocks {
+    protected readonly prefs = inject(PreferencesService);
   private readonly produitService = inject(ProduitService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -188,7 +190,7 @@ export class CatalogueStocks {
       ? this.produitService.modifier(enEdition.id, donnees)
       : this.produitService.ajouter(donnees);
 
-    requete.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    requete.subscribe({
       next: () => {
         this.fermerFormulaire();
       },
@@ -230,4 +232,6 @@ export class CatalogueStocks {
   allerAPage(n: number) {
     this.pageCourante.set(n);
   }
+
+  readonly Math = Math;
 }

@@ -1,16 +1,11 @@
-<!-- src/app/pages/auth-user/mot-de-passe-oublie/mot-de-passe-oublie.html -->
 <app-auth-user>
   <div class="auth-content">
-    <!-- En-tête -->
     <div class="auth-header">
-      <h1 class="bk-auth-title">Mot de passe oublié</h1>
-      <p class="bk-auth-subtitle">
-        Entrez votre email, on vous envoie un lien de réinitialisation
-      </p>
+      <h1 class="bk-auth-title">{{ prefs.t().forgotPassword }}</h1>
+      <p class="bk-auth-subtitle">{{ prefs.t().forgotPasswordSubtitle }}</p>
     </div>
 
     @if (!envoye) {
-      <!-- Erreur -->
       @if (errorMessage) {
         <div class="bk-auth-error">
           <span class="material-icons">error_outline</span>
@@ -18,74 +13,53 @@
         </div>
       }
 
-      <!-- Formulaire -->
       <form (ngSubmit)="soumettre()" [formGroup]="form" novalidate>
         <div class="bk-form-group">
-          <label for="email" class="bk-form-label">Email</label>
+          <label for="email" class="bk-form-label">{{ prefs.t().email }}</label>
           <div class="input-group bk-input-group">
             <span class="input-group-text bk-input-icon">
               <span class="material-icons fs-6">email</span>
             </span>
-            <input
-              type="email"
-              id="email"
-              class="form-control bk-input"
-              placeholder="exemple@email.com"
-              formControlName="email"
-              autocomplete="email">
+            <input type="email" id="email" class="form-control bk-input" placeholder="exemple@email.com" formControlName="email" autocomplete="email">
           </div>
           @if (email.touched && email.hasError('required')) {
             <div class="bk-field-error">
               <span class="material-icons">error_outline</span>
-              L'email est requis.
+              {{ prefs.t().emailRequired }}
             </div>
           }
           @if (email.touched && email.hasError('email')) {
             <div class="bk-field-error">
               <span class="material-icons">error_outline</span>
-              Format d'email invalide.
+              {{ prefs.t().invalidEmail }}
             </div>
           }
         </div>
 
-        <button
-          type="submit"
-          class="btn bk-btn-submit w-100"
-          [disabled]="form.invalid || isLoading">
+        <button type="submit" class="btn bk-btn-submit w-100" [disabled]="form.invalid || isLoading">
           @if (isLoading) {
             <span class="bk-spinner"></span>
-            <span>Envoi en cours...</span>
+            <span>{{ prefs.t().sending }}</span>
           } @else {
-            <span>Envoyer le lien</span>
+            <span>{{ prefs.t().sendLink }}</span>
             <span class="material-icons">arrow_forward</span>
           }
         </button>
 
         <p class="text-center bk-auth-footer">
-          <a routerLink="/connexion" class="bk-auth-link">← Retour à la connexion</a>
+          <a routerLink="/connexion" class="bk-auth-link">{{ prefs.t().backToLogin }}</a>
         </p>
       </form>
     } @else {
-      <!-- Succès -->
       <div class="bk-success-box">
         <div class="bk-success-icon">
           <span class="material-icons">check_circle</span>
         </div>
-        <h3>Email envoyé !</h3>
-        <p>
-          Un lien de réinitialisation a été envoyé à votre adresse email
-          si elle existe dans notre système.
-        </p>
-        <p class="bk-success-hint">
-          Vérifiez vos spams si vous ne recevez rien dans les prochaines minutes.
-        </p>
+        <h3>{{ prefs.t().emailSent }}</h3>
+        <p>{{ prefs.t().emailSentDesc }}</p>
         <div class="bk-success-actions">
-          <a routerLink="/connexion" class="btn bk-btn-primary">
-            Retour à la connexion
-          </a>
-          <button type="button" class="btn bk-btn-outline" (click)="resetForm()">
-            Renvoyer le lien
-          </button>
+          <a routerLink="/connexion" class="btn bk-btn-primary">{{ prefs.t().backToLogin }}</a>
+          <button type="button" class="btn bk-btn-outline" (click)="resetForm()">{{ prefs.t().resendLink }}</button>
         </div>
       </div>
     }
