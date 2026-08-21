@@ -197,30 +197,39 @@ export class Header {
   // ============================================================
 
   readonly notificationsOpen = signal(false);
+  readonly notificationsCleared = signal(false);
 
-  readonly notifications = signal<NotificationItem[]>([
-    {
-      id: 'n1',
-      title: 'Stock faible',
-      detail: 'Sucre 1kg atteint le seuil d\'alerte',
-      time: 'Il y a 2h',
-      type: 'stock'
-    },
-    {
-      id: 'n2',
-      title: 'Nouvelle vente',
-      detail: 'Vente enregistrée pour Restaurant Le Palo',
-      time: 'Il y a 5h',
-      type: 'vente'
-    },
-    {
-      id: 'n3',
-      title: 'Mise à jour',
-      detail: 'Le catalogue a été synchronisé',
-      time: 'Hier',
-      type: 'systeme'
-    }
-  ]);
+  readonly notifications = computed<NotificationItem[]>(() => {
+    if (this.notificationsCleared()) return [];
+    return [
+      {
+        id: 'n1',
+        title: this.prefs.t().notifStockTitle,
+        detail: this.prefs.t().notifStockDetail,
+        time: this.prefs.t().hoursAgo.replace('{n}', '2'),
+        type: 'stock'
+      },
+      {
+        id: 'n2',
+        title: this.prefs.t().notifSaleTitle,
+        detail: this.prefs.t().notifSaleDetail,
+        time: this.prefs.t().hoursAgo.replace('{n}', '5'),
+        type: 'vente'
+      },
+      {
+        id: 'n3',
+        title: this.prefs.t().notifUpdateTitle,
+        detail: this.prefs.t().notifUpdateDetail,
+        time: this.prefs.t().yesterday,
+        type: 'systeme'
+      }
+    ];
+  });
+
+  clearNotifications(): void {
+    this.notificationsCleared.set(true);
+    this.notificationsOpen.set(false);
+  }
 
   readonly notificationsCount = computed(
     () => this.notifications().length
@@ -240,12 +249,7 @@ export class Header {
     }
   }
 
-  clearNotifications(): void {
-    this.notifications.set([]);
-    this.notificationsOpen.set(false);
-  }
-
-
+ 
   // ============================================================
   // PROFIL
   // ============================================================
@@ -281,53 +285,24 @@ export class Header {
   // TITRE DE PAGE
   // ============================================================
 
-  get pageTitle(): string {
-
+   get pageTitle(): string {
     const url = this.router.url;
-
-    if (url.startsWith('/catalogue')) {
-      return 'Catalogue & Stocks';
-    }
-
-    if (url.startsWith('/ventes')) {
-      return 'Gestion des ventes';
-    }
-
-    if (url.startsWith('/charges')) {
-      return 'Gestion des charges';
-    }
-
-    if (url.startsWith('/documents')) {
-      return 'Documents';
-    }
-
-    return 'Tableau de bord';
-
+    if (url.startsWith('/catalogue')) return this.prefs.t().catalogueTitle;
+    if (url.startsWith('/ventes')) return this.prefs.t().salesManagement;
+    if (url.startsWith('/charges')) return this.prefs.t().chargesManagement;
+    if (url.startsWith('/documents')) return this.prefs.t().documents;
+    if (url.startsWith('/parametres')) return this.prefs.t().settingsTitle;
+    return this.prefs.t().dashboardTitle;
   }
 
-
   get breadcrumbCurrent(): string {
-
     const url = this.router.url;
-
-    if (url.startsWith('/catalogue')) {
-      return 'Catalogue';
-    }
-
-    if (url.startsWith('/ventes')) {
-      return 'Ventes';
-    }
-
-    if (url.startsWith('/charges')) {
-      return 'Charges';
-    }
-
-    if (url.startsWith('/documents')) {
-      return 'Documents';
-    }
-
-    return 'Accueil';
-
+    if (url.startsWith('/catalogue')) return this.prefs.t().catalogue;
+    if (url.startsWith('/ventes')) return this.prefs.t().sales;
+    if (url.startsWith('/charges')) return this.prefs.t().charges;
+    if (url.startsWith('/documents')) return this.prefs.t().documents;
+    if (url.startsWith('/parametres')) return this.prefs.t().settings;
+    return this.prefs.t().dashboard;
   }
 
 }

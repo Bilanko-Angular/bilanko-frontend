@@ -52,12 +52,20 @@ export class Parametres {
     return newPassword === confirmPassword ? null : { passwordMismatch: true };
   }
 
-  notifications = signal<NotificationPreference[]>([
-    { id: 'n1', label: 'Alertes de stock', description: 'Recevoir une notification quand un produit atteint son seuil d\'alerte', enabled: true, type: 'stock' },
-    { id: 'n2', label: 'Nouvelles ventes', description: 'Être informé des nouvelles ventes enregistrées', enabled: true, type: 'vente' },
-    { id: 'n3', label: 'Rapports mensuels', description: 'Recevoir le résumé mensuel de votre activité', enabled: false, type: 'rapport' },
-    { id: 'n4', label: 'Mises à jour', description: 'Notifications sur les nouvelles fonctionnalités', enabled: true, type: 'systeme' },
-  ]);
+   private readonly notifEnabledState = signal<Record<string, boolean>>({
+    n1: true, n2: true, n3: false, n4: true,
+  });
+
+  notifications = computed<NotificationPreference[]>(() => {
+    const t = this.prefs.t();
+    const state = this.notifEnabledState();
+    return [
+      { id: 'n1', label: t.notifStockAlertTitle, description: t.notifStockAlertDesc, enabled: state['n1'], type: 'stock' },
+      { id: 'n2', label: t.notifNewSalesTitle, description: t.notifNewSalesDesc, enabled: state['n2'], type: 'vente' },
+      { id: 'n3', label: t.notifMonthlyReportTitle, description: t.notifMonthlyReportDesc, enabled: state['n3'], type: 'rapport' },
+      { id: 'n4', label: t.notifUpdatesTitle, description: t.notifUpdatesDesc, enabled: state['n4'], type: 'systeme' },
+    ];
+  });
 
   accountStats = computed(() => ({
     totalProduits: 12,
@@ -70,12 +78,12 @@ export class Parametres {
     this.activeTab.set(tab);
   }
 
-  saveProfile(): void {
+   saveProfile(): void {
     if (this.profileForm.valid) {
       console.log('Profil sauvegardé :', this.profileForm.value);
       try {
         localStorage.setItem('bilanko_profile', JSON.stringify(this.profileForm.value));
-        this.showToast('Profil sauvegardé avec succès !');
+        this.showToast(this.prefs.t().profileSaved);
       } catch (e) {
         console.warn('Erreur sauvegarde profil :', e);
       }
@@ -88,46 +96,43 @@ export class Parametres {
     if (this.securityForm.valid) {
       console.log('Mot de passe changé');
       this.securityForm.reset();
-      this.showToast('Mot de passe modifié avec succès !');
+      this.showToast(this.prefs.t().passwordChanged);
     } else {
       this.securityForm.markAllAsTouched();
     }
   }
-
-  toggleNotification(id: string): void {
-    this.notifications.update(items =>
-      items.map(item => item.id === id ? { ...item, enabled: !item.enabled } : item)
-    );
+    toggleNotification(id: string): void {
+    this.notifEnabledState.update(state => ({ ...state, [id]: !state[id] }));
     try {
-      localStorage.setItem('bilanko_notifications', JSON.stringify(this.notifications()));
-      this.showToast('Notifications mises à jour');
+      localStorage.setItem('bilanko_notifications', JSON.stringify(this.notifEnabledState()));
+      this.showToast(this.prefs.t().notificationsUpdated);
     } catch (e) {
       console.warn('Erreur sauvegarde notifications :', e);
     }
   }
 
-  onLanguageChange(value: BilankoLanguage): void {
+   onLanguageChange(value: BilankoLanguage): void {
     this.prefs.language.set(value);
-    this.showToast('Langue modifiée avec succès');
+    this.showToast(this.prefs.t().languageChanged);
   }
 
   onDateFormatChange(value: string): void {
     this.prefs.dateFormat.set(value);
-    this.showToast('Format de date modifié avec succès');
+    this.showToast(this.prefs.t().dateFormatChanged);
   }
 
   onCurrencyChange(value: BilankoCurrency): void {
     this.prefs.currency.set(value);
-    this.showToast('Devise modifiée avec succès');
+    this.showToast(this.prefs.t().currencyChanged);
   }
 
   toggleCompactMode(): void {
     this.prefs.compactMode.update(v => !v);
-    this.showToast(this.prefs.compactMode() ? 'Mode compact activé' : 'Mode compact désactivé');
+    this.showToast(this.prefs.compactMode() ? this.prefs.t().compactModeOn : this.prefs.t().compactModeOff);
   }
 
   saveAppearance(): void {
-    this.showToast('Préférences sauvegardées avec succès !');
+    this.showToast(this.prefs.t().preferencesSaved);
   }
 
   private showToast(message: string): void {

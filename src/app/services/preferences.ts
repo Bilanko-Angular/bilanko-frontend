@@ -60,7 +60,21 @@ export interface TranslationSet {
   clearSearch: string; invalidEmail: string; invalidPassword: string; yourPassword: string;
   view: string; edit: string; delete: string;
   fcfa: string; loginWithGoogle: string; orLoginWith: string; orRegisterWith: string;
-  passwordMismatch: string; confirmYourPassword: string;
+  passwordMismatch: string;   confirmYourPassword: string;
+  // --- Nouvelles clés ---
+  notifStockTitle: string; notifStockDetail: string;
+  notifSaleTitle: string; notifSaleDetail: string;
+  notifUpdateTitle: string; notifUpdateDetail: string;
+  hoursAgo: string; yesterday: string;
+  evolutionTitle: string; chartMargin: string;
+  notifStockAlertTitle: string; notifStockAlertDesc: string;
+  notifNewSalesTitle: string; notifNewSalesDesc: string;
+  notifMonthlyReportTitle: string; notifMonthlyReportDesc: string;
+  notifUpdatesTitle: string; notifUpdatesDesc: string;
+  profileSaved: string; passwordChanged: string; notificationsUpdated: string;
+  languageChanged: string; dateFormatChanged: string; currencyChanged: string;
+  compactModeOn: string; compactModeOff: string; preferencesSaved: string;
+
 }
 
 const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
@@ -151,7 +165,21 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     view: 'Voir', edit: 'Modifier', delete: 'Supprimer',
     fcfa: 'FCFA', loginWithGoogle: 'Continuer avec Google', orLoginWith: 'ou connectez-vous',
     orRegisterWith: 'ou créez votre compte', passwordMismatch: 'Les mots de passe ne correspondent pas.',
-    confirmYourPassword: 'Confirmez votre mot de passe',
+      confirmYourPassword: 'Confirmez votre mot de passe',
+    notifStockTitle: 'Stock faible', notifStockDetail: "Sucre 1kg atteint le seuil d'alerte",
+    notifSaleTitle: 'Nouvelle vente', notifSaleDetail: 'Vente enregistrée pour Restaurant Le Palo',
+    notifUpdateTitle: 'Mise à jour', notifUpdateDetail: 'Le catalogue a été synchronisé',
+    hoursAgo: 'Il y a {n}h', yesterday: 'Hier',
+    evolutionTitle: "Évolution de l'activité", chartMargin: 'Marge',
+    notifStockAlertTitle: 'Alertes de stock', notifStockAlertDesc: "Recevoir une notification quand un produit atteint son seuil d'alerte",
+    notifNewSalesTitle: 'Nouvelles ventes', notifNewSalesDesc: 'Être informé des nouvelles ventes enregistrées',
+    notifMonthlyReportTitle: 'Rapports mensuels', notifMonthlyReportDesc: 'Recevoir le résumé mensuel de votre activité',
+    notifUpdatesTitle: 'Mises à jour', notifUpdatesDesc: 'Notifications sur les nouvelles fonctionnalités',
+    profileSaved: 'Profil sauvegardé avec succès !', passwordChanged: 'Mot de passe modifié avec succès !',
+    notificationsUpdated: 'Notifications mises à jour', languageChanged: 'Langue modifiée avec succès',
+    dateFormatChanged: 'Format de date modifié avec succès', currencyChanged: 'Devise modifiée avec succès',
+    compactModeOn: 'Mode compact activé', compactModeOff: 'Mode compact désactivé',
+    preferencesSaved: 'Préférences sauvegardées avec succès !',
   },
   en: {
     dashboard: 'Home', catalogue: 'Catalog', sales: 'Sales', charges: 'Expenses',
@@ -240,7 +268,21 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     view: 'View', edit: 'Edit', delete: 'Delete',
     fcfa: 'FCFA', loginWithGoogle: 'Continue with Google', orLoginWith: 'or log in with',
     orRegisterWith: 'or sign up with', passwordMismatch: 'Passwords do not match.',
-    confirmYourPassword: 'Confirm your password',
+       confirmYourPassword: 'Confirm your password',
+    notifStockTitle: 'Low stock', notifStockDetail: 'Sugar 1kg has reached the alert threshold',
+    notifSaleTitle: 'New sale', notifSaleDetail: 'Sale recorded for Restaurant Le Palo',
+    notifUpdateTitle: 'Update', notifUpdateDetail: 'The catalog has been synced',
+    hoursAgo: '{n}h ago', yesterday: 'Yesterday',
+    evolutionTitle: 'Activity trend', chartMargin: 'Margin',
+    notifStockAlertTitle: 'Stock alerts', notifStockAlertDesc: 'Get notified when a product reaches its alert threshold',
+    notifNewSalesTitle: 'New sales', notifNewSalesDesc: 'Be notified of new recorded sales',
+    notifMonthlyReportTitle: 'Monthly reports', notifMonthlyReportDesc: 'Receive your monthly activity summary',
+    notifUpdatesTitle: 'Updates', notifUpdatesDesc: 'Notifications about new features',
+    profileSaved: 'Profile saved successfully!', passwordChanged: 'Password changed successfully!',
+    notificationsUpdated: 'Notifications updated', languageChanged: 'Language changed successfully',
+    dateFormatChanged: 'Date format changed successfully', currencyChanged: 'Currency changed successfully',
+    compactModeOn: 'Compact mode enabled', compactModeOff: 'Compact mode disabled',
+    preferencesSaved: 'Preferences saved successfully!'
   },
   es: {
     dashboard: 'Inicio', catalogue: 'Catálogo', sales: 'Ventas', charges: 'Gastos',
@@ -329,7 +371,21 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     view: 'Ver', edit: 'Editar', delete: 'Eliminar',
     fcfa: 'FCFA', loginWithGoogle: 'Continuar con Google', orLoginWith: 'o inicia sesión con',
     orRegisterWith: 'o regístrate con', passwordMismatch: 'Las contraseñas no coinciden.',
-    confirmYourPassword: 'Confirma tu contraseña',
+     confirmYourPassword: 'Confirma tu contraseña',
+    notifStockTitle: 'Stock bajo', notifStockDetail: 'El azúcar 1kg alcanzó el umbral de alerta',
+    notifSaleTitle: 'Nueva venta', notifSaleDetail: 'Venta registrada para Restaurant Le Palo',
+    notifUpdateTitle: 'Actualización', notifUpdateDetail: 'El catálogo ha sido sincronizado',
+    hoursAgo: 'Hace {n}h', yesterday: 'Ayer',
+    evolutionTitle: 'Evolución de la actividad', chartMargin: 'Margen',
+    notifStockAlertTitle: 'Alertas de stock', notifStockAlertDesc: 'Recibir una notificación cuando un producto alcanza su umbral de alerta',
+    notifNewSalesTitle: 'Nuevas ventas', notifNewSalesDesc: 'Ser informado de las nuevas ventas registradas',
+    notifMonthlyReportTitle: 'Informes mensuales', notifMonthlyReportDesc: 'Recibir el resumen mensual de tu actividad',
+    notifUpdatesTitle: 'Actualizaciones', notifUpdatesDesc: 'Notificaciones sobre nuevas funciones',
+    profileSaved: '¡Perfil guardado con éxito!', passwordChanged: '¡Contraseña cambiada con éxito!',
+    notificationsUpdated: 'Notificaciones actualizadas', languageChanged: 'Idioma cambiado con éxito',
+    dateFormatChanged: 'Formato de fecha cambiado con éxito', currencyChanged: 'Moneda cambiada con éxito',
+    compactModeOn: 'Modo compacto activado', compactModeOff: 'Modo compacto desactivado',
+    preferencesSaved: '¡Preferencias guardadas con éxito!',
   }
 };
 
