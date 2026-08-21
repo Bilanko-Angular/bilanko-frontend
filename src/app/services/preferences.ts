@@ -386,6 +386,7 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     dateFormatChanged: 'Formato de fecha cambiado con éxito', currencyChanged: 'Moneda cambiada con éxito',
     compactModeOn: 'Modo compacto activado', compactModeOff: 'Modo compacto desactivado',
     preferencesSaved: '¡Preferencias guardadas con éxito!',
+    
   }
 };
 
