@@ -8,9 +8,11 @@ import { Connexion } from './pages/auth-user/connexion/connexion';
 import { Inscription } from './pages/auth-user/inscription/inscription';
 import { MotDePasseOublie } from './pages/auth-user/mot-de-passe-oublie/mot-de-passe-oublie';
 import { BanqueFiscalite } from './pages/banque-fiscalite/banque-fiscalite';
+import { Landing } from './pages/landing/landing';
 
 export const routes: Routes = [
-  { path: '', component: Acceuil },
+  { path: '', component: Landing },
+  { path: 'dashboard', component: Acceuil },
   { path: 'catalogue', component: CatalogueStocks },
   { path: 'ventes', component: SalesComponent },
   { path: 'charges', component: ChargesComponent },
