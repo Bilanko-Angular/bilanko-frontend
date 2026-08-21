@@ -1,6 +1,6 @@
 // src/app/services/produit.service.ts
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient, httpResource, provideHttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { Produit } from '../models/produit';

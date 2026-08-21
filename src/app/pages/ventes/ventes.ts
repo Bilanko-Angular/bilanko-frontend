@@ -1,37 +1,33 @@
+// src/app/pages/ventes/ventes.ts
 import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DecimalPipe } from '@angular/common';
-import type { Sale , Charge } from '../../models/finance';
-import { Template } from "../../components/shared/template/template"; // Import ciblé pour de meilleures performances
+import { DecimalPipe, DatePipe, CurrencyPipe } from '@angular/common';
+import type { Sale, Charge } from '../../models/finance';
+import { Template } from "../../components/shared/template/template";
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { FinanceForm } from '../../components/shared/finance-form/finance-form';
 import { SalesService } from '../../services/sales.service';
-
-
-
+import { PreferencesService } from '../../services/preferences';
 
 @Component({
   selector: 'app-ventes',
   standalone: true,
-  // On importe uniquement ce dont on a besoin (fini le CommonModule global)
-  imports: [ReactiveFormsModule, DecimalPipe, Template, ConfirmDialog, ActionMenu, FinanceForm], 
+  imports: [ReactiveFormsModule, DatePipe, Template, ConfirmDialog, ActionMenu, FinanceForm, CurrencyPipe],
   templateUrl: './ventes.html',
   styleUrls: ['./ventes.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush // Indispensable avec les Signals
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalesComponent {
   private fb = inject(FormBuilder);
   private salesService = inject(SalesService);
+  protected readonly prefs = inject(PreferencesService);
 
-  // --- UI state ---
   isFilterModalOpen = signal(false);
   isAddModalOpen = signal(false);
   openMenuId = signal<string | null>(null);
   confirmDeleteId = signal<string | null>(null);
-
   availableStock = 50;
-
   sales = this.salesService.sales;
   editingSale: Sale | null = null;
 
@@ -45,7 +41,6 @@ export class SalesComponent {
   closeAddModal() { this.isAddModalOpen.set(false); this.saleForm.reset({ quantity: 1 }); }
   openFilterModal() { this.isFilterModalOpen.set(true); }
   closeFilterModal() { this.isFilterModalOpen.set(false); }
-
   toggleActionMenu(saleId: string) { this.openMenuId.update(c => c === saleId ? null : saleId); }
 
   editSale(saleId: string) {
@@ -56,12 +51,10 @@ export class SalesComponent {
     }
     this.openMenuId.set(null);
   }
-  
-  // Handler for ActionMenu selections
+
   onRowAction(actionType: string, saleId: string) {
     if (actionType === 'edit') this.editSale(saleId);
     if (actionType === 'delete') this.showDeleteConfirm(saleId);
-    // 'view' ignored for now
   }
 
   showDeleteConfirm(saleId: string) {
@@ -75,9 +68,7 @@ export class SalesComponent {
     this.confirmDeleteId.set(null);
   }
 
-  cancelDelete() {
-    this.confirmDeleteId.set(null);
-  }
+  cancelDelete() { this.confirmDeleteId.set(null); }
 
   onSubmit() {
     if (this.saleForm.invalid) { this.saleForm.markAllAsTouched(); return; }
@@ -86,7 +77,6 @@ export class SalesComponent {
       this.saleForm.get('quantity')?.setErrors({ stockError: true });
       return;
     }
-
     const newSale = {
       id: Date.now().toString(),
       date: new Date().toISOString().split('T')[0],
@@ -96,19 +86,18 @@ export class SalesComponent {
       totalAmount: formValue.quantity * 15000,
       client: formValue.client || 'Client comptant'
     };
-
     this.salesService.add(newSale);
     this.closeAddModal();
   }
 
   handleSaleSubmit(payload: Sale | Charge) {
-  const sale = payload as Sale;
-  if (this.editingSale) {
-    this.salesService.update(this.editingSale.id, sale);
-    this.editingSale = null;
-  } else {
-    this.salesService.add(sale);
+    const sale = payload as Sale;
+    if (this.editingSale) {
+      this.salesService.update(this.editingSale.id, sale);
+      this.editingSale = null;
+    } else {
+      this.salesService.add(sale);
+    }
+    this.closeAddModal();
   }
-  this.closeAddModal();
-}
 }

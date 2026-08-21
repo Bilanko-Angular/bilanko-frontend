@@ -1,19 +1,18 @@
-<!-- src/app/pages/catalogue-stocks/catalogue-stocks.html -->
 <app-template>
   <div class="bk-page-header">
     <div>
-      <h2 class="bk-page-title">Catalogue & Stocks</h2>
-      <p class="bk-page-subtitle">Gestion détaillée de l'inventaire et des valorisations.</p>
+      <h2 class="bk-page-title">{{ prefs.t().catalogueTitle }}</h2>
+      <p class="bk-page-subtitle">{{ prefs.t().catalogueSubtitle }}</p>
     </div>
     <div class="bk-page-actions">
-      <button class="btn btn-outline" (click)="ouvrirFiltres()" title="Ouvrir les filtres avancés">
-        <span class="icon">☰</span> Filtres
+      <button class="btn btn-outline" (click)="ouvrirFiltres()">
+        <span class="icon">☰</span> {{ prefs.t().filter }}
       </button>
-      <button class="btn btn-outline" (click)="exporter()" title="Exporter les données en CSV">
-        <span class="icon">⬇</span> Exporter
+      <button class="btn btn-outline" (click)="exporter()">
+        <span class="icon">⬇</span> {{ prefs.t().export }}
       </button>
-      <button class="btn btn-primary" (click)="ouvrirCreation()" title="Créer un nouveau produit">
-        <span class="icon">+</span> Ajouter
+      <button class="btn btn-primary" (click)="ouvrirCreation()">
+        <span class="icon">+</span> {{ prefs.t().add }}
       </button>
     </div>
   </div>
@@ -22,30 +21,14 @@
     <div class="bk-toolbar">
       <div class="bk-search-wrapper">
        <span class="bk-search-icon">
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 16 16"
-            fill="currentColor">
-
-            <path
-              d="M11.742 10.344a6.5 6.5 0 1 0-1.397
-              1.398h-.001c.03.04.062.078.098.115l3.85
-              3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85
-              a1.007 1.007 0 0 0-.115-.099zm-5.242
-              1.656a5.5 5.5 0 1 1 0-11 5.5 5.5
-              0 0 1 0 11z">
-            </path>
-
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"></path>
           </svg>
-
         </span>
         <input
           class="bk-search"
           type="text"
-          placeholder="Rechercher un produit, une référence…"
+          [placeholder]="prefs.t().search + '...'"
           [ngModel]="recherche()"
           (ngModelChange)="recherche.set($event)"
         />
@@ -53,19 +36,19 @@
     </div>
 
     @if (catalogue.isLoading()) {
-      <p class="bk-state-msg">Chargement du catalogue…</p>
+      <p class="bk-state-msg">{{ prefs.t().loggingIn }}</p>
     } @else if (catalogue.error()) {
-      <p class="bk-state-msg bk-state-msg--error">Impossible de charger le catalogue depuis le serveur.</p>
+      <p class="bk-state-msg bk-state-msg--error">{{ prefs.t().noProductsFound }}</p>
     } @else {
       <table class="bk-table">
         <thead>
           <tr>
-            <th>Nom du produit & réf.</th>
-            <th>Catégorie</th>
-            <th class="align-center">Qté en stock</th>
-            <th class="align-center">Seuil alerte</th>
-            <th class="align-right">Marge unitaire (FCFA)</th>
-            <th class="align-center">Actions</th>
+            <th>{{ prefs.t().productAndRef }}</th>
+            <th>{{ prefs.t().category }}</th>
+            <th class="align-center">{{ prefs.t().stockQty }}</th>
+            <th class="align-center">{{ prefs.t().alertThreshold }}</th>
+            <th class="align-right">{{ prefs.t().unitMargin }} ({{ prefs.t().fcfa }})</th>
+            <th class="align-center">{{ prefs.t().actions }}</th>
           </tr>
         </thead>
         <tbody>
@@ -73,61 +56,57 @@
             <tr>
               <td>
                 <strong>{{ p.nom }}</strong>
-                <div class="bk-ref">RÉF : {{ p.reference }}</div>
+                <div class="bk-ref">{{ prefs.t().ref }} : {{ p.reference }}</div>
               </td>
               <td><span class="bk-badge-categorie">{{ p.categorie }}</span></td>
               <td class="align-center">
                 <span [class]="'bk-stock bk-stock--' + statutStock(p)">
                   {{ p.quantiteStock }}
-                  @if (statutStock(p) === 'warning') { <small>warning</small> }
-                  @if (statutStock(p) === 'error') { <small>rupture</small> }
+                  @if (statutStock(p) === 'warning') { <small>{{ prefs.t().lowStock }}</small> }
+                  @if (statutStock(p) === 'error') { <small>{{ prefs.t().outOfStock }}</small> }
                 </span>
               </td>
               <td class="align-center bk-text-muted">{{ p.seuilAlerte }}</td>
               <td class="align-right bk-amount"
                   [class.bk-amount--positive]="margeUnitaire(p) >= 0"
                   [class.bk-amount--negative]="margeUnitaire(p) < 0">
-                {{ margeUnitaire(p) | currency:'XAF':'symbol':'1.0-0' }}
+                {{ margeUnitaire(p) | currency: prefs.currency() : 'symbol' : '1.0-0' }}
               </td>
               <td class="align-center">
-                <button class="bk-icon-btn" (click)="ouvrirEdition(p)" title="Modifier">
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5z"/>
-  </svg>
-</button>
-<button class="bk-icon-btn bk-icon-btn--danger" (click)="supprimer(p)" title="Supprimer">
-  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3h11V2h-11v1z"/>
-  </svg>
-</button>
+                <button class="bk-icon-btn" (click)="ouvrirEdition(p)" [title]="prefs.t().edit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5z"/>
+                  </svg>
+                </button>
+                <button class="bk-icon-btn bk-icon-btn--danger" (click)="supprimer(p)" [title]="prefs.t().delete">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3h11V2h-11v1z"/>
+                  </svg>
+                </button>
               </td>
             </tr>
           } @empty {
-            <tr><td colspan="6" class="bk-state-msg">Aucun produit ne correspond à votre recherche.</td></tr>
+            <tr><td colspan="6" class="bk-state-msg">{{ prefs.t().noProductsFound }}</td></tr>
           }
         </tbody>
       </table>
 
       <div class="bk-total-banner">
-        <span>Valorisation totale du stock (marge)</span>
-        <strong>{{ valorisationTotale() | currency:'XAF':'symbol':'1.0-0' }}</strong>
+        <span>{{ prefs.t().totalStockValue }}</span>
+        <strong>{{ valorisationTotale() | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
       </div>
 
       <div class="bk-pagination">
         <span class="bk-pagination-info">
-          Affichage de {{ (pageCourante() - 1) * parPage + 1 }} à
+          {{ prefs.t().showing }} {{ (pageCourante() - 1) * parPage + 1 }} {{ prefs.t().of }}
           {{ Math.min(pageCourante() * parPage, produitsFiltres().length) }}
-          sur {{ produitsFiltres().length }} produits
+          {{ prefs.t().of }} {{ produitsFiltres().length }} {{ prefs.t().products }}
         </span>
         <div class="bk-pagination-controls">
           <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="pageCourante() === 1">‹</button>
           @for (n of pagesAffichees(); track n) {
-            <button
-              class="bk-page-btn"
-              [class.actif]="n === pageCourante()"
-              (click)="allerAPage(n)"
-            >{{ n }}</button>
+            <button class="bk-page-btn" [class.actif]="n === pageCourante()" (click)="allerAPage(n)">{{ n }}</button>
           }
           <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="pageCourante() === nombrePages()">›</button>
         </div>

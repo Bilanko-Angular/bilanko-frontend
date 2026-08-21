@@ -1,594 +1,193 @@
+<!-- src/app/pages/acceuil/acceuil.html -->
 <app-template>
-
   <div class="bk-dashboard">
-
-
-    <!-- ======================================================
-         EN-TÊTE
-    ======================================================= -->
-
     <section class="bk-dashboard__header">
-
       <div>
-
-        <span class="bk-dashboard__eyebrow">
-          BILANKO • ACTIVITÉ
-        </span>
-
-        <h1>
-          Tableau de bord
-        </h1>
-
-        <p>
-          Une vue simple et rapide de votre activité.
-        </p>
-
+        <span class="bk-dashboard__eyebrow">{{ prefs.t().dashboardEyebrow }}</span>
+        <h1>{{ prefs.t().dashboardTitle }}</h1>
+        <p>{{ prefs.t().dashboardSubtitle }}</p>
       </div>
-
     </section>
-
-
-    <!-- ======================================================
-         ACTIONS RAPIDES
-    ======================================================= -->
 
     <section class="bk-quick-actions">
-
-
-      <!-- VENTE -->
-
-      <a
-        routerLink="/ventes"
-        class="bk-quick-action bk-quick-action--primary">
-
+      <a routerLink="/ventes" class="bk-quick-action bk-quick-action--primary">
         <span class="bk-quick-action__icon">
-
           <svg viewBox="0 0 24 24">
-
-            <path
-              d="M7 3h8l3 3v15H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linejoin="round"/>
-
-            <path
-              d="M14 3v4h4M8.5 11h7M8.5 14.5h7M8.5 18h4"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"/>
-
+            <path d="M7 3h8l3 3v15H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M14 3v4h4M8.5 11h7M8.5 14.5h7M8.5 18h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
-
         </span>
-
-
         <span class="bk-quick-action__content">
-
-          <strong>
-            Ajouter une vente
-          </strong>
-
-          <small>
-            Enregistrer une transaction
-          </small>
-
+          <strong>{{ prefs.t().addSale }}</strong>
+          <small>{{ prefs.t().addSaleDesc }}</small>
         </span>
-
-
-        <span class="bk-quick-action__arrow">
-          →
-        </span>
-
+        <span class="bk-quick-action__arrow">→</span>
       </a>
 
-
-      <!-- CHARGE -->
-
-      <a
-        routerLink="/charges"
-        class="bk-quick-action">
-
+      <a routerLink="/charges" class="bk-quick-action">
         <span class="bk-quick-action__icon">
-
           <svg viewBox="0 0 24 24">
-
-            <rect
-              x="4"
-              y="5"
-              width="16"
-              height="14"
-              rx="2"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"/>
-
-            <path
-              d="M8 9h8M8 13h5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"/>
-
+            <rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M8 9h8M8 13h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
-
         </span>
-
-
         <span class="bk-quick-action__content">
-
-          <strong>
-            Ajouter une charge
-          </strong>
-
-          <small>
-            Enregistrer une dépense
-          </small>
-
+          <strong>{{ prefs.t().addCharge }}</strong>
+          <small>{{ prefs.t().addChargeDesc }}</small>
         </span>
-
-
-        <span class="bk-quick-action__arrow">
-          →
-        </span>
-
+        <span class="bk-quick-action__arrow">→</span>
       </a>
 
-
-      <!-- CATALOGUE -->
-
-      <a
-        routerLink="/catalogue"
-        class="bk-quick-action">
-
+      <a routerLink="/catalogue" class="bk-quick-action">
         <span class="bk-quick-action__icon">
-
           <svg viewBox="0 0 24 24">
-
-            <path
-              d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linejoin="round"/>
-
-            <path
-              d="m4.5 7.5 7.5 4 7.5-4M12 11.5V21"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linejoin="round"/>
-
+            <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m4.5 7.5 7.5 4 7.5-4M12 11.5V21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
           </svg>
-
         </span>
-
-
         <span class="bk-quick-action__content">
-
-          <strong>
-            Gestion des produits
-          </strong>
-
-          <small>
-            Catalogue & stock
-          </small>
-
+          <strong>{{ prefs.t().productManagement }}</strong>
+          <small>{{ prefs.t().productManagementDesc }}</small>
         </span>
-
-
-        <span class="bk-quick-action__arrow">
-          →
-        </span>
-
+        <span class="bk-quick-action__arrow">→</span>
       </a>
 
-
-      <!-- DOCUMENTS -->
-
-      <a
-        routerLink="/documents"
-        class="bk-quick-action">
-
+      <a href="#" class="bk-quick-action">
         <span class="bk-quick-action__icon">
-
           <svg viewBox="0 0 24 24">
-
-            <path
-              d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linejoin="round"/>
-
-            <path
-              d="M14 3v5h5M8 12h8M8 16h6"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"/>
-
+            <path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M14 3v5h5M8 12h8M8 16h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
-
         </span>
-
-
         <span class="bk-quick-action__content">
-
-          <strong>
-            Documents
-          </strong>
-
-          <small>
-            Banque & fiscalité
-          </small>
-
+          <strong>{{ prefs.t().documents }}</strong>
+          <small>{{ prefs.t().documentsDesc }}</small>
         </span>
-
-
-        <span class="bk-quick-action__arrow">
-          →
-        </span>
-
+        <span class="bk-quick-action__arrow">→</span>
       </a>
-
     </section>
-
-
-    <!-- ======================================================
-         KPI
-    ======================================================= -->
 
     <section class="bk-kpi-grid">
-
-
-      <!-- CA -->
-
       <article class="bk-kpi-card">
-
         <div class="bk-kpi-card__top">
-
-          <div class="bk-kpi-card__icon bk-kpi-card__icon--green">
-            FCFA
-          </div>
-
-          <span class="bk-kpi-card__trend bk-kpi-card__trend--positive">
-            Activité
-          </span>
-
+          <div class="bk-kpi-card__icon bk-kpi-card__icon--green">FCFA</div>
+          <span class="bk-kpi-card__trend bk-kpi-card__trend--positive">{{ prefs.t().activity }}</span>
         </div>
-
-        <span class="bk-kpi-card__label">
-          Chiffre d'affaires
-        </span>
-
+        <span class="bk-kpi-card__label">{{ prefs.t().revenue }}</span>
         <strong class="bk-kpi-card__value">
-
-          {{ chiffreAffaires() | number:'1.0-0':'fr-FR' }}
-
-          <small>
-            FCFA
-          </small>
-
+          {{ chiffreAffaires() | currency: prefs.currency() : 'symbol' : '1.0-0' }}
         </strong>
-
       </article>
 
-
-      <!-- CHARGES -->
-
       <article class="bk-kpi-card">
-
         <div class="bk-kpi-card__top">
-
-          <div class="bk-kpi-card__icon bk-kpi-card__icon--orange">
-            −
-          </div>
-
-          <span class="bk-kpi-card__trend">
-            Dépenses
-          </span>
-
+          <div class="bk-kpi-card__icon bk-kpi-card__icon--orange">−</div>
+          <span class="bk-kpi-card__trend">{{ prefs.t().expenses }}</span>
         </div>
-
-        <span class="bk-kpi-card__label">
-          Charges
-        </span>
-
+        <span class="bk-kpi-card__label">{{ prefs.t().charges }}</span>
         <strong class="bk-kpi-card__value bk-kpi-card__value--negative">
-
-          {{ totalCharges() | number:'1.0-0':'fr-FR' }}
-
-          <small>
-            FCFA
-          </small>
-
+          {{ totalCharges() | currency: prefs.currency() : 'symbol' : '1.0-0' }}
         </strong>
-
       </article>
 
-
-      <!-- MARGE -->
-
       <article class="bk-kpi-card">
-
         <div class="bk-kpi-card__top">
-
-          <div class="bk-kpi-card__icon bk-kpi-card__icon--dark">
-            +
-          </div>
-
-          <span class="bk-kpi-card__trend bk-kpi-card__trend--positive">
-            Résultat
-          </span>
-
+          <div class="bk-kpi-card__icon bk-kpi-card__icon--dark">+</div>
+          <span class="bk-kpi-card__trend bk-kpi-card__trend--positive">{{ prefs.t().result }}</span>
         </div>
-
-        <span class="bk-kpi-card__label">
-          Marge simplifiée
-        </span>
-
-        <strong
-          class="bk-kpi-card__value"
-          [class.bk-kpi-card__value--positive]="marge() >= 0"
-          [class.bk-kpi-card__value--negative]="marge() < 0">
-
-          {{ marge() | number:'1.0-0':'fr-FR' }}
-
-          <small>
-            FCFA
-          </small>
-
+        <span class="bk-kpi-card__label">{{ prefs.t().simplifiedMargin }}</span>
+        <strong class="bk-kpi-card__value" [class.bk-kpi-card__value--positive]="marge() >= 0" [class.bk-kpi-card__value--negative]="marge() < 0">
+          {{ marge() | currency: prefs.currency() : 'symbol' : '1.0-0' }}
         </strong>
-
       </article>
 
-
-      <!-- VENTES -->
-
       <article class="bk-kpi-card">
-
         <div class="bk-kpi-card__top">
-
-          <div class="bk-kpi-card__icon bk-kpi-card__icon--soft">
-            #
-          </div>
-
-          <span class="bk-kpi-card__trend">
-            Transactions
-          </span>
-
+          <div class="bk-kpi-card__icon bk-kpi-card__icon--soft">#</div>
+          <span class="bk-kpi-card__trend">{{ prefs.t().transactions }}</span>
         </div>
-
-        <span class="bk-kpi-card__label">
-          Nombre de ventes
-        </span>
-
+        <span class="bk-kpi-card__label">{{ prefs.t().salesCount }}</span>
         <strong class="bk-kpi-card__value">
-
           {{ nombreVentes() }}
-
-          <small>
-            ventes
-          </small>
-
+          <small>{{ prefs.t().sales }}</small>
         </strong>
-
       </article>
-
     </section>
-
-
-    <!-- ======================================================
-         GRAPHIQUE
-    ======================================================= -->
 
     <app-evolution-chart></app-evolution-chart>
 
-
-    <!-- ======================================================
-         ACTIVITÉS
-    ======================================================= -->
-
     <section class="bk-dashboard__columns">
-
-
-      <!-- VENTES -->
-
       <article class="bk-panel">
-
         <div class="bk-panel__header">
-
           <div>
-
-            <span class="bk-panel__eyebrow">
-              TRANSACTIONS
-            </span>
-
-            <h2>
-              Ventes récentes
-            </h2>
-
+            <span class="bk-panel__eyebrow">{{ prefs.t().transactions }}</span>
+            <h2>{{ prefs.t().recentSales }}</h2>
           </div>
-
-          <a
-            routerLink="/ventes"
-            class="bk-panel__link">
-
-            Voir tout
-            <span>→</span>
-
-          </a>
-
+          <a routerLink="/ventes" class="bk-panel__link">{{ prefs.t().seeAll }} <span>→</span></a>
         </div>
-
 
         @if (dernieresVentes().length === 0) {
-
-          <div class="bk-empty">
-            Aucune vente pour le moment.
-          </div>
-
+          <div class="bk-empty">{{ prefs.t().noSalesYet }}</div>
         } @else {
-
           <div class="bk-table-wrapper">
-
             <table class="bk-table">
-
               <thead>
-
                 <tr>
-
-                  <th>
-                    Produit
-                  </th>
-
-                  <th>
-                    Client
-                  </th>
-
-                  <th class="bk-table__num">
-                    Qté
-                  </th>
-
-                  <th class="bk-table__num">
-                    Montant
-                  </th>
-
+                  <th>{{ prefs.t().product }}</th>
+                  <th>{{ prefs.t().client }}</th>
+                  <th class="bk-table__num">{{ prefs.t().quantity }}</th>
+                  <th class="bk-table__num">{{ prefs.t().amount }}</th>
                 </tr>
-
               </thead>
-
               <tbody>
-
-                @for (
-                  vente of dernieresVentes();
-                  track vente.id
-                ) {
-
+                @for (vente of dernieresVentes(); track vente.id) {
                   <tr>
-
                     <td>
                       <div class="bk-product-cell">
-
                         <span class="bk-product-dot"></span>
-
                         {{ vente.product }}
-
                       </div>
                     </td>
-
-                    <td>
-                      {{ vente.client || 'Client comptant' }}
-                    </td>
-
-                    <td class="bk-table__num">
-                      {{ vente.quantity }}
-                    </td>
-
+                    <td>{{ vente.client || prefs.t().comptantClient }}</td>
+                    <td class="bk-table__num">{{ vente.quantity }}</td>
                     <td class="bk-table__num bk-table__num--positive">
-
-                      {{ vente.totalAmount | number:'1.0-0':'fr-FR' }}
-
-                      FCFA
-
+                      {{ vente.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}
                     </td>
-
                   </tr>
-
                 }
-
               </tbody>
-
             </table>
-
           </div>
-
         }
-
       </article>
-
-
-      <!-- CHARGES -->
 
       <article class="bk-panel">
-
         <div class="bk-panel__header">
-
           <div>
-
-            <span class="bk-panel__eyebrow">
-              DÉPENSES
-            </span>
-
-            <h2>
-              Charges récentes
-            </h2>
-
+            <span class="bk-panel__eyebrow">{{ prefs.t().expenses }}</span>
+            <h2>{{ prefs.t().recentCharges }}</h2>
           </div>
-
-          <a
-            routerLink="/charges"
-            class="bk-panel__link">
-
-            Voir tout
-            <span>→</span>
-
-          </a>
-
+          <a routerLink="/charges" class="bk-panel__link">{{ prefs.t().seeAll }} <span>→</span></a>
         </div>
 
-
         @if (dernieresCharges().length === 0) {
-
-          <div class="bk-empty">
-            Aucune charge enregistrée.
-          </div>
-
+          <div class="bk-empty">{{ prefs.t().noChargesYet }}</div>
         } @else {
-
           <ul class="bk-list">
-
-            @for (
-              charge of dernieresCharges();
-              track charge.id
-            ) {
-
+            @for (charge of dernieresCharges(); track charge.id) {
               <li class="bk-list__item">
-
                 <div class="bk-charge-info">
-
-                  <span class="bk-charge-icon">
-                    −
-                  </span>
-
-                  <span>
-                    {{ charge.label }}
-                  </span>
-
+                  <span class="bk-charge-icon">−</span>
+                  <span>{{ charge.label }}</span>
                 </div>
-
                 <strong class="bk-list__amount">
-
-                  -{{ charge.amount | number:'1.0-0':'fr-FR' }}
-
-                  FCFA
-
+                  -{{ charge.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}
                 </strong>
-
               </li>
-
             }
-
           </ul>
-
         }
-
       </article>
-
     </section>
-
   </div>
-
 </app-template>

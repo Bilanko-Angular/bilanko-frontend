@@ -1,22 +1,25 @@
+// src/app/pages/charges/charges.ts
 import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Template } from "../../components/shared/template/template";
 import type { Charge, Sale } from '../../models/finance';
 import { FinanceForm } from '../../components/shared/finance-form/finance-form';
 import { ChargesService } from '../../services/charges.service';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
+import { PreferencesService } from '../../services/preferences';
 
 @Component({
   selector: 'app-charges',
   standalone: true,
-  imports: [CommonModule, Template, ActionMenu, ConfirmDialog, FinanceForm],
+  imports: [CommonModule, DatePipe, Template, ActionMenu, ConfirmDialog, FinanceForm],
   templateUrl: './charges.html',
   styleUrls: ['./charges.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChargesComponent {
   private chargesService = inject(ChargesService);
+  protected readonly prefs = inject(PreferencesService);
 
   charges = this.chargesService.charges;
   editingCharge: Charge | null = null;
@@ -34,8 +37,6 @@ export class ChargesComponent {
     this.editingCharge = null;
   }
 
-  // Le formulaire partagé (FinanceForm) émet Sale | Charge selon le contexte.
-  // Ici [kind]="'charge'" donc on sait que c'est toujours une Charge.
   handleChargeSubmit(payload: Sale | Charge) {
     const c = payload as Charge;
     if (this.editingCharge) {

@@ -1,3 +1,4 @@
+// src/app/pages/catalogue-stocks/catalogue-stocks.ts
 import { Component, inject, signal, computed, DestroyRef } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +7,7 @@ import { ProduitService } from '../../services/produit.service';
 import { ProduitForm } from './produit-form/produit-form';
 import { Produit } from '../../models/produit';
 import { Template } from '../../components/shared/template/template';
+import { PreferencesService } from '../../services/preferences';
 
 @Component({
   selector: 'app-catalogue-stocks',
@@ -15,6 +17,7 @@ import { Template } from '../../components/shared/template/template';
   styleUrl: './catalogue-stocks.css',
 })
 export class CatalogueStocks {
+    protected readonly prefs = inject(PreferencesService);
   private readonly produitService = inject(ProduitService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -89,7 +92,7 @@ export class CatalogueStocks {
       ? this.produitService.modifier(enEdition.id, donnees)
       : this.produitService.ajouter(donnees);
 
-    requete.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    requete.subscribe({
       next: () => {
         this.catalogue.reload();
         this.fermerFormulaire();
@@ -102,19 +105,16 @@ export class CatalogueStocks {
     if (confirm('Supprimer ce produit ?')) {
       this.produitService
         .supprimer(p.id)
-        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({ next: () => this.catalogue.reload() });
     }
   }
 
   // --- Filtres et export ---
   ouvrirFiltres() {
-    // TODO: Implémentation du panel de filtres avancés
     console.log('Filtres - À implémenter');
   }
 
   exporter() {
-    // TODO: Implémentation de l'export CSV/Excel
     console.log('Export - À implémenter');
   }
 
