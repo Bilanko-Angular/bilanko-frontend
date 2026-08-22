@@ -1,0 +1,53 @@
+<app-template>
+  <div class="bk-page">
+    <header class="bk-header">
+      <div>
+        <div class="bk-breadcrumb">BILANKO › CATALOGUE</div>
+        <h1 class="bk-title">{{ prefs.t().catalogueTitle }}</h1>
+        <p class="bk-subtitle">{{ prefs.t().catalogueSubtitle }}</p>
+      </div>
+      <div class="bk-actions">
+        <app-product-filter-dropdown [categories]="categoriesOptions()" (filtresChange)="onFiltresChange($event)" />
+
+        <button class="bk-btn bk-btn--secondary" (click)="exporter()">
+          {{ prefs.t().export }}
+        </button>
+
+        <button class="bk-btn bk-btn--primary" (click)="ouvrirCreation()">
+          {{ prefs.t().add }}
+        </button>
+      </div>
+    </header>
+
+    <app-product-search-bar (rechercheChange)="onRechercheChange($event)" />
+
+    <app-product-table
+      [produits]="produits()"
+      [isLoading]="isLoading()"
+      [error]="error()"
+      (edit)="ouvrirEdition($event)"
+      (supprimer)="demanderSuppression($event)"
+    />
+
+    <app-product-pagination
+      [pageCourante]="pageCourante()"
+      [totalPages]="totalPages()"
+      [totalElements]="totalElements()"
+      (changerPage)="onChangerPage($event)"
+    />
+
+    @if (afficherFormulaire()) {
+      <app-produit-form
+        [produit]="produitEnEdition()"
+        (enregistrer)="onEnregistrer($event)"
+        (annuler)="afficherFormulaire.set(false)"
+      />
+    }
+
+    <app-product-delete-modal
+      [produit]="produitASupprimer()"
+      (confirmer)="confirmerSuppression()"
+      (annuler)="produitASupprimer.set(undefined)"
+    />
+  </div>
+</app-template>

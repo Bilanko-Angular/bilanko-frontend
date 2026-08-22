@@ -1,0 +1,30 @@
+<!-- product-pagination.html -->
+@if (totalPages() >= 1) {
+  <div class="bk-pagination">
+    <span class="bk-pagination-info">
+      Affichage {{ debutAffiche() }} - {{ finAffiche() }} sur {{ totalElements() }} produits
+    </span>
+
+    <div class="bk-pagination-controls">
+      <button class="bk-btn bk-btn--ghost" [disabled]="pageCourante() === 0" (click)="precedente()">
+        Précédent
+      </button>
+
+      <div class="bk-pagination-pages">
+        @for (page of pagesAffichees(); track page) {
+          <button
+            class="bk-page-btn"
+            [class.active]="page === pageCourante()"
+            (click)="allerA(page)"
+          >
+            {{ page + 1 }}
+          </button>
+        }
+      </div>
+
+      <button class="bk-btn bk-btn--ghost" [disabled]="pageCourante() >= totalPages() - 1" (click)="suivante()">
+        Suivant
+      </button>
+    </div>
+  </div>
+}

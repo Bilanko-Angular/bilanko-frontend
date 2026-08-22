@@ -1,0 +1,40 @@
+<!-- product-filter-dropdown.html -->
+<div class="bk-filter-wrapper">
+  <button class="bk-btn bk-btn--secondary" (click)="toggle()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+    </svg>
+    Filtrer
+  </button>
+
+  @if (ouvert()) {
+    <div class="bk-filter-dropdown">
+      <div class="bk-filter-dropdown-title">Filtrer les produits</div>
+
+      <div class="bk-filter-group">
+        <label>Categorie</label>
+        <select [ngModel]="categorieId()" (ngModelChange)="categorieId.set($event)">
+          <option [value]="undefined">Toutes les categories</option>
+          @for (cat of categories(); track cat.id) {
+            <option [value]="cat.id">{{ cat.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="bk-filter-group">
+        <label>Statut de stock</label>
+        <select [ngModel]="statut()" (ngModelChange)="statut.set($event)">
+          <option value="tous">Tous les statuts</option>
+          <option value="ok">En stock OK</option>
+          <option value="warning">Alerte stock bas</option>
+          <option value="error">Rupture de stock</option>
+        </select>
+      </div>
+
+      <div class="bk-filter-actions">
+        <button type="button" class="bk-btn bk-btn--ghost" (click)="reinitialiser()">Reinitialiser</button>
+        <button type="button" class="bk-btn bk-btn--primary" (click)="appliquer()">Appliquer</button>
+      </div>
+    </div>
+  }
+</div>

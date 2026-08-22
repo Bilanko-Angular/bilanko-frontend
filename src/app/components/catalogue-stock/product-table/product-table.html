@@ -1,0 +1,33 @@
+<!-- product-table.html -->
+<table class="bk-table">
+  <thead>
+    <tr>
+      <th>Produit & référence</th>
+      <th>Catégorie</th>
+      <th class="align-center">Qté en stock</th>
+      <th class="align-center">Seuil d'alerte</th>
+      <th class="align-right">Marge unitaire (FCFA)</th>
+      <th class="align-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (isLoading()) {
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <app-product-skeleton-row />
+      }
+    } @else if (error()) {
+      <tr><td colspan="6" class="bk-state-msg bk-state-msg--error">{{ error() }}</td></tr>
+    } @else if (produits().length === 0) {
+      <tr><td colspan="6" class="bk-state-msg">Aucun produit trouvé</td></tr>
+    } @else {
+      @for (p of produits(); track p.id) {
+        <app-product-table-row
+          [produit]="p"
+          [devise]="devise()"
+          (edit)="edit.emit($event)"
+          (supprimer)="supprimer.emit($event)"
+        />
+      }
+    }
+  </tbody>
+</table>

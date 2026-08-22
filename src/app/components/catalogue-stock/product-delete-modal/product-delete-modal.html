@@ -1,0 +1,16 @@
+<!-- product-delete-modal.html -->
+@if (produit(); as p) {
+  <div class="bk-modal-overlay">
+    <div class="bk-modal bk-modal--danger">
+      <h3>Supprimer le produit</h3>
+      <p>
+        Êtes-vous sûr de vouloir supprimer le produit <strong>{{ p.nom }}</strong> ({{ p.reference }}) ?
+        Cette action est irréversible.
+      </p>
+      <div class="bk-modal-actions">
+        <button class="bk-btn bk-btn--ghost" (click)="annuler.emit()">Annuler</button>
+        <button class="bk-btn bk-btn--danger" (click)="confirmer.emit()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}
