@@ -1,25 +1,5 @@
-.bk-search-bar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  }
-  .bk-search-bar svg {
-    position: absolute;
-    left: 12px;
-    color: var(--color-text-muted);
-  }
-
-  .bk-search-bar input {
-    width: 100%;
-    padding: 10px 12px 10px 40px;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-base);
-    color: var(--color-text);
-    font-size: 0.875rem;
-    outline: none;
-    }
-    .bk-search-bar input:focus {
-      border-color: var(--color-primary);
-    }
+/* Bootstrap gère le layout, on garde juste le focus custom */
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.15);
+}

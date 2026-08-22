@@ -1,31 +1,4 @@
-.bk-pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 8px;
-}
-
-.bk-pagination-pages {
-  display: flex;
-  gap: 6px;
-}
-
-.bk-page-btn {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  color: var(--color-text);
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.bk-page-btn.active {
-  background-color: var(--color-primary);
-  color: var(--color-on-brand);
-  border-color: var(--color-primary);
+/* Bootstrap pagination gère les styles. Override couleur active uniquement. */
+.page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
 }

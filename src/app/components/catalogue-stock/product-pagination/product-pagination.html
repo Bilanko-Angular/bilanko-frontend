@@ -1,30 +1,44 @@
 <!-- product-pagination.html -->
 @if (totalPages() >= 1) {
-  <div class="bk-pagination">
-    <span class="bk-pagination-info">
-      Affichage {{ debutAffiche() }} - {{ finAffiche() }} sur {{ totalElements() }} produits
+  <div class="d-flex justify-content-between align-items-center pt-2 flex-wrap gap-2">
+
+    <!-- Info résultats -->
+    <span class="small" style="color: var(--color-text-muted);">
+      Affichage {{ debutAffiche() }} – {{ finAffiche() }} sur {{ totalElements() }} produits
     </span>
 
-    <div class="bk-pagination-controls">
-      <button class="bk-btn bk-btn--ghost" [disabled]="pageCourante() === 0" (click)="precedente()">
-        Précédent
-      </button>
-
-      <div class="bk-pagination-pages">
-        @for (page of pagesAffichees(); track page) {
-          <button
-            class="bk-page-btn"
-            [class.active]="page === pageCourante()"
-            (click)="allerA(page)"
-          >
-            {{ page + 1 }}
+    <!-- Contrôles pagination Bootstrap -->
+    <nav aria-label="Navigation des pages">
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item" [class.disabled]="pageCourante() === 0">
+          <button class="page-link" (click)="precedente()" [disabled]="pageCourante() === 0"
+            style="background-color: var(--color-surface); border-color: var(--color-border); color: var(--color-text);">
+            Précédent
           </button>
-        }
-      </div>
+        </li>
 
-      <button class="bk-btn bk-btn--ghost" [disabled]="pageCourante() >= totalPages() - 1" (click)="suivante()">
-        Suivant
-      </button>
-    </div>
+        @for (page of pagesAffichees(); track page) {
+          <li class="page-item" [class.active]="page === pageCourante()">
+            <button
+              class="page-link"
+              (click)="allerA(page)"
+              style="background-color: var(--color-surface); border-color: var(--color-border); color: var(--color-text);"
+              [style.background-color]="page === pageCourante() ? 'var(--color-primary)' : ''"
+              [style.border-color]="page === pageCourante() ? 'var(--color-primary)' : ''"
+              [style.color]="page === pageCourante() ? '#fff' : ''"
+            >
+              {{ page + 1 }}
+            </button>
+          </li>
+        }
+
+        <li class="page-item" [class.disabled]="pageCourante() >= totalPages() - 1">
+          <button class="page-link" (click)="suivante()" [disabled]="pageCourante() >= totalPages() - 1"
+            style="background-color: var(--color-surface); border-color: var(--color-border); color: var(--color-text);">
+            Suivant
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 }
