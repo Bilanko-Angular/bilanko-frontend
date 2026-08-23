@@ -11,7 +11,7 @@ import { PagedResponseDto } from '../../../models/DTO/response/PageResponse';
   providedIn: 'root',
 })
 export class ProductApiService {
-  private readonly basePath = '/api/products';
+  private readonly basePath = '/products';
 
   async getAll(): Promise<Produit[]> {
     const response = await apiClient.get<ProductApiDto[]>(`${this.basePath}/all`);

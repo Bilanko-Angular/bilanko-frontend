@@ -16,6 +16,7 @@ import { SalesService } from '../../../services/sales.service';
 import type { Produit } from '../../../models/produit';
 import { PreferencesService } from '../../../services/preferences';
 import type { Sale } from '../../../models/finance';
+import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
 
 
 interface SearchResult {
@@ -50,25 +51,15 @@ export class Header {
   private readonly router = inject(Router);
   private readonly elementRef = inject(ElementRef);
 
-  private readonly produitService =
-    inject(ProduitService);
+  private readonly produitStore =
+    inject(ProduitStoreService);
 
   private readonly salesService =
     inject(SalesService);
 
-   protected readonly prefs = inject(PreferencesService);
-
-
-  // ============================================================
-  // RECHERCHE
-  // ============================================================
+  protected readonly prefs = inject(PreferencesService)
 
   readonly searchTerm = signal('');
-
-
-  readonly produits =
-    this.produitService.catalogue;
-
 
   readonly ventes =
     this.salesService.sales;
@@ -80,20 +71,14 @@ export class Header {
       .trim()
       .toLowerCase();
 
-
     if (!terme) {
       return [];
     }
 
-
     const results: SearchResult[] = [];
 
-
-    const produits =
-      this.produits.value()
-        ? this.produits.value()
-        : [];
-
+    // produits est déjà un signal de tableau, pas besoin de .value()
+    const produits = this.produitStore.produits() ?? [];
 
     for (const produit of produits) {
 
@@ -102,51 +87,36 @@ export class Header {
         produit.reference.toLowerCase().includes(terme) ||
         produit.categorie.toLowerCase().includes(terme);
 
-
       if (correspond) {
-
         results.push({
           type: 'produit',
           id: produit.id,
           title: produit.nom,
-          subtitle:
-            `${produit.reference} · ${produit.categorie}`,
+          subtitle: `${produit.reference} · ${produit.categorie}`,
           produit
         });
-
       }
-
     }
 
-
     for (const vente of this.ventes()) {
-
       const correspond =
         vente.product.toLowerCase().includes(terme) ||
-        (vente.client ?? '')
-          .toLowerCase()
-          .includes(terme);
-
+        (vente.client ?? '').toLowerCase().includes(terme);
 
       if (correspond) {
-
         results.push({
           type: 'vente',
           id: vente.id,
           title: vente.product,
-          subtitle:
-            `Vente · ${vente.client || 'Client comptant'}`,
+          subtitle: `Vente · ${vente.client || 'Client comptant'}`,
           vente
         });
-
       }
-
     }
 
-
     return results.slice(0, 8);
-
   });
+
 
 
   onSearch(event: Event): void {

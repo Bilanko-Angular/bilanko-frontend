@@ -7,10 +7,10 @@ import { apiClient } from '../../../core/axios/axios.config';
   providedIn: 'root',
 })
 export class CategoryApiService {
-  private readonly basePath = '/api/categories';
+  private readonly basePath = '/categories';
 
   async getAll(): Promise<CategorieOption[]> {
-    const response = await apiClient.get<CategoryApiDto[]>(this.basePath);
+    const response = await apiClient.get<CategoryApiDto[]>(this.basePath+"/all");
     return response.data.map((dto) => ({ id: dto.id, name: dto.name }));
   }
 
