@@ -7,7 +7,7 @@ import { Produit } from '../../../../models/produit';
 type StatutStock = 'ok' | 'warning' | 'error';
 
 @Component({
-  selector: 'app-product-table-row',
+  selector: '[app-product-table-row]',
   standalone: true,
   imports: [CurrencyPipe],
   templateUrl: './product-table-row.html',

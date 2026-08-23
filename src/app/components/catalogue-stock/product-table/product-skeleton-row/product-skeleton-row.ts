@@ -1,14 +1,12 @@
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-product-skeleton-row',
+  selector: '[app-product-skeleton-row]',
   standalone: true,
   template: `
-    <tr class="skeleton-row">
       @for (col of columns(); track $index) {
         <td><div class="skeleton-bar"></div></td>
       }
-    </tr>
   `,
   styles: [`
     .skeleton-bar {

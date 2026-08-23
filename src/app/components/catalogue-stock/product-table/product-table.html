@@ -14,7 +14,7 @@
     <tbody>
       @if (isLoading()) {
         @for (i of [1, 2, 3, 4, 5]; track i) {
-          <app-product-skeleton-row />
+          <tr app-product-skeleton-row class="skeleton-row"></tr>
         }
       } @else if (error()) {
         <tr><td colspan="6" class="text-center text-danger py-4">{{ error() }}</td></tr>
@@ -22,12 +22,12 @@
         <tr><td colspan="6" class="text-center text-secondary py-4">Aucun produit trouvé</td></tr>
       } @else {
         @for (p of produits(); track p.id) {
-          <app-product-table-row
+          <tr app-product-table-row
             [produit]="p"
             [devise]="devise()"
             (edit)="edit.emit($event)"
             (supprimer)="supprimer.emit($event)"
-          />
+          ></tr>
         }
       }
     </tbody>
