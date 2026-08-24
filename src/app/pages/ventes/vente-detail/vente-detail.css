@@ -1,0 +1,54 @@
+.bk-detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.bk-back-btn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+}
+.bk-back-btn:hover { text-decoration: underline; }
+.bk-detail-header h1 { margin: 0; color: var(--color-text); font-size: 1.5rem; }
+
+.bk-detail-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 1.5rem;
+}
+
+.bk-detail-top {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.bk-detail-top div { display: flex; flex-direction: column; gap: 0.25rem; }
+.bk-detail-label { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; }
+.bk-detail-top strong { color: var(--color-text); font-size: 1rem; }
+
+.registry-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.registry-table th { text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); padding: 0.6rem; border-bottom: 2px solid var(--color-text); }
+.registry-table td { padding: 0.75rem 0.6rem; border-bottom: 1px solid var(--color-border); color: var(--color-text); }
+.align-center { text-align: center; }
+.align-right { text-align: right; }
+.amount-positive { color: var(--color-positive); font-weight: 600; }
+
+.bk-detail-totals {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--color-border);
+}
+.bk-detail-totals div { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; }
+.bk-detail-totals span { font-size: 0.8rem; color: var(--color-text-muted); }
+.bk-detail-totals strong { font-size: 1.2rem; }

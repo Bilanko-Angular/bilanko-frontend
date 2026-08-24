@@ -1,0 +1,95 @@
+<form class="bk-form" (ngSubmit)="onSubmit()">
+
+  <div class="bk-form-grid">
+    <div class="bk-form-group">
+      <label>{{ prefs.t().client }}</label>
+      <input [(ngModel)]="customerName" name="customerName" [placeholder]="prefs.t().clientCashIfEmpty" />
+    </div>
+    <div class="bk-form-group">
+      <label>{{ prefs.t().date }}</label>
+      <input type="datetime-local" [(ngModel)]="saleDateTime" name="saleDateTime" />
+    </div>
+  </div>
+
+  <div class="bk-panier-picker">
+    <div class="bk-form-group bk-form-group--grow bk-autocomplete">
+      <label>{{ prefs.t().product }}</label>
+      <input
+        type="text"
+        [ngModel]="productQuery()"
+        (ngModelChange)="onProductQueryChange($event)"
+        (focus)="onProductFocus()"
+        (blur)="onProductBlur()"
+        name="produitRecherche"
+        [placeholder]="prefs.t().product + '...'"
+        autocomplete="off"
+      />
+      @if (showSuggestions()) {
+        <ul class="bk-autocomplete-list">
+          @for (p of filteredProducts(); track p.id) {
+            <li (mousedown)="selectProduct(p)">
+              {{ p.nom }}
+              <span class="bk-autocomplete-stock">({{ p.quantiteStock }} {{ prefs.t().stockQty }})</span>
+            </li>
+          }
+          @empty {
+            <li class="bk-autocomplete-empty">{{ prefs.t().noProductsFound }}</li>
+          }
+        </ul>
+      }
+    </div>
+    <div class="bk-form-group bk-form-group--qty">
+      <label>{{ prefs.t().quantity }}</label>
+      <input type="number" min="1" [(ngModel)]="selectedQuantity" name="qty" />
+    </div>
+    <div class="bk-form-group bk-form-group--btn">
+      <label class="bk-label-spacer">&nbsp;</label>
+      <button type="button" class="bk-btn bk-btn--outline bk-btn--add" (click)="ajouterAuPanier()" [disabled]="!selectedProductId()">
+        + {{ prefs.t().add }}
+      </button>
+    </div>
+  </div>
+
+  @if (stockWarning()) {
+    <p class="bk-field-error">{{ stockWarning() }}</p>
+  }
+
+  @if (panier().length > 0) {
+    <div class="bk-panier-table-wrapper">
+      <table class="bk-panier-table">
+        <thead>
+          <tr>
+            <th>{{ prefs.t().product }}</th>
+            <th class="align-center">{{ prefs.t().quantity }}</th>
+            <th class="align-right">{{ prefs.t().unitPrice }}</th>
+            <th class="align-right">{{ prefs.t().totalAmount }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of panier(); track item.productId + '-' + $index; let i = $index) {
+            <tr>
+              <td>{{ item.productName }}</td>
+              <td class="align-center">{{ item.quantity }}</td>
+              <td class="align-right">{{ item.unitSellingPrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td class="align-right">{{ item.unitSellingPrice * item.quantity | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td class="align-center">
+                <button type="button" class="bk-remove-btn" (click)="retirerDuPanier(i)">✕</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bk-panier-total">
+      <span>{{ prefs.t().totalAmount }}</span>
+      <strong>{{ total() | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+    </div>
+  }
+
+  <div class="bk-form-actions">
+    <button type="button" class="bk-btn bk-btn--outline" (click)="cancel.emit()">{{ prefs.t().cancel }}</button>
+    <button type="submit" class="bk-btn bk-btn--primary" [disabled]="panier().length === 0">{{ prefs.t().save }}</button>
+  </div>
+</form>

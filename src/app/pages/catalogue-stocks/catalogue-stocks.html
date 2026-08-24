@@ -1,219 +1,667 @@
 <app-template>
-<div class="bk-page">
-  <header class="bk-header">
-    <div>
-      <div class="bk-breadcrumb">BILANKO › CATALOGUE</div>
-      <h1 class="bk-title">{{ prefs.t().catalogueTitle }}</h1>
-      <p class="bk-subtitle">{{ prefs.t().catalogueSubtitle }}</p>
-    </div>
-    <div class="bk-actions">
-      <div class="bk-filter-wrapper">
-        <button class="bk-btn bk-btn--secondary" (click)="toggleFiltres()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+
+  <div class="bk-page">
+
+    <!-- =========================================================
+         EN-TÊTE
+    ========================================================== -->
+
+    <header class="bk-header">
+
+      <div class="bk-header-text">
+
+        <div class="bk-breadcrumb">
+          BILANKO › CATALOGUE
+        </div>
+
+        <h1 class="bk-title">
+          {{ prefs.t().catalogueTitle }}
+        </h1>
+
+        <p class="bk-subtitle">
+          {{ prefs.t().catalogueSubtitle }}
+        </p>
+
+      </div>
+
+
+      <!-- ACTIONS -->
+      <div class="bk-actions">
+
+        <!-- FILTRE -->
+        <div class="bk-filter-wrapper">
+
+          <button
+            type="button"
+            class="bk-btn bk-btn--secondary"
+            (click)="toggleFiltres()"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polygon
+                points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+              ></polygon>
+            </svg>
+
+            {{ prefs.t().filter }}
+          </button>
+
+
+          <!-- POPUP FILTRE -->
+          @if (afficherFiltres()) {
+
+            <div class="bk-filter-dropdown">
+
+              <div class="bk-filter-header">
+
+                <strong>
+                  Filtrer les produits
+                </strong>
+
+                <button
+                  type="button"
+                  class="bk-filter-close"
+                  (click)="toggleFiltres()"
+                  aria-label="Fermer"
+                >
+                  ×
+                </button>
+
+              </div>
+
+
+              <!-- CATEGORIE -->
+              <div class="bk-filter-group">
+
+                <label>
+                  Catégorie
+                </label>
+
+                <select
+                  [ngModel]="filtreCategorie()"
+                  (ngModelChange)="onFiltreCategorieChange($event)"
+                >
+
+                  <option value="">
+                    Toutes les catégories
+                  </option>
+
+                  @for (cat of categories(); track cat) {
+
+                    <option [value]="cat">
+                      {{ cat }}
+                    </option>
+
+                  }
+
+                </select>
+
+              </div>
+
+
+              <!-- STOCK -->
+              <div class="bk-filter-group">
+
+                <label>
+                  Statut de stock
+                </label>
+
+                <select
+                  [ngModel]="filtreStatut()"
+                  (ngModelChange)="onFiltreStatutChange($event)"
+                >
+
+                  <option value="tous">
+                    Tous les statuts
+                  </option>
+
+                  <option value="ok">
+                    En stock OK
+                  </option>
+
+                  <option value="warning">
+                    Alerte stock bas
+                  </option>
+
+                  <option value="error">
+                    Rupture de stock
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <!-- ACTIONS FILTRE -->
+              <div class="bk-filter-actions">
+
+                <button
+                  type="button"
+                  class="bk-btn bk-btn--ghost"
+                  (click)="reinitialiserFiltres()"
+                >
+                  Réinitialiser
+                </button>
+
+                <button
+                  type="button"
+                  class="bk-btn bk-btn--primary"
+                  (click)="toggleFiltres()"
+                >
+                  Appliquer
+                </button>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- EXPORT -->
+        <button
+          type="button"
+          class="bk-btn bk-btn--secondary"
+          (click)="exporter()"
+        >
+
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+            ></path>
+
+            <polyline
+              points="7 10 12 15 17 10"
+            ></polyline>
+
+            <line
+              x1="12"
+              y1="15"
+              x2="12"
+              y2="3"
+            ></line>
           </svg>
-          {{ prefs.t().filter }}
+
+          {{ prefs.t().export }}
+
         </button>
 
-        @if (afficherFiltres()) {
-          <div class="bk-filter-dropdown">
-            <div class="bk-filter-dropdown-title">Filtrer les produits</div>
 
-            <div class="bk-filter-group">
-              <label>Categorie</label>
-              <select [ngModel]="filtreCategorie()" (ngModelChange)="onFiltreCategorieChange($event)">
-                <option value="">Toutes les categories</option>
-                @for (cat of categories(); track cat) {
-                  <option [value]="cat">{{ cat }}</option>
-                }
-              </select>
-            </div>
+        <!-- AJOUTER -->
+        <button
+          type="button"
+          class="bk-btn bk-btn--primary"
+          (click)="ouvrirCreation()"
+        >
 
-            <div class="bk-filter-group">
-              <label>Statut de stock</label>
-              <select [ngModel]="filtreStatut()" (ngModelChange)="onFiltreStatutChange($event)">
-                <option value="tous">Tous les statuts</option>
-                <option value="ok">En stock OK</option>
-                <option value="warning">Alerte stock bas</option>
-                <option value="error">Rupture de stock</option>
-              </select>
-            </div>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line
+              x1="12"
+              y1="5"
+              x2="12"
+              y2="19"
+            ></line>
 
-            <div class="bk-filter-actions">
-              <button type="button" class="bk-btn bk-btn--ghost" (click)="reinitialiserFiltres()">Reinitialiser</button>
-              <button type="button" class="bk-btn bk-btn--primary" (click)="toggleFiltres()">Appliquer</button>
-            </div>
-          </div>
-        }
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+            ></line>
+          </svg>
+
+          {{ prefs.t().add }}
+
+        </button>
+
       </div>
 
-      <button class="bk-btn bk-btn--secondary" (click)="exporter()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        {{ prefs.t().export }}
-      </button>
+    </header>
 
-      <button class="bk-btn bk-btn--primary" (click)="ouvrirCreation()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        {{ prefs.t().add }}
-      </button>
+
+    <!-- =========================================================
+         RECHERCHE
+    ========================================================== -->
+
+    <div class="bk-search-bar">
+
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle
+          cx="11"
+          cy="11"
+          r="8"
+        ></circle>
+
+        <line
+          x1="21"
+          y1="21"
+          x2="16.65"
+          y2="16.65"
+        ></line>
+      </svg>
+
+      <input
+        type="text"
+        placeholder="Rechercher un produit..."
+        [ngModel]="recherche()"
+        (ngModelChange)="onRechercheChange($event)"
+      />
+
     </div>
-  </header>
 
-  <div class="bk-search-bar">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="8"></circle>
-      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-    <input
-      type="text"
-      [placeholder]="'Rechercher un produit' + '...'"
-      [ngModel]="recherche()"
-      (ngModelChange)="onRechercheChange($event)"
-    />
-  </div>
+
+    <!-- =========================================================
+         CONTENU
+    ========================================================== -->
 
     @if (catalogue.isLoading()) {
-      <p class="bk-state-msg">{{ prefs.t().loggingIn }}</p>
-    } @else if (catalogue.error()) {
-      <p class="bk-state-msg bk-state-msg--error">{{ prefs.t().noProductsFound }}</p>
-    } @else {
-      <table class="bk-table">
-        <thead>
-          <tr>
-            <th>{{ prefs.t().productAndRef }}</th>
-            <th>{{ prefs.t().category }}</th>
-            <th class="align-center">{{ prefs.t().stockQty }}</th>
-            <th class="align-center">{{ prefs.t().alertThreshold }}</th>
-            <th class="align-right">{{ prefs.t().unitMargin }} ({{ prefs.t().fcfa }})</th>
-            <th class="align-center">{{ prefs.t().actions }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (p of produitsPage(); track p.id) {
+
+      <div class="bk-state-msg">
+        {{ prefs.t().loggingIn }}
+      </div>
+
+    }
+
+    @else if (catalogue.error()) {
+
+      <div class="bk-state-msg bk-state-msg--error">
+        {{ prefs.t().noProductsFound }}
+      </div>
+
+    }
+
+    @else {
+
+      <div class="bk-table-wrapper">
+
+        <table class="bk-table">
+
+          <thead>
+
             <tr>
-              <td>
-                <strong>{{ p.nom }}</strong>
-                <div class="bk-ref">{{ prefs.t().ref }} : {{ p.reference }}</div>
-              </td>
-              <td class="bk-td-right">
-                <span class="bk-price-value">{{ p.prixAchat.toLocaleString('fr-FR') }} FCFA</span>
-              </td>
-              <td class="bk-td-center">
-                <span
-                  class="bk-stock-qty"
-                  [class.bk-stock-qty--warning]="statutStock(p) === 'warning'"
-                  [class.bk-stock-qty--error]="statutStock(p) === 'error'"
-                >
-                  {{ p.quantiteStock }}
-                </span>
-                @if (statutStock(p) === 'warning') {
-                  <span class="bk-stock-tag bk-stock-tag--warning">{{ prefs.t().lowStock }}</span>
-                }
-                @if (statutStock(p) === 'error') {
-                  <span class="bk-stock-tag bk-stock-tag--error">{{ prefs.t().outOfStock }}</span>
-                }
-              </td>
-            <td class="bk-td-center">{{ p.seuilAlerte }}</td>
-            <td class="align-right bk-amount"
-                [class.bk-amount--positive]="margeUnitaire(p) >= 0"
-                [class.bk-amount--negative]="margeUnitaire(p) < 0">
-              {{ margeUnitaire(p) | currency: prefs.currency() : 'symbol' : '1.0-0' }}
-            </td>
-            <td class="td-actions">
-              <button type="button" class="bk-icon-btn" (click)="ouvrirEdition(p)" [title]="prefs.t().edit">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                </svg>
-              </button>
-              <button type="button" class="bk-icon-btn bk-icon-btn--danger" (click)="demanderSuppression(p)" [title]="prefs.t().delete">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                  <line x1="10" y1="11" x2="10" y2="17"></line>
-                  <line x1="14" y1="11" x2="14" y2="17"></line> 
-                  </svg>
-                </button>
-              </td>
+
+              <th>
+                {{ prefs.t().productAndRef }}
+              </th>
+
+              <th>
+                {{ prefs.t().category }}
+              </th>
+
+              <th class="align-center">
+                {{ prefs.t().stockQty }}
+              </th>
+
+              <th class="align-center">
+                {{ prefs.t().alertThreshold }}
+              </th>
+
+              <th class="align-right">
+                {{ prefs.t().unitMargin }}
+                ({{ prefs.t().fcfa }})
+              </th>
+
+              <th class="align-center">
+                {{ prefs.t().actions }}
+              </th>
+
             </tr>
-          } @empty {
-            <tr><td colspan="6" class="bk-state-msg">{{ prefs.t().noProductsFound }}</td></tr>
-          }
-        </tbody>
-      </table>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (p of produitsPage(); track p.id) {
+
+              <tr>
+
+                <!-- PRODUIT -->
+                <td>
+
+                  <strong class="bk-product-name">
+                    {{ p.nom }}
+                  </strong>
+
+                  <div class="bk-ref">
+                    {{ prefs.t().ref }} :
+                    {{ p.reference }}
+                  </div>
+
+                </td>
+
+
+                <!-- CATEGORIE -->
+                <td>
+
+                  <span class="bk-badge-category">
+                    {{ p.categorie }}
+                  </span>
+
+                </td>
+
+
+                <!-- STOCK -->
+                <td class="align-center">
+
+                  <span
+                    class="bk-stock-qty"
+                    [class.bk-stock-qty--warning]="
+                      statutStock(p) === 'warning'
+                    "
+                    [class.bk-stock-qty--error]="
+                      statutStock(p) === 'error'
+                    "
+                  >
+                    {{ p.quantiteStock }}
+                  </span>
+
+
+                  @if (statutStock(p) === 'warning') {
+
+                    <span class="bk-stock-tag bk-stock-tag--warning">
+                      {{ prefs.t().lowStock }}
+                    </span>
+
+                  }
+
+
+                  @if (statutStock(p) === 'error') {
+
+                    <span class="bk-stock-tag bk-stock-tag--error">
+                      {{ prefs.t().outOfStock }}
+                    </span>
+
+                  }
+
+                </td>
+
+
+                <!-- SEUIL -->
+                <td class="align-center">
+
+                  {{ p.seuilAlerte }}
+
+                </td>
+
+
+                <!-- MARGE -->
+                <td
+                  class="align-right bk-amount"
+                  [class.bk-amount--positive]="margeUnitaire(p) >= 0"
+                  [class.bk-amount--negative]="margeUnitaire(p) < 0"
+                >
+
+                  {{ margeUnitaire(p)
+                    | currency:
+                      prefs.currency():
+                      'symbol':
+                      '1.0-0'
+                  }}
+
+                </td>
+
+
+                <!-- ACTIONS -->
+                <td class="td-actions">
+
+                  <button
+                    type="button"
+                    class="bk-icon-btn"
+                    (click)="ouvrirEdition(p)"
+                    [title]="prefs.t().edit"
+                  >
+
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+
+                      <path
+                        d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                      ></path>
+
+                      <path
+                        d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                      ></path>
+
+                    </svg>
+
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="bk-icon-btn bk-icon-btn--danger"
+                    (click)="demanderSuppression(p)"
+                    [title]="prefs.t().delete"
+                  >
+
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+
+                      <polyline
+                        points="3 6 5 6 21 6"
+                      ></polyline>
+
+                      <path
+                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"
+                      ></path>
+
+                      <path
+                        d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                      ></path>
+
+                      <line
+                        x1="10"
+                        y1="11"
+                        x2="10"
+                        y2="17"
+                      ></line>
+
+                      <line
+                        x1="14"
+                        y1="11"
+                        x2="14"
+                        y2="17"
+                      ></line>
+
+                    </svg>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+            @empty {
+
+              <tr>
+
+                <td
+                  colspan="6"
+                  class="bk-empty"
+                >
+                  {{ prefs.t().noProductsFound }}
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- =======================================================
+           VALORISATION
+      ======================================================== -->
 
       <div class="bk-total-banner">
-        <span>{{ prefs.t().totalStockValue }}</span>
-        <strong>{{ valorisationTotale() | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
-      </div>
-    }
 
-    @if (nombrePages() >= 1) {
-      <div class="bk-pagination">
-        <span class="bk-pagination-info">
-          {{ prefs.t().showing }} {{ (pageCourante() - 1) * parPage + 1 }} -
-          {{ Math.min(pageCourante() * parPage, produitsFiltres().length) }}
-          {{ prefs.t().of }} {{ produitsFiltres().length }} {{ prefs.t().products }}
+        <span>
+          {{ prefs.t().totalStockValue }}
         </span>
 
-        <div class="bk-pagination-controls">
-          <button 
-            class="bk-btn bk-btn--ghost" 
-            [disabled]="pageCourante() === 1" 
-            (click)="pagePrecedente()">
-             Précédent
-          </button>
+        <strong>
+          {{ valorisationTotale()
+            | currency:
+              prefs.currency():
+              'symbol':
+              '1.0-0'
+          }}
+        </strong>
 
-          <div class="bk-pagination-pages">
-            @for (page of pagesAffichees(); track page) {
-              <button
-                class="bk-page-btn"
-                [class.active]="page === pageCourante()"
-                (click)="allerAPage(page)"
-              >
-                {{ page }}
-              </button>
-            }
-          </div>
-
-          <button 
-            class="bk-btn bk-btn--ghost" 
-            [disabled]="pageCourante() === nombrePages()" 
-            (click)="pageSuivante()">
-              Suivant
-          </button>
-        </div>
       </div>
+
     }
 
+
+    <!-- =========================================================
+         PAGINATION
+    ========================================================== -->
+
+    @if (nombrePages() > 1) {
+
+      <div class="bk-pagination">
+
+        <button
+          type="button"
+          class="bk-page-btn"
+          [disabled]="pageCourante() === 1"
+          (click)="pagePrecedente()"
+        >
+          ‹ Précédent
+        </button>
+
+
+        <span class="bk-page-indicator">
+          Page {{ pageCourante() }}
+          sur
+          {{ nombrePages() }}
+        </span>
+
+
+        <button
+          type="button"
+          class="bk-page-btn"
+          [disabled]="pageCourante() === nombrePages()"
+          (click)="pageSuivante()"
+        >
+          Suivant ›
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =========================================================
+         FORMULAIRE
+    ========================================================== -->
+
     @if (afficherFormulaire()) {
+
       <app-produit-form
         [produit]="produitEnEdition()"
         (enregistrer)="onEnregistrer($event)"
         (annuler)="fermerFormulaire()"
       />
+
     }
 
+
+    <!-- =========================================================
+         MODALE SUPPRESSION
+    ========================================================== -->
+
     @if (produitASupprimer(); as prod) {
+
       <div class="bk-modal-overlay">
-        <div class="bk-modal bk-modal--danger">
-          <h3>Supprimer le produit</h3>
+
+        <div class="bk-modal">
+
+          <h3>
+            Supprimer le produit
+          </h3>
+
           <p>
-            Etes-vous sur de vouloir supprimer le produit <strong>{{ prod.nom }}</strong> ({{ prod.reference }}) ? Cette action est irreversible.
+            Êtes-vous sûr de vouloir supprimer le produit
+            <strong>{{ prod.nom }}</strong>
+            ({{ prod.reference }}) ?
+            Cette action est irréversible.
           </p>
+
           <div class="bk-modal-actions">
-            <button class="bk-btn bk-btn--ghost" (click)="annulerSuppression()">Annuler</button>
-            <button class="bk-btn bk-btn--danger" (click)="confirmerSuppression()">Supprimer</button>
+
+            <button
+              type="button"
+              class="bk-btn bk-btn--ghost"
+              (click)="annulerSuppression()"
+            >
+              Annuler
+            </button>
+
+            <button
+              type="button"
+              class="bk-btn bk-btn--danger"
+              (click)="confirmerSuppression()"
+            >
+              Supprimer
+            </button>
+
           </div>
+
         </div>
+
       </div>
+
     }
+
   </div>
+
 </app-template>

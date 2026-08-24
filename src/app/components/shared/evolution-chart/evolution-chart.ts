@@ -14,6 +14,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Chart, registerables } from 'chart.js';
 import { SalesService } from '../../../services/sales.service';
 import { ChargesService } from '../../../services/charges.service';
+import { PreferencesService } from '../../../services/preferences';
 
 Chart.register(...registerables);
 
@@ -33,7 +34,7 @@ interface PointJournalier {
 })
 export class EvolutionChart implements AfterViewInit, OnDestroy {
   @ViewChild('canvas') canvasRef!: ElementRef<HTMLCanvasElement>;
-
+  protected readonly prefs = inject(PreferencesService);
   private salesService = inject(SalesService);
   private chargesService = inject(ChargesService);
   private platformId = inject(PLATFORM_ID);
@@ -47,9 +48,10 @@ export class EvolutionChart implements AfterViewInit, OnDestroy {
     const parDate = new Map<string, { ca: number; charges: number }>();
 
     for (const vente of this.salesService.sales()) {
-      const entree = parDate.get(vente.date) ?? { ca: 0, charges: 0 };
+      const dateKey = vente.saleDate.split('T')[0];
+      const entree = parDate.get(dateKey) ?? { ca: 0, charges: 0 };
       entree.ca += vente.totalAmount;
-      parDate.set(vente.date, entree);
+      parDate.set(dateKey, entree);
     }
 
     for (const charge of this.chargesService.charges()) {
@@ -67,17 +69,15 @@ export class EvolutionChart implements AfterViewInit, OnDestroy {
         marge: valeurs.ca - valeurs.charges,
       }));
   });
-
   constructor() {
-    // Redessine le graphique automatiquement si les ventes/charges changent.
     effect(() => {
       const data = this.donnees();
+      this.prefs.language(); // dépendance pour redessiner si la langue change
       if (this.viewReady && this.isBrowser) {
         this.renderChart(data);
       }
     });
   }
-
   ngAfterViewInit(): void {
     this.viewReady = true;
     if (this.isBrowser) {
@@ -103,9 +103,9 @@ export class EvolutionChart implements AfterViewInit, OnDestroy {
       type: 'line',
       data: {
         labels: data.map((d) => d.date),
-        datasets: [
+               datasets: [
           {
-            label: "Chiffre d'affaires",
+            label: this.prefs.t().revenue,
             data: data.map((d) => d.ca),
             borderColor: couleurCA,
             backgroundColor: couleurCA + '33',
@@ -113,7 +113,7 @@ export class EvolutionChart implements AfterViewInit, OnDestroy {
             fill: true,
           },
           {
-            label: 'Marge',
+            label: this.prefs.t().chartMargin,
             data: data.map((d) => d.marge),
             borderColor: couleurMarge,
             backgroundColor: couleurMarge + '33',
@@ -121,7 +121,7 @@ export class EvolutionChart implements AfterViewInit, OnDestroy {
             fill: true,
           },
           {
-            label: 'Charges',
+            label: this.prefs.t().charges,
             data: data.map((d) => d.charges),
             borderColor: couleurCharges,
             backgroundColor: couleurCharges + '33',

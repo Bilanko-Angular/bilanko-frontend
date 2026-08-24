@@ -1,34 +1,320 @@
-.action-cell { position: relative; display: inline-block; }
-.kebab-btn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0 0.5rem;
-  color: var(--color-text-muted);
-}
-.kebab-btn:hover { color: var(--color-text); }
+/* ============================================================
+   ACTION MENU
+   Trois points - Ventes / Charges
+   ============================================================ */
 
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  min-width: 140px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-  z-index: 100;
+:host {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+
+  align-items: center;
+  justify-content: center;
+
+  vertical-align: middle;
 }
-.dropdown-item {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  padding: 0.6rem 0.9rem;
+
+
+/* ============================================================
+   WRAPPER
+   ============================================================ */
+
+.action-menu-wrapper {
+  position: relative;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ============================================================
+   BOUTON TROIS POINTS
+   ============================================================ */
+
+.action-menu-button {
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: var(--color-text-muted);
+
   cursor: pointer;
-  color: var(--color-text);
+
+  position: relative;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
-.dropdown-item:hover { background: var(--color-primary-subtle); }
-.dropdown-item.danger { color: var(--color-negative); }
+
+
+/* ============================================================
+   LES TROIS POINTS
+   ============================================================ */
+
+.three-dots {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  font-size: 23px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   HOVER
+   ============================================================ */
+
+.action-menu-button:hover {
+  background: var(--color-primary-subtle);
+
+  border-color: var(--color-border);
+
+  color: var(--color-primary);
+
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   CLICK / FOCUS
+   ============================================================ */
+
+.action-menu-button:focus-visible {
+  outline: none;
+
+  border-color: var(--color-primary);
+
+  background: var(--color-primary-subtle);
+
+  color: var(--color-primary);
+
+  box-shadow:
+    0 0 0 3px var(--color-primary-subtle);
+}
+
+
+/* ============================================================
+   MENU DÉROULANT
+   ============================================================ */
+
+.action-dropdown {
+  /*
+   * IMPORTANT :
+   * Le menu est positionné par rapport à la fenêtre.
+   * Cela évite les problèmes causés par les <table>, <tr> et <td>.
+   */
+
+  position: fixed !important;
+
+  width: 180px;
+  min-width: 180px;
+
+  padding: 6px;
+
+  box-sizing: border-box;
+
+  background: var(--color-surface);
+
+  color: var(--color-text);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.16),
+    0 4px 10px rgba(0, 0, 0, 0.08);
+
+  /*
+   * Très haut pour être au-dessus du tableau.
+   */
+
+  z-index: 2147483647 !important;
+
+  overflow: hidden;
+
+  transform-origin: top right;
+
+  animation:
+    actionDropdownAppear
+    0.14s
+    ease-out;
+}
+
+
+/* ============================================================
+   ÉLÉMENT DU MENU
+   ============================================================ */
+
+.action-item {
+  width: 100%;
+
+  min-height: 40px;
+
+  padding: 9px 11px;
+
+  margin: 0;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: var(--color-text);
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+
+/* ============================================================
+   HOVER
+   ============================================================ */
+
+.action-item:hover {
+  background: var(--color-primary-subtle);
+
+  color: var(--color-primary);
+}
+
+
+/* ============================================================
+   ICÔNE
+   ============================================================ */
+
+.action-item-icon {
+  width: 22px;
+  min-width: 22px;
+
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+}
+
+
+/* ============================================================
+   SUPPRESSION
+   ============================================================ */
+
+.action-item.action-delete {
+  color: var(--color-negative);
+}
+
+
+.action-item.action-delete:hover {
+  background: var(--color-negative-subtle);
+
+  color: var(--color-negative);
+}
+
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+
+@keyframes actionDropdownAppear {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-4px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* ============================================================
+   PETITS ÉCRANS
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  :host {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+
+  .action-menu-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .action-menu-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .three-dots {
+    font-size: 21px;
+  }
+
+  .action-dropdown {
+    width: 165px;
+    min-width: 165px;
+  }
+
+  .action-item {
+    min-height: 38px;
+    font-size: 13px;
+  }
+}
