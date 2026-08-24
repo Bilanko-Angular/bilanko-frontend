@@ -3,12 +3,13 @@ import { apiClient } from '../../../core/axios/axios.config';
 import { User } from '../../../models/person';
 import { UserMapper } from '../../../mapper/UserMapper';
 import { AuthResponseDto } from '../../../models/DTO/UserDto';
+import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthApiService {
-  private readonly basePath = '/api/auth';
+  private readonly basePath = environment.baseApiUrl + '/auth';
 
   async register(userData: User): Promise<AuthResponseDto> {
     const userDto = UserMapper.toRegisterDto(userData);
