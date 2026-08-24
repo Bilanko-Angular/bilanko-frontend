@@ -6,11 +6,12 @@ import { AuthUser } from "../auth-user";
 import { User } from '../../../models/person';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 import { PreferencesService } from '../../../services/preferences';
+import { GoogleLoginButton } from '../../../components/shared/ui/google-login-button/google-login-button';
 
 @Component({
   selector: 'app-connexion',
   standalone: true,
-  imports: [AuthUser, ReactiveFormsModule, RouterLink],
+  imports: [AuthUser, ReactiveFormsModule, RouterLink,GoogleLoginButton],
   templateUrl: './connexion.html',
   styleUrl: './connexion.css',
 })
@@ -64,5 +65,12 @@ export class Connexion {
     } finally {
       this.isLoading = false;
     }
+  }
+  onGoogleSuccess(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  onGoogleError(message: string): void {
+    console.error(message);
   }
 }
