@@ -1,4 +1,4 @@
-import { afterNextRender, Component, computed, ElementRef, type OnDestroy, QueryList, signal, ViewChildren } from '@angular/core';
+import { afterNextRender, Component, computed, ElementRef, type OnDestroy, QueryList, signal, ViewChildren, output, input } from '@angular/core';
 import { form, FormRoot, maxLength, minLength, required, submit } from '@angular/forms/signals';
 
 @Component({
@@ -21,6 +21,11 @@ export class InputOtpFormComponent implements OnDestroy {
 	public readonly otpIndexes = Array.from({ length: this.maxLength }, (_, i) => i);
 	public readonly otpDigits = signal<string[]>(Array(this.maxLength).fill(''));
 
+	public readonly otpVerified = output<void>();
+	public readonly restart = output<void>();
+	public readonly email = input<string>('');
+	private attempts = 0;
+
 	private readonly _model = signal({
 		otp: '',
 	});
@@ -36,7 +41,18 @@ export class InputOtpFormComponent implements OnDestroy {
 			submission: {
 				action: async () => {
 					const model = this._model();
-					this.toastMessage.set(`Votre code ${model.otp} a été soumis`);
+					if (model.otp === '123456') { // Mock valid OTP
+						this.toastMessage.set(`Votre code ${model.otp} a été soumis et validé.`);
+						setTimeout(() => this.otpVerified.emit(), 1000);
+					} else {
+						this.attempts++;
+						if (this.attempts >= 5) {
+							this.toastMessage.set('Trop de tentatives échouées. Veuillez recommencer.');
+							setTimeout(() => this.restart.emit(), 2000);
+						} else {
+							this.toastMessage.set(`Code invalide. Tentative ${this.attempts}/5`);
+						}
+					}
 				},
 			},
 		},
