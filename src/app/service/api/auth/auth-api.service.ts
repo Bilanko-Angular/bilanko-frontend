@@ -21,4 +21,9 @@ export class AuthApiService {
     const response = await apiClient.post<AuthResponseDto>(`${this.basePath}/login`, userDto);
     return response.data;
   }
+  
+  async loginWithGoogle(idToken: string): Promise<AuthResponseDto> {
+    const response = await apiClient.post<AuthResponseDto>(`${this.basePath}/google`, { idToken });
+    return response.data;
+  }
 }

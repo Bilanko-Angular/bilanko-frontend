@@ -3,11 +3,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
 import { PreferencesService } from '../../../services/preferences';
+import { GoogleLoginButton } from '../../../components/shared/ui/google-login-button/google-login-button';
 
 @Component({
   selector: 'app-inscription',
   standalone: true,
-  imports: [ReactiveFormsModule, AuthUser, RouterLink],
+  imports: [ReactiveFormsModule, AuthUser, RouterLink, GoogleLoginButton],
   templateUrl: './inscription.html',
   styleUrl: './inscription.css',
 })
@@ -68,5 +69,14 @@ export class Inscription {
         this.router.navigate(['/connexion']);
       }, 1500);
     }, 800);
+  }
+  // connexion.ts
+  onGoogleSuccess(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  onGoogleError(message: string): void {
+    console.error(message);
+    // affiche un message d'erreur à l'utilisateur si tu veux
   }
 }
