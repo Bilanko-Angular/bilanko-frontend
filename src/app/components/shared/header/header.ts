@@ -10,12 +10,15 @@ import {
 import { Router } from '@angular/router';
 
 import { ThemeService } from '../../../services/theme';
-import { ProduitService } from '../../../services/produit.service';
 import { SalesService } from '../../../services/sales.service';
 
 import type { Produit } from '../../../models/produit';
 import { PreferencesService } from '../../../services/preferences';
-import type { Sale } from '../../../models/sale';
+import type { Sale } from '../../../models/finance';
+import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
+import { NotificationsBell } from './notifications-bell/notifications-bell';
+
+
 
 interface SearchResult {
   type: 'produit' | 'vente';
@@ -26,19 +29,11 @@ interface SearchResult {
   vente?: Sale;
 }
 
-interface NotificationItem {
-  id: string;
-  title: string;
-  detail: string;
-  time: string;
-  type: 'stock' | 'vente' | 'systeme';
-}
-
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [NotificationsBell],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
 })
@@ -49,25 +44,15 @@ export class Header {
   private readonly router = inject(Router);
   private readonly elementRef = inject(ElementRef);
 
-  private readonly produitService =
-    inject(ProduitService);
+  private readonly produitStore =
+    inject(ProduitStoreService);
 
   private readonly salesService =
     inject(SalesService);
 
-   protected readonly prefs = inject(PreferencesService);
-
-
-  // ============================================================
-  // RECHERCHE
-  // ============================================================
+  protected readonly prefs = inject(PreferencesService)
 
   readonly searchTerm = signal('');
-
-
-  readonly produits =
-    this.produitService.catalogue;
-
 
   readonly ventes =
     this.salesService.sales;
@@ -79,20 +64,14 @@ export class Header {
       .trim()
       .toLowerCase();
 
-
     if (!terme) {
       return [];
     }
 
-
     const results: SearchResult[] = [];
 
-
-    const produits =
-      this.produits.value()
-        ? this.produits.value()
-        : [];
-
+    // produits est déjà un signal de tableau, pas besoin de .value()
+    const produits = this.produitStore.produits() ?? [];
 
     for (const produit of produits) {
 
@@ -101,43 +80,36 @@ export class Header {
         produit.reference.toLowerCase().includes(terme) ||
         produit.categorie.toLowerCase().includes(terme);
 
-
       if (correspond) {
-
         results.push({
           type: 'produit',
           id: produit.id,
           title: produit.nom,
-          subtitle:
-            `${produit.reference} · ${produit.categorie}`,
+          subtitle: `${produit.reference} · ${produit.categorie}`,
           produit
         });
-
       }
-
     }
 
-
     for (const vente of this.ventes()) {
-  const correspond =
-    vente.customerName.toLowerCase().includes(terme) ||
-    vente.items.some(i => i.productName.toLowerCase().includes(terme));
+      const correspond =
+        vente.product.toLowerCase().includes(terme) ||
+        (vente.client ?? '').toLowerCase().includes(terme);
 
-  if (correspond) {
-    results.push({
-      type: 'vente',
-      id: vente.id,
-      title: vente.customerName,
-      subtitle: `Vente · ${vente.items.length} produit(s)`,
-      vente
-    });
-  }
-}
-
+      if (correspond) {
+        results.push({
+          type: 'vente',
+          id: vente.id,
+          title: vente.product,
+          subtitle: `Vente · ${vente.client || 'Client comptant'}`,
+          vente
+        });
+      }
+    }
 
     return results.slice(0, 8);
-
   });
+
 
 
   onSearch(event: Event): void {
@@ -184,64 +156,6 @@ export class Header {
 
 
   // ============================================================
-  // NOTIFICATIONS
-  // ============================================================
-
-  readonly notificationsOpen = signal(false);
-  readonly notificationsCleared = signal(false);
-
-  readonly notifications = computed<NotificationItem[]>(() => {
-    if (this.notificationsCleared()) return [];
-    return [
-      {
-        id: 'n1',
-        title: this.prefs.t().notifStockTitle,
-        detail: this.prefs.t().notifStockDetail,
-        time: this.prefs.t().hoursAgo.replace('{n}', '2'),
-        type: 'stock'
-      },
-      {
-        id: 'n2',
-        title: this.prefs.t().notifSaleTitle,
-        detail: this.prefs.t().notifSaleDetail,
-        time: this.prefs.t().hoursAgo.replace('{n}', '5'),
-        type: 'vente'
-      },
-      {
-        id: 'n3',
-        title: this.prefs.t().notifUpdateTitle,
-        detail: this.prefs.t().notifUpdateDetail,
-        time: this.prefs.t().yesterday,
-        type: 'systeme'
-      }
-    ];
-  });
-
-  clearNotifications(): void {
-    this.notificationsCleared.set(true);
-    this.notificationsOpen.set(false);
-  }
-
-  readonly notificationsCount = computed(
-    () => this.notifications().length
-  );
-
-  toggleNotifications(): void {
-    this.notificationsOpen.update((v) => !v);
-    this.profileOpen.set(false);
-  }
-
-  goToNotificationTarget(notif: NotificationItem): void {
-    this.notificationsOpen.set(false);
-    if (notif.type === 'stock') {
-      this.router.navigate(['/catalogue']);
-    } else if (notif.type === 'vente') {
-      this.router.navigate(['/ventes']);
-    }
-  }
-
- 
-  // ============================================================
   // PROFIL
   // ============================================================
 
@@ -249,7 +163,6 @@ export class Header {
 
   toggleProfile(): void {
     this.profileOpen.update((v) => !v);
-    this.notificationsOpen.set(false);
   }
 
   logout(): void {
@@ -259,14 +172,14 @@ export class Header {
 
 
   // ============================================================
-  // FERMETURE AU CLIC EXTÉRIEUR
+  // FERMETURE AU CLIC EXTÉRIEUR (profil uniquement — les
+  // notifications gèrent leur propre fermeture dans NotificationsBell)
   // ============================================================
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
     if (!clickedInside) {
-      this.notificationsOpen.set(false);
       this.profileOpen.set(false);
     }
   }

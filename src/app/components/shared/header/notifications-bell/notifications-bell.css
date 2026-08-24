@@ -1,0 +1,44 @@
+.bk-bell {
+  transition: transform .15s ease, border-color .15s ease, color .15s ease;
+}
+.bk-bell:hover {
+  transform: translateY(-1px);
+}
+
+.bk-bell__badge {
+  animation: bkBadgePop .2s ease-out;
+}
+
+.bk-bell__panel {
+  animation: bkPanelIn .15s ease-out;
+}
+
+@keyframes bkPanelIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bkBadgePop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.bk-bell__item {
+  transition: background-color .12s ease;
+}
+
+/* Puce indiquant le type de notification, cohérente avec la charte Bilanko */
+.bk-bell__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.bk-bell__dot--stock {
+  background-color: var(--color-accent);
+}
+.bk-bell__dot--vente {
+  background-color: var(--color-primary);
+}
+.bk-bell__dot--systeme {
+  background-color: var(--color-text-muted);
+}

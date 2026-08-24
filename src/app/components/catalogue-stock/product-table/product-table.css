@@ -1,0 +1,4 @@
+/* Bootstrap table gère tout. On conserve juste la couleur du thead. */
+thead th {
+  background-color: var(--color-surface);
+}

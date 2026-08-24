@@ -1,0 +1,63 @@
+<!-- product-filter-dropdown.html -->
+<div class="dropdown">
+  <button
+    class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    (click)="toggle()"
+  >
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+    </svg>
+    Filtrer
+  </button>
+
+  @if (ouvert()) {
+    <div class="dropdown-menu show p-3" style="min-width: 280px; background-color: var(--color-surface); border-color: var(--color-border);">
+      <p class="fw-semibold small mb-3" style="color: var(--color-text);">Filtrer les produits</p>
+
+      <!-- Catégorie -->
+      <div class="mb-3">
+        <label class="form-label text-uppercase fw-medium" style="font-size: 0.7rem; color: var(--color-text-muted); letter-spacing: .04em;">
+          Catégorie
+        </label>
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="categorieId()"
+          (ngModelChange)="categorieId.set($event)"
+          style="background-color: var(--color-background); border-color: var(--color-border); color: var(--color-text);"
+        >
+          <option [value]="undefined">Toutes les catégories</option>
+          @for (cat of categories(); track cat.id) {
+            <option [value]="cat.id">{{ cat.name }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Statut stock -->
+      <div class="mb-3">
+        <label class="form-label text-uppercase fw-medium" style="font-size: 0.7rem; color: var(--color-text-muted); letter-spacing: .04em;">
+          Statut de stock
+        </label>
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="statut()"
+          (ngModelChange)="statut.set($event)"
+          style="background-color: var(--color-background); border-color: var(--color-border); color: var(--color-text);"
+        >
+          <option value="tous">Tous les statuts</option>
+          <option value="ok">En stock OK</option>
+          <option value="warning">Alerte stock bas</option>
+          <option value="error">Rupture de stock</option>
+        </select>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex justify-content-end gap-2 pt-2 border-top" style="border-color: var(--color-border) !important;">
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="reinitialiser()">Réinitialiser</button>
+        <button type="button" class="btn btn-sm btn-success" (click)="appliquer()">Appliquer</button>
+      </div>
+    </div>
+  }
+</div>
