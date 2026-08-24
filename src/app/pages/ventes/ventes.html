@@ -1,53 +1,54 @@
 <app-template>
-
-  <!-- =========================================
-      EN-TÊTE DE LA PAGE
-      ========================================= -->
   <div class="page-header">
     <div class="header-text">
-      <h1>Gestion des ventes</h1>
-      <p>Consultez, recherchez et gérez l'ensemble de vos ventes.</p>
+      <h1>{{ prefs.t().salesManagement }}</h1>
+      <p>{{ prefs.t().salesManagementDesc }}</p>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary" (click)="openFilterModal()" aria-label="Ouvrir les filtres">Filtre</button>
-      <button class="btn btn-primary" (click)="openAddModal()" aria-label="Ajouter">Ajouter</button>
+      <button class="btn btn-secondary" [class.btn-secondary--active]="hasActiveFilter()" (click)="openFilterModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+        </svg>
+        {{ prefs.t().filter }}
+        @if (hasActiveFilter()) { <span class="bk-filter-dot"></span> }
+      </button>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"/>
+        </svg>
+        {{ prefs.t().add }}
+      </button>
     </div>
   </div>
 
-  <!-- =========================================
-      TABLEAU DES VENTES
-      ========================================= -->
   <div class="table-container">
-    
-    @if (sales().length === 0) {
-      <div class="empty-state">
-        <p>Aucune vente enregistrée ce mois — ajoutez votre première vente.</p>
-      </div>
-    } 
-    
-    @if (sales().length > 0) {
+    @if (filteredSales().length === 0) {
+      <div class="empty-state"><p>{{ prefs.t().noSalesRecorded }}</p></div>
+    }
+    @if (filteredSales().length > 0) {
       <table class="registry-table">
         <thead>
           <tr>
-            <th class="align-left">Date</th>
-            <th class="align-left">Produit</th>
-            <th class="align-center">Qté</th>
-            <th class="align-right">Prix unitaire</th>
-            <th class="align-right">Montant total</th>
-            <th class="align-left">Client</th>
-            <th class="align-center">Actions</th>
+            <th class="align-left">{{ prefs.t().date }}</th>
+            <th class="align-left">{{ prefs.t().client }}</th>
+            <th class="align-center">{{ prefs.t().products }}</th>
+            <th class="align-right">{{ prefs.t().totalAmount }}</th>
+            <th class="align-right">{{ prefs.t().simplifiedMargin }}</th>
+            <th class="align-center">{{ prefs.t().actions }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (sale of sales(); track sale.id) {
+          @for (sale of salesPage(); track sale.id) {
             <tr>
-              <td class="align-left">{{ sale.date }}</td>
-              <td class="align-left">{{ sale.product }}</td>
-              <td class="align-center tabular-nums">{{ sale.quantity }}</td>
-              <!-- Utilisation du pipe DecimalPipe (renommé 'number') -->
-              <td class="align-right tabular-nums">{{ sale.unitPrice | number:'1.0-0':'fr-FR' }} FCFA</td>
-              <td class="align-right tabular-nums amount-positive">{{ sale.totalAmount | number:'1.0-0':'fr-FR' }} FCFA</td>
-              <td class="align-left">{{ sale.client }}</td>
+              <td class="align-left">{{ sale.saleDate | date: prefs.angularDateFormat() + ' HH:mm' }}</td>
+              <td class="align-left">
+                <button type="button" class="bk-client-link" (click)="voirVente(sale.id)">
+                  {{ sale.customerName || prefs.t().comptantClient }}
+                </button>
+              </td>
+              <td class="align-center tabular-nums">{{ sale.items.length }}</td>
+              <td class="align-right tabular-nums amount-positive">{{ sale.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td class="align-right tabular-nums">{{ sale.totalMargin | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
               <td class="align-center">
                 <app-action-menu (action)="onRowAction($event, sale.id)"></app-action-menu>
               </td>
@@ -55,64 +56,69 @@
           }
         </tbody>
       </table>
+
+      @if (nombrePages() > 1) {
+        <div class="bk-pagination">
+          <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="pageCourante() === 1">
+            ‹ {{ prefs.t().previous }}
+          </button>
+          <span class="bk-page-indicator">{{ prefs.t().page }} {{ pageCourante() }} {{ prefs.t().pageOf }} {{ nombrePages() }}</span>
+          <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="pageCourante() === nombrePages()">
+            {{ prefs.t().next }} ›
+          </button>
+        </div>
+      }
     }
   </div>
 
-  <!-- =========================================
-      MODALE D'AJOUT
-      ========================================= -->
   @if (isAddModalOpen()) {
     <div class="modal-overlay" (click)="closeAddModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-content modal-wide" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>Ajouter une vente</h2>
-          <button class="close-btn" (click)="closeAddModal()" aria-label="Fermer">×</button>
+          <h2>{{ prefs.t().addASale }}</h2>
+          <button class="close-btn" (click)="closeAddModal()">×</button>
         </div>
-
-        <app-finance-form [kind]="'sale'" [initial]="editingSale" (submit)="handleSaleSubmit($event)" (cancel)="closeAddModal()"></app-finance-form>
+        <div class="modal-form">
+          <app-panier-form [initial]="editingSale" (submitSale)="handleSaleSubmit($event)" (cancel)="closeAddModal()"></app-panier-form>
+        </div>
       </div>
     </div>
   }
 
-  <!-- =========================================
-      MODALE DE FILTRE
-      ========================================= -->
   @if (isFilterModalOpen()) {
     <div class="modal-overlay" (click)="closeFilterModal()">
       <div class="modal-content modal-small" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>Filtrer les ventes</h2>
-          <button class="close-btn" (click)="closeFilterModal()" aria-label="Fermer">×</button>
+          <h2>{{ prefs.t().filterSales }}</h2>
+          <button class="close-btn" (click)="closeFilterModal()">×</button>
         </div>
-
         <div class="modal-form">
           <div class="form-group">
-            <label for="search">Recherche</label>
-            <input type="text" id="search" placeholder="Nom du produit ou du client">
+            <label for="filterSearch">{{ prefs.t().search }}</label>
+            <input
+              type="text"
+              id="filterSearch"
+              [(ngModel)]="filterSearchTerm"
+              [placeholder]="prefs.t().client + ' ' + prefs.t().or + ' ' + prefs.t().product"
+              (keydown.enter)="applyFilter()">
           </div>
-
           <div class="form-group">
-            <label>Période</label>
-            <div class="checkbox-group">
-              <label class="checkbox-label"><input type="checkbox" name="period" value="today"> Aujourd'hui</label>
-              <label class="checkbox-label"><input type="checkbox" name="period" value="week"> Cette semaine</label>
-              <label class="checkbox-label"><input type="checkbox" name="period" value="month"> Ce mois-ci</label>
-            </div>
+            <label for="filterDate">{{ prefs.t().filterByDate }}</label>
+            <input
+              type="date"
+              id="filterDate"
+              [(ngModel)]="filterDate">
           </div>
-
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" (click)="closeFilterModal()">Réinitialiser</button>
-            <button type="button" class="btn btn-primary" (click)="closeFilterModal()">Appliquer</button>
+            <button type="button" class="btn btn-secondary" (click)="resetFilter()">{{ prefs.t().reset }}</button>
+            <button type="button" class="btn btn-primary" (click)="applyFilter()">{{ prefs.t().apply }}</button>
           </div>
         </div>
       </div>
     </div>
   }
+
   @if (confirmDeleteId()) {
-    <app-confirm
-      [message]="'Voulez-vous vraiment supprimer cette vente ? Le stock sera recrédité.'"
-      (confirm)="confirmDelete()"
-      (cancel)="cancelDelete()">
-    </app-confirm>
+    <app-confirm [message]="prefs.t().confirmDeleteSale" (confirm)="confirmDelete()" (cancel)="cancelDelete()"></app-confirm>
   }
 </app-template>

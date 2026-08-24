@@ -2,10 +2,12 @@
 [data-theme="light"],
 [data-bs-theme="light"] {
   --bs-primary:                var(--color-primary);
-  --bs-primary-rgb:            16, 185, 129;
+  --bs-primary-rgb:            5, 223, 114;
   --bs-primary-text-emphasis:  var(--color-primary-active);
   --bs-primary-bg-subtle:      var(--color-primary-subtle);
   --bs-primary-border-subtle:  var(--color-primary);
+  --bs-link-color:             var(--color-primary);
+  --bs-link-hover-color:       var(--color-primary-hover);
 
   --bs-success:                var(--color-positive);
   --bs-danger:                 var(--color-negative);
@@ -37,7 +39,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bs-primary-rgb:            52, 211, 153;
+    --bs-primary-rgb:            5, 223, 114;
+    --bs-link-color:             var(--color-primary);
+    --bs-link-hover-color:       var(--color-primary-hover);
     --bs-body-bg:                var(--color-background);
     --bs-body-color:             var(--color-text);
     --bs-secondary-bg:           var(--color-surface);
@@ -58,10 +62,12 @@
 [data-theme="dark"],
 [data-bs-theme="dark"] {
   --bs-primary:                var(--color-primary);
-  --bs-primary-rgb:            52, 211, 153;
+  --bs-primary-rgb:            5, 223, 114;
   --bs-primary-text-emphasis:  var(--color-primary-active);
   --bs-primary-bg-subtle:      var(--color-primary-subtle);
   --bs-primary-border-subtle:  var(--color-primary);
+  --bs-link-color:             var(--color-primary);
+  --bs-link-hover-color:       var(--color-primary-hover);
 
   --bs-success:                var(--color-positive);
   --bs-danger:                 var(--color-negative);

@@ -1,72 +1,125 @@
-import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DecimalPipe } from '@angular/common';
-import type { Sale , Charge } from '../../models/finance';
-import { Template } from "../../components/shared/template/template"; // Import ciblé pour de meilleures performances
+import { Component, signal, computed, effect, ChangeDetectionStrategy, inject } from '@angular/core';
+import { DatePipe, CurrencyPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import type { Sale } from '../../models/sale';
+import { Template } from "../../components/shared/template/template";
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
-import { FinanceForm } from '../../components/shared/finance-form/finance-form';
+import { PanierForm } from './panier-form/panier-form';
 import { SalesService } from '../../services/sales.service';
-
-
-
+import { PreferencesService } from '../../services/preferences';
 
 @Component({
   selector: 'app-ventes',
   standalone: true,
-  // On importe uniquement ce dont on a besoin (fini le CommonModule global)
-  imports: [ReactiveFormsModule, DecimalPipe, Template, ConfirmDialog, ActionMenu, FinanceForm], 
+  imports: [DatePipe, CurrencyPipe, FormsModule, Template, ConfirmDialog, ActionMenu, PanierForm],
   templateUrl: './ventes.html',
   styleUrls: ['./ventes.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush // Indispensable avec les Signals
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SalesComponent {
-  private fb = inject(FormBuilder);
   private salesService = inject(SalesService);
+  private router = inject(Router);
+  protected readonly prefs = inject(PreferencesService);
 
-  // --- UI state ---
-  isFilterModalOpen = signal(false);
   isAddModalOpen = signal(false);
-  openMenuId = signal<string | null>(null);
+  isFilterModalOpen = signal(false);
   confirmDeleteId = signal<string | null>(null);
-
-  availableStock = 50;
-
-  sales = this.salesService.sales;
   editingSale: Sale | null = null;
 
-  saleForm: FormGroup = this.fb.group({
-    product: ['', Validators.required],
-    quantity: [1, [Validators.required, Validators.min(1)]],
-    client: ['']
+  sales = this.salesService.sales;
+
+  // --- Filtre : texte + date ---
+  filterSearchTerm = signal('');
+  filterDate = signal('');           // valeur en cours de saisie dans la modale
+  appliedSearchTerm = signal('');
+  appliedDate = signal('');          // valeur réellement appliquée
+
+  readonly filteredSales = computed(() => {
+    const term = this.appliedSearchTerm().trim().toLowerCase();
+    const date = this.appliedDate();
+
+    return this.sales().filter(s => {
+      const matchTerm = !term ||
+        s.customerName.toLowerCase().includes(term) ||
+        s.items.some(i => i.productName.toLowerCase().includes(term));
+
+      const matchDate = !date || s.saleDate.startsWith(date);
+
+      return matchTerm && matchDate;
+    });
   });
 
-  openAddModal() { this.isAddModalOpen.set(true); this.openMenuId.set(null); }
-  closeAddModal() { this.isAddModalOpen.set(false); this.saleForm.reset({ quantity: 1 }); }
-  openFilterModal() { this.isFilterModalOpen.set(true); }
+  applyFilter(): void {
+    this.appliedSearchTerm.set(this.filterSearchTerm());
+    this.appliedDate.set(this.filterDate());
+    this.pageCourante.set(1);
+    this.closeFilterModal();
+  }
+
+  resetFilter(): void {
+    this.filterSearchTerm.set('');
+    this.filterDate.set('');
+    this.appliedSearchTerm.set('');
+    this.appliedDate.set('');
+    this.pageCourante.set(1);
+    this.closeFilterModal();
+  }
+
+  readonly hasActiveFilter = computed(() =>
+    this.appliedSearchTerm().trim().length > 0 || this.appliedDate().length > 0
+  );
+
+  // --- Pagination texte (Précédent / Page X sur Y / Suivant) ---
+  readonly pageCourante = signal(1);
+  readonly parPage = 6;
+
+  readonly nombrePages = computed(() =>
+    Math.max(1, Math.ceil(this.filteredSales().length / this.parPage))
+  );
+
+  readonly salesPage = computed(() => {
+    const debut = (this.pageCourante() - 1) * this.parPage;
+    return this.filteredSales().slice(debut, debut + this.parPage);
+  });
+
+  constructor() {
+    effect(() => {
+      const max = this.nombrePages();
+      if (this.pageCourante() > max) this.pageCourante.set(max);
+    });
+  }
+
+  pageSuivante() { this.pageCourante.update(v => Math.min(v + 1, this.nombrePages())); }
+  pagePrecedente() { this.pageCourante.update(v => Math.max(v - 1, 1)); }
+
+  openAddModal() { this.editingSale = null; this.isAddModalOpen.set(true); }
+  closeAddModal() { this.isAddModalOpen.set(false); this.editingSale = null; }
+
+  openFilterModal() {
+    this.filterSearchTerm.set(this.appliedSearchTerm());
+    this.filterDate.set(this.appliedDate());
+    this.isFilterModalOpen.set(true);
+  }
   closeFilterModal() { this.isFilterModalOpen.set(false); }
 
-  toggleActionMenu(saleId: string) { this.openMenuId.update(c => c === saleId ? null : saleId); }
+  voirVente(id: string) {
+    this.router.navigate(['/ventes', id]);
+  }
 
-  editSale(saleId: string) {
-    const s = this.salesService.sales().find(x => x.id === saleId) || null;
+  editSale(id: string) {
+    const s = this.salesService.getById(id) || null;
     if (s) {
       this.editingSale = s;
       this.isAddModalOpen.set(true);
     }
-    this.openMenuId.set(null);
-  }
-  
-  // Handler for ActionMenu selections
-  onRowAction(actionType: string, saleId: string) {
-    if (actionType === 'edit') this.editSale(saleId);
-    if (actionType === 'delete') this.showDeleteConfirm(saleId);
-    // 'view' ignored for now
   }
 
-  showDeleteConfirm(saleId: string) {
-    this.confirmDeleteId.set(saleId);
-    this.openMenuId.set(null);
+  onRowAction(actionType: string, id: string) {
+    if (actionType === 'view') this.voirVente(id);
+    if (actionType === 'edit') this.editSale(id);
+    if (actionType === 'delete') this.confirmDeleteId.set(id);
   }
 
   confirmDelete() {
@@ -74,41 +127,14 @@ export class SalesComponent {
     if (id) this.salesService.delete(id);
     this.confirmDeleteId.set(null);
   }
+  cancelDelete() { this.confirmDeleteId.set(null); }
 
-  cancelDelete() {
-    this.confirmDeleteId.set(null);
-  }
-
-  onSubmit() {
-    if (this.saleForm.invalid) { this.saleForm.markAllAsTouched(); return; }
-    const formValue = this.saleForm.value;
-    if (formValue.quantity > this.availableStock) {
-      this.saleForm.get('quantity')?.setErrors({ stockError: true });
-      return;
+  handleSaleSubmit(payload: Omit<Sale, 'id'>) {
+    if (this.editingSale) {
+      this.salesService.update(this.editingSale.id, payload);
+    } else {
+      this.salesService.add(payload);
     }
-
-    const newSale = {
-      id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
-      product: formValue.product,
-      quantity: formValue.quantity,
-      unitPrice: 15000,
-      totalAmount: formValue.quantity * 15000,
-      client: formValue.client || 'Client comptant'
-    };
-
-    this.salesService.add(newSale);
     this.closeAddModal();
   }
-
-  handleSaleSubmit(payload: Sale | Charge) {
-  const sale = payload as Sale;
-  if (this.editingSale) {
-    this.salesService.update(this.editingSale.id, sale);
-    this.editingSale = null;
-  } else {
-    this.salesService.add(sale);
-  }
-  this.closeAddModal();
-}
 }

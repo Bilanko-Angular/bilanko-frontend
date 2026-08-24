@@ -1,37 +1,49 @@
+<!-- src/app/pages/charges/charges.html -->
 <app-template>
   <div class="page-header">
     <div class="header-text">
-      <h1>Gestion des charges</h1>
-      <p>Consultez, recherchez et gérez l'ensemble de vos charges.</p>
+      <h1>{{ prefs.t().chargesManagement }}</h1>
+      <p>{{ prefs.t().chargesManagementDesc }}</p>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary" (click)="isFilterModalOpen.set(true)">Filtre</button>
-      <button class="btn btn-primary" (click)="openAdd()">Ajouter</button>
+      <button class="btn btn-secondary" [class.btn-secondary--active]="hasActiveFilter()" (click)="openFilterModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+        </svg>
+        {{ prefs.t().filter }}
+        @if (hasActiveFilter()) { <span class="bk-filter-dot"></span> }
+      </button>
+      <button class="btn btn-primary" (click)="openAdd()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"/>
+        </svg>
+        {{ prefs.t().add }}
+      </button>
     </div>
   </div>
 
   <div class="table-container">
-    @if (charges().length === 0) {
-      <div class="empty-state">Aucune charge trouvée.</div>
+    @if (filteredCharges().length === 0) {
+      <div class="empty-state">{{ prefs.t().noChargesFound }}</div>
     }
-    @if (charges().length > 0) {
+    @if (filteredCharges().length > 0) {
       <table class="registry-table">
         <thead>
           <tr>
-            <th>Libellé</th>
-            <th>Fournisseur</th>
-            <th class="align-right">Montant</th>
-            <th>Date</th>
-            <th class="align-center">Actions</th>
+            <th>{{ prefs.t().label }}</th>
+            <th>{{ prefs.t().supplier }}</th>
+            <th class="align-right">{{ prefs.t().amount }}</th>
+            <th>{{ prefs.t().date }}</th>
+            <th class="align-center">{{ prefs.t().actions }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (c of charges(); track c.id) {
+          @for (c of chargesPage(); track c.id) {
             <tr>
               <td>{{ c.label }}</td>
               <td>{{ c.supplier }}</td>
-              <td class="align-right tabular-nums">{{ c.amount | number:'1.0-0':'fr-FR' }} FCFA</td>
-              <td>{{ c.date }}</td>
+              <td class="align-right tabular-nums">{{ c.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td>{{ c.date | date: prefs.angularDateFormat() }}</td>
               <td class="align-center">
                 <app-action-menu (action)="onChargeAction($event, c.id)"></app-action-menu>
               </td>
@@ -39,6 +51,18 @@
           }
         </tbody>
       </table>
+
+      @if (nombrePages() > 1) {
+        <div class="bk-pagination">
+          <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="pageCourante() === 1">
+            ‹ {{ prefs.t().previous }}
+          </button>
+          <span class="bk-page-indicator">{{ prefs.t().page }} {{ pageCourante() }} {{ prefs.t().pageOf }} {{ nombrePages() }}</span>
+          <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="pageCourante() === nombrePages()">
+            {{ prefs.t().next }} ›
+          </button>
+        </div>
+      }
     }
   </div>
 
@@ -46,15 +70,66 @@
     <div class="modal-overlay" (click)="closeAdd()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>Ajouter une charge</h2>
+          <h2>{{ prefs.t().addACharge }}</h2>
         </div>
         <app-finance-form [kind]="'charge'" [initial]="editingCharge" (submit)="handleChargeSubmit($event)" (cancel)="closeAdd()"></app-finance-form>
       </div>
     </div>
   }
+
+  @if (isFilterModalOpen()) {
+    <div class="modal-overlay" (click)="isFilterModalOpen.set(false)">
+      <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ prefs.t().filter }}</h2>
+          <button class="close-btn" (click)="isFilterModalOpen.set(false)">×</button>
+        </div>
+        <div class="modal-form">
+          <div class="form-group">
+            <label for="chargeFilterSearch">{{ prefs.t().search }}</label>
+            <input
+              type="text"
+              id="chargeFilterSearch"
+              [(ngModel)]="filterSearchTerm"
+              [placeholder]="prefs.t().label + ' ' + prefs.t().or + ' ' + prefs.t().supplier"
+              (keydown.enter)="applyFilter()">
+          </div>
+          <div class="form-group">
+            <label for="chargeFilterDate">{{ prefs.t().filterByDate }}</label>
+            <input
+              type="date"
+              id="chargeFilterDate"
+              [(ngModel)]="filterDate">
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" (click)="resetFilter()">{{ prefs.t().reset }}</button>
+            <button type="button" class="btn btn-primary" (click)="applyFilter()">{{ prefs.t().apply }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (viewingCharge()) {
+    <div class="modal-overlay" (click)="closeView()">
+      <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ prefs.t().chargeDetails }}</h2>
+          <button class="close-btn" (click)="closeView()">×</button>
+        </div>
+        <div class="modal-form">
+          <div class="bk-view-row"><span>{{ prefs.t().label }}</span><span>{{ viewingCharge()!.label }}</span></div>
+          <div class="bk-view-row"><span>{{ prefs.t().supplier }}</span><span>{{ viewingCharge()!.supplier || '-' }}</span></div>
+          <div class="bk-view-row"><span>{{ prefs.t().amount }}</span><span>{{ viewingCharge()!.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</span></div>
+          <div class="bk-view-row"><span>{{ prefs.t().date }}</span><span>{{ viewingCharge()!.date | date: prefs.angularDateFormat() }}</span></div>
+        </div>
+      </div>
+    </div>
+  }
+
   @if (confirmDeleteId()) {
     <app-confirm
-      [message]="'Voulez-vous vraiment supprimer cette charge ?'"
+      [message]="prefs.t().confirmDeleteCharge"
       (confirm)="confirmDelete()"
       (cancel)="cancelDelete()">
     </app-confirm>

@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
 import { User } from '../../../models/person';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
+import { PreferencesService } from '../../../services/preferences';
 
 @Component({
   selector: 'app-connexion',
@@ -16,12 +17,13 @@ import { AuthStoreService } from '../../../service/store/auth/auth-store.service
 export class Connexion {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly authStore = inject(AuthStoreService);
+  protected readonly prefs = inject(PreferencesService);
 
   readonly connectionForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
-  private readonly authStore = inject(AuthStoreService);
 
   isLoading = false;
   loginError = '';
@@ -32,7 +34,6 @@ export class Connexion {
   /* ── Bouton Google ── */
   loginWithGoogle(): void {
     console.log('Connexion avec Google');
-    // Redirection vers la page d'accueil
     this.router.navigate(['/']);
   }
 

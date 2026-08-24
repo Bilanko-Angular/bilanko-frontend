@@ -1,22 +1,82 @@
 [
   {
     "id": "p1",
-    "reference": "REF-001",
-    "nom": "MacBook Pro 16\" M3 Max",
-    "categorie": "Informatique",
-    "prixAchat": 200000,
-    "prixVente": 250000,
+    "reference": "RIZ-25-001",
+    "nom": "Sac de riz 25kg",
+    "categorie": "Alimentaire",
+    "prixAchat": 12000,
+    "prixVente": 15000,
     "quantiteStock": 45,
     "seuilAlerte": 10
   },
   {
     "id": "p2",
-    "reference": "REF-045",
-    "nom": "Onduleur APC Smart-UPS",
-    "categorie": "Énergie",
-    "prixAchat": 35000,
-    "prixVente": 45000,
-    "quantiteStock": 4,
+    "reference": "HUILE-5L-002",
+    "nom": "Huile 5L",
+    "categorie": "Alimentaire",
+    "prixAchat": 4500,
+    "prixVente": 5500,
+    "quantiteStock": 30,
+    "seuilAlerte": 8
+  },
+  {
+    "id": "p3",
+    "reference": "SUCRE-1KG-003",
+    "nom": "Sucre 1kg",
+    "categorie": "Alimentaire",
+    "prixAchat": 800,
+    "prixVente": 1000,
+    "quantiteStock": 60,
+    "seuilAlerte": 15
+  },
+  {
+    "id": "p4",
+    "reference": "LAIT-1L-004",
+    "nom": "Lait 1L",
+    "categorie": "Alimentaire",
+    "prixAchat": 1500,
+    "prixVente": 1800,
+    "quantiteStock": 25,
     "seuilAlerte": 5
+  },
+  {
+    "id": "p5",
+    "reference": "SAVON-500G-005",
+    "nom": "Savon 500g",
+    "categorie": "Hygiène",
+    "prixAchat": 900,
+    "prixVente": 1200,
+    "quantiteStock": 40,
+    "seuilAlerte": 10
+  },
+  {
+    "id": "p6",
+    "reference": "CAFE-250G-006",
+    "nom": "Café 250g",
+    "categorie": "Alimentaire",
+    "prixAchat": 2000,
+    "prixVente": 2500,
+    "quantiteStock": 20,
+    "seuilAlerte": 5
+  },
+  {
+    "id": "p7",
+    "reference": "THE-100G-007",
+    "nom": "Thé 100g",
+    "categorie": "Alimentaire",
+    "prixAchat": 1200,
+    "prixVente": 1500,
+    "quantiteStock": 35,
+    "seuilAlerte": 8
+  },
+  {
+    "id": "p8",
+    "reference": "PAIN-500G-008",
+    "nom": "Pain 500g",
+    "categorie": "Alimentaire",
+    "prixAchat": 500,
+    "prixVente": 700,
+    "quantiteStock": 50,
+    "seuilAlerte": 12
   }
 ]
