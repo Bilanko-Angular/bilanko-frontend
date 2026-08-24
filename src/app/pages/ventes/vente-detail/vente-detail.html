@@ -1,0 +1,57 @@
+<app-template>
+  @if (sale(); as s) {
+    <div class="bk-detail-header">
+      <button class="bk-back-btn" (click)="retour()">← {{ prefs.t().backToLogin }}</button>
+      <h1>{{ prefs.t().saleDetails }}</h1>
+    </div>
+
+    <div class="bk-detail-card">
+      <div class="bk-detail-top">
+        <div>
+          <span class="bk-detail-label">{{ prefs.t().client }}</span>
+          <strong>{{ s.customerName || prefs.t().comptantClient }}</strong>
+        </div>
+       <div>
+          <span class="bk-detail-label">{{ prefs.t().date }}</span>
+          <strong>{{ s.saleDate | date: prefs.angularDateFormat() + ' à HH:mm' }}</strong>
+        </div>
+      </div>
+
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th class="align-left">{{ prefs.t().product }}</th>
+            <th class="align-center">{{ prefs.t().quantity }}</th>
+            <th class="align-right">{{ prefs.t().unitPrice }}</th>
+            <th class="align-right">{{ prefs.t().totalAmount }}</th>
+            <th class="align-right">{{ prefs.t().simplifiedMargin }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of s.items; track item.productId + '-' + $index) {
+            <tr>
+              <td class="align-left">{{ item.productName }}</td>
+              <td class="align-center">{{ item.quantity }}</td>
+              <td class="align-right">{{ item.unitSellingPrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td class="align-right amount-positive">{{ item.unitSellingPrice * item.quantity | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td class="align-right">{{ item.margin | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="bk-detail-totals">
+        <div>
+          <span>{{ prefs.t().totalAmount }}</span>
+          <strong class="amount-positive">{{ s.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+        </div>
+        <div>
+          <span>{{ prefs.t().simplifiedMargin }}</span>
+          <strong>{{ s.totalMargin | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="empty-state">{{ prefs.t().noSalesForClient }}</div>
+  }
+</app-template>

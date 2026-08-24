@@ -1,6 +1,7 @@
-import { Component, input, output, effect, signal } from '@angular/core';
+import { Component, input, output, effect, signal, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Produit } from '../../../models/produit';
+import { PreferencesService } from '../../../services/preferences';
 
 @Component({
   selector: 'app-produit-form',
@@ -10,6 +11,7 @@ import { Produit } from '../../../models/produit';
   styleUrl: './produit-form.css',
 })
 export class ProduitForm {
+  protected readonly prefs = inject(PreferencesService);
   // Entrées/Sorties Signals modernes (Compatible Angular 17.1+)
   readonly produit = input<Produit | undefined>(undefined);
   readonly enregistrer = output<Omit<Produit, 'id'>>();
@@ -22,6 +24,7 @@ export class ProduitForm {
   readonly quantiteStock = signal(0);
   readonly seuilAlerte = signal(5);
   readonly prixAchat = signal(0);
+  readonly prixVente = signal(0);
 
   constructor() {
     effect(() => {
@@ -33,6 +36,7 @@ export class ProduitForm {
         this.quantiteStock.set(p.quantiteStock);
         this.seuilAlerte.set(p.seuilAlerte);
         this.prixAchat.set(p.prixAchat);
+        this.prixVente.set(p.prixVente);
       } else {
         this.reinitialiser();
       }
@@ -55,6 +59,7 @@ export class ProduitForm {
       quantiteStock: Number(this.quantiteStock()),
       seuilAlerte: Number(this.seuilAlerte()),
       prixAchat: Number(this.prixAchat()),
+      prixVente: Number(this.prixVente()),
     });
   }
 
@@ -69,5 +74,6 @@ export class ProduitForm {
     this.quantiteStock.set(0);
     this.seuilAlerte.set(5);
     this.prixAchat.set(0);
+    this.prixVente.set(0);
   }
 }

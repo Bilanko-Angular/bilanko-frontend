@@ -1,28 +1,59 @@
 <!-- src/app/pages/auth-user/connexion/connexion.html -->
+
 <app-auth-user>
+
   <div class="auth-content">
+
     <!-- En-tête -->
     <div class="auth-header">
-      <h1 class="bk-auth-title">Bon retour !</h1>
-      <p class="bk-auth-subtitle">Connectez-vous pour accéder à votre tableau de bord</p>
+
+      <h1 class="bk-auth-title">
+        {{ prefs.t().welcomeBack }}
+      </h1>
+
+      <p class="bk-auth-subtitle">
+        {{ prefs.t().loginSubtitle }}
+      </p>
+
     </div>
+
 
     <!-- Erreur -->
     @if (loginError) {
+
       <div class="bk-auth-error">
-        <span class="material-icons">error_outline</span>
+
+        <span class="material-icons">
+          error_outline
+        </span>
+
         {{ loginError }}
+
       </div>
+
     }
 
+
     <!-- Formulaire -->
-    <form (ngSubmit)="soumettre($event)" [formGroup]="connectionForm" novalidate>
+    <form
+      (ngSubmit)="soumettre($event)"
+      [formGroup]="connectionForm"
+      novalidate>
+
       <div class="bk-form-group">
-        <label for="email" class="bk-form-label">Email</label>
+
+        <label for="email" class="bk-form-label">
+          {{ prefs.t().email }}
+        </label>
+
         <div class="input-group bk-input-group">
+
           <span class="input-group-text bk-input-icon">
-            <span class="material-icons fs-6">email</span>
+            <span class="material-icons fs-6">
+              email
+            </span>
           </span>
+
           <input
             type="email"
             id="email"
@@ -30,74 +61,165 @@
             placeholder="exemple@email.com"
             formControlName="email"
             autocomplete="email">
+
         </div>
+
+
         @if (email.touched && email.hasError('required')) {
+
           <div class="bk-field-error">
-            <span class="material-icons">error_outline</span>
-            L'email est requis.
+
+            <span class="material-icons">
+              error_outline
+            </span>
+
+            {{ prefs.t().emailRequired }}
+
           </div>
+
         }
+
+
         @if (email.touched && email.hasError('email')) {
+
           <div class="bk-field-error">
-            <span class="material-icons">error_outline</span>
-            Format d'email invalide.
+
+            <span class="material-icons">
+              error_outline
+            </span>
+
+            {{ prefs.t().invalidEmail }}
+
           </div>
+
         }
+
       </div>
 
+
       <div class="bk-form-group">
+
         <div class="bk-password-header">
-          <label for="password" class="bk-form-label">Mot de passe</label>
-          <a routerLink="/mot-de-passe-oublie" class="bk-auth-link bk-forgot-link">
-            Mot de passe oublié ?
+
+          <label for="password" class="bk-form-label">
+            {{ prefs.t().password }}
+          </label>
+
+          <a
+            routerLink="/mot-de-passe-oublie"
+            class="bk-auth-link bk-forgot-link">
+
+            {{ prefs.t().forgotPassword }}
+
           </a>
+
         </div>
+
+
         <div class="input-group bk-input-group">
+
           <span class="input-group-text bk-input-icon">
-            <span class="material-icons fs-6">lock</span>
+
+            <span class="material-icons fs-6">
+              lock
+            </span>
+
           </span>
+
           <input
             type="password"
             id="password"
             class="form-control bk-input"
-            placeholder="Votre mot de passe"
+            [placeholder]="prefs.t().yourPassword"
             formControlName="password"
             autocomplete="current-password">
+
         </div>
+
+
         @if (password.touched && password.hasError('required')) {
+
           <div class="bk-field-error">
-            <span class="material-icons">error_outline</span>
-            Le mot de passe est requis.
+
+            <span class="material-icons">
+              error_outline
+            </span>
+
+            {{ prefs.t().passwordRequired }}
+
           </div>
+
         }
+
       </div>
 
+
       <div class="bk-form-options">
+
         <div class="form-check bk-check">
-          <input class="form-check-input bk-check-input" type="checkbox" id="rememberMe">
-          <label class="form-check-label bk-check-label" for="rememberMe">
-            Se souvenir de moi
+
+          <input
+            class="form-check-input bk-check-input"
+            type="checkbox"
+            id="rememberMe">
+
+          <label
+            class="form-check-label bk-check-label"
+            for="rememberMe">
+
+            {{ prefs.t().rememberMe }}
+
           </label>
+
         </div>
+
       </div>
+
 
       <button
         type="submit"
         class="btn bk-btn-submit w-100"
         [disabled]="connectionForm.invalid || isLoading">
+
         @if (isLoading) {
+
           <span class="bk-spinner"></span>
-          <span>Connexion...</span>
+
+          <span>
+            {{ prefs.t().loggingIn }}
+          </span>
+
         } @else {
-          <span>Se connecter</span>
-          <span class="material-icons">arrow_forward</span>
+
+          <span>
+            {{ prefs.t().login }}
+          </span>
+
+          <span class="material-icons">
+            arrow_forward
+          </span>
+
         }
+
       </button>
 
+
       <p class="text-center bk-auth-footer">
-        Pas encore de compte ?
-        <a routerLink="/inscription" class="bk-auth-link">Créer un compte</a>
+
+        {{ prefs.t().noAccount }}
+
+        <a
+          routerLink="/inscription"
+          class="bk-auth-link">
+
+          {{ prefs.t().createAccount }}
+
+        </a>
+
       </p>
+
     </form>
+
   </div>
+
 </app-auth-user>

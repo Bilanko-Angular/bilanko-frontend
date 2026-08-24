@@ -1,0 +1,66 @@
+<app-template>
+  <div class="d-flex flex-column gap-4">
+
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+      <div>
+        <div class="text-uppercase fw-bold small mb-1" style="color: var(--color-primary); letter-spacing: .05em;">
+          BILANKO › CATALOGUE
+        </div>
+        <h1 class="fs-3 fw-bold mb-1" style="color: var(--color-text);">{{ prefs.t().catalogueTitle }}</h1>
+        <p class="text-secondary small mb-0">{{ prefs.t().catalogueSubtitle }}</p>
+      </div>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <app-product-filter-dropdown [categories]="categoriesOptions()" (filtresChange)="onFiltresChange($event)" />
+
+        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" (click)="exporter()">
+          <i class="bi bi-download"></i>
+          {{ prefs.t().export }}
+        </button>
+
+        <button class="btn btn-success btn-sm d-flex align-items-center gap-1" (click)="ouvrirCreation()">
+          <i class="bi bi-plus-lg"></i>
+          {{ prefs.t().add }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de recherche -->
+    <app-product-search-bar (rechercheChange)="onRechercheChange($event)" />
+
+    <!-- Tableau -->
+    <div class="card border rounded" style="border-color: var(--color-border) !important; background-color: var(--color-surface);">
+      <app-product-table
+        [produits]="produits()"
+        [isLoading]="isLoading()"
+        [error]="error()"
+        (edit)="ouvrirEdition($event)"
+        (supprimer)="demanderSuppression($event)"
+      />
+    </div>
+
+    <!-- Pagination -->
+    <app-product-pagination
+      [pageCourante]="pageCourante()"
+      [totalPages]="totalPages()"
+      [totalElements]="totalElements()"
+      (changerPage)="onChangerPage($event)"
+    />
+
+    <!-- Formulaire modal -->
+    @if (afficherFormulaire()) {
+      <app-produit-form
+        [produit]="produitEnEdition()"
+        (enregistrer)="onEnregistrer($event)"
+        (annuler)="afficherFormulaire.set(false)"
+      />
+    }
+
+    <!-- Modal suppression -->
+    <app-product-delete-modal
+      [produit]="produitASupprimer()"
+      (confirmer)="confirmerSuppression()"
+      (annuler)="produitASupprimer.set(undefined)"
+    />
+  </div>
+</app-template>

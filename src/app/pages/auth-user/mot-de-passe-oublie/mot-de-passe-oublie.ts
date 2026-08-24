@@ -3,6 +3,8 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthUser } from "../auth-user";
+import { PreferencesService } from '../../../services/preferences';
+
 
 @Component({
   selector: 'app-mot-de-passe-oublie',
@@ -13,6 +15,7 @@ import { AuthUser } from "../auth-user";
 })
 export class MotDePasseOublie {
   private readonly fb = inject(FormBuilder);
+  protected readonly prefs = inject(PreferencesService);
 
   envoye = false;
   isLoading = false;

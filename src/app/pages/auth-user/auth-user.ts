@@ -1,6 +1,6 @@
-// src/app/pages/auth-user/auth-user.ts
 import { Component, inject } from '@angular/core';
 import { ThemeService } from '../../services/theme';
+import { PreferencesService } from '../../services/preferences';
 
 @Component({
   selector: 'app-auth-user',
@@ -11,4 +11,5 @@ import { ThemeService } from '../../services/theme';
 })
 export class AuthUser {
   protected readonly themeService = inject(ThemeService);
+  protected readonly prefs = inject(PreferencesService);
 }
