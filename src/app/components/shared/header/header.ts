@@ -14,7 +14,7 @@ import { SalesService } from '../../../services/sales.service';
 
 import type { Produit } from '../../../models/produit';
 import { PreferencesService } from '../../../services/preferences';
-import type { Sale } from '../../../models/finance';
+import type { Sale } from '../../../models/sale';
 import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
 import { NotificationsBell } from './notifications-bell/notifications-bell';
 
@@ -92,16 +92,18 @@ export class Header {
     }
 
     for (const vente of this.ventes()) {
+      const produitNom = vente.product || (vente.items && vente.items.length > 0 ? vente.items[0].productName : 'Vente');
+      const clientNom = vente.client || vente.customerName || 'Client comptant';
       const correspond =
-        vente.product.toLowerCase().includes(terme) ||
-        (vente.client ?? '').toLowerCase().includes(terme);
+        produitNom.toLowerCase().includes(terme) ||
+        clientNom.toLowerCase().includes(terme);
 
       if (correspond) {
         results.push({
           type: 'vente',
           id: vente.id,
-          title: vente.product,
-          subtitle: `Vente · ${vente.client || 'Client comptant'}`,
+          title: produitNom,
+          subtitle: `Vente · ${clientNom}`,
           vente
         });
       }
