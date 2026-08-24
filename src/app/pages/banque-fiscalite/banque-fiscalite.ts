@@ -85,7 +85,7 @@ export class BanqueFiscalite {
 
     return this.moisCouverts().map(({ cle, label }) => {
       const chiffreAffaires = ventes
-        .filter((v) => v.date.startsWith(cle))
+        .filter((v) => v.date?.startsWith(cle))
         .reduce((s, v) => s + v.totalAmount, 0);
       const achatsCharges = charges
         .filter((c) => c.date.startsWith(cle))
