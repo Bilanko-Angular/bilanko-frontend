@@ -1,0 +1,83 @@
+		@if (toastMessage()) {
+			<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080">
+				<div class="toast show" role="alert">
+					<div class="toast-header">
+						<strong class="me-auto">OTP soumis</strong>
+						<button type="button" class="btn-close" (click)="toastMessage.set(null)"></button>
+					</div>
+					<div class="toast-body">{{ toastMessage() }}</div>
+				</div>
+			</div>
+		}
+ 
+		<div class="card mx-auto" style="max-width: 420px;">
+			<div class="card-header">
+				<h5 class="card-title mb-1">Vérifiez votre connexion</h5>
+				<p class="card-text text-muted small mb-0">
+					Saisissez le code de vérification envoyé à l'adresse :
+					<span class="fw-medium">m&#64;example.com</span>
+				</p>
+			</div>
+ 
+			<form [formRoot]="form" (ngSubmit)="submit()" id="otp-form">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-2">
+						<label class="form-label mb-0">Code de vérification</label>
+						<button
+							type="button"
+							class="btn btn-outline-secondary btn-sm"
+							[disabled]="isResendDisabled()"
+							(click)="resendOtp()"
+						>
+							<span class="material-icons me-1" style="font-size: 1rem; vertical-align: text-bottom;">refresh</span>
+							Renvoyer le code
+							@if (countdown() > 0) {
+								dans {{ countdown() }}s
+							}
+						</button>
+					</div>
+ 
+					<!-- Groupe de 6 cases OTP -->
+					<div class="d-flex gap-2 justify-content-center" (paste)="onPaste($event)">
+						@for (i of otpIndexes; track i) {
+							<input
+								#otpInput
+								type="text"
+								inputmode="numeric"
+								maxlength="1"
+								class="form-control text-center fs-4"
+								style="width: 3rem; height: 3.25rem;"
+								[value]="otpDigits()[i]"
+								(input)="onDigitInput($event, i)"
+								(keydown)="onKeydown($event, i)"
+							/>
+							@if (i === 2) {
+								<span class="d-flex align-items-center px-1">-</span>
+							}
+						}
+					</div>
+ 
+					@if (form.otp().invalid() && form.otp().touched()) {
+						<div class="text-danger small mt-2">
+							{{ form.otp().errors()[0]?.message }}
+						</div>
+					}
+ 
+					<div class="form-text mt-2">
+						<a href="#">Je n'ai plus accès à cette adresse email.</a>
+					</div>
+				</div>
+ 
+				<div class="card-footer">
+					<button type="submit" class="btn btn-primary w-100 mb-2" [disabled]="form().invalid()">
+						Vérifier
+					</button>
+					<div class="text-muted small">
+						Un problème pour vous connecter ?
+						<a href="#" class="link-underline link-underline-opacity-0 link-underline-opacity-100-hover">
+							Contacter le support
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
