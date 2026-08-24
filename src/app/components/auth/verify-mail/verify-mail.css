@@ -69,7 +69,6 @@ form {
   overflow: hidden;
   border: 1.5px solid var(--color-border);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  background-color: var(--color-surface);
   width: 100%;
 }
 
@@ -90,6 +89,7 @@ form {
   height: 100%;
   transition: color 0.15s ease;
   min-width: 40px;
+
 }
 
 .bk-input-group:focus-within .bk-input-icon {

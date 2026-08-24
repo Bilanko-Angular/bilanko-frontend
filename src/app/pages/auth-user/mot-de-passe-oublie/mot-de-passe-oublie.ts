@@ -15,8 +15,11 @@ import { ResetYourPasswordComponent } from '../../../components/auth/reset-your-
 export class MotDePasseOublie {
   step = signal<number>(1);
   email = signal<string>('');
-  
-  constructor(private router: Router) {}
+  token = signal<string>('');
+  otp=signal<string>('');
+  newPassword=signal<string>('');
+
+  constructor(private router: Router) { }
 
   onMailVerified(email: string) {
     this.email.set(email);
