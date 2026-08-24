@@ -10,13 +10,14 @@ import {
 import { Router } from '@angular/router';
 
 import { ThemeService } from '../../../services/theme';
-import { ProduitService } from '../../../services/produit.service';
 import { SalesService } from '../../../services/sales.service';
 
 import type { Produit } from '../../../models/produit';
 import { PreferencesService } from '../../../services/preferences';
 import type { Sale } from '../../../models/finance';
 import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
+import { NotificationsBell } from './notifications-bell/notifications-bell';
+
 
 
 interface SearchResult {
@@ -28,19 +29,11 @@ interface SearchResult {
   vente?: Sale;
 }
 
-interface NotificationItem {
-  id: string;
-  title: string;
-  detail: string;
-  time: string;
-  type: 'stock' | 'vente' | 'systeme';
-}
-
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [NotificationsBell],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
 })
@@ -163,60 +156,6 @@ export class Header {
 
 
   // ============================================================
-  // NOTIFICATIONS
-  // ============================================================
-
-  readonly notificationsOpen = signal(false);
-
-  readonly notifications = signal<NotificationItem[]>([
-    {
-      id: 'n1',
-      title: 'Stock faible',
-      detail: 'Sucre 1kg atteint le seuil d\'alerte',
-      time: 'Il y a 2h',
-      type: 'stock'
-    },
-    {
-      id: 'n2',
-      title: 'Nouvelle vente',
-      detail: 'Vente enregistrée pour Restaurant Le Palo',
-      time: 'Il y a 5h',
-      type: 'vente'
-    },
-    {
-      id: 'n3',
-      title: 'Mise à jour',
-      detail: 'Le catalogue a été synchronisé',
-      time: 'Hier',
-      type: 'systeme'
-    }
-  ]);
-
-  readonly notificationsCount = computed(
-    () => this.notifications().length
-  );
-
-  toggleNotifications(): void {
-    this.notificationsOpen.update((v) => !v);
-    this.profileOpen.set(false);
-  }
-
-  goToNotificationTarget(notif: NotificationItem): void {
-    this.notificationsOpen.set(false);
-    if (notif.type === 'stock') {
-      this.router.navigate(['/catalogue']);
-    } else if (notif.type === 'vente') {
-      this.router.navigate(['/ventes']);
-    }
-  }
-
-  clearNotifications(): void {
-    this.notifications.set([]);
-    this.notificationsOpen.set(false);
-  }
-
-
-  // ============================================================
   // PROFIL
   // ============================================================
 
@@ -224,7 +163,6 @@ export class Header {
 
   toggleProfile(): void {
     this.profileOpen.update((v) => !v);
-    this.notificationsOpen.set(false);
   }
 
   logout(): void {
@@ -234,14 +172,14 @@ export class Header {
 
 
   // ============================================================
-  // FERMETURE AU CLIC EXTÉRIEUR
+  // FERMETURE AU CLIC EXTÉRIEUR (profil uniquement — les
+  // notifications gèrent leur propre fermeture dans NotificationsBell)
   // ============================================================
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
     if (!clickedInside) {
-      this.notificationsOpen.set(false);
       this.profileOpen.set(false);
     }
   }
