@@ -53,28 +53,6 @@
   <!-- Panneau droit : formulaire -->
   <div class="auth-form-panel d-flex align-items-center justify-content-center">
     <div class="auth-form-wrapper position-relative">
-      <!-- Bouton de thème -->
-      <div class="auth-theme-toggle position-absolute">
-        <button
-          type="button"
-          class="bk-icon-btn bk-theme-btn btn rounded-circle d-flex align-items-center justify-content-center"
-          (click)="themeService.toggle()"
-          [attr.aria-label]="themeService.theme() === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'"
-          [attr.title]="themeService.theme() === 'dark' ? 'Mode clair' : 'Mode sombre'">
-          @if (themeService.theme() === 'dark') {
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 4a4 4 0 1 0 0 8A4 4 0 0 0 8 4z"/>
-              <path d="M8 .5a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0V1A.5.5 0 0 1 8 .5zM8 13.6a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0v-1.4a.5.5 0 0 1 .5-.5z"/>
-              <path d="M2.5 2.5a.5.5 0 0 1 .708 0l.99.99a.5.5 0 0 1-.707.707l-.99-.99a.5.5 0 0 1 0-.708zM13.5 2.5a.5.5 0 0 1 0 .708l-.99.99a.5.5 0 0 1-.707-.707l.99-.99a.5.5 0 0 1 .708 0zM2.5 13.5a.5.5 0 0 1 0-.708l.99-.99a.5.5 0 0 1 .707.707l-.99.99a.5.5 0 0 1-.708 0zM13.5 13.5a.5.5 0 0 1-.708 0l-.99-.99a.5.5 0 0 1 .707-.707l.99.99a.5.5 0 0 1 0 .708z"/>
-            </svg>
-          } @else {
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M6.7 1.2a.7.7 0 0 1 .07.8A6.2 6.2 0 0 0 6 4.9c0 3.5 2.8 6.3 6.3 6.3.9 0 1.8-.2 2.6-.5a.7.7 0 0 1 .8.1.7.7 0 0 1 .05.9A7.7 7.7 0 1 1 5.8 .35a.7.7 0 0 1 .9.85z"/>
-            </svg>
-          }
-        </button>
-      </div>
-
       <ng-content />
     </div>
   </div>
