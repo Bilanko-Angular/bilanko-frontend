@@ -1,10 +1,60 @@
-<div class="action-cell">
-  <button class="kebab-btn" (click)="toggle()" aria-label="Actions">⋮</button>
+<div class="action-menu-wrapper">
+
+  <!-- Bouton trois points -->
+  <button
+    type="button"
+    class="action-menu-button"
+    (click)="toggle($event)"
+    [attr.aria-expanded]="open()"
+    aria-haspopup="menu"
+    aria-label="Actions"
+  >
+    <span class="three-dots" aria-hidden="true">⋮</span>
+  </button>
+
+  <!-- Menu -->
   @if (open()) {
-    <div class="dropdown-menu">
-      <button class="dropdown-item" (click)="select('view')">{{ prefs.t().view }}</button>
-      <button class="dropdown-item" (click)="select('edit')">{{ prefs.t().edit }}</button>
-      <button class="dropdown-item danger" (click)="select('delete')">{{ prefs.t().delete }}</button>
+
+    <div
+      class="action-dropdown"
+      role="menu"
+      [style.top.px]="menuTop()"
+      [style.left.px]="menuLeft()"
+      (click)="$event.stopPropagation()"
+    >
+
+      <button
+        type="button"
+        class="action-item"
+        role="menuitem"
+        (click)="select('view', $event)"
+      >
+        <span class="action-item-icon">👁</span>
+        <span>{{ prefs.t().view }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="action-item"
+        role="menuitem"
+        (click)="select('edit', $event)"
+      >
+        <span class="action-item-icon">✎</span>
+        <span>{{ prefs.t().edit }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="action-item action-delete"
+        role="menuitem"
+        (click)="select('delete', $event)"
+      >
+        <span class="action-item-icon">🗑</span>
+        <span>{{ prefs.t().delete }}</span>
+      </button>
+
     </div>
+
   }
+
 </div>

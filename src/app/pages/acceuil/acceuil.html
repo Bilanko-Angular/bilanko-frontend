@@ -131,32 +131,30 @@
         } @else {
           <div class="bk-table-wrapper">
             <table class="bk-table">
-              <thead>
-                <tr>
-                  <th>{{ prefs.t().product }}</th>
-                  <th>{{ prefs.t().client }}</th>
-                  <th class="bk-table__num">{{ prefs.t().quantity }}</th>
-                  <th class="bk-table__num">{{ prefs.t().amount }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (vente of dernieresVentes(); track vente.id) {
-                  <tr>
-                    <td>
-                      <div class="bk-product-cell">
-                        <span class="bk-product-dot"></span>
-                        {{ vente.product }}
-                      </div>
-                    </td>
-                    <td>{{ vente.client || prefs.t().comptantClient }}</td>
-                    <td class="bk-table__num">{{ vente.quantity }}</td>
-                    <td class="bk-table__num bk-table__num--positive">
-                      {{ vente.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+  <thead>
+    <tr>
+      <th>{{ prefs.t().client }}</th>
+      <th class="bk-table__num">{{ prefs.t().products }}</th>
+      <th class="bk-table__num">{{ prefs.t().amount }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (vente of dernieresVentes(); track vente.id) {
+      <tr>
+        <td>
+          <div class="bk-product-cell">
+            <span class="bk-product-dot"></span>
+            {{ vente.customerName || prefs.t().comptantClient }}
+          </div>
+        </td>
+        <td class="bk-table__num">{{ vente.items.length }}</td>
+        <td class="bk-table__num bk-table__num--positive">
+          {{ vente.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
           </div>
         }
       </article>

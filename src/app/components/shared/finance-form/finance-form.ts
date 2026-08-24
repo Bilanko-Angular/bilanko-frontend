@@ -1,7 +1,9 @@
+// src/app/components/shared/finance-form/finance-form.ts
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import type { Sale, Charge } from '../../../models/finance';
+import type { Charge } from '../../../models/finance';
+import type { Sale } from '../../../models/sale';
 import { PreferencesService } from '../../../services/preferences';
 
 @Component({
@@ -36,12 +38,24 @@ export class FinanceForm {
 
   ngOnChanges() {
     if (!this.initial) return;
-    if ((this.initial as Sale).product !== undefined) {
+    // Vérifier si c'est une vente (possède 'product')
+    if ('product' in this.initial) {
       const s = this.initial as Sale;
-      this.form.patchValue({ product: s.product, quantity: s.quantity, unitPrice: s.unitPrice, client: s.client, date: s.date });
+      this.form.patchValue({ 
+        product: s.product || s.items?.[0]?.productName || '', 
+        quantity: s.quantity || s.items?.[0]?.quantity || 1, 
+        unitPrice: s.unitPrice || s.items?.[0]?.unitSellingPrice || 0, 
+        client: s.client || s.customerName || '', 
+        date: s.date || s.saleDate?.split('T')[0] || new Date().toISOString().split('T')[0]
+      });
     } else {
       const c = this.initial as Charge;
-      this.form.patchValue({ label: c.label, amount: c.amount, supplier: c.supplier, date: c.date });
+      this.form.patchValue({ 
+        label: c.label, 
+        amount: c.amount, 
+        supplier: c.supplier, 
+        date: c.date 
+      });
     }
   }
 
@@ -59,15 +73,24 @@ export class FinanceForm {
         this.form.get('quantity')?.markAsTouched();
         return;
       }
+
+      // NOUVELLE STRUCTURE : Créer un sale avec le bon format
       const sale: Sale = {
         id: (this.initial as Sale | null)?.id || Date.now().toString(),
-        date: String(this.form.get('date')?.value ?? new Date().toISOString().split('T')[0]),
-        product,
-        quantity,
-        unitPrice,
+        saleDate: new Date(this.form.get('date')?.value ?? new Date()).toISOString(),
+        customerName: this.form.get('client')?.value?.trim() || 'Client comptant',
         totalAmount: quantity * unitPrice,
-        client: this.form.get('client')?.value || ''
+        totalMargin: 0, // On peut calculer plus tard
+        items: [{
+          productId: `temp-${Date.now()}`,
+          productName: product,
+          quantity: quantity,
+          unitSellingPrice: unitPrice,
+          unitPurchasePrice: 0,
+          margin: 0
+        }]
       };
+
       this.submit.emit(sale);
       return;
     }

@@ -15,8 +15,7 @@ import { SalesService } from '../../../services/sales.service';
 
 import type { Produit } from '../../../models/produit';
 import { PreferencesService } from '../../../services/preferences';
-import type { Sale } from '../../../models/finance';
-
+import type { Sale } from '../../../models/sale';
 
 interface SearchResult {
   type: 'produit' | 'vente';
@@ -120,28 +119,20 @@ export class Header {
 
 
     for (const vente of this.ventes()) {
+  const correspond =
+    vente.customerName.toLowerCase().includes(terme) ||
+    vente.items.some(i => i.productName.toLowerCase().includes(terme));
 
-      const correspond =
-        vente.product.toLowerCase().includes(terme) ||
-        (vente.client ?? '')
-          .toLowerCase()
-          .includes(terme);
-
-
-      if (correspond) {
-
-        results.push({
-          type: 'vente',
-          id: vente.id,
-          title: vente.product,
-          subtitle:
-            `Vente · ${vente.client || 'Client comptant'}`,
-          vente
-        });
-
-      }
-
-    }
+  if (correspond) {
+    results.push({
+      type: 'vente',
+      id: vente.id,
+      title: vente.customerName,
+      subtitle: `Vente · ${vente.items.length} produit(s)`,
+      vente
+    });
+  }
+}
 
 
     return results.slice(0, 8);

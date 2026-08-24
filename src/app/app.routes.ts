@@ -10,12 +10,14 @@ import { MotDePasseOublie } from './pages/auth-user/mot-de-passe-oublie/mot-de-p
 import { Parametres } from './pages/parametres/parametres';
 import { BanqueFiscalite } from './pages/banque-fiscalite/banque-fiscalite';
 import { Landing } from './pages/landing/landing';
+import { VenteDetail } from './pages/ventes/vente-detail/vente-detail';
 
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'dashboard', component: Acceuil },
   { path: 'catalogue', component: CatalogueStocks },
   { path: 'ventes', component: SalesComponent },
+  { path: 'ventes/:id', component: VenteDetail },
   { path: 'charges', component: ChargesComponent },
   { path: 'connexion', component: Connexion },
   { path: 'inscription', component: Inscription },

@@ -1,4 +1,3 @@
-<!-- src/app/pages/ventes/ventes.html -->
 <app-template>
   <div class="page-header">
     <div class="header-text">
@@ -6,39 +5,50 @@
       <p>{{ prefs.t().salesManagementDesc }}</p>
     </div>
     <div class="header-actions">
-      <button class="btn btn-secondary" (click)="openFilterModal()">{{ prefs.t().filter }}</button>
-      <button class="btn btn-primary" (click)="openAddModal()">{{ prefs.t().add }}</button>
+      <button class="btn btn-secondary" [class.btn-secondary--active]="hasActiveFilter()" (click)="openFilterModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+        </svg>
+        {{ prefs.t().filter }}
+        @if (hasActiveFilter()) { <span class="bk-filter-dot"></span> }
+      </button>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"/>
+        </svg>
+        {{ prefs.t().add }}
+      </button>
     </div>
   </div>
 
   <div class="table-container">
-    @if (sales().length === 0) {
-      <div class="empty-state">
-        <p>{{ prefs.t().noSalesRecorded }}</p>
-      </div>
+    @if (filteredSales().length === 0) {
+      <div class="empty-state"><p>{{ prefs.t().noSalesRecorded }}</p></div>
     }
-    @if (sales().length > 0) {
+    @if (filteredSales().length > 0) {
       <table class="registry-table">
         <thead>
           <tr>
             <th class="align-left">{{ prefs.t().date }}</th>
-            <th class="align-left">{{ prefs.t().product }}</th>
-            <th class="align-center">{{ prefs.t().quantity }}</th>
-            <th class="align-right">{{ prefs.t().unitPrice }}</th>
-            <th class="align-right">{{ prefs.t().totalAmount }}</th>
             <th class="align-left">{{ prefs.t().client }}</th>
+            <th class="align-center">{{ prefs.t().products }}</th>
+            <th class="align-right">{{ prefs.t().totalAmount }}</th>
+            <th class="align-right">{{ prefs.t().simplifiedMargin }}</th>
             <th class="align-center">{{ prefs.t().actions }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (sale of sales(); track sale.id) {
+          @for (sale of salesPage(); track sale.id) {
             <tr>
-              <td class="align-left">{{ sale.date | date: prefs.angularDateFormat() }}</td>
-              <td class="align-left">{{ sale.product }}</td>
-              <td class="align-center tabular-nums">{{ sale.quantity }}</td>
-              <td class="align-right tabular-nums">{{ sale.unitPrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <td class="align-left">{{ sale.saleDate | date: prefs.angularDateFormat() + ' HH:mm' }}</td>
+              <td class="align-left">
+                <button type="button" class="bk-client-link" (click)="voirVente(sale.id)">
+                  {{ sale.customerName || prefs.t().comptantClient }}
+                </button>
+              </td>
+              <td class="align-center tabular-nums">{{ sale.items.length }}</td>
               <td class="align-right tabular-nums amount-positive">{{ sale.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
-              <td class="align-left">{{ sale.client }}</td>
+              <td class="align-right tabular-nums">{{ sale.totalMargin | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
               <td class="align-center">
                 <app-action-menu (action)="onRowAction($event, sale.id)"></app-action-menu>
               </td>
@@ -46,23 +56,35 @@
           }
         </tbody>
       </table>
+
+      @if (nombrePages() > 1) {
+        <div class="bk-pagination">
+          <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="pageCourante() === 1">
+            ‹ {{ prefs.t().previous }}
+          </button>
+          <span class="bk-page-indicator">{{ prefs.t().page }} {{ pageCourante() }} {{ prefs.t().pageOf }} {{ nombrePages() }}</span>
+          <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="pageCourante() === nombrePages()">
+            {{ prefs.t().next }} ›
+          </button>
+        </div>
+      }
     }
   </div>
 
-  <!-- Modal Ajout -->
   @if (isAddModalOpen()) {
     <div class="modal-overlay" (click)="closeAddModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-content modal-wide" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <h2>{{ prefs.t().addASale }}</h2>
           <button class="close-btn" (click)="closeAddModal()">×</button>
         </div>
-        <app-finance-form [kind]="'sale'" [initial]="editingSale" (submit)="handleSaleSubmit($event)" (cancel)="closeAddModal()"></app-finance-form>
+        <div class="modal-form">
+          <app-panier-form [initial]="editingSale" (submitSale)="handleSaleSubmit($event)" (cancel)="closeAddModal()"></app-panier-form>
+        </div>
       </div>
     </div>
   }
 
-  <!-- Modal Filtre -->
   @if (isFilterModalOpen()) {
     <div class="modal-overlay" (click)="closeFilterModal()">
       <div class="modal-content modal-small" (click)="$event.stopPropagation()">
@@ -72,20 +94,24 @@
         </div>
         <div class="modal-form">
           <div class="form-group">
-            <label for="search">{{ prefs.t().search }}</label>
-            <input type="text" id="search" placeholder="{{ prefs.t().product }} {{ prefs.t().or }} {{ prefs.t().client }}">
+            <label for="filterSearch">{{ prefs.t().search }}</label>
+            <input
+              type="text"
+              id="filterSearch"
+              [(ngModel)]="filterSearchTerm"
+              [placeholder]="prefs.t().client + ' ' + prefs.t().or + ' ' + prefs.t().product"
+              (keydown.enter)="applyFilter()">
           </div>
           <div class="form-group">
-            <label>{{ prefs.t().period }}</label>
-            <div class="checkbox-group">
-              <label class="checkbox-label"><input type="checkbox" name="period" value="today"> {{ prefs.t().today }}</label>
-              <label class="checkbox-label"><input type="checkbox" name="period" value="week"> {{ prefs.t().thisWeek }}</label>
-              <label class="checkbox-label"><input type="checkbox" name="period" value="month"> {{ prefs.t().thisMonth }}</label>
-            </div>
+            <label for="filterDate">{{ prefs.t().filterByDate }}</label>
+            <input
+              type="date"
+              id="filterDate"
+              [(ngModel)]="filterDate">
           </div>
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" (click)="closeFilterModal()">{{ prefs.t().reset }}</button>
-            <button type="button" class="btn btn-primary" (click)="closeFilterModal()">{{ prefs.t().apply }}</button>
+            <button type="button" class="btn btn-secondary" (click)="resetFilter()">{{ prefs.t().reset }}</button>
+            <button type="button" class="btn btn-primary" (click)="applyFilter()">{{ prefs.t().apply }}</button>
           </div>
         </div>
       </div>
@@ -93,10 +119,6 @@
   }
 
   @if (confirmDeleteId()) {
-    <app-confirm
-      [message]="prefs.t().confirmDeleteSale"
-      (confirm)="confirmDelete()"
-      (cancel)="cancelDelete()">
-    </app-confirm>
+    <app-confirm [message]="prefs.t().confirmDeleteSale" (confirm)="confirmDelete()" (cancel)="cancelDelete()"></app-confirm>
   }
 </app-template>

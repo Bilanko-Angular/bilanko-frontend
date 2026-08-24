@@ -48,9 +48,10 @@ export class EvolutionChart implements AfterViewInit, OnDestroy {
     const parDate = new Map<string, { ca: number; charges: number }>();
 
     for (const vente of this.salesService.sales()) {
-      const entree = parDate.get(vente.date) ?? { ca: 0, charges: 0 };
+      const dateKey = vente.saleDate.split('T')[0];
+      const entree = parDate.get(dateKey) ?? { ca: 0, charges: 0 };
       entree.ca += vente.totalAmount;
-      parDate.set(vente.date, entree);
+      parDate.set(dateKey, entree);
     }
 
     for (const charge of this.chargesService.charges()) {

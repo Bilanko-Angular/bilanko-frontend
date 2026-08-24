@@ -73,8 +73,12 @@ export interface TranslationSet {
   notifUpdatesTitle: string; notifUpdatesDesc: string;
   profileSaved: string; passwordChanged: string; notificationsUpdated: string;
   languageChanged: string; dateFormatChanged: string; currencyChanged: string;
-  compactModeOn: string; compactModeOff: string; preferencesSaved: string;
-
+  compactModeOn: string; compactModeOff: string;
+  preferencesSaved: string;
+  previous: string; next: string;
+  saleDetails: string; chargeDetails: string;
+  clientSalesTitle: string; total: string;  noSalesForClient: string;
+  filterByDate: string; allDates: string; page: string; pageOf: string;
 }
 
 const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
@@ -180,6 +184,11 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     dateFormatChanged: 'Format de date modifié avec succès', currencyChanged: 'Devise modifiée avec succès',
     compactModeOn: 'Mode compact activé', compactModeOff: 'Mode compact désactivé',
     preferencesSaved: 'Préférences sauvegardées avec succès !',
+    previous: 'Précédent', next: 'Suivant',
+    saleDetails: 'Détails de la vente', chargeDetails: 'Détails de la charge',
+    clientSalesTitle: 'Ventes de', total: 'Total', noSalesForClient: 'Aucune vente trouvée.',
+    filterByDate: 'Filtrer par date', allDates: 'Toutes les dates',
+    page: 'Page', pageOf: 'sur',
   },
   en: {
     dashboard: 'Home', catalogue: 'Catalog', sales: 'Sales', charges: 'Expenses',
@@ -282,7 +291,11 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     notificationsUpdated: 'Notifications updated', languageChanged: 'Language changed successfully',
     dateFormatChanged: 'Date format changed successfully', currencyChanged: 'Currency changed successfully',
     compactModeOn: 'Compact mode enabled', compactModeOff: 'Compact mode disabled',
-    preferencesSaved: 'Preferences saved successfully!'
+    preferencesSaved: 'Preferences saved successfully!',
+    previous: 'Previous', next: 'Next',
+    saleDetails: 'Sale details', chargeDetails: 'Expense details',
+    clientSalesTitle: 'Sales from', total: 'Total', noSalesForClient: 'No sales found.', filterByDate: 'Filter by date', allDates: 'All dates',
+    page: 'Page', pageOf: 'of',
   },
   es: {
     dashboard: 'Inicio', catalogue: 'Catálogo', sales: 'Ventas', charges: 'Gastos',
@@ -386,8 +399,12 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     dateFormatChanged: 'Formato de fecha cambiado con éxito', currencyChanged: 'Moneda cambiada con éxito',
     compactModeOn: 'Modo compacto activado', compactModeOff: 'Modo compacto desactivado',
     preferencesSaved: '¡Preferencias guardadas con éxito!',
-    
-  }
+    previous: 'Anterior', next: 'Siguiente',
+    saleDetails: 'Detalles de la venta', chargeDetails: 'Detalles del gasto',
+    clientSalesTitle: 'Ventas de', total: 'Total', noSalesForClient: 'No se encontraron ventas.',filterByDate: 'Filtrar por fecha', allDates: 'Todas las fechas',
+    page: 'Página', pageOf: 'de',
+ }
+
 };
 
 @Injectable({ providedIn: 'root' })
