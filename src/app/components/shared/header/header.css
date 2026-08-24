@@ -1,3 +1,12 @@
+/* Voile translucide + flou léger pour détacher le header du contenu qui défile
+   (dégrade proprement si color-mix()/backdrop-filter n'est pas supporté) */
+.bk-header {
+  background-color: var(--color-background);
+  background-color: color-mix(in srgb, var(--color-background) 90%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
 /* Animation douce pour les menus déroulants Angular */
 .dropdown-menu.show {
   animation: bkDropdownIn .15s ease-out;
@@ -6,4 +15,29 @@
 @keyframes bkDropdownIn {
   from { opacity: 0; transform: translateY(-6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.bk-icon-btn,
+.bk-header .btn-outline-secondary {
+  transition: transform .15s ease, border-color .15s ease, color .15s ease;
+}
+.bk-icon-btn:hover,
+.bk-header .btn-outline-secondary:hover {
+  transform: translateY(-1px);
+}
+
+/* Pastille de statut sur l'avatar */
+.bk-avatar__dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-background);
+}
+
+.bk-header__search-panel {
+  border-color: var(--color-border);
 }

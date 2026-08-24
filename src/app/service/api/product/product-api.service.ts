@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Produit } from '../../../models/produit';
-import { ProductApiDto } from '../../../models/DTO/ProductDto';
+import { PagedProduits, ProductApiDto, SearchProduitParams } from '../../../models/DTO/ProductDto';
 import { ProductMapper } from '../../../mapper/ProductMapper';
 import { CreateProduitPayload, UpdateProduitPayload } from '../../../models/DTO/payload/ProductPayload';
 import { apiClient } from '../../../core/axios/axios.config';
+import { PagedResponseDto } from '../../../models/DTO/response/PageResponse';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductApiService {
-  private readonly basePath = '/api/products';
+  private readonly basePath = '/products';
 
   async getAll(): Promise<Produit[]> {
     const response = await apiClient.get<ProductApiDto[]>(`${this.basePath}/all`);
@@ -41,5 +42,23 @@ export class ProductApiService {
 
   async delete(id: string): Promise<void> {
     await apiClient.delete(`${this.basePath}/${id}`);
+  }
+
+  async search(params: SearchProduitParams): Promise<PagedProduits> {
+    const response = await apiClient.get<PagedResponseDto<ProductApiDto>>(`${this.basePath}/search`, {
+      params: {
+        search: params.search || undefined,
+        categoryId: params.categoryId || undefined,
+        stockStatus: params.stockStatus && params.stockStatus !== 'tous' ? params.stockStatus : undefined,
+        page: params.page ?? 0,
+        size: params.size ?? 10,
+      },
+    });
+    return {
+      produits: ProductMapper.toProduitList(response.data.content),
+      totalElements: response.data.totalElements,
+      totalPages: response.data.totalPages,
+      page: response.data.number,
+    };
   }
 }

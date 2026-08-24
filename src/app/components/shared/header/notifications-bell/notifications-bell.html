@@ -1,0 +1,88 @@
+<div class="position-relative">
+
+  <button
+    type="button"
+    class="btn btn-outline-secondary p-0 d-flex align-items-center justify-content-center rounded-2 position-relative bk-bell"
+    style="width: 36px; height: 36px;"
+    (click)="toggle()"
+    [attr.aria-label]="prefs.t().notifications"
+    [attr.title]="prefs.t().notifications">
+
+    <span class="material-symbols-outlined fs-5">notifications</span>
+
+    @if (count() > 0) {
+      <span
+        class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-2 border-body p-1 bk-bell__badge"
+        style="font-size: 0.58rem; min-width: 16px;">
+        {{ count() }}
+      </span>
+    }
+
+  </button>
+
+
+  @if (open()) {
+
+    <div
+      class="dropdown-menu dropdown-menu-end show shadow-lg mt-2 p-0 overflow-hidden bk-bell__panel"
+      style="width: 300px;">
+
+      <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+
+        <strong class="small mb-0 text-body">
+          {{ prefs.t().notifications }}
+        </strong>
+
+        @if (notifications().length > 0) {
+          <button
+            type="button"
+            class="btn btn-link p-0 text-primary text-decoration-none small fw-semibold"
+            (click)="clearAll()">
+            {{ prefs.t().clearAll }}
+          </button>
+        }
+
+      </div>
+
+
+      @if (notifications().length === 0) {
+
+        <div class="text-center text-muted p-4 small">
+          <span class="material-symbols-outlined d-block mb-1 text-muted" style="font-size: 26px;">
+            notifications_off
+          </span>
+          {{ prefs.t().noNotifications }}
+        </div>
+
+      } @else {
+
+        <div class="list-group list-group-flush overflow-auto" style="max-height: 320px;">
+
+          @for (notif of notifications(); track notif.id) {
+
+            <button
+              type="button"
+              class="list-group-item list-group-item-action d-flex align-items-start gap-2 p-3 text-start bk-bell__item"
+              (click)="goToTarget(notif)">
+
+              <span class="bk-bell__dot bk-bell__dot--{{ notif.type }} mt-1 flex-shrink-0"></span>
+
+              <span class="d-flex flex-column gap-1 min-w-0">
+                <span class="fw-bold small text-body">{{ notif.title }}</span>
+                <span class="text-muted small" style="font-size: 0.72rem;">{{ notif.detail }}</span>
+                <span class="text-muted" style="font-size: 0.65rem;">{{ notif.time }}</span>
+              </span>
+
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>
