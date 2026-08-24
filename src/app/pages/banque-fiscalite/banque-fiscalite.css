@@ -30,6 +30,7 @@
   justify-content: center;
   font-size: 0.75rem;
   flex-shrink: 0;
+  transition: all .15s ease;
 }
 
 .bk-step.actif { color: var(--color-primary); }
@@ -51,7 +52,7 @@
   min-width: 24px;
 }
 
-/* --- Layout deux colonnes : formulaire + récapitulatif --- */
+/* --- Layout deux colonnes --- */
 .bk-layout-split {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -83,95 +84,191 @@
   line-height: 1.5;
 }
 
-/* --- Étape 1 --- */
-.bk-objectif-grid {
+.bk-muted { color: var(--color-text-muted); font-size: 0.8rem; }
+
+/* --- Étape 1 : type de dossier (cartes cliquables) --- */
+.bk-type-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
 @media (max-width: 560px) {
-  .bk-objectif-grid { grid-template-columns: 1fr; }
-}
-.bk-objectif-card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.bk-objectif-card strong { color: var(--color-text); font-size: 0.9rem; }
-.bk-objectif-card span { color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.4; }
-
-/* --- Étape 2 : documents --- */
-.bk-doc-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 1.5rem;
+  .bk-type-grid { grid-template-columns: 1fr; }
 }
 
-.bk-doc-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.85rem;
-  border: 1px solid var(--color-border);
+.bk-type-card {
+  text-align: left;
+  border: 1.5px solid var(--color-border);
   border-radius: var(--radius-base);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--color-surface);
   cursor: pointer;
-  transition: border-color .15s ease, background-color .15s ease;
+  transition: all .18s ease;
   position: relative;
 }
-.bk-doc-row:hover { border-color: var(--color-primary); }
-.bk-doc-row.selectionne {
+.bk-type-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+.bk-type-card.selectionne {
   border-color: var(--color-primary);
   background: var(--color-primary-subtle);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
 }
 
-.bk-doc-row input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.bk-doc-check {
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  border: 1px solid var(--color-border);
-  flex-shrink: 0;
-  margin-top: 2px;
-  display: flex;
+.bk-type-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all .15s ease;
+  color: var(--color-on-brand);
 }
-.bk-doc-row.selectionne .bk-doc-check {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-}
-.bk-doc-row.selectionne .bk-doc-check::after {
-  content: '';
-  width: 5px;
-  height: 9px;
-  border: solid var(--color-on-brand);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translate(-1px, -1px);
+.bk-type-icon--pret { background: var(--bilanko-vert-bilanko, var(--color-primary)); }
+.bk-type-icon--dsf { background: var(--bilanko-ocre-marche, var(--color-accent)); }
+
+.bk-type-card strong { color: var(--color-text); font-size: 0.95rem; }
+.bk-type-card span:not(.bk-type-check) { color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.45; }
+
+.bk-type-check {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
 }
 
-.bk-doc-text { display: flex; flex-direction: column; gap: 0.2rem; }
-.bk-doc-text strong { font-size: 0.875rem; color: var(--color-text); }
-.bk-doc-text small { font-size: 0.78rem; color: var(--color-text-muted); }
+.bk-type-badge {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.bk-type-badge--optionnel {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+.bk-type-badge--obligatoire {
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+/* --- Formulaires (étape 2) --- */
+.bk-field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 560px) {
+  .bk-field-grid { grid-template-columns: 1fr; }
+}
+
+.bk-field-full { grid-column: 1 / -1; }
+
+.bk-field-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+}
+
+.bk-optional {
+  text-transform: none;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
+.bk-field-grid input,
+.bk-field-grid select,
+.bk-field-grid textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-family: inherit;
+  resize: vertical;
+}
+.bk-field-grid input:focus,
+.bk-field-grid select:focus,
+.bk-field-grid textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
 
 .bk-subheading {
   font-size: 0.85rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  margin-bottom: 0.75rem;
+  margin: 1.25rem 0 0.75rem;
 }
 
+.bk-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 560px) {
+  .bk-info-row { grid-template-columns: 1fr; }
+}
+
+.bk-info-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
+}
+.bk-info-card span { font-size: 0.78rem; color: var(--color-text-muted); }
+.bk-info-card strong { font-size: 0.95rem; color: var(--color-primary); }
+
+.bk-info-card--accent {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+}
+.bk-info-card--accent strong { color: var(--color-accent); }
+
+/* --- Capacité de remboursement indicative --- */
+.bk-capacite-card {
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+.bk-capacite-card--alerte {
+  border-color: var(--color-accent);
+  background: var(--color-accent-subtle);
+}
+.bk-capacite-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  font-size: 0.85rem;
+}
+.bk-capacite-row span { color: var(--color-text-muted); }
+.bk-capacite-row strong { color: var(--color-text); }
+.bk-capacite-note {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  margin: 0.5rem 0 0;
+  line-height: 1.4;
+}
+
+/* --- Format (radios pilules), réutilisé pour durée historique --- */
 .bk-format-group {
   display: flex;
   gap: 0.75rem;
@@ -196,41 +293,180 @@
   background: var(--color-primary-subtle);
 }
 
-/* --- Étape 3 : dates --- */
-.bk-date-grid {
+/* --- Étape 3 : historique calculé (lecture seule) --- */
+.bk-historique-table {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+.bk-historique-head {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: 110px 1fr 160px;
+  gap: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--color-surface);
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.bk-historique-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 160px;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.65rem 0.9rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.bk-historique-mois {
+  font-size: 0.82rem;
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.bk-historique-bar-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  background: var(--color-surface);
+  border-radius: var(--radius-base);
+  overflow: hidden;
+}
+.bk-historique-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--color-primary-subtle);
+  border-radius: var(--radius-base);
+  transition: width .25s ease;
+}
+.bk-historique-valeur {
+  position: relative;
+  z-index: 1;
+  padding-left: 10px;
+  font-size: 0.82rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+.bk-historique-valeur--muted {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+  padding-left: 0;
+}
+
+@media (max-width: 640px) {
+  .bk-historique-head, .bk-historique-row {
+    grid-template-columns: 80px 1fr 1fr;
+    font-size: 0.72rem;
+  }
+}
+
+.bk-historique-totaux {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
 }
-@media (max-width: 480px) {
-  .bk-date-grid { grid-template-columns: 1fr; }
+@media (max-width: 560px) {
+  .bk-historique-totaux { grid-template-columns: 1fr; }
 }
-.bk-date-grid label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-}
-.bk-date-grid input {
-  padding: 0.6rem 0.75rem;
+.bk-historique-totaux div {
+  padding: 0.85rem 1rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-base);
   background: var(--color-surface);
-  color: var(--color-text);
-  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
-.bk-date-grid input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+.bk-historique-totaux span { font-size: 0.75rem; color: var(--color-text-muted); }
+.bk-historique-totaux strong { font-size: 1rem; color: var(--color-text); }
+.bk-totaux-note {
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+/* --- Étape 4 : récapitulatif --- */
+.bk-recap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.bk-recap-block {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 1rem;
+  background: var(--color-surface);
+}
+.bk-recap-block h5 {
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+}
+.bk-recap-block p { font-size: 0.85rem; color: var(--color-text); margin: 0; }
+.bk-recap-montant { font-size: 1.1rem; font-weight: var(--font-weight-bold); color: var(--color-primary); }
+
+/* --- Checklist pièces à fournir (étape 4, à l'écran uniquement) --- */
+.bk-pieces-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.5rem;
+  background: var(--color-surface);
+}
+.bk-pieces-card h5 {
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0 0 0.3rem;
+}
+.bk-pieces-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+}
+.bk-pieces-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+.bk-pieces-list li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-primary);
 }
 
 .bk-error-msg {
   color: var(--color-negative);
   background: var(--color-negative-subtle);
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-base);
+  font-size: 0.83rem;
+  margin-bottom: 1rem;
+}
+
+.bk-warning-msg {
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
   padding: 0.7rem 0.9rem;
   border-radius: var(--radius-base);
   font-size: 0.83rem;
@@ -245,27 +481,13 @@
   border-top: 1px solid var(--color-border);
 }
 
-/* --- Récapitulatif --- */
+/* --- Récapitulatif (aside) --- */
 .bk-summary-card { position: sticky; top: 1.5rem; }
 .bk-summary-card h4 {
   font-size: 0.9rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
   margin-bottom: 1rem;
-}
-.bk-summary-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
-}
-.bk-summary-list li {
-  font-size: 0.82rem;
-  color: var(--color-text);
-  padding: 0.5rem 0.65rem;
-  background: var(--color-primary-subtle);
-  border-radius: var(--radius-base);
 }
 .bk-summary-row {
   display: flex;
@@ -275,6 +497,7 @@
   border-top: 1px solid var(--color-border);
   font-size: 0.82rem;
 }
+.bk-summary-row:first-of-type { border-top: none; }
 .bk-summary-row span { color: var(--color-text-muted); }
 .bk-summary-row strong { color: var(--color-text); text-align: right; }
 
