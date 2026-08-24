@@ -1,0 +1,4 @@
+/* Bootstrap pagination gère les styles. Override couleur active uniquement. */
+.page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
+}

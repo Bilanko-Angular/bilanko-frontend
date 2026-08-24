@@ -1,0 +1,1 @@
+export type StockStatus = 'ok' | 'warning' | 'error';

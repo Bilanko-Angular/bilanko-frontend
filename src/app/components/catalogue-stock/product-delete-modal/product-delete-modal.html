@@ -1,0 +1,47 @@
+<!-- product-delete-modal.html -->
+@if (produit(); as p) {
+  <!-- Backdrop -->
+  <div class="modal-backdrop fade show" style="z-index: 1040;"></div>
+
+  <!-- Modal -->
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" style="z-index: 1050;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="background-color: var(--color-surface); border-color: var(--color-border); color: var(--color-text);">
+
+        <!-- Header -->
+        <div class="modal-header" style="border-color: var(--color-border);">
+          <h5 class="modal-title d-flex align-items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Supprimer le produit
+          </h5>
+          <button type="button" class="btn-close" (click)="annuler.emit()" aria-label="Fermer"
+            style="filter: var(--bs-btn-close-filter, none);"></button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body">
+          <p class="mb-0" style="color: var(--color-text-muted);">
+            Êtes-vous sûr de vouloir supprimer le produit
+            <strong style="color: var(--color-text);">{{ p.nom }}</strong>
+            ({{ p.reference }}) ?
+            <br>
+            <span class="small text-danger mt-1 d-block">⚠ Cette action est irréversible.</span>
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer" style="border-color: var(--color-border);">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="annuler.emit()">
+            Annuler
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="confirmer.emit()">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
