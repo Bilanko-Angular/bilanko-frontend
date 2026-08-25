@@ -4,9 +4,9 @@
       @if (step() === 1) {
         <app-verify-mail (mailVerified)="onMailVerified($event)"></app-verify-mail>
       } @else if (step() === 2) {
-        <app-input-otp-form (otpVerified)="onOtpVerified()" (restart)="onRestart()" [email]="email()"></app-input-otp-form>
+        <app-input-otp-form (otpVerified)="onOtpVerified($event)" (restart)="onRestart()" [email]="email()"></app-input-otp-form>
       } @else if (step() === 3) {
-        <app-reset-your-password (passwordReset)="onPasswordReset()"></app-reset-your-password>
+        <app-reset-your-password (passwordReset)="onPasswordReset()" [token]="token()"></app-reset-your-password>
       }
     </div>
   </div>

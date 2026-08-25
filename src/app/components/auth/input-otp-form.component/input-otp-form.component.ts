@@ -1,5 +1,9 @@
 import { afterNextRender, Component, computed, ElementRef, type OnDestroy, QueryList, signal, ViewChildren, output, input } from '@angular/core';
 import { form, FormRoot, maxLength, minLength, required, submit } from '@angular/forms/signals';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { firstValueFrom } from 'rxjs';
+import { inject } from '@angular/core';
 
 @Component({
 	selector: 'app-input-otp-form',
@@ -21,10 +25,11 @@ export class InputOtpFormComponent implements OnDestroy {
 	public readonly otpIndexes = Array.from({ length: this.maxLength }, (_, i) => i);
 	public readonly otpDigits = signal<string[]>(Array(this.maxLength).fill(''));
 
-	public readonly otpVerified = output<void>();
+	public readonly otpVerified = output<string>();
 	public readonly restart = output<void>();
 	public readonly email = input<string>('');
 	private attempts = 0;
+	private readonly http = inject(HttpClient);
 
 	private readonly _model = signal({
 		otp: '',
@@ -41,17 +46,19 @@ export class InputOtpFormComponent implements OnDestroy {
 			submission: {
 				action: async () => {
 					const model = this._model();
-					if (model.otp === '123456') { // Mock valid OTP
-						this.toastMessage.set(`Votre code ${model.otp} a été soumis et validé.`);
-						setTimeout(() => this.otpVerified.emit(), 1000);
-					} else {
-						this.attempts++;
-						if (this.attempts >= 5) {
-							this.toastMessage.set('Trop de tentatives échouées. Veuillez recommencer.');
-							setTimeout(() => this.restart.emit(), 2000);
+					try {
+						const res = await firstValueFrom(this.http.post<any>(`${environment.baseApiUrl}/auth/password/verify-otp`, {
+							email: this.email(),
+							otp: model.otp
+						}));
+						if (res.success) {
+							this.toastMessage.set(res.message || `Votre code a été soumis et validé.`);
+							setTimeout(() => this.otpVerified.emit(res.token), 1000);
 						} else {
-							this.toastMessage.set(`Code invalide. Tentative ${this.attempts}/5`);
+							this.handleInvalidOtp(res.message);
 						}
+					} catch (err: any) {
+						this.handleInvalidOtp(err.error?.message || 'Erreur lors de la vérification.');
 					}
 				},
 			},
@@ -106,8 +113,26 @@ export class InputOtpFormComponent implements OnDestroy {
 	}
 
 	resendOtp() {
-		// ajoute ici ta requête API pour renvoyer le code
-		this.resetCountdown();
+		this.http.post<any>(`${environment.baseApiUrl}/auth/password/forgot`, { email: this.email() })
+			.subscribe({
+				next: () => {
+					this.toastMessage.set('Code renvoyé avec succès.');
+					this.resetCountdown();
+				},
+				error: () => {
+					this.toastMessage.set('Erreur lors du renvoi du code.');
+				}
+			});
+	}
+
+	private handleInvalidOtp(msg: string) {
+		this.attempts++;
+		if (this.attempts >= 5) {
+			this.toastMessage.set('Trop de tentatives échouées. Veuillez recommencer.');
+			setTimeout(() => this.restart.emit(), 2000);
+		} else {
+			this.toastMessage.set(msg || `Code invalide. Tentative ${this.attempts}/5`);
+		}
 	}
 
 	ngOnDestroy() {

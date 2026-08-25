@@ -1,4 +1,6 @@
-import { Component, inject, output, ViewChild } from '@angular/core';
+import { Component, inject, output, ViewChild, input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
 @Component({
@@ -12,10 +14,13 @@ export class ResetYourPasswordComponent {
   @ViewChild('passwordInput') passwordInput!: HTMLInputElement;
   @ViewChild('confirmPasswordInput') confirmPasswordInput!: HTMLInputElement;
   private readonly fb = inject(FormBuilder);
+  private readonly http = inject(HttpClient);
   passwordReset = output<void>();
+  public readonly token = input.required<string>();
 
   isLoading = false;
   success = false;
+  errorMessage = '';
 
   readonly resetForm = this.fb.group(
     {
@@ -48,14 +53,26 @@ export class ResetYourPasswordComponent {
 
     this.isLoading = true;
 
-    // Simuler l'appel API
-    setTimeout(() => {
-      this.isLoading = false;
-      this.success = true;
-      setTimeout(() => {
-        this.passwordReset.emit();
-      }, 2000);
-    }, 1000);
+    this.http.post<any>(`${environment.baseApiUrl}/auth/password/reset`, {
+      token: this.token(),
+      newPassword: this.resetForm.value.password
+    }).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        if (res.success) {
+          this.success = true;
+          setTimeout(() => {
+            this.passwordReset.emit();
+          }, 2000);
+        } else {
+          this.errorMessage = res.message;
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.message || 'Une erreur est survenue lors de la réinitialisation.';
+      }
+    });
   }
   togglePasswordVisibility(inputElement: HTMLInputElement): void {
     if (inputElement.type === 'password') {

@@ -26,7 +26,8 @@ export class MotDePasseOublie {
     this.step.set(2);
   }
 
-  onOtpVerified() {
+  onOtpVerified(token: string) {
+    this.token.set(token);
     this.step.set(3);
   }
 
