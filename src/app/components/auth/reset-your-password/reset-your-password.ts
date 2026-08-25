@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
 @Component({
@@ -9,8 +9,10 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
   styleUrl: './reset-your-password.css'
 })
 export class ResetYourPasswordComponent {
+  @ViewChild('passwordInput') passwordInput!: HTMLInputElement;
+  @ViewChild('confirmPasswordInput') confirmPasswordInput!: HTMLInputElement;
+  showPassword = false;
   private readonly fb = inject(FormBuilder);
-  
   passwordReset = output<void>();
 
   isLoading = false;
@@ -55,5 +57,13 @@ export class ResetYourPasswordComponent {
         this.passwordReset.emit();
       }, 2000);
     }, 1000);
+  }
+    togglePasswordVisibility(inputElement: HTMLInputElement): void {
+    this.showPassword = !this.showPassword;
+    if (this.showPassword) {
+      inputElement.type = 'text';
+    } else {
+      inputElement.type = 'password';
+    }
   }
 }
