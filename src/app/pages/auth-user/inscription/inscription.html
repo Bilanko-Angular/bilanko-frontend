@@ -1,32 +1,47 @@
+<!-- src/app/pages/auth-user/inscription/inscription.html -->
 <app-auth-user>
   <div class="auth-content">
-    <div class="auth-header">
+    <!-- En-tête -->
+    <div class="auth-header mb-4">
       <h1 class="bk-auth-title">{{ prefs.t().createAccount }}</h1>
-      <p class="bk-auth-subtitle">{{ prefs.t().registerSubtitle }}</p>
+      <p class="bk-auth-subtitle text-muted mb-0">{{ prefs.t().registerSubtitle }}</p>
     </div>
 
     @if (registerSuccess) {
-      <div class="bk-auth-success">
-        <span class="material-icons">check_circle</span>
+      <div class="alert alert-success d-flex align-items-center gap-2 mb-3" role="alert">
+        <span class="material-icons flex-shrink-0">check_circle</span>
         <div>
-          <strong>{{ prefs.t().emailSent }}</strong>
-          <p>{{ prefs.t().backToLogin }}</p>
+          <strong class="d-block small">{{ prefs.t().emailSent }}</strong>
+          <span class="small opacity-75">{{ prefs.t().backToLogin }}</span>
         </div>
       </div>
     }
 
     @if (registerError) {
-      <div class="bk-auth-error">
-        <span class="material-icons">error_outline</span>
-        {{ registerError }}
+      <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3" role="alert">
+        <span class="material-icons fs-6">error_outline</span>
+        <span class="small">{{ registerError }}</span>
       </div>
     }
 
     @if (!registerSuccess) {
-      <form (ngSubmit)="soumettre()" [formGroup]="inscriptionForm" novalidate>
-        <div class="bk-form-row">
-          <div class="bk-form-group">
-            <label for="nom" class="bk-form-label">{{ prefs.t().lastName }}</label>
+
+      <!-- Bouton Google (avant le formulaire) -->
+      <app-google-login-button label="S'inscrire avec Google" (success)="onGoogleSuccess()" (error)="onGoogleError($event)" />
+
+      <!-- Séparateur -->
+      <div class="bk-divider d-flex align-items-center gap-2 mb-3">
+        <hr class="flex-grow-1 m-0">
+        <span class="small text-muted px-1">ou</span>
+        <hr class="flex-grow-1 m-0">
+      </div>
+
+      <form (ngSubmit)="soumettre()" [formGroup]="inscriptionForm" novalidate class="d-flex flex-column gap-3">
+
+        <!-- Nom & Prénom -->
+        <div class="row g-2">
+          <div class="col-6">
+            <label for="nom" class="form-label bk-form-label">{{ prefs.t().lastName }}</label>
             <div class="input-group bk-input-group">
               <span class="input-group-text bk-input-icon">
                 <span class="material-icons fs-6">person</span>
@@ -34,15 +49,15 @@
               <input type="text" id="nom" class="form-control bk-input" [placeholder]="prefs.t().lastName" formControlName="nom" autocomplete="family-name">
             </div>
             @if (nom.touched && nom.hasError('required')) {
-              <div class="bk-field-error">
-                <span class="material-icons">error_outline</span>
-                {{ prefs.t().lastName }} {{ prefs.t().requiredField }}
+              <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
+                <span class="material-icons" style="font-size:.9rem">error_outline</span>
+                <small>{{ prefs.t().lastName }} {{ prefs.t().requiredField }}</small>
               </div>
             }
           </div>
 
-          <div class="bk-form-group">
-            <label for="prenom" class="bk-form-label">{{ prefs.t().firstName }}</label>
+          <div class="col-6">
+            <label for="prenom" class="form-label bk-form-label">{{ prefs.t().firstName }}</label>
             <div class="input-group bk-input-group">
               <span class="input-group-text bk-input-icon">
                 <span class="material-icons fs-6">person_outline</span>
@@ -52,8 +67,9 @@
           </div>
         </div>
 
-        <div class="bk-form-group">
-          <label for="email" class="bk-form-label">{{ prefs.t().email }}</label>
+        <!-- Email -->
+        <div class="mb-0">
+          <label for="email" class="form-label bk-form-label">{{ prefs.t().email }}</label>
           <div class="input-group bk-input-group">
             <span class="input-group-text bk-input-icon">
               <span class="material-icons fs-6">email</span>
@@ -61,101 +77,105 @@
             <input type="email" id="email" class="form-control bk-input" placeholder="exemple@email.com" formControlName="email" autocomplete="email">
           </div>
           @if (email.touched && email.hasError('required')) {
-            <div class="bk-field-error">
-              <span class="material-icons">error_outline</span>
-              {{ prefs.t().emailRequired }}
+            <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
+              <span class="material-icons" style="font-size:.9rem">error_outline</span>
+              <small>{{ prefs.t().emailRequired }}</small>
             </div>
           }
           @if (email.touched && email.hasError('email')) {
-            <div class="bk-field-error">
-              <span class="material-icons">error_outline</span>
-              {{ prefs.t().invalidEmail }}
+            <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
+              <span class="material-icons" style="font-size:.9rem">error_outline</span>
+              <small>{{ prefs.t().invalidEmail }}</small>
             </div>
           }
         </div>
 
-        <div class="bk-form-group">
-          <label for="password" class="bk-form-label">{{ prefs.t().password }}</label>
-          <div class="input-group bk-input-group">
+        <!-- Mot de passe -->
+        <div class="mb-0">
+          <label for="password" class="form-label bk-form-label" >{{ prefs.t().password }}</label>
+          <div class="input-group bk-input-group" >
             <span class="input-group-text bk-input-icon">
               <span class="material-icons fs-6">lock</span>
             </span>
-            <input type="password" id="password" class="form-control bk-input" formControlName="password" autocomplete="new-password">
+            <input type="password" id="password" class="form-control bk-input" formControlName="password" autocomplete="new-password" #passwordInput>
+            <button type="button" class="input-group-text bk-input-icon" (click)="togglePasswordVisibility(passwordInput)">
+              <span class="material-icons fs-6">{{ passwordInput.type === 'password' ? 'visibility' : 'visibility_off' }}</span>
+            </button>
           </div>
           @if (password.touched && password.hasError('required')) {
-            <div class="bk-field-error">
-              <span class="material-icons">error_outline</span>
-              {{ prefs.t().passwordRequired }}
+            <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
+              <span class="material-icons" style="font-size:.9rem">error_outline</span>
+              <small>{{ prefs.t().passwordRequired }}</small>
             </div>
           }
           @if (password.touched && password.hasError('pattern')) {
-            <div class="bk-field-error">
-              <span class="material-icons">error_outline</span>
-              {{ prefs.t().invalidPassword }}
+            <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
+              <span class="material-icons" style="font-size:.9rem">error_outline</span>
+              <small>{{ prefs.t().invalidPassword }}</small>
             </div>
           }
 
           @if (password.value) {
-            <div class="bk-password-checklist">
-              <span class="bk-pwd-rule" [class.ok]="hasMinLength()">
-                <span class="material-icons">{{ hasMinLength() ? 'check_circle' : 'radio_button_unchecked' }}</span>
-                8+
+            <div class="bk-password-checklist d-flex flex-wrap gap-2 p-2 mt-2 rounded border">
+              <span class="bk-pwd-rule d-inline-flex align-items-center gap-1 small" [class.ok]="hasMinLength()">
+                <span class="material-icons" style="font-size:.9rem">{{ hasMinLength() ? 'check_circle' : 'radio_button_unchecked' }}</span>8+
               </span>
-              <span class="bk-pwd-rule" [class.ok]="hasUpperCase()">
-                <span class="material-icons">{{ hasUpperCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
-                A-Z
+              <span class="bk-pwd-rule d-inline-flex align-items-center gap-1 small" [class.ok]="hasUpperCase()">
+                <span class="material-icons" style="font-size:.9rem">{{ hasUpperCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>A-Z
               </span>
-              <span class="bk-pwd-rule" [class.ok]="hasLowerCase()">
-                <span class="material-icons">{{ hasLowerCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>
-                a-z
+              <span class="bk-pwd-rule d-inline-flex align-items-center gap-1 small" [class.ok]="hasLowerCase()">
+                <span class="material-icons" style="font-size:.9rem">{{ hasLowerCase() ? 'check_circle' : 'radio_button_unchecked' }}</span>a-z
               </span>
-              <span class="bk-pwd-rule" [class.ok]="hasNumber()">
-                <span class="material-icons">{{ hasNumber() ? 'check_circle' : 'radio_button_unchecked' }}</span>
-                0-9
+              <span class="bk-pwd-rule d-inline-flex align-items-center gap-1 small" [class.ok]="hasNumber()">
+                <span class="material-icons" style="font-size:.9rem">{{ hasNumber() ? 'check_circle' : 'radio_button_unchecked' }}</span>0-9
               </span>
-              <span class="bk-pwd-rule" [class.ok]="hasSpecialChar()">
-                <span class="material-icons">{{ hasSpecialChar() ? 'check_circle' : 'radio_button_unchecked' }}</span>
-                #?!
+              <span class="bk-pwd-rule d-inline-flex align-items-center gap-1 small" [class.ok]="hasSpecialChar()">
+                <span class="material-icons" style="font-size:.9rem">{{ hasSpecialChar() ? 'check_circle' : 'radio_button_unchecked' }}</span>#?!
               </span>
             </div>
           }
         </div>
 
-        <div class="bk-form-group">
-          <label for="confirmPassword" class="bk-form-label">{{ prefs.t().confirmPassword }}</label>
+        <!-- Confirmation mot de passe -->
+        <div class="mb-0">
+          <label for="confirmPassword" class="form-label bk-form-label">{{ prefs.t().confirmPassword }}</label>
           <div class="input-group bk-input-group">
             <span class="input-group-text bk-input-icon">
               <span class="material-icons fs-6">lock_outline</span>
             </span>
-            <input type="password" id="confirmPassword" class="form-control bk-input" [placeholder]="prefs.t().confirmYourPassword" formControlName="confirmPassword" autocomplete="new-password">
+            <input type="password" id="confirmPassword" class="form-control bk-input" [placeholder]="prefs.t().confirmYourPassword" formControlName="confirmPassword" autocomplete="new-password" #confirmPasswordInput>
+            <button type="button" class="input-group-text bk-input-icon" (click)="togglePasswordVisibility(confirmPasswordInput)">
+              <span class="material-icons fs-6">{{ confirmPasswordInput.type === 'password' ? 'visibility' : 'visibility_off' }}</span>
+            </button>          
           </div>
           @if (confirmPassword.touched && inscriptionForm.hasError('passwordMismatch')) {
-            <div class="bk-field-error">
-              <span class="material-icons">error_outline</span>
-              {{ prefs.t().passwordMismatch }}
+            <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
+              <span class="material-icons" style="font-size:.9rem">error_outline</span>
+              <small>{{ prefs.t().passwordMismatch }}</small>
             </div>
           }
           @if (confirmPassword.touched && confirmPassword.hasError('required')) {
-            <div class="bk-field-error">
-              <span class="material-icons">error_outline</span>
-              {{ prefs.t().confirmPassword }} {{ prefs.t().requiredField }}
+            <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
+              <span class="material-icons" style="font-size:.9rem">error_outline</span>
+              <small>{{ prefs.t().confirmPassword }} {{ prefs.t().requiredField }}</small>
             </div>
           }
         </div>
 
-        <button type="submit" class="btn bk-btn-submit w-100" [disabled]="inscriptionForm.invalid || isLoading">
+        <!-- Bouton Inscription -->
+        <button type="submit" class="btn bk-btn-submit w-100 d-flex align-items-center justify-content-center gap-2" [disabled]="inscriptionForm.invalid || isLoading">
           @if (isLoading) {
             <span class="bk-spinner"></span>
             <span>{{ prefs.t().registering }}</span>
           } @else {
             <span>{{ prefs.t().register }}</span>
-            <span class="material-icons">arrow_forward</span>
+            <span class="material-icons" style="font-size:1.1rem">arrow_forward</span>
           }
         </button>
 
-        <p class="text-center bk-auth-footer">
+        <p class="text-center bk-auth-footer small mb-0">
           {{ prefs.t().alreadyAccount }}
-          <a routerLink="/connexion" class="bk-auth-link">{{ prefs.t().login }}</a>
+          <a routerLink="/connexion" class="bk-auth-link fw-medium">{{ prefs.t().login }}</a>
         </p>
       </form>
     }

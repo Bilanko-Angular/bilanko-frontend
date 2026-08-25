@@ -61,4 +61,16 @@ export class AuthStoreService {
     }
     return null;
   }
+
+  async loginWithGoogle(idToken: string): Promise<void> {
+    try {
+      const response = await this.authApiService.loginWithGoogle(idToken);
+      if (response?.token) {
+        this.saveToken(response.token);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la connexion Google :', error);
+      throw error;
+    }
+  }
 }

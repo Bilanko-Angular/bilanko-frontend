@@ -1,4 +1,6 @@
 @import url('./assets/styles/theme.css');
+@import url('./assets/styles/bootstrap.config.css'); /* Add this line */
+
 .btn {
   display: inline-flex;
   align-items: center;

@@ -3,6 +3,38 @@
   width: 100%;
 }
 
+/* ============================================================
+   BOUTON GOOGLE
+   ============================================================ */
+.bk-btn-google {
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-base);
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.bk-btn-google:hover {
+  background-color: var(--color-background);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+.bk-btn-google:active {
+  transform: scale(0.98);
+}
+
+/* Séparateur ou */
+.bk-divider hr {
+  border-color: var(--color-border);
+  opacity: 1;
+}
+
 /* En-tête */
 .auth-header {
   margin-bottom: 1.5rem;
