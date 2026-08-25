@@ -1,5 +1,5 @@
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { PreferencesService } from '../../../services/preferences';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
@@ -18,7 +18,12 @@ export class Aside {
 
   readonly profileImageError = signal(false);
 
-
+  constructor() {
+    effect(() => {
+      this.userStore.user()?.profilePicture; // dépendance
+      this.profileImageError.set(false);
+    }, { allowSignalWrites: true });
+  }
   logout(): void {
     this.router.navigate(['/connexion']);
   }
