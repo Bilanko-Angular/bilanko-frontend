@@ -1,0 +1,43 @@
+	.otp-card {
+		border-radius: 1rem;
+	}
+
+	.otp-icon {
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--bs-primary-bg-subtle, #e7f1ff);
+		color: var(--bs-primary, #0d6efd);
+	}
+
+	.otp-icon .material-icons {
+		font-size: 1.5rem;
+	}
+
+	.otp-digit {
+		width: 3rem;
+		height: 3.25rem;
+		font-size: 1.5rem;
+		border-radius: 0.6rem;
+		border: 1.5px solid var(--bs-border-color, #dee2e6);
+		transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+	}
+
+	.otp-digit:focus {
+		border-color: var(--bs-primary, #0d6efd);
+		box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+		transform: translateY(-1px);
+	}
+
+	.otp-digit.filled {
+		border-color: var(--bs-primary, #0d6efd);
+		background-color: var(--bs-primary-bg-subtle, #e7f1ff);
+	}
+
+	.toast {
+		border-radius: 0.75rem;
+		overflow: hidden;
+	}
