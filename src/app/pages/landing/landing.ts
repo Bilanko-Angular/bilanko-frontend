@@ -1,17 +1,22 @@
-import { Component } from '@angular/core';
-import { NavbarLanding } from "../../components/landing/navbar-landing/navbar-landing";
-import { Hero } from "../../components/landing/hero/hero";
-import { Features } from "../../components/landing/features/features";
-import { HowItWorks } from "../../components/landing/how-it-works/how-it-works";
-import { CtaBanner } from "../../components/landing/cta-banner/cta-banner";
-import { FooterLanding } from "../../components/landing/footer-landing/footer-landing";
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ThemeService } from '../../services/theme';
 
 @Component({
   selector: 'app-landing',
-  imports: [NavbarLanding, Hero, Features, HowItWorks, CtaBanner, FooterLanding],
+  standalone: true,
+  imports: [RouterLink],
   templateUrl: './landing.html',
-  styleUrl: './landing.css',
+  styleUrls: ['./landing.css'],
 })
 export class Landing {
+  readonly themeService = inject(ThemeService);
 
+  toggleTheme(): void {
+    this.themeService.toggle();
+  }
+
+  get isDark(): boolean {
+    return this.themeService.theme() === 'dark';
+  }
 }

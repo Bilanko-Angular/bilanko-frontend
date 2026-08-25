@@ -1,8 +1,1011 @@
-<app-navbar-landing />
+<!-- ============================================================
+     BILANKO — LANDING PAGE
+============================================================ -->
+
+<div class="landing-page">
+
+  <!-- ==========================================================
+       NAVBAR
+  =========================================================== -->
+  <header class="landing-header">
+    <nav class="landing-nav">
+
+      <!-- LOGO -->
+      <a routerLink="/" class="brand">
+        <span class="brand-logo">
+          B
+        </span>
+
+        <span class="brand-text">
+          Bilanko
+        </span>
+      </a>
+
+      <!-- NAVIGATION -->
+      <div class="nav-links">
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#comment-ca-marche">Comment ça marche</a>
+        <a href="#pourquoi-bilanko">Pourquoi Bilanko</a>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="nav-actions">
+
+        <!-- DARK MODE -->
+        <button
+          type="button"
+          class="theme-button"
+          (click)="toggleTheme()"
+          [attr.aria-label]="isDark ? 'Activer le mode clair' : 'Activer le mode sombre'"
+          [attr.title]="isDark ? 'Mode clair' : 'Mode sombre'"
+        >
+
+          @if (isDark) {
+            <!-- SUN SVG -->
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="theme-icon"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2"></path>
+              <path d="M12 20v2"></path>
+              <path d="m4.93 4.93 1.41 1.41"></path>
+              <path d="m17.66 17.66 1.41 1.41"></path>
+              <path d="M2 12h2"></path>
+              <path d="M20 12h2"></path>
+              <path d="m6.34 17.66-1.41 1.41"></path>
+              <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+          } @else {
+            <!-- MOON SVG -->
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="theme-icon"
+            >
+              <path d="M21 12.8A8.5 8.5 0 0 1 11.2 3a8.5 8.5 0 1 0 9.8 9.8Z"></path>
+            </svg>
+          }
+
+          <span class="theme-label">
+            {{ isDark ? '' : '' }}
+          </span>
+        </button>
+
+        <!-- CONNEXION -->
+        <a
+          routerLink="/connexion"
+          class="login-link"
+        >
+          Se connecter
+        </a>
+
+        <!-- INSCRIPTION -->
+        <a
+          routerLink="/inscription"
+          class="nav-cta"
+        >
+          Commencer
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14"></path>
+            <path d="m13 6 6 6-6 6"></path>
+          </svg>
+        </a>
+
+      </div>
+
+      <!-- MOBILE -->
+      <button
+        type="button"
+        class="mobile-menu"
+        aria-label="Ouvrir le menu"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 18h16"></path>
+        </svg>
+      </button>
+
+    </nav>
+  </header>
+
+
+  <!-- ==========================================================
+       HERO
+  =========================================================== -->
   <main>
-    <app-hero />
-    <app-features />
-    <app-how-it-works />
-    <app-cta-banner />
+
+    <section class="hero">
+
+      <div class="hero-background">
+        <div class="hero-glow hero-glow-one"></div>
+        <div class="hero-glow hero-glow-two"></div>
+      </div>
+
+      <div class="hero-container">
+
+        <!-- HERO TEXT -->
+        <div class="hero-content">
+
+          <h1 class="hero-title">
+            Gérez votre activité.
+            <span>Préparez votre avenir.</span>
+          </h1>
+
+          <p class="hero-description">
+            Bilanko vous aide à suivre vos ventes, votre stock et vos finances
+            afin de transformer votre activité en données claires,
+            fiables et prêtes pour votre banque.
+          </p>
+
+          <div class="hero-actions">
+
+            <a
+              routerLink="/inscription"
+              class="primary-button"
+            >
+              Créer mon compte
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </a>
+
+            <a
+              href="#comment-ca-marche"
+              class="secondary-button"
+            >
+              Découvrir Bilanko
+            </a>
+
+          </div>
+
+          <div class="hero-trust">
+
+            <div class="trust-item">
+              <span class="trust-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6"></path>
+                </svg>
+              </span>
+              Simple à utiliser
+            </div>
+
+            <div class="trust-item">
+              <span class="trust-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"></path>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg>
+              </span>
+              Données sécurisées
+            </div>
+
+            <div class="trust-item">
+              <span class="trust-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2v20"></path>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+              </span>
+              Pensé pour les PME
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- HERO DASHBOARD -->
+        <div class="hero-visual">
+
+          <div class="dashboard-window">
+
+            <!-- DASHBOARD TOP -->
+            <div class="dashboard-top">
+
+              <div class="dashboard-brand">
+                <span class="mini-logo">B</span>
+                <span>Tableau de bord</span>
+              </div>
+
+              <div class="dashboard-user">
+                <span></span>
+                <span></span>
+              </div>
+
+            </div>
+
+
+            <!-- DASHBOARD BODY -->
+            <div class="dashboard-body">
+
+              <div class="dashboard-heading">
+                <div>
+                  <small>Vue générale</small>
+                  <h3>Bonjour, bienvenue</h3>
+                </div>
+
+                <div class="dashboard-date">
+                  Cette semaine
+                </div>
+              </div>
+
+
+              <!-- STATS -->
+              <div class="stats-grid">
+
+                <div class="stat-card">
+                  <div class="stat-top">
+                    <span>Ventes</span>
+
+                    <span class="stat-icon green">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M3 3v18h18"></path>
+                        <path d="m7 16 4-5 3 3 5-7"></path>
+                      </svg>
+                    </span>
+                  </div>
+
+                  <strong>1 284 500 FCFA</strong>
+
+                  <small class="positive">
+                    +12,8% cette semaine
+                  </small>
+                </div>
+
+
+                <div class="stat-card">
+                  <div class="stat-top">
+                    <span>Produits</span>
+
+                    <span class="stat-icon blue">
+                      <svg viewBox="0 0 24 24">
+                        <path d="m21 8-9-5-9 5 9 5 9-5Z"></path>
+                        <path d="m3 8 9 5 9-5"></path>
+                        <path d="M3 8v8l9 5 9-5V8"></path>
+                      </svg>
+                    </span>
+                  </div>
+
+                  <strong>248</strong>
+
+                  <small>
+                    18 produits à surveiller
+                  </small>
+                </div>
+
+
+                <div class="stat-card">
+                  <div class="stat-top">
+                    <span>Documents</span>
+
+                    <span class="stat-icon orange">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                        <path d="M14 2v6h6"></path>
+                        <path d="M8 13h8"></path>
+                        <path d="M8 17h6"></path>
+                      </svg>
+                    </span>
+                  </div>
+
+                  <strong>12</strong>
+
+                  <small>
+                    Documents disponibles
+                  </small>
+                </div>
+
+              </div>
+
+
+              <!-- CHART -->
+              <div class="chart-card">
+
+                <div class="chart-header">
+                  <div>
+                    <span>Évolution des ventes</span>
+                    <strong>4 850 000 FCFA</strong>
+                  </div>
+
+                  <span class="chart-growth">
+                    +18.4%
+                  </span>
+                </div>
+
+                <div class="chart">
+
+                  <div class="chart-grid-line line-one"></div>
+                  <div class="chart-grid-line line-two"></div>
+                  <div class="chart-grid-line line-three"></div>
+
+                  <svg
+                    viewBox="0 0 600 180"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <defs>
+                      <linearGradient
+                        id="chartGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stop-color="#05DF72"
+                          stop-opacity="0.28"
+                        />
+                        <stop
+                          offset="100%"
+                          stop-color="#05DF72"
+                          stop-opacity="0"
+                        />
+                      </linearGradient>
+                    </defs>
+
+                    <path
+                      class="chart-area"
+                      d="M0 145
+                         C45 138 60 110 100 118
+                         C140 126 155 85 200 94
+                         C245 103 260 68 300 76
+                         C340 84 365 55 405 64
+                         C445 73 460 42 500 48
+                         C540 54 560 25 600 30
+                         L600 180
+                         L0 180 Z"
+                    ></path>
+
+                    <path
+                      class="chart-line"
+                      d="M0 145
+                         C45 138 60 110 100 118
+                         C140 126 155 85 200 94
+                         C245 103 260 68 300 76
+                         C340 84 365 55 405 64
+                         C445 73 460 42 500 48
+                         C540 54 560 25 600 30"
+                    ></path>
+
+                    <circle
+                      cx="500"
+                      cy="48"
+                      r="5"
+                      class="chart-point"
+                    ></circle>
+
+                  </svg>
+
+                </div>
+
+                <div class="chart-labels">
+                  <span>Lun</span>
+                  <span>Mar</span>
+                  <span>Mer</span>
+                  <span>Jeu</span>
+                  <span>Ven</span>
+                  <span>Sam</span>
+                  <span>Dim</span>
+                </div>
+
+              </div>
+
+
+              <!-- BOTTOM -->
+              <div class="dashboard-bottom">
+
+                <div class="activity-card">
+
+                  <div class="card-title">
+                    <strong>Activité récente</strong>
+                    <span>Voir tout</span>
+                  </div>
+
+                  <div class="activity-row">
+
+                    <span class="activity-icon">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M6 2h12v20H6z"></path>
+                        <path d="M9 6h6"></path>
+                        <path d="M9 10h6"></path>
+                        <path d="M9 14h4"></path>
+                      </svg>
+                    </span>
+
+                    <div>
+                      <strong>Nouvelle vente</strong>
+                      <small>Il y a 12 minutes</small>
+                    </div>
+
+                    <b>+125 000</b>
+
+                  </div>
+
+                  <div class="activity-row">
+
+                    <span class="activity-icon">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16"></path>
+                        <path d="M6 7V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"></path>
+                        <path d="M5 7v12h14V7"></path>
+                      </svg>
+                    </span>
+
+                    <div>
+                      <strong>Stock mis à jour</strong>
+                      <small>Il y a 35 minutes</small>
+                    </div>
+
+                    <b>+24 produits</b>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- FLOATING CARD -->
+          <div class="floating-result">
+
+            <span class="floating-check">
+              <svg viewBox="0 0 24 24">
+                <path d="m5 12 4 4L19 6"></path>
+              </svg>
+            </span>
+
+            <div>
+              <strong>Document généré</strong>
+              <small>Votre dossier est prêt</small>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         FEATURES
+    ========================================================= -->
+    <section
+      class="features-section"
+      id="fonctionnalites"
+    >
+
+      <div class="section-container">
+
+        <div class="section-heading center">
+
+          <span class="section-eyebrow">
+            FONCTIONNALITÉS
+          </span>
+
+          <h2>
+            Tout ce qu'il vous faut
+            <span>au même endroit.</span>
+          </h2>
+
+          <p>
+            Une solution pensée pour vous faire gagner du temps,
+            mieux comprendre votre activité et prendre de meilleures décisions.
+          </p>
+
+        </div>
+
+
+        <div class="features-grid">
+
+          <!-- CARD 1 -->
+          <article class="feature-card">
+
+            <div class="feature-icon green">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"></path>
+                <path d="m7 16 4-5 3 3 5-7"></path>
+              </svg>
+            </div>
+
+            <h3>Suivez vos ventes</h3>
+
+            <p>
+              Visualisez vos performances et comprenez rapidement
+              l'évolution de votre chiffre d'affaires.
+            </p>
+
+            <a href="#comment-ca-marche">
+              Découvrir
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </a>
+
+          </article>
+
+
+          <!-- CARD 2 -->
+          <article class="feature-card">
+
+            <div class="feature-icon blue">
+              <svg viewBox="0 0 24 24">
+                <path d="m21 8-9-5-9 5 9 5 9-5Z"></path>
+                <path d="M3 8v8l9 5 9-5V8"></path>
+                <path d="m12 13 9-5"></path>
+                <path d="m12 13-9-5"></path>
+              </svg>
+            </div>
+
+            <h3>Maîtrisez votre stock</h3>
+
+            <p>
+              Sachez ce qui entre, ce qui sort et quels produits
+              nécessitent votre attention.
+            </p>
+
+            <a href="#comment-ca-marche">
+              Découvrir
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </a>
+
+          </article>
+
+
+          <!-- CARD 3 -->
+          <article class="feature-card">
+
+            <div class="feature-icon orange">
+              <svg viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                <path d="M14 2v6h6"></path>
+                <path d="M8 13h8"></path>
+                <path d="M8 17h5"></path>
+              </svg>
+            </div>
+
+            <h3>Générez vos documents</h3>
+
+            <p>
+              Produisez rapidement les documents nécessaires
+              pour présenter votre activité à votre banque.
+            </p>
+
+            <a href="#comment-ca-marche">
+              Découvrir
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </a>
+
+          </article>
+
+
+          <!-- CARD 4 -->
+          <article class="feature-card">
+
+            <div class="feature-icon purple">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 3v18"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+            </div>
+
+            <h3>Comprenez vos finances</h3>
+
+            <p>
+              Centralisez les informations essentielles de votre
+              activité pour garder une vision claire.
+            </p>
+
+            <a href="#comment-ca-marche">
+              Découvrir
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </a>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         WHY BILANKO
+    ========================================================= -->
+    <section
+      class="why-section"
+      id="pourquoi-bilanko"
+    >
+
+      <div class="section-container why-container">
+
+        <div class="why-content">
+
+          <span class="section-eyebrow">
+            POURQUOI BILANKO ?
+          </span>
+
+          <h2>
+            Votre activité mérite
+            <span>des outils à sa hauteur.</span>
+          </h2>
+
+          <p>
+            Bilanko transforme les informations quotidiennes de votre
+            entreprise en une vision claire de votre activité.
+          </p>
+
+          <div class="why-list">
+
+            <div class="why-item">
+
+              <span class="why-number">
+                01
+              </span>
+
+              <div>
+                <h3>Gagnez du temps</h3>
+                <p>
+                  Réduisez les tâches manuelles et concentrez-vous
+                  sur le développement de votre entreprise.
+                </p>
+              </div>
+
+            </div>
+
+
+            <div class="why-item">
+
+              <span class="why-number">
+                02
+              </span>
+
+              <div>
+                <h3>Prenez de meilleures décisions</h3>
+                <p>
+                  Basez vos décisions sur des données simples,
+                  organisées et accessibles.
+                </p>
+              </div>
+
+            </div>
+
+
+            <div class="why-item">
+
+              <span class="why-number">
+                03
+              </span>
+
+              <div>
+                <h3>Préparez votre financement</h3>
+                <p>
+                  Présentez une activité mieux organisée et
+                  des documents plus facilement exploitables.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="why-visual">
+
+          <div class="finance-card">
+
+            <div class="finance-header">
+              <span>Résumé financier</span>
+
+              <button type="button">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 8v4l2.5 2"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="finance-main">
+              <small>Chiffre d'affaires</small>
+              <strong>8 450 000 FCFA</strong>
+
+              <span>
+                +21,4% par rapport au mois dernier
+              </span>
+            </div>
+
+            <div class="finance-bars">
+
+              <div style="height: 38%"></div>
+              <div style="height: 52%"></div>
+              <div style="height: 44%"></div>
+              <div style="height: 68%"></div>
+              <div style="height: 58%"></div>
+              <div style="height: 76%"></div>
+              <div style="height: 92%"></div>
+
+            </div>
+
+            <div class="finance-footer">
+              <span>Jan</span>
+              <span>Fév</span>
+              <span>Mar</span>
+              <span>Avr</span>
+              <span>Mai</span>
+              <span>Juin</span>
+              <span>Juil</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         HOW IT WORKS
+    ========================================================= -->
+    <section
+      class="steps-section"
+      id="comment-ca-marche"
+    >
+
+      <div class="section-container">
+
+        <div class="section-heading center">
+
+          <span class="section-eyebrow">
+            COMMENT ÇA MARCHE ?
+          </span>
+
+          <h2>
+            Commencez en
+            <span>trois étapes.</span>
+          </h2>
+
+          <p>
+            Pas besoin d'être expert en comptabilité.
+            Bilanko vous accompagne simplement.
+          </p>
+
+        </div>
+
+
+        <div class="steps-grid">
+
+          <div class="step">
+
+            <div class="step-top">
+              <span class="step-number">01</span>
+
+              <span class="step-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+            </div>
+
+            <h3>Créez votre compte</h3>
+
+            <p>
+              Inscrivez votre entreprise et commencez
+              en quelques minutes.
+            </p>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-top">
+              <span class="step-number">02</span>
+
+              <span class="step-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 3v18"></path>
+                  <path d="M3 12h18"></path>
+                  <path d="M5 5h14v14H5z"></path>
+                </svg>
+              </span>
+            </div>
+
+            <h3>Ajoutez votre activité</h3>
+
+            <p>
+              Enregistrez vos produits, ventes et
+              informations financières.
+            </p>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-top">
+              <span class="step-number">03</span>
+
+              <span class="step-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                  <path d="M14 2v6h6"></path>
+                  <path d="m8 15 2 2 5-5"></path>
+                </svg>
+              </span>
+            </div>
+
+            <h3>Obtenez vos documents</h3>
+
+            <p>
+              Générez les documents utiles pour
+              piloter et présenter votre activité.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         CTA
+    ========================================================= -->
+    <section class="cta-section">
+
+      <div class="section-container">
+
+        <div class="cta-card">
+
+          <div class="cta-glow"></div>
+
+          <div class="cta-content">
+
+            <span class="cta-eyebrow">
+              PRÊT À COMMENCER ?
+            </span>
+
+            <h2>
+              Donnez à votre entreprise
+              <span>les moyens d'avancer.</span>
+            </h2>
+
+            <p>
+              Commencez gratuitement avec Bilanko
+              et reprenez le contrôle de votre activité.
+            </p>
+
+            <a
+              routerLink="/inscription"
+              class="cta-button"
+            >
+              Créer mon compte gratuitement
+
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
-<app-footer-landing />
+
+
+  <!-- ==========================================================
+       FOOTER
+  =========================================================== -->
+  <footer class="landing-footer">
+
+    <div class="section-container footer-container">
+
+      <div class="footer-brand">
+
+        <a routerLink="/" class="brand">
+          <span class="brand-logo">
+            B
+          </span>
+
+          <span class="brand-text">
+            Bilanko
+          </span>
+        </a>
+
+        <p>
+          Des outils simples pour une gestion
+          plus claire et plus efficace.
+        </p>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <h4>Produit</h4>
+
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#comment-ca-marche">Comment ça marche</a>
+        <a href="#pourquoi-bilanko">Pourquoi Bilanko</a>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <h4>Compte</h4>
+
+        <a routerLink="/connexion">
+          Se connecter
+        </a>
+
+        <a routerLink="/inscription">
+          Créer un compte
+        </a>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <h4>Bilanko</h4>
+
+        <a href="#fonctionnalites">À propos</a>
+        <a href="#comment-ca-marche">Aide</a>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <div class="section-container footer-bottom-inner">
+
+        <span>
+          © {{ 2026 }} Bilanko. Tous droits réservés.
+        </span>
+
+        <span>
+          Gestion simple. Décisions meilleures.
+        </span>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+</div>
