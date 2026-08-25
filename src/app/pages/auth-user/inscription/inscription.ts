@@ -21,7 +21,6 @@ export class Inscription {
   isLoading = false;
   registerError = '';
   registerSuccess = false;
-  showPassword = false;
   readonly inscriptionForm = this.fb.group(
     {
       nom: ['', [Validators.required, Validators.minLength(2)]],
@@ -46,8 +45,7 @@ export class Inscription {
   get confirmPassword() { return this.inscriptionForm.controls.confirmPassword; }
 
   togglePasswordVisibility(inputElement: HTMLInputElement): void {
-    this.showPassword = !this.showPassword;
-    if (this.showPassword) {
+    if (inputElement.type === 'password') {
       inputElement.type = 'text';
     } else {
       inputElement.type = 'password';

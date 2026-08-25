@@ -99,7 +99,7 @@
             </span>
             <input type="password" id="password" class="form-control bk-input" formControlName="password" autocomplete="new-password" #passwordInput>
             <button type="button" class="input-group-text bk-input-icon" (click)="togglePasswordVisibility(passwordInput)">
-              <span class="material-icons fs-6">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+              <span class="material-icons fs-6">{{ passwordInput.type === 'password' ? 'visibility' : 'visibility_off' }}</span>
             </button>
           </div>
           @if (password.touched && password.hasError('required')) {
@@ -145,7 +145,7 @@
             </span>
             <input type="password" id="confirmPassword" class="form-control bk-input" [placeholder]="prefs.t().confirmYourPassword" formControlName="confirmPassword" autocomplete="new-password" #confirmPasswordInput>
             <button type="button" class="input-group-text bk-input-icon" (click)="togglePasswordVisibility(confirmPasswordInput)">
-              <span class="material-icons fs-6">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+              <span class="material-icons fs-6">{{ confirmPasswordInput.type === 'password' ? 'visibility' : 'visibility_off' }}</span>
             </button>          
           </div>
           @if (confirmPassword.touched && inscriptionForm.hasError('passwordMismatch')) {

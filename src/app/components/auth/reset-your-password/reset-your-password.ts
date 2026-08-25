@@ -11,7 +11,6 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 export class ResetYourPasswordComponent {
   @ViewChild('passwordInput') passwordInput!: HTMLInputElement;
   @ViewChild('confirmPasswordInput') confirmPasswordInput!: HTMLInputElement;
-  showPassword = false;
   private readonly fb = inject(FormBuilder);
   passwordReset = output<void>();
 
@@ -58,9 +57,8 @@ export class ResetYourPasswordComponent {
       }, 2000);
     }, 1000);
   }
-    togglePasswordVisibility(inputElement: HTMLInputElement): void {
-    this.showPassword = !this.showPassword;
-    if (this.showPassword) {
+  togglePasswordVisibility(inputElement: HTMLInputElement): void {
+    if (inputElement.type === 'password') {
       inputElement.type = 'text';
     } else {
       inputElement.type = 'password';
