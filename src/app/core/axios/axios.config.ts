@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 const TOKEN_KEY = 'bilanko_jwt_token';
 

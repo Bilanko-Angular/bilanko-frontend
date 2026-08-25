@@ -3,7 +3,7 @@ import { apiClient } from '../../../core/axios/axios.config';
 import { User } from '../../../models/person';
 import { UserMapper } from '../../../mapper/UserMapper';
 import { AuthResponseDto } from '../../../models/DTO/UserDto';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

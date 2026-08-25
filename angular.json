@@ -33,11 +33,8 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
-              
             ],
-            "scripts": [
-              
-            ],
+            "scripts": [],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
@@ -70,6 +67,17 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
+            },
+            "local": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -82,6 +90,9 @@
             },
             "development": {
               "buildTarget": "bilanko:build:development"
+            },
+            "local": {
+              "buildTarget": "bilanko:build:local"
             }
           },
           "defaultConfiguration": "development"

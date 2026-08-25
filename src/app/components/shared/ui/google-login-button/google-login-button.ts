@@ -1,7 +1,7 @@
 // google-login-button.ts
 import { Component, inject, AfterViewInit, ElementRef, viewChild, output, input } from '@angular/core';
 import { AuthStoreService } from '../../../../service/store/auth/auth-store.service';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-google-login-button',
