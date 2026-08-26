@@ -33,4 +33,8 @@ export class UserStoreService {
       this.router.navigate(['/connexion']);
     }
   }
+
+  clearUser(): void {
+    this.user.set(null);
+  }
 }
