@@ -32,11 +32,6 @@ export class Connexion {
   get email() { return this.connectionForm.controls.email; }
   get password() { return this.connectionForm.controls.password; }
 
-  /* ── Bouton Google ── */
-  loginWithGoogle(): void {
-    console.log('Connexion avec Google');
-    this.router.navigate(['/']);
-  }
 
   async soumettre(event: Event): Promise<void> {
     event.preventDefault();
@@ -57,10 +52,8 @@ export class Connexion {
 
     try {
       await this.authStore.login(user);
-      console.log('Connexion réussie ! Token :', this.authStore.token());
-      this.router.navigate(['/']);
+      this.router.navigate(['/dashboard']);
     } catch (error: any) {
-      console.error('Échec de la connexion', error);
       this.loginError = error?.message || 'Identifiants incorrects ou erreur serveur.';
     } finally {
       this.isLoading = false;
