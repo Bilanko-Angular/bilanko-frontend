@@ -1,17 +1,27 @@
+// src/app/pages/landing/landing.component.ts
+
 import { Component } from '@angular/core';
-import { NavbarLanding } from "../../components/landing/navbar-landing/navbar-landing";
-import { Hero } from "../../components/landing/hero/hero";
-import { Features } from "../../components/landing/features/features";
-import { HowItWorks } from "../../components/landing/how-it-works/how-it-works";
-import { CtaBanner } from "../../components/landing/cta-banner/cta-banner";
-import { FooterLanding } from "../../components/landing/footer-landing/footer-landing";
+import { LandingNavbar } from './components/landing-navbar/landing-navbar';
+import { LandingHero } from './components/landing-hero/landing-hero';
+import { LandingFeatures } from './components/landing-features/landing-features';
+import { LandingWhy } from './components/landing-why/landing-why';
+import { LandingSteps } from './components/landing-steps/landing-steps';
+import { LandingCta } from './components/landing-cta/landing-cta';
+import { LandingFooter } from './components/landing-footer/landing-footer';
 
 @Component({
   selector: 'app-landing',
-  imports: [NavbarLanding, Hero, Features, HowItWorks, CtaBanner, FooterLanding],
+  standalone: true,
+  imports: [
+    LandingNavbar,
+    LandingHero,
+    LandingFeatures,
+    LandingWhy,
+    LandingSteps,
+    LandingCta,
+    LandingFooter
+  ],
   templateUrl: './landing.html',
-  styleUrl: './landing.css',
+  styleUrls: ['./landing.css']
 })
-export class Landing {
-
-}
+export class Landing {}
