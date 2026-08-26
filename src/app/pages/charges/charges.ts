@@ -1,4 +1,5 @@
 // src/app/pages/charges/charges.ts
+
 import { Component, signal, computed, effect, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +31,20 @@ export class ChargesComponent {
   confirmDeleteId = signal<string | null>(null);
   viewingCharge = signal<Charge | null>(null);
 
-  // --- Filtre : texte + date ---
+  // --- BARRE DE RECHERCHE (RAPIDE) ---
+  searchTerm = signal('');
+  filteredBySearch = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.charges();
+    
+    return this.charges().filter(c =>
+      c.label.toLowerCase().includes(term) ||
+      (c.supplier?.toLowerCase().includes(term) ?? false) ||
+      c.id.toLowerCase().includes(term)
+    );
+  });
+
+  // --- FILTRE AVANCÉ ---
   filterSearchTerm = signal('');
   filterDate = signal('');
   appliedSearchTerm = signal('');
@@ -39,45 +53,29 @@ export class ChargesComponent {
   readonly filteredCharges = computed(() => {
     const term = this.appliedSearchTerm().trim().toLowerCase();
     const date = this.appliedDate();
+    let results = this.filteredBySearch();
 
-    return this.charges().filter(c => {
-      const matchTerm = !term ||
+    if (term && this.searchTerm().trim().toLowerCase() !== term) {
+      results = results.filter(c =>
         c.label.toLowerCase().includes(term) ||
-        (c.supplier ?? '').toLowerCase().includes(term);
+        (c.supplier?.toLowerCase().includes(term) ?? false)
+      );
+    }
 
-      const matchDate = !date || c.date === date;
+    if (date) {
+      results = results.filter(c => c.date === date);
+    }
 
-      return matchTerm && matchDate;
-    });
+    return results;
   });
 
-  applyFilter(): void {
-    this.appliedSearchTerm.set(this.filterSearchTerm());
-    this.appliedDate.set(this.filterDate());
-    this.pageCourante.set(1);
-    this.isFilterModalOpen.set(false);
-  }
-
-  resetFilter(): void {
-    this.filterSearchTerm.set('');
-    this.filterDate.set('');
-    this.appliedSearchTerm.set('');
-    this.appliedDate.set('');
-    this.pageCourante.set(1);
-    this.isFilterModalOpen.set(false);
-  }
-
   readonly hasActiveFilter = computed(() =>
-    this.appliedSearchTerm().trim().length > 0 || this.appliedDate().length > 0
+    this.searchTerm().trim().length > 0 ||
+    this.appliedSearchTerm().trim().length > 0 ||
+    this.appliedDate().length > 0
   );
 
-  openFilterModal(): void {
-    this.filterSearchTerm.set(this.appliedSearchTerm());
-    this.filterDate.set(this.appliedDate());
-    this.isFilterModalOpen.set(true);
-  }
-
-  // --- Pagination texte ---
+  // --- Pagination ---
   readonly pageCourante = signal(1);
   readonly parPage = 6;
 
@@ -97,9 +95,46 @@ export class ChargesComponent {
     });
   }
 
+  // --- Actions de recherche ---
+  onSearchChange(value: string): void {
+    this.searchTerm.set(value);
+    this.pageCourante.set(1);
+  }
+
+  clearSearch(): void {
+    this.searchTerm.set('');
+    this.pageCourante.set(1);
+  }
+
+  // --- Filtres ---
+  applyFilter(): void {
+    this.appliedSearchTerm.set(this.filterSearchTerm());
+    this.appliedDate.set(this.filterDate());
+    this.pageCourante.set(1);
+    this.isFilterModalOpen.set(false);
+  }
+
+  resetFilter(): void {
+    this.filterSearchTerm.set('');
+    this.filterDate.set('');
+    this.appliedSearchTerm.set('');
+    this.appliedDate.set('');
+    this.searchTerm.set('');
+    this.pageCourante.set(1);
+    this.isFilterModalOpen.set(false);
+  }
+
+  openFilterModal(): void {
+    this.filterSearchTerm.set(this.appliedSearchTerm());
+    this.filterDate.set(this.appliedDate());
+    this.isFilterModalOpen.set(true);
+  }
+
+  // --- Pagination ---
   pageSuivante() { this.pageCourante.update(v => Math.min(v + 1, this.nombrePages())); }
   pagePrecedente() { this.pageCourante.update(v => Math.max(v - 1, 1)); }
 
+  // --- CRUD ---
   openAdd() {
     this.editingCharge = null;
     this.isAddModalOpen.set(true);
@@ -144,9 +179,7 @@ export class ChargesComponent {
   }
 
   onChargeAction(actionType: string, id: string) {
-    if (actionType === 'delete') {
-      this.showDeleteConfirm(id);
-    }
+    if (actionType === 'delete') this.showDeleteConfirm(id);
     if (actionType === 'edit') {
       const c = this.chargesService.charges().find((x) => x.id === id) || null;
       if (c) {
@@ -154,8 +187,6 @@ export class ChargesComponent {
         this.isAddModalOpen.set(true);
       }
     }
-    if (actionType === 'view') {
-      this.viewCharge(id);
-    }
+    if (actionType === 'view') this.viewCharge(id);
   }
 }

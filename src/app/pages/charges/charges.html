@@ -1,4 +1,5 @@
 <!-- src/app/pages/charges/charges.html -->
+
 <app-template>
   <div class="page-header">
     <div class="header-text">
@@ -6,6 +7,27 @@
       <p>{{ prefs.t().chargesManagementDesc }}</p>
     </div>
     <div class="header-actions">
+      <!-- BARRE DE RECHERCHE RAPIDE -->
+      <div class="search-wrapper">
+        <div class="search-input-group">
+          <span class="search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+          </span>
+          <input
+            type="text"
+            class="search-input"
+            [placeholder]="prefs.t().search + ' ' + prefs.t().label + '...'"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="onSearchChange($event)"
+          />
+          @if (searchTerm()) {
+            <button class="search-clear" (click)="clearSearch()" type="button">✕</button>
+          }
+        </div>
+      </div>
+
       <button class="btn btn-secondary" [class.btn-secondary--active]="hasActiveFilter()" (click)="openFilterModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
           <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
@@ -24,7 +46,12 @@
 
   <div class="table-container">
     @if (filteredCharges().length === 0) {
-      <div class="empty-state">{{ prefs.t().noChargesFound }}</div>
+      <div class="empty-state">
+        <p>{{ prefs.t().noChargesFound }}</p>
+        @if (searchTerm() || hasActiveFilter()) {
+          <p class="text-muted small mt-2">{{ prefs.t().noResults }} — {{ prefs.t().reset }} {{ prefs.t().filter }}</p>
+        }
+      </div>
     }
     @if (filteredCharges().length > 0) {
       <table class="registry-table">
@@ -41,7 +68,7 @@
           @for (c of chargesPage(); track c.id) {
             <tr>
               <td>{{ c.label }}</td>
-              <td>{{ c.supplier }}</td>
+              <td>{{ c.supplier || '-' }}</td>
               <td class="align-right tabular-nums">{{ c.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
               <td>{{ c.date | date: prefs.angularDateFormat() }}</td>
               <td class="align-center">
@@ -66,17 +93,20 @@
     }
   </div>
 
+  <!-- MODALE AJOUT -->
   @if (isAddModalOpen()) {
     <div class="modal-overlay" (click)="closeAdd()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <h2>{{ prefs.t().addACharge }}</h2>
+          <button class="close-btn" (click)="closeAdd()">×</button>
         </div>
         <app-finance-form [kind]="'charge'" [initial]="editingCharge" (submit)="handleChargeSubmit($event)" (cancel)="closeAdd()"></app-finance-form>
       </div>
     </div>
   }
 
+  <!-- MODALE FILTRE -->
   @if (isFilterModalOpen()) {
     <div class="modal-overlay" (click)="isFilterModalOpen.set(false)">
       <div class="modal-content modal-small" (click)="$event.stopPropagation()">
@@ -110,6 +140,7 @@
     </div>
   }
 
+  <!-- MODALE VISUALISATION -->
   @if (viewingCharge()) {
     <div class="modal-overlay" (click)="closeView()">
       <div class="modal-content modal-small" (click)="$event.stopPropagation()">
@@ -127,6 +158,7 @@
     </div>
   }
 
+  <!-- CONFIRMATION SUPPRESSION -->
   @if (confirmDeleteId()) {
     <app-confirm
       [message]="prefs.t().confirmDeleteCharge"

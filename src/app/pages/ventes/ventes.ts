@@ -1,3 +1,5 @@
+// src/app/pages/ventes/ventes.ts
+
 import { Component, signal, computed, effect, ChangeDetectionStrategy, inject } from '@angular/core';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,48 +32,55 @@ export class SalesComponent {
 
   sales = this.salesService.sales;
 
-  // --- Filtre : texte + date ---
-  filterSearchTerm = signal('');
-  filterDate = signal('');           // valeur en cours de saisie dans la modale
-  appliedSearchTerm = signal('');
-  appliedDate = signal('');          // valeur réellement appliquée
+  // --- BARRE DE RECHERCHE (RAPIDE) ---
+  searchTerm = signal('');           // Texte tapé dans la barre de recherche
+  filteredBySearch = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.sales();
+    
+    return this.sales().filter(s =>
+      s.customerName.toLowerCase().includes(term) ||
+      s.items.some(i => i.productName.toLowerCase().includes(term)) ||
+      s.id.toLowerCase().includes(term)
+    );
+  });
 
+  // --- FILTRE AVANCÉ (Modale) ---
+  filterSearchTerm = signal('');
+  filterDate = signal('');
+  appliedSearchTerm = signal('');
+  appliedDate = signal('');
+
+  // Combine recherche rapide + filtres avancés
   readonly filteredSales = computed(() => {
     const term = this.appliedSearchTerm().trim().toLowerCase();
     const date = this.appliedDate();
+    let results = this.filteredBySearch(); // Déjà filtré par la recherche rapide
 
-    return this.sales().filter(s => {
-      const matchTerm = !term ||
+    // Appliquer le filtre avancé par texte (si différent de la recherche rapide)
+    if (term && this.searchTerm().trim().toLowerCase() !== term) {
+      results = results.filter(s =>
         s.customerName.toLowerCase().includes(term) ||
-        s.items.some(i => i.productName.toLowerCase().includes(term));
+        s.items.some(i => i.productName.toLowerCase().includes(term))
+      );
+    }
 
-      const matchDate = !date || s.saleDate.startsWith(date);
+    // Filtrer par date
+    if (date) {
+      results = results.filter(s => s.saleDate.startsWith(date));
+    }
 
-      return matchTerm && matchDate;
-    });
+    return results;
   });
 
-  applyFilter(): void {
-    this.appliedSearchTerm.set(this.filterSearchTerm());
-    this.appliedDate.set(this.filterDate());
-    this.pageCourante.set(1);
-    this.closeFilterModal();
-  }
-
-  resetFilter(): void {
-    this.filterSearchTerm.set('');
-    this.filterDate.set('');
-    this.appliedSearchTerm.set('');
-    this.appliedDate.set('');
-    this.pageCourante.set(1);
-    this.closeFilterModal();
-  }
-
+  // --- Indicateur de filtre actif ---
   readonly hasActiveFilter = computed(() =>
-    this.appliedSearchTerm().trim().length > 0 || this.appliedDate().length > 0
+    this.searchTerm().trim().length > 0 ||
+    this.appliedSearchTerm().trim().length > 0 ||
+    this.appliedDate().length > 0
   );
 
-  // --- Pagination texte (Précédent / Page X sur Y / Suivant) ---
+  // --- Pagination ---
   readonly pageCourante = signal(1);
   readonly parPage = 6;
 
@@ -91,9 +100,40 @@ export class SalesComponent {
     });
   }
 
+  // --- Actions de recherche ---
+  onSearchChange(value: string): void {
+    this.searchTerm.set(value);
+    this.pageCourante.set(1);
+  }
+
+  clearSearch(): void {
+    this.searchTerm.set('');
+    this.pageCourante.set(1);
+  }
+
+  // --- Filtres avancés ---
+  applyFilter(): void {
+    this.appliedSearchTerm.set(this.filterSearchTerm());
+    this.appliedDate.set(this.filterDate());
+    this.pageCourante.set(1);
+    this.closeFilterModal();
+  }
+
+  resetFilter(): void {
+    this.filterSearchTerm.set('');
+    this.filterDate.set('');
+    this.appliedSearchTerm.set('');
+    this.appliedDate.set('');
+    this.searchTerm.set('');
+    this.pageCourante.set(1);
+    this.closeFilterModal();
+  }
+
+  // --- Pagination ---
   pageSuivante() { this.pageCourante.update(v => Math.min(v + 1, this.nombrePages())); }
   pagePrecedente() { this.pageCourante.update(v => Math.max(v - 1, 1)); }
 
+  // --- Modales ---
   openAddModal() { this.editingSale = null; this.isAddModalOpen.set(true); }
   closeAddModal() { this.isAddModalOpen.set(false); this.editingSale = null; }
 
