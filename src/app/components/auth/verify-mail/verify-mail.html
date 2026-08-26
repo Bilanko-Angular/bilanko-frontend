@@ -1,0 +1,64 @@
+<div class="auth-header">
+  <h1 class="bk-auth-title">Mot de passe oublié</h1>
+  <p class="bk-auth-subtitle">Entrez votre adresse email pour recevoir un code de vérification.</p>
+</div>
+
+@if (!envoye) {
+  @if (errorMessage) {
+    <div class="bk-auth-error">
+      <span class="material-icons">error_outline</span>
+      {{ errorMessage }}
+    </div>
+  }
+
+  <form (ngSubmit)="soumettre()" [formGroup]="form" novalidate>
+    <div class="bk-form-group">
+      <label for="email" class="bk-form-label">Adresse email</label>
+      <div class="input-group bk-input-group">
+        <span class=" bk-input-icon">
+          <span class="material-icons fs-6">email</span>
+        </span>
+        <input type="email" id="email" class=" bk-input" placeholder="exemple@email.com" formControlName="email" autocomplete="email">
+      </div>
+      @if (email.touched && email.hasError('required')) {
+        <div class="bk-field-error">
+          <span class="material-icons">error_outline</span>
+          L'adresse email est requise
+        </div>
+      }
+      @if (email.touched && email.hasError('email')) {
+        <div class="bk-field-error">
+          <span class="material-icons">error_outline</span>
+          L'adresse email est invalide
+        </div>
+      }
+    </div>
+
+    <button type="submit" class="btn bk-btn-submit w-100" [disabled]="form.invalid || isLoading">
+      @if (isLoading) {
+        <span class="bk-spinner"></span>
+        <span>Envoi en cours...</span>
+      } @else {
+        <span>Envoyer le code</span>
+        <span class="material-icons">arrow_forward</span>
+      }
+    </button>
+
+    <p class="text-center bk-auth-footer">
+      <a routerLink="/connexion" class="bk-auth-link">Retour à la connexion</a>
+    </p>
+  </form>
+} @else {
+  <div class="bk-success-box">
+    <div class="bk-success-icon">
+      <span class="material-icons">check_circle</span>
+    </div>
+    <h3>Code envoyé</h3>
+    <p>Un code de vérification à 6 chiffres a été envoyé à votre adresse email.</p>
+    <div class="bk-success-actions">
+       <div class="d-flex justify-content-center mt-3">
+         <span class="bk-spinner border-primary"></span>
+       </div>
+    </div>
+  </div>
+}

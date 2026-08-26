@@ -3,12 +3,13 @@ import { apiClient } from '../../../core/axios/axios.config';
 import { User } from '../../../models/person';
 import { UserMapper } from '../../../mapper/UserMapper';
 import { AuthResponseDto } from '../../../models/DTO/UserDto';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthApiService {
-  private readonly basePath = '/api/auth';
+  private readonly basePath = environment.baseApiUrl + '/auth';
 
   async register(userData: User): Promise<AuthResponseDto> {
     const userDto = UserMapper.toRegisterDto(userData);
@@ -19,6 +20,11 @@ export class AuthApiService {
   async login(userData: User): Promise<AuthResponseDto> {
     const userDto = UserMapper.toLoginDto(userData);
     const response = await apiClient.post<AuthResponseDto>(`${this.basePath}/login`, userDto);
+    return response.data;
+  }
+  
+  async loginWithGoogle(idToken: string): Promise<AuthResponseDto> {
+    const response = await apiClient.post<AuthResponseDto>(`${this.basePath}/google`, { idToken });
     return response.data;
   }
 }

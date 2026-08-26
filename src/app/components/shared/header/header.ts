@@ -16,7 +16,9 @@ import type { Produit } from '../../../models/produit';
 import { PreferencesService } from '../../../services/preferences';
 import type { Sale } from '../../../models/sale';
 import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
+import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { NotificationsBell } from './notifications-bell/notifications-bell';
+import { UpperCasePipe } from '@angular/common';
 
 
 
@@ -33,7 +35,7 @@ interface SearchResult {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NotificationsBell],
+  imports: [NotificationsBell,UpperCasePipe],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
 })
@@ -50,7 +52,10 @@ export class Header {
   private readonly salesService =
     inject(SalesService);
 
-  protected readonly prefs = inject(PreferencesService)
+  protected readonly prefs = inject(PreferencesService);
+  protected readonly userStore = inject(UserStoreService);
+
+  readonly profileImageError = signal(false);
 
   readonly searchTerm = signal('');
 

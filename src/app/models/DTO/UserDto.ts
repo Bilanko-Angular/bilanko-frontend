@@ -13,3 +13,10 @@ export interface UserLoginDto {
 export interface AuthResponseDto {
   token: string;
 }
+
+export interface UserResponseDto {
+  name: string;
+  subname: string;
+  email: string;
+  profilePicture: string;
+}

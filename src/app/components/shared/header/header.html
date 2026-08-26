@@ -168,11 +168,15 @@
         (click)="toggleProfile()">
 
         <span class="position-relative d-inline-flex bk-avatar">
-          <span
-            class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
-            style="width: 30px; height: 30px; font-size: 0.67rem;">
-            EM
-          </span>
+          @if (userStore.user()?.profilePicture && !profileImageError()) {
+            <img [src]="userStore.user()?.profilePicture" alt="Profile" class="rounded-circle object-fit-cover" style="width: 30px; height: 30px;" (error)="profileImageError.set(true)">
+          } @else {
+            <span
+              class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+              style="width: 30px; height: 30px; font-size: 0.67rem;">
+              {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
+            </span>
+          }
           <span class="bk-avatar__dot"></span>
         </span>
 
@@ -180,7 +184,7 @@
 
           <strong class="text-body"
                   style="font-size: 0.76rem;">
-            Emmanuel
+            {{ userStore.user()?.nom }} {{ userStore.user()?.subname }}
           </strong>
 
           <small class="text-muted"
@@ -206,18 +210,22 @@
           <div class="d-flex align-items-center gap-2 p-3 border-bottom">
 
             <span class="position-relative d-inline-flex bk-avatar">
-              <span
-                class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                style="width: 38px; height: 38px; font-size: 0.85rem;">
-                EM
-              </span>
+              @if (userStore.user()?.profilePicture && !profileImageError()) {
+                <img [src]="userStore.user()?.profilePicture" alt="Profile" class="rounded-circle object-fit-cover" style="width: 38px; height: 38px;" (error)="profileImageError.set(true)">
+              } @else {
+                <span
+                  class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                  style="width: 38px; height: 38px; font-size: 0.85rem;">
+                  {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
+                </span>
+              }
               <span class="bk-avatar__dot"></span>
             </span>
 
             <div class="d-flex flex-column lh-sm">
 
               <strong class="text-body small">
-                Emmanuel
+                {{ userStore.user()?.nom }} {{ userStore.user()?.subname }}
               </strong>
 
               <small class="text-muted"

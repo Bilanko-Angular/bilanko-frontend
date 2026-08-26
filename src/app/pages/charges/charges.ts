@@ -7,10 +7,10 @@ import { Template } from "../../components/shared/template/template";
 import type { Charge } from '../../models/finance';
 import { Sale } from '../../models/sale';
 import { FinanceForm } from '../../components/shared/finance-form/finance-form';
-import { ChargesService } from '../../services/charges.service';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { PreferencesService } from '../../services/preferences';
+import { ChargeStoreService } from '../../service/store/charge/charge-store.service';
 
 @Component({
   selector: 'app-charges',
@@ -21,77 +21,39 @@ import { PreferencesService } from '../../services/preferences';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChargesComponent {
-  private chargesService = inject(ChargesService);
   protected readonly prefs = inject(PreferencesService);
+  protected readonly store = inject(ChargeStoreService);
 
-  charges = this.chargesService.charges;
   editingCharge: Charge | null = null;
   isAddModalOpen = signal(false);
-  isFilterModalOpen = signal(false);
   confirmDeleteId = signal<string | null>(null);
   viewingCharge = signal<Charge | null>(null);
 
-  // --- BARRE DE RECHERCHE (RAPIDE) ---
-  searchTerm = signal('');
-  filteredBySearch = computed(() => {
-    const term = this.searchTerm().trim().toLowerCase();
-    if (!term) return this.charges();
-    
-    return this.charges().filter(c =>
-      c.label.toLowerCase().includes(term) ||
-      (c.supplier?.toLowerCase().includes(term) ?? false) ||
-      c.id.toLowerCase().includes(term)
-    );
-  });
-
-  // --- FILTRE AVANCÉ ---
-  filterSearchTerm = signal('');
-  filterDate = signal('');
-  appliedSearchTerm = signal('');
-  appliedDate = signal('');
-
-  readonly filteredCharges = computed(() => {
-    const term = this.appliedSearchTerm().trim().toLowerCase();
-    const date = this.appliedDate();
-    let results = this.filteredBySearch();
-
-    if (term && this.searchTerm().trim().toLowerCase() !== term) {
-      results = results.filter(c =>
-        c.label.toLowerCase().includes(term) ||
-        (c.supplier?.toLowerCase().includes(term) ?? false)
-      );
-    }
-
-    if (date) {
-      results = results.filter(c => c.date === date);
-    }
-
-    return results;
-  });
-
-  readonly hasActiveFilter = computed(() =>
-    this.searchTerm().trim().length > 0 ||
-    this.appliedSearchTerm().trim().length > 0 ||
-    this.appliedDate().length > 0
-  );
+  // --- Barre de recherche inline (liée au store) ---
+  get searchTerm() { return this.store.searchTerm; }
 
   // --- Pagination ---
   readonly pageCourante = signal(1);
   readonly parPage = 6;
 
   readonly nombrePages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredCharges().length / this.parPage))
+    Math.max(1, Math.ceil(this.store.filteredCharges().length / this.parPage))
   );
 
   readonly chargesPage = computed(() => {
     const debut = (this.pageCourante() - 1) * this.parPage;
-    return this.filteredCharges().slice(debut, debut + this.parPage);
+    return this.store.filteredCharges().slice(debut, debut + this.parPage);
   });
 
   constructor() {
     effect(() => {
       const max = this.nombrePages();
       if (this.pageCourante() > max) this.pageCourante.set(max);
+    });
+    // Réinitialiser la pagination quand la recherche change
+    effect(() => {
+      this.store.searchTerm();
+      this.pageCourante.set(1);
     });
   }
 
@@ -145,12 +107,14 @@ export class ChargesComponent {
     this.editingCharge = null;
   }
 
-  handleChargeSubmit(payload: Sale | Charge) {
+  async handleChargeSubmit(payload: Sale | Charge) {
     const c = payload as Charge;
     if (this.editingCharge) {
-      this.chargesService.update(this.editingCharge.id, c);
+      const { id, ...rest } = c;
+      await this.store.update(this.editingCharge.id, rest);
     } else {
-      this.chargesService.add(c);
+      const { id, ...rest } = c as any;
+      await this.store.add(rest);
     }
     this.closeAdd();
   }
@@ -159,9 +123,9 @@ export class ChargesComponent {
     this.confirmDeleteId.set(id);
   }
 
-  confirmDelete() {
+  async confirmDelete() {
     const id = this.confirmDeleteId();
-    if (id) this.chargesService.delete(id);
+    if (id) await this.store.delete(id);
     this.confirmDeleteId.set(null);
   }
 
@@ -170,7 +134,7 @@ export class ChargesComponent {
   }
 
   viewCharge(id: string) {
-    const c = this.chargesService.charges().find(x => x.id === id) || null;
+    const c = this.store.charges().find(x => x.id === id) || null;
     this.viewingCharge.set(c);
   }
 
@@ -181,7 +145,7 @@ export class ChargesComponent {
   onChargeAction(actionType: string, id: string) {
     if (actionType === 'delete') this.showDeleteConfirm(id);
     if (actionType === 'edit') {
-      const c = this.chargesService.charges().find((x) => x.id === id) || null;
+      const c = this.store.charges().find((x) => x.id === id) || null;
       if (c) {
         this.editingCharge = c;
         this.isAddModalOpen.set(true);
