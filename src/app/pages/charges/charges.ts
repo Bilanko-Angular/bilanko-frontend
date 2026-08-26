@@ -68,29 +68,7 @@ export class ChargesComponent {
     this.pageCourante.set(1);
   }
 
-  // --- Filtres ---
-  applyFilter(): void {
-    this.appliedSearchTerm.set(this.filterSearchTerm());
-    this.appliedDate.set(this.filterDate());
-    this.pageCourante.set(1);
-    this.isFilterModalOpen.set(false);
-  }
 
-  resetFilter(): void {
-    this.filterSearchTerm.set('');
-    this.filterDate.set('');
-    this.appliedSearchTerm.set('');
-    this.appliedDate.set('');
-    this.searchTerm.set('');
-    this.pageCourante.set(1);
-    this.isFilterModalOpen.set(false);
-  }
-
-  openFilterModal(): void {
-    this.filterSearchTerm.set(this.appliedSearchTerm());
-    this.filterDate.set(this.appliedDate());
-    this.isFilterModalOpen.set(true);
-  }
 
   // --- Pagination ---
   pageSuivante() { this.pageCourante.update(v => Math.min(v + 1, this.nombrePages())); }
