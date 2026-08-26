@@ -3,6 +3,7 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { PreferencesService } from '../../../services/preferences';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
+import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 import { UpperCasePipe } from '@angular/common';
 
 @Component({
@@ -15,6 +16,7 @@ export class Aside {
   private readonly router = inject(Router);
   protected readonly prefs = inject(PreferencesService);
   protected readonly userStore = inject(UserStoreService);
+  protected readonly authStore = inject(AuthStoreService);
 
   readonly profileImageError = signal(false);
 
@@ -25,6 +27,7 @@ export class Aside {
     }, { allowSignalWrites: true });
   }
   logout(): void {
+    this.authStore.logout();
     this.router.navigate(['/connexion']);
   }
 }
