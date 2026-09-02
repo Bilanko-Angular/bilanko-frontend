@@ -1,11 +1,34 @@
 // src/app/pages/parametres/parametres.ts
-import { Component, inject, signal, computed } from '@angular/core';
+
+import {
+  Component,
+  computed,
+  inject,
+  signal
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+
 import { Template } from '../../components/shared/template/template';
+
 import { ThemeService } from '../../services/theme';
+
 import { AuthStoreService } from '../../service/store/auth/auth-store.service';
-import { PreferencesService, BilankoLanguage, BilankoCurrency } from '../../services/preferences';
+
+import {
+  PreferencesService,
+  BilankoLanguage,
+  BilankoCurrency
+} from '../../services/preferences';
+
 
 interface NotificationPreference {
   id: string;
@@ -15,136 +38,816 @@ interface NotificationPreference {
   type: 'stock' | 'vente' | 'rapport' | 'systeme';
 }
 
+
 @Component({
   selector: 'app-parametres',
+
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, Template],
+
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    Template
+  ],
+
   templateUrl: './parametres.html',
-  styleUrls: ['./parametres.css'],
+
+  styleUrls: ['./parametres.css']
 })
 export class Parametres {
-  private readonly fb = inject(FormBuilder);
-  protected readonly themeService = inject(ThemeService);
-  private readonly authStore = inject(AuthStoreService);
-  protected readonly prefs = inject(PreferencesService);
 
-  activeTab = signal<'general' | 'compte' | 'notifications' | 'apparence'>('general');
-  showSuccessMessage = signal<string>('');
-  showSuccess = signal<boolean>(false);
+  /* =====================================================
+     SERVICES
+  ====================================================== */
 
-  profileForm: FormGroup = this.fb.group({
-    nom: ['Emmanuel', [Validators.required, Validators.minLength(2)]],
-    prenom: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['emmanuel@bilanko.com', [Validators.required, Validators.email]],
-    telephone: ['+237 6XX XX XX XX'],
-    entreprise: ['Bilanko SARL'],
-  });
+  private readonly fb =
+    inject(FormBuilder);
 
-  securityForm: FormGroup = this.fb.group({
-    currentPassword: ['', [Validators.required, Validators.minLength(6)]],
-    newPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*\-]).{8,}$/)]],
-    confirmPassword: ['', [Validators.required]],
-  }, { validators: this.passwordsMatchValidator });
+  protected readonly themeService =
+    inject(ThemeService);
 
-  private passwordsMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
-    const newPassword = group.get('newPassword')?.value;
-    const confirmPassword = group.get('confirmPassword')?.value;
-    return newPassword === confirmPassword ? null : { passwordMismatch: true };
+  private readonly authStore =
+    inject(AuthStoreService);
+
+  protected readonly prefs =
+    inject(PreferencesService);
+
+
+  /* =====================================================
+     ONGLET ACTIF
+  ====================================================== */
+
+  activeTab =
+    signal<
+      'general' |
+      'compte' |
+      'notifications' |
+      'apparence'
+    >('general');
+
+
+  /* =====================================================
+     MESSAGE SUCCÈS
+  ====================================================== */
+
+  showSuccessMessage =
+    signal<string>('');
+
+  showSuccess =
+    signal<boolean>(false);
+
+
+  /* =====================================================
+     PHOTO DE PROFIL
+  ====================================================== */
+
+  profileImage =
+    signal<string | null>(null);
+
+
+  /* =====================================================
+     FORMULAIRE PROFIL
+  ====================================================== */
+
+  profileForm: FormGroup =
+    this.fb.group({
+
+      nom: [
+        'Emmanuel',
+        [
+          Validators.required,
+          Validators.minLength(2)
+        ]
+      ],
+
+      prenom: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2)
+        ]
+      ],
+
+      email: [
+        'emmanuel@bilanko.com',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      telephone: [
+        '+237 6XX XX XX XX'
+      ],
+
+      entreprise: [
+        'Bilanko SARL'
+      ]
+
+    });
+
+
+  /* =====================================================
+     FORMULAIRE SECURITE
+  ====================================================== */
+
+  securityForm: FormGroup =
+    this.fb.group({
+
+      currentPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
+      ],
+
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*\-]).{8,}$/
+          )
+        ]
+      ],
+
+      confirmPassword: [
+        '',
+        [
+          Validators.required
+        ]
+      ]
+
+    }, {
+      validators:
+        this.passwordsMatchValidator
+    });
+
+
+  /* =====================================================
+     VALIDATION MOT DE PASSE
+  ====================================================== */
+
+  private passwordsMatchValidator(
+    group: FormGroup
+  ): { [key: string]: boolean } | null {
+
+    const newPassword =
+      group.get('newPassword')?.value;
+
+    const confirmPassword =
+      group.get('confirmPassword')?.value;
+
+    return newPassword === confirmPassword
+      ? null
+      : { passwordMismatch: true };
   }
 
-   private readonly notifEnabledState = signal<Record<string, boolean>>({
-    n1: true, n2: true, n3: false, n4: true,
-  });
 
-  notifications = computed<NotificationPreference[]>(() => {
-    const t = this.prefs.t();
-    const state = this.notifEnabledState();
-    return [
-      { id: 'n1', label: t.notifStockAlertTitle, description: t.notifStockAlertDesc, enabled: state['n1'], type: 'stock' },
-      { id: 'n2', label: t.notifNewSalesTitle, description: t.notifNewSalesDesc, enabled: state['n2'], type: 'vente' },
-      { id: 'n3', label: t.notifMonthlyReportTitle, description: t.notifMonthlyReportDesc, enabled: state['n3'], type: 'rapport' },
-      { id: 'n4', label: t.notifUpdatesTitle, description: t.notifUpdatesDesc, enabled: state['n4'], type: 'systeme' },
-    ];
-  });
+  /* =====================================================
+     NOTIFICATIONS
+  ====================================================== */
 
-  accountStats = computed(() => ({
-    totalProduits: 12,
-    totalVentes: 20,
-    totalCharges: 17,
-    membreDepuis: 'Janvier 2026',
-  }));
+  private readonly defaultNotifications:
+    NotificationPreference[] = [
 
-  setActiveTab(tab: 'general' | 'compte' | 'notifications' | 'apparence'): void {
-    this.activeTab.set(tab);
-  }
+      {
+        id: 'stock',
+        label: 'Alertes de stock',
+        description:
+          'Recevoir une notification quand un produit atteint son seuil d’alerte',
+        enabled: true,
+        type: 'stock'
+      },
 
-   saveProfile(): void {
-    if (this.profileForm.valid) {
-      console.log('Profil sauvegardé :', this.profileForm.value);
-      try {
-        localStorage.setItem('bilanko_profile', JSON.stringify(this.profileForm.value));
-        this.showToast(this.prefs.t().profileSaved);
-      } catch (e) {
-        console.warn('Erreur sauvegarde profil :', e);
+      {
+        id: 'vente',
+        label: 'Nouvelles ventes',
+        description:
+          'Être informé des nouvelles ventes enregistrées',
+        enabled: true,
+        type: 'vente'
+      },
+
+      {
+        id: 'rapport',
+        label: 'Rapports mensuels',
+        description:
+          'Recevoir le résumé mensuel de votre activité',
+        enabled: false,
+        type: 'rapport'
+      },
+
+      {
+        id: 'systeme',
+        label: 'Mises à jour',
+        description:
+          'Notifications sur les nouvelles fonctionnalités',
+        enabled: true,
+        type: 'systeme'
       }
-    } else {
-      this.profileForm.markAllAsTouched();
-    }
+
+    ];
+
+
+  readonly notifEnabledState =
+    signal<Record<string, boolean>>(
+      this.loadNotificationState()
+    );
+
+
+  readonly notifications =
+    computed<NotificationPreference[]>(() => {
+
+      return this.defaultNotifications.map(
+        notification => ({
+
+          ...notification,
+
+          enabled:
+            this.notifEnabledState()[
+              notification.id
+            ] ?? notification.enabled
+
+        })
+      );
+
+    });
+
+
+  /* =====================================================
+     STATISTIQUES
+  ====================================================== */
+
+  accountStats =
+    computed(() => ({
+
+      totalProduits: 12,
+
+      totalVentes: 20,
+
+      totalCharges: 17,
+
+      membreDepuis: 'Janvier 2026'
+
+    }));
+
+
+  /* =====================================================
+     CONSTRUCTEUR
+  ====================================================== */
+
+  constructor() {
+
+    this.loadProfile();
+
+    this.loadPhoto();
+
   }
+
+
+  /* =====================================================
+     CHANGER D'ONGLET
+  ====================================================== */
+
+  setActiveTab(
+    tab:
+      'general' |
+      'compte' |
+      'notifications' |
+      'apparence'
+  ): void {
+
+    this.activeTab.set(tab);
+
+  }
+
+
+  /* =====================================================
+     CHARGER PROFIL
+  ====================================================== */
+
+  private loadProfile(): void {
+
+    try {
+
+      const saved =
+        localStorage.getItem(
+          'bilanko_profile'
+        );
+
+      if (!saved) {
+        return;
+      }
+
+      const profile =
+        JSON.parse(saved);
+
+      this.profileForm.patchValue(
+        profile
+      );
+
+    } catch (error) {
+
+      console.warn(
+        'Erreur chargement profil :',
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SAUVEGARDER PROFIL
+  ====================================================== */
+
+  saveProfile(): void {
+
+    if (this.profileForm.invalid) {
+
+      this.profileForm.markAllAsTouched();
+
+      return;
+
+    }
+
+
+    try {
+
+      localStorage.setItem(
+        'bilanko_profile',
+
+        JSON.stringify(
+          this.profileForm.value
+        )
+      );
+
+
+      this.showToast(
+        this.prefs.t().profileSaved
+      );
+
+    } catch (error) {
+
+      console.warn(
+        'Erreur sauvegarde profil :',
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     INITIALS
+  ====================================================== */
+
+  getInitials(): string {
+
+    const nom =
+      this.profileForm
+        .get('nom')
+        ?.value
+        ?.charAt(0) || '';
+
+    const prenom =
+      this.profileForm
+        .get('prenom')
+        ?.value
+        ?.charAt(0) || '';
+
+    const initials =
+      `${nom}${prenom}`.toUpperCase();
+
+    return initials || 'B';
+
+  }
+
+
+  /* =====================================================
+     CHARGER PHOTO
+  ====================================================== */
+
+  private loadPhoto(): void {
+
+    try {
+
+      const saved =
+        localStorage.getItem(
+          'bilanko_profile_photo'
+        );
+
+      if (saved) {
+
+        this.profileImage.set(
+          saved
+        );
+
+      }
+
+    } catch (error) {
+
+      console.warn(
+        'Erreur chargement photo :',
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SELECTION PHOTO
+  ====================================================== */
+
+  onPhotoSelected(
+    event: Event
+  ): void {
+
+    const input =
+      event.target as HTMLInputElement;
+
+    const file =
+      input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+
+    /* Types acceptés */
+
+    const allowedTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/webp'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+
+      this.showToast(
+        this.prefs.t().photoInvalidType
+      );
+
+      input.value = '';
+
+      return;
+
+    }
+
+
+    /* Maximum 5 MB */
+
+    if (
+      file.size >
+      5 * 1024 * 1024
+    ) {
+
+      this.showToast(
+        this.prefs.t().photoTooLarge
+      );
+
+      input.value = '';
+
+      return;
+
+    }
+
+
+    /* Lecture */
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload = () => {
+
+      const result =
+        reader.result as string;
+
+      this.profileImage.set(
+        result
+      );
+
+
+      try {
+
+        localStorage.setItem(
+          'bilanko_profile_photo',
+          result
+        );
+
+        this.showToast(
+          this.prefs.t().photoUpdated
+        );
+
+      } catch (error) {
+
+        console.warn(
+          'Impossible de sauvegarder la photo :',
+          error
+        );
+
+      }
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+  }
+
+
+  /* =====================================================
+     SUPPRIMER PHOTO
+  ====================================================== */
+
+  removePhoto(): void {
+
+    this.profileImage.set(null);
+
+    localStorage.removeItem(
+      'bilanko_profile_photo'
+    );
+
+    this.showToast(
+      this.prefs.t().photoRemoved
+    );
+
+  }
+
+
+  /* =====================================================
+     MOT DE PASSE
+  ====================================================== */
 
   changePassword(): void {
-    if (this.securityForm.valid) {
-      console.log('Mot de passe changé');
-      this.securityForm.reset();
-      this.showToast(this.prefs.t().passwordChanged);
-    } else {
+
+    if (this.securityForm.invalid) {
+
       this.securityForm.markAllAsTouched();
+
+      return;
+
     }
+
+
+    console.log(
+      'Mot de passe changé'
+    );
+
+
+    this.securityForm.reset();
+
+
+    this.showToast(
+      this.prefs.t().passwordChanged
+    );
+
   }
-    toggleNotification(id: string): void {
-    this.notifEnabledState.update(state => ({ ...state, [id]: !state[id] }));
+
+
+  /* =====================================================
+     NOTIFICATION
+  ====================================================== */
+
+  toggleNotification(
+    id: string
+  ): void {
+
+    this.notifEnabledState.update(
+      state => ({
+
+        ...state,
+
+        [id]:
+          !state[id]
+
+      })
+    );
+
+
     try {
-      localStorage.setItem('bilanko_notifications', JSON.stringify(this.notifEnabledState()));
-      this.showToast(this.prefs.t().notificationsUpdated);
-    } catch (e) {
-      console.warn('Erreur sauvegarde notifications :', e);
+
+      localStorage.setItem(
+        'bilanko_notifications',
+
+        JSON.stringify(
+          this.notifEnabledState()
+        )
+      );
+
+
+      this.showToast(
+        this.prefs.t().notificationsUpdated
+      );
+
+    } catch (error) {
+
+      console.warn(
+        'Erreur sauvegarde notifications :',
+        error
+      );
+
     }
+
   }
 
-   onLanguageChange(value: BilankoLanguage): void {
-    this.prefs.language.set(value);
-    this.showToast(this.prefs.t().languageChanged);
+
+  /* =====================================================
+     CHARGER NOTIFICATIONS
+  ====================================================== */
+
+  private loadNotificationState():
+    Record<string, boolean> {
+
+    try {
+
+      const saved =
+        localStorage.getItem(
+          'bilanko_notifications'
+        );
+
+      if (saved) {
+
+        return JSON.parse(
+          saved
+        );
+
+      }
+
+    } catch (error) {
+
+      console.warn(
+        'Erreur chargement notifications :',
+        error
+      );
+
+    }
+
+    return {};
+
   }
 
-  onDateFormatChange(value: string): void {
-    this.prefs.dateFormat.set(value);
-    this.showToast(this.prefs.t().dateFormatChanged);
+
+  /* =====================================================
+     LANGUE
+  ====================================================== */
+
+  onLanguageChange(
+    value: BilankoLanguage
+  ): void {
+
+    this.prefs.language.set(
+      value
+    );
+
+
+    this.showToast(
+      this.prefs.t().languageChanged
+    );
+
   }
 
-  onCurrencyChange(value: BilankoCurrency): void {
-    this.prefs.currency.set(value);
-    this.showToast(this.prefs.t().currencyChanged);
+
+  /* =====================================================
+     FORMAT DATE
+  ====================================================== */
+
+  onDateFormatChange(
+    value: string
+  ): void {
+
+    this.prefs.dateFormat.set(
+      value
+    );
+
+
+    this.showToast(
+      this.prefs.t().dateFormatChanged
+    );
+
   }
+
+
+  /* =====================================================
+     DEVISE
+  ====================================================== */
+
+  onCurrencyChange(
+    value: BilankoCurrency
+  ): void {
+
+    this.prefs.currency.set(
+      value
+    );
+
+
+    this.showToast(
+      this.prefs.t().currencyChanged
+    );
+
+  }
+
+
+  /* =====================================================
+     MODE COMPACT
+  ====================================================== */
 
   toggleCompactMode(): void {
-    this.prefs.compactMode.update(v => !v);
-    this.showToast(this.prefs.compactMode() ? this.prefs.t().compactModeOn : this.prefs.t().compactModeOff);
+
+    this.prefs.compactMode.update(
+      value => !value
+    );
+
+
+    this.showToast(
+
+      this.prefs.compactMode()
+
+        ? this.prefs.t().compactModeOn
+
+        : this.prefs.t().compactModeOff
+
+    );
+
   }
+
+
+  /* =====================================================
+     SAUVEGARDER APPARENCE
+  ====================================================== */
 
   saveAppearance(): void {
-    this.showToast(this.prefs.t().preferencesSaved);
+
+    this.showToast(
+      this.prefs.t().preferencesSaved
+    );
+
   }
 
-  private showToast(message: string): void {
-    this.showSuccessMessage.set(message);
-    this.showSuccess.set(true);
-    setTimeout(() => this.showSuccess.set(false), 3000);
+
+  /* =====================================================
+     TOAST
+  ====================================================== */
+
+  private showToast(
+    message: string
+  ): void {
+
+    this.showSuccessMessage.set(
+      message
+    );
+
+    this.showSuccess.set(
+      true
+    );
+
+
+    setTimeout(() => {
+
+      this.showSuccess.set(
+        false
+      );
+
+    }, 3000);
+
   }
+
+
+  /* =====================================================
+     LOGOUT
+  ====================================================== */
 
   logout(): void {
+
     this.authStore.logout();
+
   }
 
-  get f() { return this.profileForm.controls; }
-  get s() { return this.securityForm.controls; }
+
+  /* =====================================================
+     GETTERS FORM
+  ====================================================== */
+
+  get f() {
+
+    return this.profileForm.controls;
+
+  }
+
+
+  get s() {
+
+    return this.securityForm.controls;
+
+  }
+
 }
