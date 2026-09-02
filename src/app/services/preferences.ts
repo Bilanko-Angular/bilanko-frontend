@@ -421,18 +421,102 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
  }
 };
 
+// src/app/services/preferences.ts
+
 @Injectable({ providedIn: 'root' })
 export class PreferencesService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly STORAGE_KEY = 'bilanko_preferences';
 
-  readonly language = signal<BilankoLanguage>('fr');
+  readonly language = signal<BilankoLanguage>(this.getInitialLanguage());
   readonly dateFormat = signal<string>('DD/MM/YYYY');
   readonly currency = signal<BilankoCurrency>('XAF');
   readonly compactMode = signal<boolean>(false);
 
   readonly t = computed(() => TRANSLATIONS[this.language()]);
+
+  // ✅ Méthode pour charger depuis localStorage
+  private loadFromStorage(): any {
+    if (!this.isBrowser) return null;
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  // ✅ Détecter la langue du navigateur
+  private getBrowserLanguage(): BilankoLanguage {
+    if (!this.isBrowser) return 'fr';
+    const browserLang = navigator.language || navigator.languages?.[0] || 'fr';
+    const lang = browserLang.split('-')[0].toLowerCase();
+    return lang === 'en' ? 'en' : lang === 'es' ? 'es' : 'fr';
+  }
+
+  // ✅ Vérifier si on est sur la landing page
+  private isLandingPage(): boolean {
+    if (!this.isBrowser) return false;
+    return window.location.pathname === '/' || window.location.pathname === '';
+  }
+
+  // ✅ Initialiser la langue
+  private getInitialLanguage(): BilankoLanguage {
+    if (this.isLandingPage()) {
+      return this.getBrowserLanguage();
+    }
+
+    const saved = this.loadFromStorage();
+    if (saved?.language) {
+      const lang = saved.language as BilankoLanguage;
+      return ['fr', 'en', 'es'].includes(lang) ? lang : 'fr';
+    }
+
+    return this.getBrowserLanguage();
+  }
+
+  // ✅ Pour la landing page
+  getSystemLanguage(): BilankoLanguage {
+    return this.getBrowserLanguage();
+  }
+
+  setLanguageFromSystem(): void {
+    this.language.set(this.getBrowserLanguage());
+  }
+
+  // ✅ Charger les préférences
+  private load(): void {
+    const prefs = this.loadFromStorage();
+    if (!prefs) return;
+    if (prefs.language) this.language.set(prefs.language);
+    if (prefs.dateFormat) this.dateFormat.set(prefs.dateFormat);
+    if (prefs.currency) this.currency.set(prefs.currency);
+    if (prefs.compactMode !== undefined) this.compactMode.set(prefs.compactMode);
+  }
+
+  // ✅ Sauvegarder (ne pas sauvegarder sur la landing page)
+  private save(): void {
+    if (!this.isBrowser) return;
+    if (this.isLandingPage()) return;
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
+        language: this.language(),
+        dateFormat: this.dateFormat(),
+        currency: this.currency(),
+        compactMode: this.compactMode(),
+      }));
+    } catch {}
+  }
+
+  // ✅ Appliquer au DOM
+  private applyDom(): void {
+    if (!this.isBrowser) return;
+    const html = document.documentElement;
+    html.setAttribute('lang', this.language());
+    html.setAttribute('data-compact', this.compactMode() ? 'true' : 'false');
+  }
 
   readonly angularDateFormat = computed(() => {
     switch (this.dateFormat()) {
@@ -448,37 +532,5 @@ export class PreferencesService {
       this.save();
       this.applyDom();
     });
-  }
-
-  private load(): void {
-    if (!this.isBrowser) return;
-    try {
-      const raw = localStorage.getItem(this.STORAGE_KEY);
-      if (!raw) return;
-      const prefs = JSON.parse(raw);
-      if (prefs.language) this.language.set(prefs.language);
-      if (prefs.dateFormat) this.dateFormat.set(prefs.dateFormat);
-      if (prefs.currency) this.currency.set(prefs.currency);
-      if (prefs.compactMode !== undefined) this.compactMode.set(prefs.compactMode);
-    } catch {}
-  }
-
-  private save(): void {
-    if (!this.isBrowser) return;
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
-        language: this.language(),
-        dateFormat: this.dateFormat(),
-        currency: this.currency(),
-        compactMode: this.compactMode(),
-      }));
-    } catch {}
-  }
-
-  private applyDom(): void {
-    if (!this.isBrowser) return;
-    const html = document.documentElement;
-    html.setAttribute('lang', this.language());
-    html.setAttribute('data-compact', this.compactMode() ? 'true' : 'false');
   }
 }
