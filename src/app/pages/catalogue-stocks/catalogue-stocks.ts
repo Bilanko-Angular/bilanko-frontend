@@ -3,10 +3,12 @@ import { CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProduitService } from '../../services/produit.service';
+import { ProduitStoreService } from '../../service/store/product/produit-store.service';
 import { ProduitForm } from './produit-form/produit-form';
 import { Produit } from '../../models/produit';
 import { Template } from '../../components/shared/template/template';
 import { PreferencesService } from '../../services/preferences';
+import { CreateProduitPayload, UpdateProduitPayload } from '../../models/DTO/payload/ProductPayload';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -22,6 +24,7 @@ type StatutStock = 'ok' | 'warning' | 'error';
 export class CatalogueStocks {
     protected readonly prefs = inject(PreferencesService);
   private readonly produitService = inject(ProduitService);
+  private readonly produitStore = inject(ProduitStoreService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly catalogue = this.produitService.catalogue;
@@ -188,18 +191,26 @@ export class CatalogueStocks {
     this.afficherFormulaire.set(false);
   }
 
-  onEnregistrer(donnees: Omit<Produit, 'id'>) {
+  async onEnregistrer(donnees: CreateProduitPayload) {
     const enEdition = this.produitEnEdition();
-    const requete = enEdition
-      ? this.produitService.modifier(enEdition.id, donnees)
-      : this.produitService.ajouter(donnees);
-
-    requete.subscribe({
-      next: () => {
-        this.fermerFormulaire();
-      },
-      error: (e) => console.error('Erreur enregistrement produit :', e),
-    });
+    try {
+      if (enEdition) {
+        const updatePayload: UpdateProduitPayload = {
+          nom: donnees.nom,
+          quantiteStock: donnees.quantiteStock,
+          prixVente: donnees.prixVente,
+          prixAchat: donnees.prixAchat,
+          seuilAlerte: donnees.seuilAlerte,
+          idCategories: donnees.idCategories,
+        };
+        await this.produitStore.modifier(enEdition.id, updatePayload);
+      } else {
+        await this.produitStore.ajouter(donnees);
+      }
+      this.fermerFormulaire();
+    } catch (e) {
+      console.error('Erreur enregistrement produit :', e);
+    }
   }
 
   // --- Suppression ---
