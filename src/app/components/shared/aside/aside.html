@@ -1,33 +1,48 @@
 <!-- src/app/components/shared/aside/aside.html -->
-<aside class="d-flex flex-column bg-body border-end position-sticky top-0 overflow-y-auto vh-100" style="width: 260px; min-width: 260px; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent;">
-  <!-- Logo / Marque -->
-  <div class="d-flex align-items-center gap-3 px-4 py-3 border-bottom border-light-subtle">
-    <div class="d-flex align-items-center justify-content-center rounded shadow-sm overflow-hidden" style="width: 36px; height: 36px;">
-      <img src="assets/images/logo.png" alt="Logo" class="w-100 h-100 object-fit-cover">
+
+<!-- ✅ OVERLAY (visible uniquement sur mobile quand menu ouvert) -->
+<div class="aside-overlay" [class.visible]="isOpen()" (click)="closeMenu()"></div>
+
+<!-- ✅ ASIDE -->
+<aside class="bk-aside" [class.open]="isOpen()">
+  <!-- En-tête du menu avec bouton de fermeture -->
+  <div class="bk-aside-header">
+    <div class="d-flex align-items-center gap-3">
+      <div class="d-flex align-items-center justify-content-center rounded shadow-sm overflow-hidden" style="width: 36px; height: 36px;">
+        <img src="assets/images/logo.png" alt="Logo" class="w-100 h-100 object-fit-cover">
+      </div>
+      <div class="d-flex flex-column">
+        <span class="fs-5 fw-bold lh-sm" style="color: var(--color-text); letter-spacing: -0.02em;">Bilanko</span>
+        <span class="text-muted lh-1 mt-1" style="font-size: 0.68rem;">{{ prefs.t().brandTagline }}</span>
+      </div>
     </div>
-    <div class="d-flex flex-column">
-      <span class="fs-5 fw-bold lh-sm" style="color: var(--color-text); letter-spacing: -0.02em;">Bilanko</span>
-      <span class="text-muted lh-1 mt-1" style="font-size: 0.68rem;">{{ prefs.t().brandTagline }}</span>
-    </div>
+    <!-- ✅ Bouton fermeture (visible uniquement sur mobile) -->
+    <button class="bk-aside-close" (click)="closeMenu()" aria-label="Fermer le menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
   </div>
 
-  <nav class="flex-grow-1 px-3 py-3 overflow-y-auto">
+  <!-- Navigation -->
+  <nav class="bk-aside-nav">
     <p class="text-uppercase text-muted fw-bold mb-2 px-2" style="font-size: 0.65rem; letter-spacing: 0.08em;">{{ prefs.t().main }}</p>
     <ul class="nav flex-column gap-1 mb-4">
       <li class="nav-item">
-        <a routerLink="/dashboard" routerLinkActive="active bg-primary text-white shadow-sm" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav">
+        <a routerLink="/dashboard" routerLinkActive="active bg-primary text-white shadow-sm" [routerLinkActiveOptions]="{exact: true}" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav" (click)="closeMenu()">
           <span class="material-symbols-outlined fs-5">dashboard</span>
           <span class="fw-medium" style="font-size: 0.9rem;">{{ prefs.t().dashboard }}</span>
         </a>
       </li>
       <li class="nav-item">
-        <a routerLink="/catalogue" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav">
+        <a routerLink="/catalogue" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav" (click)="closeMenu()">
           <span class="material-symbols-outlined fs-5">inventory_2</span>
           <span class="fw-medium" style="font-size: 0.9rem;">{{ prefs.t().catalogue }}</span>
         </a>
       </li>
       <li class="nav-item">
-        <a routerLink="/ventes" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav">
+        <a routerLink="/ventes" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav" (click)="closeMenu()">
           <span class="material-symbols-outlined fs-5">shopping_cart</span>
           <span class="fw-medium" style="font-size: 0.9rem;">{{ prefs.t().sales }}</span>
           <span class="badge bg-primary-subtle text-primary rounded-pill ms-auto nav-badge px-2">12</span>
@@ -38,13 +53,13 @@
     <p class="text-uppercase text-muted fw-bold mb-2 px-2" style="font-size: 0.65rem; letter-spacing: 0.08em;">{{ prefs.t().finances }}</p>
     <ul class="nav flex-column gap-1 mb-4">
       <li class="nav-item">
-        <a routerLink="/charges" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav">
+        <a routerLink="/charges" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav" (click)="closeMenu()">
           <span class="material-symbols-outlined fs-5">account_balance_wallet</span>
           <span class="fw-medium" style="font-size: 0.9rem;">{{ prefs.t().charges }}</span>
         </a>
       </li>
       <li class="nav-item">
-        <a routerLink="/banque-fiscalite" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav">
+        <a routerLink="/banque-fiscalite" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav" (click)="closeMenu()">
           <span class="material-symbols-outlined fs-5">account_balance</span>
           <span class="fw-medium" style="font-size: 0.9rem;">{{ prefs.t().documents }}</span>
           <span class="badge bg-light text-muted border rounded-pill ms-auto nav-badge px-2" style="font-size: 0.65rem; font-weight: 500;">{{ prefs.t().soon }}</span>
@@ -55,7 +70,7 @@
     <p class="text-uppercase text-muted fw-bold mb-2 px-2" style="font-size: 0.65rem; letter-spacing: 0.08em;">{{ prefs.t().system }}</p>
     <ul class="nav flex-column gap-1">
       <li class="nav-item">
-        <a routerLink="/parametres" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav">
+        <a routerLink="/parametres" routerLinkActive="active bg-primary text-white shadow-sm" class="nav-link text-muted rounded d-flex align-items-center gap-3 px-3 py-2 btn-nav" (click)="closeMenu()">
           <span class="material-symbols-outlined fs-5">settings</span>
           <span class="fw-medium" style="font-size: 0.9rem;">{{ prefs.t().settings }}</span>
         </a>
@@ -63,22 +78,25 @@
     </ul>
   </nav>
 
-  <div class="mt-auto px-4 py-3 border-top border-light-subtle d-flex align-items-center gap-3 bg-body-tertiary">
-    @if (userStore.user()?.profilePicture && !profileImageError()) {
-      <div class="rounded-circle shadow-sm overflow-hidden flex-shrink-0" style="width: 32px; height: 32px;">
-        <img [src]="userStore.user()?.profilePicture" alt="Profile" class="w-100 h-100 object-fit-cover" (error)="profileImageError.set(true)">
+  <!-- Footer du menu (profil) -->
+  <div class="bk-aside-footer">
+    <div class="d-flex align-items-center gap-3 px-4 py-3 border-top border-light-subtle">
+      @if (userStore.user()?.profilePicture && !profileImageError()) {
+        <div class="rounded-circle shadow-sm overflow-hidden flex-shrink-0" style="width: 32px; height: 32px;">
+          <img [src]="userStore.user()?.profilePicture" alt="Profile" class="w-100 h-100 object-fit-cover" (error)="profileImageError.set(true)">
+        </div>
+      } @else {
+        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0 shadow-sm" style="width: 32px; height: 32px; font-size: 0.7rem;">
+          {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
+        </div>
+      }
+      <div class="flex-grow-1 overflow-hidden lh-sm">
+        <p class="mb-1 fw-semibold text-truncate" style="font-size: 0.85rem; color: var(--color-text);">{{ userStore.user()?.nom }} {{ userStore.user()?.subname }}</p>
+        <p class="mb-0 text-muted text-truncate" style="font-size: 0.7rem;">{{ userStore.user()?.email }}</p>
       </div>
-    } @else {
-      <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0 shadow-sm" style="width: 32px; height: 32px; font-size: 0.7rem;">
-        {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
-      </div>
-    }
-    <div class="flex-grow-1 overflow-hidden lh-sm">
-      <p class="mb-1 fw-semibold text-truncate" style="font-size: 0.85rem; color: var(--color-text);">{{ userStore.user()?.nom }} {{ userStore.user()?.subname }}</p>
-      <p class="mb-0 text-muted text-truncate" style="font-size: 0.7rem;">{{ userStore.user()?.email }}</p>
+      <button class="btn btn-sm btn-outline-danger border-0 p-2 d-flex align-items-center justify-content-center rounded-circle" (click)="logout()" [attr.aria-label]="prefs.t().logout" [attr.title]="prefs.t().logout">
+        <span class="material-symbols-outlined fs-5">logout</span>
+      </button>
     </div>
-    <button class="btn btn-sm btn-outline-danger border-0 p-2 d-flex align-items-center justify-content-center rounded-circle" (click)="logout()" [attr.aria-label]="prefs.t().logout" [attr.title]="prefs.t().logout">
-      <span class="material-symbols-outlined fs-5">logout</span>
-    </button>
   </div>
 </aside>

@@ -1,797 +1,565 @@
+/* ============================================================
+   DASHBOARD BILANKO — REFAIT PROFESSIONNEL
+   ============================================================ */
+
+/* ✅ Reset local */
 .bk-dashboard {
-  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 1.25rem;
+  width: 100%;
+  color: var(--color-text);
+  background: transparent;
+  padding: 0.25rem 0 0.5rem;
 }
 
-
+/* ✅ HEADER (propre) */
 .bk-dashboard__header {
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
-
 
 .bk-dashboard__eyebrow {
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 0.2rem;
   color: var(--color-primary);
-  font-size: .62rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: .10em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
-
 
 .bk-dashboard__header h1 {
   margin: 0;
   color: var(--color-text);
-  font-size: 1.55rem;
-  line-height: 1.15;
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
   font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .bk-dashboard__header p {
-  margin: 4px 0 0;
+  margin: 0.2rem 0 0;
   color: var(--color-text-muted);
-  font-size: .78rem;
+  font-size: clamp(0.75rem, 1vw, 0.85rem);
 }
 
+/* ✅ QUICK ACTIONS */
 .bk-quick-actions {
   display: grid;
-  grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
 }
-
 
 .bk-quick-action {
-
-  min-height: 62px;
-
   display: flex;
-
   align-items: center;
-
-  gap: 10px;
-
-  padding: 9px 12px;
-
-  border:
-    1px solid var(--color-border);
-
-  border-radius: 6px;
-
-  background:
-    var(--color-surface);
-
-  color:
-    var(--color-text);
-
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  min-height: 60px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  color: var(--color-text);
   text-decoration: none;
-
+  transition: all 0.2s ease;
   cursor: pointer;
-
-  transition:
-    transform .15s ease,
-    border-color .15s ease,
-    box-shadow .15s ease;
-
 }
-
 
 .bk-quick-action:hover {
-
-  transform:
-    translateY(-1px);
-
-  border-color:
-    var(--color-primary);
-
-  box-shadow:
-    0 5px 16px rgba(0,0,0,.06);
-
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
-
 
 .bk-quick-action--primary {
-
-  background:
-    var(--color-primary);
-
-  border-color:
-    var(--color-primary);
-
-  color:
-    var(--color-on-brand);
-
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-brand);
 }
-
 
 .bk-quick-action--primary:hover {
-
-  background:
-    var(--color-primary-hover);
-
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--color-on-brand);
 }
 
-
 .bk-quick-action__icon {
-
   width: 34px;
-
   height: 34px;
-
-  flex: 0 0 34px;
-
+  flex-shrink: 0;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  border-radius: 7px;
-
-  background:
-    var(--color-primary-subtle);
-
-  color:
-    var(--color-primary);
-
-  font-size: .7rem;
-
-  font-weight: 700;
-
+  border-radius: 8px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  font-size: 1rem;
 }
 
-
-.bk-quick-action--primary
-.bk-quick-action__icon {
-
-  background:
-    rgba(255,255,255,.16);
-
-  color:
-    var(--color-on-brand);
-
+.bk-quick-action--primary .bk-quick-action__icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--color-on-brand);
 }
-
 
 .bk-quick-action__icon svg {
-
   width: 18px;
-
   height: 18px;
-
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
 }
-
 
 .bk-quick-action__content {
-
-  min-width: 0;
-
   flex: 1;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 2px;
-
+  min-width: 0;
 }
-
 
 .bk-quick-action__content strong {
-
-  font-size: .76rem;
-
+  display: block;
+  font-size: clamp(0.75rem, 1vw, 0.85rem);
   font-weight: 700;
-
+  line-height: 1.2;
 }
-
 
 .bk-quick-action__content small {
-
-  color:
-    var(--color-text-muted);
-
-  font-size: .61rem;
-
+  display: block;
+  font-size: clamp(0.55rem, 0.8vw, 0.65rem);
+  color: var(--color-text-muted);
+  line-height: 1.3;
 }
 
-
-.bk-quick-action--primary
-.bk-quick-action__content small {
-
-  color:
-    rgba(255,255,255,.8);
-
+.bk-quick-action--primary .bk-quick-action__content small {
+  color: rgba(255, 255, 255, 0.8);
 }
-
 
 .bk-quick-action__arrow {
-
-  color:
-    var(--color-text-muted);
-
-  font-size: .95rem;
-
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
 }
 
-
-.bk-quick-action--primary
-.bk-quick-action__arrow {
-
-  color:
-    rgba(255,255,255,.8);
-
+.bk-quick-action--primary .bk-quick-action__arrow {
+  color: rgba(255, 255, 255, 0.8);
 }
 
+.bk-quick-action:hover .bk-quick-action__arrow {
+  transform: translateX(4px);
+}
 
-/* ============================================================
-   KPI
-   ============================================================ */
-
+/* ✅ KPI GRID */
 .bk-kpi-grid {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
-  gap: 10px;
-
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
 }
-
 
 .bk-kpi-card {
-
-  min-width: 0;
-
-  padding: 13px;
-
   display: flex;
-
   flex-direction: column;
-
-  gap: 5px;
-
-  background:
-    var(--color-surface);
-
-  border:
-    1px solid var(--color-border);
-
-  border-radius: 6px;
-
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
 }
-
 
 .bk-kpi-card__top {
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
 }
-
 
 .bk-kpi-card__icon {
-
-  width: 31px;
-
-  height: 31px;
-
+  width: 30px;
+  height: 30px;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  border-radius: 7px;
-
-  font-size: .62rem;
-
+  border-radius: 8px;
+  font-size: 0.6rem;
   font-weight: 800;
-
 }
-
 
 .bk-kpi-card__icon--green {
-
-  background:
-    var(--color-primary-subtle);
-
-  color:
-    var(--color-primary);
-
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
-
 
 .bk-kpi-card__icon--orange {
-
-  background:
-    var(--color-accent-subtle);
-
-  color:
-    var(--color-accent);
-
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
 }
-
 
 .bk-kpi-card__icon--dark {
-
-  background:
-    var(--color-positive-subtle);
-
-  color:
-    var(--color-positive);
-
+  background: var(--color-positive-subtle);
+  color: var(--color-positive);
 }
-
 
 .bk-kpi-card__icon--soft {
-
-  background:
-    var(--color-primary-subtle);
-
-  color:
-    var(--color-primary);
-
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
-
 
 .bk-kpi-card__trend {
-
-  padding: 3px 6px;
-
+  padding: 0.2rem 0.5rem;
   border-radius: 999px;
-
-  background:
-    var(--color-background);
-
-  color:
-    var(--color-text-muted);
-
-  font-size: .55rem;
-
+  background: var(--color-background);
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
 }
-
 
 .bk-kpi-card__trend--positive {
-
-  background:
-    var(--color-positive-subtle);
-
-  color:
-    var(--color-positive);
-
+  background: var(--color-positive-subtle);
+  color: var(--color-positive);
 }
-
 
 .bk-kpi-card__label {
-
-  color:
-    var(--color-text-muted);
-
-  font-size: .65rem;
-
+  font-size: clamp(0.6rem, 0.8vw, 0.7rem);
+  color: var(--color-text-muted);
 }
-
 
 .bk-kpi-card__value {
-
   display: flex;
-
   align-items: baseline;
-
-  gap: 4px;
-
-  color:
-    var(--color-text);
-
-  font-size: 1.15rem;
-
-  line-height: 1.1;
-
+  gap: 0.3rem;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
   font-weight: 750;
-
+  color: var(--color-text);
+  line-height: 1.2;
 }
-
 
 .bk-kpi-card__value small {
-
-  color:
-    var(--color-text-muted);
-
-  font-size: .58rem;
-
+  font-size: clamp(0.5rem, 0.7vw, 0.6rem);
   font-weight: 600;
-
+  color: var(--color-text-muted);
 }
-
 
 .bk-kpi-card__value--positive {
-
-  color:
-    var(--color-positive);
-
+  color: var(--color-positive);
 }
-
 
 .bk-kpi-card__value--negative {
-
-  color:
-    var(--color-negative);
-
+  color: var(--color-negative);
 }
 
-
-/* ============================================================
-   COLONNES
-   ============================================================ */
-
+/* ✅ COLONNES */
 .bk-dashboard__columns {
-
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1.7fr)
-    minmax(260px, 1fr);
-
-  gap: 10px;
-
+  grid-template-columns: minmax(0, 1.7fr) minmax(240px, 1fr);
+  gap: 0.75rem;
 }
-
 
 .bk-panel {
-
-  min-width: 0;
-
-  padding: 14px;
-
-  background:
-    var(--color-surface);
-
-  border:
-    1px solid var(--color-border);
-
-  border-radius: 6px;
-
+  padding: 1rem 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
 }
-
 
 .bk-panel__header {
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
-  gap: 10px;
-
-  margin-bottom: 8px;
-
+  gap: 1rem;
+  margin-bottom: 0.75rem;
 }
-
 
 .bk-panel__eyebrow {
-
   display: block;
-
-  margin-bottom: 2px;
-
-  color:
-    var(--color-primary);
-
-  font-size: .54rem;
-
+  margin-bottom: 0.1rem;
+  color: var(--color-primary);
+  font-size: 0.55rem;
   font-weight: 700;
-
-  letter-spacing: .08em;
-
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-
 
 .bk-panel__header h2 {
-
   margin: 0;
-
-  color:
-    var(--color-text);
-
-  font-size: .86rem;
-
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
   font-weight: 700;
-
+  color: var(--color-text);
 }
-
 
 .bk-panel__link {
-
-  color:
-    var(--color-primary);
-
+  font-size: clamp(0.6rem, 0.8vw, 0.7rem);
+  font-weight: 600;
+  color: var(--color-primary);
   text-decoration: none;
-
-  font-size: .65rem;
-
-  font-weight: 650;
-
+  white-space: nowrap;
 }
-
 
 .bk-panel__link:hover {
-
   text-decoration: underline;
-
 }
 
-
-/* ============================================================
-   TABLE
-   ============================================================ */
-
+/* ✅ TABLE */
 .bk-table-wrapper {
-
-  width: 100%;
-
   overflow-x: auto;
-
 }
-
 
 .bk-table {
-
   width: 100%;
-
   border-collapse: collapse;
-
-  font-size: .67rem;
-
+  font-size: clamp(0.65rem, 0.8vw, 0.75rem);
 }
-
 
 .bk-table th {
-
-  padding: 7px 5px;
-
-  border-bottom:
-    1px solid var(--color-border);
-
-  color:
-    var(--color-text-muted);
-
-  font-size: .53rem;
-
+  padding: 0.5rem 0.4rem;
   text-align: left;
-
+  font-size: clamp(0.5rem, 0.7vw, 0.6rem);
   text-transform: uppercase;
-
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
 }
-
 
 .bk-table td {
-
-  padding: 8px 5px;
-
-  border-bottom:
-    1px solid var(--color-border);
-
-  color:
-    var(--color-text);
-
+  padding: 0.6rem 0.4rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
 }
-
 
 .bk-table tbody tr:last-child td {
-
-  border-bottom: 0;
-
+  border-bottom: none;
 }
-
 
 .bk-table tbody tr:hover {
-
-  background:
-    var(--color-primary-subtle);
-
+  background: var(--color-primary-subtle);
 }
-
 
 .bk-table__num {
-
   text-align: right;
-
   white-space: nowrap;
-
 }
-
 
 .bk-table__num--positive {
-
-  color:
-    var(--color-positive);
-
-  font-weight: 650;
-
+  color: var(--color-positive);
+  font-weight: 600;
 }
-
 
 .bk-product-cell {
-
   display: flex;
-
   align-items: center;
-
-  gap: 6px;
-
+  gap: 0.5rem;
 }
-
 
 .bk-product-dot {
-
   width: 6px;
-
   height: 6px;
-
-  flex: 0 0 6px;
-
+  flex-shrink: 0;
   border-radius: 50%;
-
-  background:
-    var(--color-primary);
-
+  background: var(--color-primary);
 }
 
-
-/* ============================================================
-   CHARGES
-   ============================================================ */
-
+/* ✅ LISTE CHARGES */
 .bk-list {
-
   list-style: none;
-
   margin: 0;
-
   padding: 0;
-
 }
-
 
 .bk-list__item {
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
-  gap: 8px;
-
-  padding: 8px 0;
-
-  border-bottom:
-    1px solid var(--color-border);
-
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--color-border);
 }
-
 
 .bk-list__item:last-child {
-
-  border-bottom: 0;
-
+  border-bottom: none;
 }
-
 
 .bk-charge-info {
-
-  min-width: 0;
-
   display: flex;
-
   align-items: center;
-
-  gap: 7px;
-
-  color:
-    var(--color-text);
-
-  font-size: .67rem;
-
+  gap: 0.6rem;
+  min-width: 0;
+  font-size: clamp(0.65rem, 0.8vw, 0.75rem);
+  color: var(--color-text);
 }
-
 
 .bk-charge-icon {
-
   width: 26px;
-
   height: 26px;
-
-  flex: 0 0 26px;
-
+  flex-shrink: 0;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   border-radius: 6px;
-
-  background:
-    var(--color-negative-subtle);
-
-  color:
-    var(--color-negative);
-
+  background: var(--color-negative-subtle);
+  color: var(--color-negative);
   font-weight: 700;
-
+  font-size: 0.7rem;
 }
-
 
 .bk-list__amount {
-
-  color:
-    var(--color-negative);
-
+  font-size: clamp(0.6rem, 0.8vw, 0.7rem);
+  font-weight: 600;
+  color: var(--color-negative);
   white-space: nowrap;
-
-  font-size: .65rem;
-
 }
-
 
 .bk-empty {
-
-  padding: 18px 8px;
-
+  padding: 1.5rem 0.5rem;
   text-align: center;
-
-  color:
-    var(--color-text-muted);
-
-  font-size: .68rem;
-
+  color: var(--color-text-muted);
+  font-size: clamp(0.65rem, 0.8vw, 0.75rem);
 }
-
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — PARFAITEMENT ADAPTÉ
    ============================================================ */
 
+/* ✅ Tablette */
 @media (max-width: 1050px) {
-
   .bk-quick-actions,
   .bk-kpi-grid {
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
-
-@media (max-width: 800px) {
-
+@media (max-width: 900px) {
   .bk-dashboard__columns {
-
     grid-template-columns: 1fr;
-
   }
-
 }
 
-
-@media (max-width: 560px) {
-
-  .bk-quick-actions,
-  .bk-kpi-grid {
-
-    grid-template-columns: 1fr;
-
+/* ✅ Mobile */
+@media (max-width: 650px) {
+  .bk-quick-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
 
+  .bk-quick-action {
+    min-height: 52px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .bk-quick-action__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .bk-quick-action__icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .bk-quick-action__content strong {
+    font-size: 0.7rem;
+  }
+
+  .bk-quick-action__content small {
+    font-size: 0.5rem;
+  }
+
+  .bk-kpi-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .bk-kpi-card {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .bk-kpi-card__value {
+    font-size: 1rem;
+  }
+
+  .bk-panel {
+    padding: 0.75rem;
+  }
+}
+
+/* ✅ Très petit mobile */
+@media (max-width: 480px) {
+  .bk-quick-actions {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .bk-quick-action {
+    min-height: 44px;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .bk-kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .bk-kpi-card {
+    padding: 0.5rem 0.6rem;
+  }
+
+  .bk-kpi-card__value {
+    font-size: 0.9rem;
+  }
+
+  .bk-dashboard__header h1 {
+    font-size: 1.1rem;
+  }
+
+  .bk-panel {
+    padding: 0.5rem;
+  }
+
+  .bk-table {
+    font-size: 0.6rem;
+  }
+
+  .bk-table th,
+  .bk-table td {
+    padding: 0.3rem 0.25rem;
+  }
+}
+
+/* ============================================================
+   MODE COMPACT (activé dans les préférences)
+   ============================================================ */
+[data-compact="true"] .bk-dashboard {
+  gap: 0.75rem !important;
+}
+
+[data-compact="true"] .bk-quick-action {
+  min-height: 44px !important;
+  padding: 0.35rem 0.6rem !important;
+}
+
+[data-compact="true"] .bk-quick-action__icon {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+[data-compact="true"] .bk-kpi-card {
+  padding: 0.4rem 0.6rem !important;
+}
+
+[data-compact="true"] .bk-panel {
+  padding: 0.5rem 0.75rem !important;
+}
+
+[data-compact="true"] .bk-panel__header {
+  margin-bottom: 0.4rem !important;
+}
+
+[data-compact="true"] .bk-table th,
+[data-compact="true"] .bk-table td {
+  padding: 0.25rem 0.3rem !important;
+}
+
+[data-compact="true"] .bk-list__item {
+  padding: 0.35rem 0 !important;
+}
+
+[data-compact="true"] .bk-kpi-card__value {
+  font-size: 0.9rem !important;
 }
