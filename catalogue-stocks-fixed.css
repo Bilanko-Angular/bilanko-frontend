@@ -263,7 +263,7 @@
 }
 .bk-icon-btn--danger {
   color: var(--color-text-muted);
-}
+}j
 .bk-icon-btn--danger:hover {
   border-color: var(--color-negative);
   color: var(--color-negative);
