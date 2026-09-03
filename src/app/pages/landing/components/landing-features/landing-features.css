@@ -12,6 +12,7 @@
 .section-container {
   width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
+  padding: 0 0.5rem;
 }
 
 /* ============================================================
@@ -42,7 +43,7 @@
 .section-heading h2 {
   margin: 0 0 17px;
   color: var(--color-text);
-  font-size: clamp(2.1rem, 4vw, 3.5rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 1.08;
   letter-spacing: -0.05em;
 }
@@ -54,7 +55,7 @@
 .section-heading p {
   margin: 0;
   color: var(--color-text-muted);
-  font-size: 0.98rem;
+  font-size: clamp(0.85rem, 1.2vw, 0.98rem);
   line-height: 1.75;
 }
 
@@ -98,6 +99,7 @@
   margin-bottom: 25px;
   border-radius: 12px;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .feature-card:hover .feature-icon {
@@ -137,7 +139,7 @@
 .feature-card h3 {
   margin: 0 0 12px;
   color: var(--color-text);
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
   font-weight: 800;
 }
 
@@ -145,7 +147,7 @@
   min-height: 85px;
   margin: 0;
   color: var(--color-text-muted);
-  font-size: 0.82rem;
+  font-size: clamp(0.75rem, 1vw, 0.82rem);
   line-height: 1.7;
   flex: 1;
 }
@@ -206,21 +208,42 @@
 
   .features-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .feature-card {
     min-height: auto;
+    padding: 20px 24px;
   }
 
   .feature-card p {
     min-height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+  }
+
+  .section-container {
+    width: min(100%, calc(100% - 24px));
   }
 }
 
 @media (max-width: 420px) {
   .section-heading h2 {
     font-size: 1.9rem;
+  }
+
+  .feature-card {
+    padding: 16px 18px;
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 18px;
+  }
+
+  .feature-icon svg {
+    width: 18px;
+    height: 18px;
   }
 }
 

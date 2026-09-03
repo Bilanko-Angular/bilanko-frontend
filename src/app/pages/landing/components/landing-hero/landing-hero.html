@@ -8,8 +8,6 @@
   <div class="hero-container">
     <!-- HERO TEXT -->
     <div class="hero-content" appAnimateOnScroll [appAnimateOnScrollDelay]="0">
-      
-
       <h1>
         Gérez votre activité.
         <span>Préparez votre avenir.</span>
@@ -53,7 +51,12 @@
         <!-- Dashboard top -->
         <div class="dashboard-top">
           <div class="dashboard-brand">
-            <span class="mini-logo">B</span>
+            <!-- ✅ MINI LOGO AVEC IMAGE -->
+            <img 
+              src="assets/images/logo.png" 
+              alt="Bilanko" 
+              class="mini-logo-img"
+            />
             <span>Tableau de bord</span>
           </div>
           <div class="dashboard-user"><span></span><span></span></div>

@@ -43,7 +43,7 @@ export class BanqueFiscalite {
   readonly etape = signal<Etape>(1);
   readonly typeDossier = signal<TypeDossier | null>(null);
 
-  // --- Identification (commune) ---
+  // --- Identification (commune) ---//
   readonly raisonSociale = signal('');
   readonly activite = signal('');
   readonly adresse = signal('');

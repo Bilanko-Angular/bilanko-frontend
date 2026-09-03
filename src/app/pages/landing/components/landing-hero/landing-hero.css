@@ -61,6 +61,7 @@
   grid-template-columns: 0.95fr 1.05fr;
   align-items: center;
   gap: 70px;
+  padding: 0 0.5rem;
 }
 
 /* ============================================================
@@ -113,7 +114,7 @@
   max-width: 690px;
   margin: 24px 0 22px;
   color: var(--color-text);
-  font-size: clamp(3.1rem, 5.3vw, 5.1rem);
+  font-size: clamp(2.8rem, 5.3vw, 5.1rem);
   line-height: 0.98;
   letter-spacing: -0.065em;
   font-weight: 800;
@@ -145,6 +146,7 @@
   align-items: center;
   gap: 12px;
   margin-top: 30px;
+  flex-wrap: wrap;
 }
 
 .primary-button,
@@ -156,7 +158,7 @@
   gap: 9px;
   padding: 0 20px;
   border-radius: 10px;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 1.2vw, 0.9rem);
   font-weight: 700;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -344,6 +346,8 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 11px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .dashboard-heading small {
@@ -366,6 +370,7 @@
   color: var(--color-text-muted);
   font-size: 0.62rem;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .dashboard-date:hover {
@@ -404,7 +409,7 @@
   justify-content: space-between;
   margin-bottom: 6px;
   color: var(--color-text-muted);
-  font-size: 0.65rem;
+  font-size: clamp(0.55rem, 1vw, 0.65rem);
   font-weight: 600;
 }
 
@@ -412,13 +417,13 @@
   display: block;
   margin-bottom: 2px;
   color: var(--color-text);
-  font-size: 0.82rem;
+  font-size: clamp(0.7rem, 1.2vw, 0.82rem);
   font-weight: 800;
 }
 
 .stat-card small {
   color: var(--color-text-muted);
-  font-size: 0.54rem;
+  font-size: clamp(0.45rem, 0.8vw, 0.54rem);
 }
 
 .stat-card small.positive {
@@ -433,6 +438,7 @@
   justify-content: center;
   border-radius: 7px;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .stat-card:hover .stat-icon {
@@ -486,6 +492,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .chart-header > div span {
@@ -498,7 +506,7 @@
   display: block;
   margin-top: 4px;
   color: var(--color-text);
-  font-size: 0.92rem;
+  font-size: clamp(0.8rem, 1.2vw, 0.92rem);
 }
 
 .chart-growth {
@@ -509,6 +517,7 @@
   font-size: 0.6rem;
   font-weight: 700;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .chart-growth:hover {
@@ -778,6 +787,7 @@
   .hero-container {
     grid-template-columns: 1fr;
     gap: 55px;
+    width: min(1180px, calc(100% - 24px));
   }
 
   .hero-content {
@@ -786,6 +796,7 @@
 
   .hero h1 {
     max-width: 700px;
+    font-size: clamp(2.5rem, 6vw, 3.8rem);
   }
 
   .hero-visual {
@@ -797,6 +808,10 @@
   .floating-result {
     display: none;
   }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 650px) {
@@ -806,26 +821,30 @@
 
   .hero-container {
     width: min(100% - 28px, 1180px);
+    gap: 40px;
   }
 
   .hero h1 {
     margin-top: 2px;
-    font-size: 2.8rem;
+    font-size: clamp(2.2rem, 7vw, 2.8rem);
     letter-spacing: -0.06em;
   }
 
   .hero-description {
-    font-size: 0.9rem;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
   }
 
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .primary-button,
   .secondary-button {
     width: 100%;
+    justify-content: center;
+    min-height: 48px;
   }
 
   .hero-trust {
@@ -851,29 +870,40 @@
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .stat-card {
-    padding: 11px;
+    padding: 8px 10px;
   }
 
   .chart {
-    height: 110px;
+    height: 80px;
+  }
+
+  .floating-result {
+    display: none;
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
   .hero h1 {
-    font-size: 2.35rem;
+    font-size: 2rem;
   }
 
   .hero-badge {
     font-size: 0.65rem;
+    padding: 6px 10px;
   }
 
   .dashboard-top {
-    height: 48px;
+    height: 44px;
+    padding: 0 12px;
+  }
+
+  .dashboard-brand {
+    font-size: 0.7rem;
   }
 
   .dashboard-date {
@@ -881,7 +911,16 @@
   }
 
   .dashboard-heading {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .stat-card {
+    padding: 8px 12px;
   }
 
   .chart-card {
@@ -890,10 +929,37 @@
 
   .activity-row {
     grid-template-columns: 28px 1fr;
+    gap: 8px;
   }
 
   .activity-row b {
     display: none;
+  }
+
+  .chart-labels {
+    font-size: 0.45rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .hero-container {
+    padding: 0 0.25rem;
+  }
+
+  .dashboard-body {
+    padding: 8px;
+  }
+
+  .stat-card strong {
+    font-size: 0.75rem;
+  }
+
+  .stat-top {
+    font-size: 0.5rem;
   }
 }
 
@@ -939,6 +1005,26 @@
 
   .floating-result {
     animation: none;
+  }
+}
+/* Ajouter à la fin de landing-hero.css */
+
+/* ✅ MINI LOGO AVEC IMAGE (dans le dashboard preview) */
+.mini-logo-img {
+  width: 25px;
+  height: 25px;
+  border-radius: 7px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Ajustement pour mobile */
+@media (max-width: 480px) {
+  .mini-logo-img {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
   }
 }
 
