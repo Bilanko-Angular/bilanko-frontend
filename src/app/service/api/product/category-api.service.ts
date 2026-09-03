@@ -10,7 +10,14 @@ export class CategoryApiService {
   private readonly basePath = '/categories';
 
   async getAll(): Promise<CategorieOption[]> {
-    const response = await apiClient.get<CategoryApiDto[]>(this.basePath+"/all");
+    const response = await apiClient.get<CategoryApiDto[]>(this.basePath + '/all');
+    return response.data.map((dto) => ({ id: dto.id, name: dto.name }));
+  }
+
+  async search(name: string): Promise<CategorieOption[]> {
+    const response = await apiClient.get<CategoryApiDto[]>(this.basePath + '/search', {
+      params: { name },
+    });
     return response.data.map((dto) => ({ id: dto.id, name: dto.name }));
   }
 

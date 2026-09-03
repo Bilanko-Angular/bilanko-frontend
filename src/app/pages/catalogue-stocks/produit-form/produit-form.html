@@ -1,5 +1,7 @@
 <div class="bilanko-form-overlay" (click)="annuler.emit()">
   <form class="bilanko-form-card" #produitForm="ngForm" (click)="$event.stopPropagation()" (ngSubmit)="onSubmit(produitForm)">
+
+    <!-- ═══════════════════════════════ EN-TÊTE ═════════════════════════════════ -->
     <div class="bilanko-form-header">
       <h3>{{ produit() ? prefs.t().editProduct : prefs.t().newProduct }}</h3>
       <button type="button" class="bilanko-form-close" (click)="annuler.emit()" [title]="prefs.t().close">
@@ -10,23 +12,89 @@
       </button>
     </div>
 
-    <div class="bilanko-form-grid">
-      <label>
-        {{ prefs.t().reference }}
-        <input
-          [(ngModel)]="reference"
-          name="reference"
-          #referenceRef="ngModel"
-          placeholder="ex: REF-001"
-          required
-          minlength="2"
-        />
-        @if (referenceRef.invalid && referenceRef.touched) {
-          <span class="bilanko-form-error">La référence est obligatoire (2 caractères min.).</span>
+    <!-- ═══════════════════════════ AIDE IA (2 boutons) ════════════════════════ -->
+    <div class="bilanko-ai-bar">
+      <!-- Bouton Image IA -->
+      <button
+        type="button"
+        class="bilanko-ai-btn"
+        [class.bilanko-ai-btn--loading]="aiImageLoading()"
+        (click)="triggerImageInput()"
+        [disabled]="aiImageLoading() || aiVoiceLoading() || isRecording()"
+        title="Pré-remplir depuis une photo du produit"
+      >
+        @if (aiImageLoading()) {
+          <span class="bilanko-spinner"></span>
+          <span>Analyse…</span>
+        } @else {
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span>Photo du produit</span>
         }
-      </label>
+      </button>
+      <!-- input caché pour l'image -->
+      <input
+        id="ai-image-input"
+        type="file"
+        accept="image/*"
+        style="display:none"
+        (change)="onImageSelected($event)"
+      />
 
-      <label>
+      <!-- Bouton Voice IA -->
+      <button
+        type="button"
+        class="bilanko-ai-btn"
+        [class.bilanko-ai-btn--recording]="isRecording()"
+        [class.bilanko-ai-btn--loading]="aiVoiceLoading()"
+        (click)="toggleRecording()"
+        [disabled]="aiImageLoading() || aiVoiceLoading()"
+        title="Décrire le produit à voix haute"
+      >
+        @if (aiVoiceLoading()) {
+          <span class="bilanko-spinner"></span>
+          <span>Traitement…</span>
+        } @else if (isRecording()) {
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="6" width="12" height="12" rx="1"/>
+          </svg>
+          <span>Arrêter</span>
+        } @else {
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+          <span>Décrire vocalement</span>
+        }
+      </button>
+    </div>
+
+    <!-- Messages d'erreur IA -->
+    @if (aiImageError()) {
+      <div class="bilanko-ai-error">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        {{ aiImageError() }}
+      </div>
+    }
+    @if (aiVoiceError()) {
+      <div class="bilanko-ai-error">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        {{ aiVoiceError() }}
+      </div>
+    }
+
+    <!-- ═════════════════════════ GRILLE DES CHAMPS ════════════════════════════ -->
+    <div class="bilanko-form-grid">
+
+      <!-- Nom du produit (toute la largeur) -->
+      <label class="bilanko-form-full">
         {{ prefs.t().productName }}
         <input
           [(ngModel)]="nom"
@@ -41,35 +109,23 @@
         }
       </label>
 
-      <label>
-        {{ prefs.t().category }}
-        <input
-          [(ngModel)]="categorie"
-          name="categorie"
-          #categorieRef="ngModel"
-          placeholder="ex: Informatique"
-          required
-        />
-        @if (categorieRef.invalid && categorieRef.touched) {
-          <span class="bilanko-form-error">La catégorie est obligatoire.</span>
-        }
-      </label>
-
+      <!-- Prix d'achat -->
       <label>
         {{ prefs.t().purchasePrice }}
         <input
           type="number"
           [(ngModel)]="prixAchat"
           name="prixAchat"
-          #prixRef="ngModel"
-          min="1"
+          #prixAchatRef="ngModel"
+          min="0"
           required
         />
-        @if (prixRef.invalid && prixRef.touched) {
-          <span class="bilanko-form-error">Indiquez un prix d'achat supérieur à 0.</span>
+        @if (prixAchatRef.invalid && prixAchatRef.touched) {
+          <span class="bilanko-form-error">Indiquez un prix d'achat valide.</span>
         }
       </label>
 
+      <!-- Prix de vente -->
       <label>
         {{ prefs.t().sellingPrice }}
         <input
@@ -80,8 +136,12 @@
           min="0"
           required
         />
+        @if (prixVenteRef.invalid && prixVenteRef.touched) {
+          <span class="bilanko-form-error">Indiquez un prix de vente valide.</span>
+        }
       </label>
 
+      <!-- Quantité en stock -->
       <label>
         {{ prefs.t().stockQuantity }}
         <input
@@ -97,6 +157,7 @@
         }
       </label>
 
+      <!-- Seuil d'alerte -->
       <label>
         {{ prefs.t().alertThreshold }}
         <input
@@ -108,16 +169,65 @@
           required
         />
         @if (seuilRef.invalid && seuilRef.touched) {
-          <span class="bilanko-form-error">Le seuil d'alerte doit être 0 ou plus.</span>
+          <span class="bilanko-form-error">Le seuil doit être 0 ou plus.</span>
         }
       </label>
     </div>
 
+    <!-- ══════════════════════ SÉLECTEUR DE CATÉGORIES ═════════════════════════ -->
+    <div class="bilanko-cat-section">
+      <span class="bilanko-cat-label">{{ prefs.t().category }}</span>
+
+      <!-- Tags des catégories sélectionnées -->
+      @if (categoriesSelectionnees().length > 0) {
+        <div class="bilanko-cat-tags">
+          @for (cat of categoriesSelectionnees(); track cat.id) {
+            <span class="bilanko-cat-tag">
+              {{ cat.name }}
+              <button type="button" class="bilanko-cat-tag-remove" (click)="removeCategorie(cat.id)" title="Retirer">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </span>
+          }
+        </div>
+      }
+
+      <!-- Champ de recherche catégorie -->
+      <div class="bilanko-cat-search-wrapper">
+        <input
+          class="bilanko-cat-input"
+          type="text"
+          placeholder="Rechercher une catégorie…"
+          [ngModel]="categorieSearchQuery()"
+          name="categorieSearch"
+          (ngModelChange)="onCategorieSearchInput($event)"
+          autocomplete="off"
+        />
+        @if (categorieLoading()) {
+          <span class="bilanko-spinner bilanko-cat-spinner"></span>
+        }
+        <!-- Dropdown des suggestions -->
+        @if (categoriesSuggestions().length > 0) {
+          <ul class="bilanko-cat-dropdown">
+            @for (cat of categoriesSuggestions(); track cat.id) {
+              <li class="bilanko-cat-dropdown-item" (click)="selectCategorie(cat)">
+                {{ cat.name }}
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════ ACTIONS ═════════════════════════════════ -->
     <div class="bilanko-form-actions">
       <button type="button" class="bk-btn bk-btn--ghost" (click)="annuler.emit()">{{ prefs.t().cancel }}</button>
       <button type="submit" class="bk-btn bk-btn--primary" [disabled]="produitForm.invalid">
         {{ prefs.t().save }}
       </button>
     </div>
+
   </form>
 </div>
