@@ -241,3 +241,51 @@
     height: 16px;
   }
 }
+
+/* src/app/pages/landing/components/landing-navbar/landing-navbar.css */
+
+/* ✅ STYLE POUR LES LIENS NAVIGATION */
+.nav-links a.nav-link {
+  padding: 9px 13px;
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  font-size: clamp(0.8rem, 1.1vw, 0.88rem);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-links a.nav-link:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+/* ✅ Lien actif - surligné en vert */
+.nav-links a.nav-link.active {
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  font-weight: 700;
+}
+
+/* ✅ Petite barre sous le lien actif */
+.nav-links a.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+/* ✅ Sur mobile, les liens sont cachés */
+@media (max-width: 900px) {
+  .nav-links {
+    display: none !important;
+  }
+}
