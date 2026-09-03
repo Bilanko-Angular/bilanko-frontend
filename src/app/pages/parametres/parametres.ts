@@ -211,46 +211,40 @@ export class Parametres {
      NOTIFICATIONS
   ====================================================== */
 
-  private readonly defaultNotifications:
-    NotificationPreference[] = [
-
-      {
-        id: 'stock',
-        label: 'Alertes de stock',
-        description:
-          'Recevoir une notification quand un produit atteint son seuil d’alerte',
-        enabled: true,
-        type: 'stock'
-      },
-
-      {
-        id: 'vente',
-        label: 'Nouvelles ventes',
-        description:
-          'Être informé des nouvelles ventes enregistrées',
-        enabled: true,
-        type: 'vente'
-      },
-
-      {
-        id: 'rapport',
-        label: 'Rapports mensuels',
-        description:
-          'Recevoir le résumé mensuel de votre activité',
-        enabled: false,
-        type: 'rapport'
-      },
-
-      {
-        id: 'systeme',
-        label: 'Mises à jour',
-        description:
-          'Notifications sur les nouvelles fonctionnalités',
-        enabled: true,
-        type: 'systeme'
-      }
-
-    ];
+ // Dans parametres.ts
+private getDefaultNotifications(): NotificationPreference[] {
+  const t = this.prefs.t();
+  return [
+    {
+      id: 'stock',
+      label: t.notifStockAlertTitle,
+      description: t.notifStockAlertDesc,
+      enabled: true,
+      type: 'stock'
+    },
+    {
+      id: 'vente',
+      label: t.notifNewSalesTitle,
+      description: t.notifNewSalesDesc,
+      enabled: true,
+      type: 'vente'
+    },
+    {
+      id: 'rapport',
+      label: t.notifMonthlyReportTitle,
+      description: t.notifMonthlyReportDesc,
+      enabled: false,
+      type: 'rapport'
+    },
+    {
+      id: 'systeme',
+      label: t.notifUpdatesTitle,
+      description: t.notifUpdatesDesc,
+      enabled: true,
+      type: 'systeme'
+    }
+  ];
+}
 
 
   readonly notifEnabledState =
@@ -262,7 +256,7 @@ export class Parametres {
   readonly notifications =
     computed<NotificationPreference[]>(() => {
 
-      return this.defaultNotifications.map(
+      return this.getDefaultNotifications().map(
         notification => ({
 
           ...notification,
