@@ -1036,4 +1036,34 @@ button:focus-visible,
 a:focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 3px;
+}  
+
+
+/* src/app/pages/landing/components/landing-hero/landing-hero.css */
+
+/* ... tout le code existant ... */
+
+/* ============================================================
+   RESPONSIVE - CACHER LE DASHBOARD PREVIEW SUR MOBILE
+   ============================================================ */
+
+@media (max-width: 650px) {
+  /* ✅ Cacher le dashboard preview sur mobile */
+  .hero-visual {
+    display: none !important;
+  }
+
+  /* Ajuster la largeur du contenu texte pour qu'il prenne toute la place */
+  .hero-container {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  .hero-content {
+    max-width: 100% !important;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 7vw, 2.8rem) !important;
+  }
 }
