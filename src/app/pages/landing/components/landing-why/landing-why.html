@@ -3,19 +3,27 @@
 <section class="why-section" id="pourquoi-bilanko">
   <div class="section-container why-container">
 
-    <div class="why-content" appAnimateOnScroll [appAnimateOnScrollDelay]="0">
+    <!-- =========================================================
+         TITRE ET DESCRIPTION CENTRÉS (NOUVEAU)
+    ========================================================== -->
+    <div class="why-header" appAnimateOnScroll [appAnimateOnScrollDelay]="0">
       <span class="section-eyebrow">POURQUOI BILANKO ?</span>
       <h2>
         Votre activité mérite
         <span>des outils à sa hauteur.</span>
       </h2>
-      <p>
+      <p class="why-header-description">
         Bilanko transforme les informations quotidiennes de votre
         entreprise en une vision claire de votre activité.
       </p>
+    </div>
 
+    <!-- =========================================================
+         CONTENU EN DEUX COLONNES (GARDE LA MÊME STRUCTURE)
+    ========================================================== -->
+    <div class="why-content" appAnimateOnScroll [appAnimateOnScrollDelay]="100">
       <div class="why-list">
-        <div class="why-item" appAnimateOnScroll [appAnimateOnScrollDelay]="100">
+        <div class="why-item">
           <span class="why-number">01</span>
           <div>
             <h3>Gagnez du temps</h3>
@@ -50,6 +58,9 @@
       </div>
     </div>
 
+    <!-- =========================================================
+         PARTIE VISUELLE (GRAPHIQUE)
+    ========================================================== -->
     <div class="why-visual" appAnimateOnScroll [appAnimateOnScrollDelay]="200">
       <div class="finance-card">
         <div class="finance-header">

@@ -12,6 +12,7 @@
 .section-container {
   width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
+  padding: 0 0.5rem;
 }
 
 /* ============================================================
@@ -69,7 +70,7 @@
   max-width: 700px;
   margin: 0 auto 18px;
   color: #ffffff;
-  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
   line-height: 1.05;
   letter-spacing: -0.05em;
 }
@@ -82,7 +83,7 @@
   max-width: 570px;
   margin: 0 auto;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
   line-height: 1.7;
 }
 
@@ -96,7 +97,7 @@
   border-radius: 9px;
   background: #ffffff;
   color: #064e2d;
-  font-size: 0.84rem;
+  font-size: clamp(0.78rem, 1.1vw, 0.84rem);
   font-weight: 800;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -137,13 +138,47 @@
   }
 
   .cta-card {
-    padding: 55px 22px;
+    padding: 45px 22px;
     border-radius: 16px;
+  }
+
+  .cta-card h2 {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+  }
+
+  .cta-button {
+    min-height: 46px;
+    padding: 0 16px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section-container {
+    width: min(100%, calc(100% - 24px));
   }
 }
 
 @media (max-width: 420px) {
+  .cta-card {
+    padding: 35px 16px;
+    border-radius: 12px;
+  }
+
   .cta-card h2 {
-    font-size: 1.9rem;
+    font-size: 1.5rem;
+  }
+
+  .cta-card p {
+    font-size: 0.8rem;
+  }
+
+  .cta-button {
+    font-size: 0.75rem;
+    min-height: 42px;
+    padding: 0 14px;
+  }
+
+  .cta-eyebrow {
+    font-size: 0.6rem;
   }
 }

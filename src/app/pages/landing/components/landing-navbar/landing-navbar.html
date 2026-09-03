@@ -1,17 +1,43 @@
 <!-- src/app/pages/landing/components/landing-navbar/landing-navbar.html -->
+
 <header class="landing-header">
   <nav class="landing-nav">
     <!-- LOGO -->
     <a routerLink="/" class="brand">
-      <span class="brand-logo">B</span>
+      <img 
+        src="assets/images/logo.png" 
+        alt="Bilanko Logo" 
+        class="brand-logo-img"
+      />
       <span class="brand-text">Bilanko</span>
     </a>
 
-    <!-- NAVIGATION -->
+    <!-- NAVIGATION AVEC LIENS ACTIFS -->
     <div class="nav-links">
-      <a href="#fonctionnalites">Fonctionnalités</a>
-      <a href="#comment-ca-marche">Comment ça marche</a>
-      <a href="#pourquoi-bilanko">Pourquoi Bilanko</a>
+      <a 
+        href="#fonctionnalites" 
+        class="nav-link"
+        [class.active]="activeSection() === 'fonctionnalites'"
+        (click)="scrollTo('fonctionnalites', $event)"
+      >
+        Fonctionnalités
+      </a>
+      <a 
+        href="#comment-ca-marche" 
+        class="nav-link"
+        [class.active]="activeSection() === 'comment-ca-marche'"
+        (click)="scrollTo('comment-ca-marche', $event)"
+      >
+        Comment ça marche
+      </a>
+      <a 
+        href="#pourquoi-bilanko" 
+        class="nav-link"
+        [class.active]="activeSection() === 'pourquoi-bilanko'"
+        (click)="scrollTo('pourquoi-bilanko', $event)"
+      >
+        Pourquoi Bilanko
+      </a>
     </div>
 
     <!-- ACTIONS -->
