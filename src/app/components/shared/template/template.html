@@ -1,8 +1,15 @@
+<!-- src/app/components/shared/template/template.html -->
+
 <main class="layout">
-  <app-aside></app-aside>
+  <!-- ASIDE -->
+  <app-aside #asideComponent />
+
   <section class="main-section">
-    <app-header></app-header>
-    <section class="content p-4">
+    <!-- HEADER AVEC BURGER INTÉGRÉ -->
+    <app-header (menuToggle)="toggleMenu()" />
+    
+    <!-- CONTENU -->
+    <section class="content">
       <ng-content></ng-content>
     </section>
   </section>
