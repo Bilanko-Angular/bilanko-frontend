@@ -1,19 +1,83 @@
+/* ============================================================
+   TEMPLATE BILANKO — LAYOUT ULTRA PRO
+   ============================================================ */
+
 main.layout {
   display: flex;
   flex-direction: row;
   height: 100vh;
   background-color: var(--color-background);
+  position: relative;
+  overflow: hidden;
 }
 
+/* ASIDE */
+app-aside {
+  flex-shrink: 0;
+  z-index: 60;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* SECTION PRINCIPALE */
 .main-section {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  position: relative;
+  overflow: hidden;
 }
 
+/* CONTENU */
 .content {
   flex: 1;
   overflow-y: auto;
   background-color: var(--color-background);
+  padding: 1.25rem 1.5rem;
+  scroll-behavior: smooth;
+}
+
+.content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* ✅ SUR MOBILE */
+@media (max-width: 1024px) {
+  .content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 0.5rem 0.35rem;
+  }
+}
+
+/* ✅ MODE COMPACT */
+[data-compact="true"] .content {
+  padding: 0.5rem 0.75rem !important;
+}
+
+[data-compact="true"] .content {
+  padding: 0.35rem 0.5rem !important;
 }

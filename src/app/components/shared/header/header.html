@@ -1,254 +1,172 @@
-<header class="sticky-top w-100 bg-body border-bottom px-3 py-2 d-flex flex-wrap flex-md-nowrap align-items-center justify-content-between gap-2 gap-md-3 bk-header">
+<!-- src/app/components/shared/header/header.html -->
 
-  <!-- ==========================================================
-       GAUCHE : Infos Page
-  =========================================================== -->
-  <div class="d-flex align-items-center order-1">
-    <div class="d-flex flex-column">
-      <p class="text-uppercase text-muted fw-semibold mb-0 d-flex align-items-center"
-         style="font-size: 0.68rem; letter-spacing: 0.04em;">
-        BILANKO
-        <span class="mx-1 text-muted opacity-50">›</span>
-        <strong class="text-primary fw-bold">{{ breadcrumbCurrent }}</strong>
-      </p>
+<header class="bk-header">
+  <!-- 🔥 BURGER -->
+  <button 
+    class="bk-header__menu-btn" 
+    (click)="menuToggle.emit()"
+    aria-label="Menu"
+    type="button"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-      <h1 class="h6 mb-0 fw-bold text-body">{{ pageTitle }}</h1>
+  <!-- ✅ TITRE (caché sur mobile) -->
+  <div class="bk-header-info">
+    <p class="bk-header-breadcrumb">
+      <span class="separator">‹</span>
+      <span class="current">{{ breadcrumbCurrent }}</span>
+    </p>
+    <h1 class="bk-header-title">{{ pageTitle }}</h1>
+  </div>
+
+  <!-- 🔍 RECHERCHE SUR DESKTOP -->
+  <div class="bk-header-search bk-header-search--desktop">
+    <div class="input-group">
+      <span class="input-group-text">
+        <span class="material-symbols-outlined">search</span>
+      </span>
+      <input
+        type="search"
+        class="form-control"
+        [placeholder]="prefs.t().searchPlaceholder"
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+        autocomplete="off"
+      />
     </div>
   </div>
 
-
-  <!-- ==========================================================
-       CENTRE : Recherche
-  =========================================================== -->
-  <div class="w-100 order-3 order-md-2 mx-auto" style="max-width: 460px;">
-    <div class="position-relative">
-
-      <div class="input-group">
-
-        <span class="input-group-text bg-body-tertiary border-end-0 text-muted pe-1">
-          <span class="material-symbols-outlined fs-5">search</span>
-        </span>
-
-        <input
-          type="search"
-          class="form-control form-control-sm border-start-0 ps-1"
-          [placeholder]="prefs.t().searchPlaceholder"
-          [attr.aria-label]="prefs.t().search"
-          [value]="searchTerm()"
-          (input)="onSearch($event)"
-          (keydown)="onSearchKeydown($event)"
-          autocomplete="off">
-
-        @if (searchTerm()) {
-          <button
-            type="button"
-            class="btn btn-sm btn-link text-muted position-absolute end-0 top-50 translate-middle-y z-3 text-decoration-none pe-2"
-            (click)="clearSearch()"
-            [attr.aria-label]="prefs.t().clearSearch">
-            ×
-          </button>
-        }
-
-      </div>
-
-
-      <!-- RESULTATS -->
-      @if (searchTerm()) {
-        <div class="dropdown-menu show w-100 shadow-lg mt-2 overflow-auto bk-header__search-panel"
-             style="max-height: 380px;">
-
-          @if (searchResults().length === 0) {
-            <div class="text-center p-4">
-
-              <span class="d-block mb-1 text-muted">
-                <span class="material-symbols-outlined text-muted" style="font-size: 28px;">search_off</span>
-              </span>
-
-              <strong class="d-block text-body small">
-                {{ prefs.t().noResults }}
-              </strong>
-
-              <small class="text-muted" style="font-size: 0.68rem;">
-                {{ prefs.t().searchHint }}
-              </small>
-
-            </div>
-          }
-
-
-          @for (result of searchResults(); track result.type + '-' + result.id) {
-
-            <button
-              type="button"
-              class="dropdown-item d-flex align-items-center gap-2 p-2 border-bottom"
-              (click)="openResult(result)">
-
-              <span
-                class="rounded bg-primary-subtle text-primary p-2 d-flex align-items-center justify-content-center flex-shrink-0"
-                style="width: 34px; height: 34px;">
-
-                @if (result.type === 'produit') {
-
-                  <span class="material-symbols-outlined fs-5">inventory_2</span>
-
-                } @else {
-
-                  <span class="material-symbols-outlined fs-5">receipt_long</span>
-
-                }
-
-              </span>
-
-              <span class="d-flex flex-column flex-grow-1 min-w-0">
-                <strong class="text-truncate text-body"
-                        style="font-size: 0.8rem;">
-                  {{ result.title }}
-                </strong>
-
-                <small class="text-muted text-truncate"
-                       style="font-size: 0.67rem;">
-                  {{ result.subtitle }}
-                </small>
-              </span>
-
-              <span class="text-muted ms-auto">→</span>
-
-            </button>
-          }
-
-        </div>
-      }
-
-    </div>
-  </div>
-
-
-  <!-- ==========================================================
-       DROITE : Actions
-  =========================================================== -->
-  <div class="d-flex align-items-center gap-2 order-2 order-md-3 ms-auto ms-md-0">
-
-
-    <!-- MODE SOMBRE -->
+  <!-- ACTIONS -->
+  <div class="bk-header-actions">
+    <!-- 🔍 RECHERCHE SUR MOBILE (icône qui ouvre le popup) -->
     <button
       type="button"
-      class="btn btn-outline-secondary p-0 d-flex align-items-center justify-content-center rounded-2 bk-icon-btn"
-      style="width: 36px; height: 36px;"
-      (click)="themeService.toggle()"
-      [attr.aria-label]="themeService.theme() === 'dark'
-        ? prefs.t().enableLightMode
-        : prefs.t().enableDarkMode"
-      [attr.title]="themeService.theme() === 'dark'
-        ? prefs.t().lightMode
-        : prefs.t().darkMode">
-
-      @if (themeService.theme() === 'dark') {
-
-        <span class="material-symbols-outlined fs-5">light_mode</span>
-
-      } @else {
-
-        <span class="material-symbols-outlined fs-5">dark_mode</span>
-
-      }
-
+      class="bk-header__action-btn bk-header__search-toggle"
+      (click)="openSearchPopup()"
+      [attr.title]="prefs.t().search"
+      aria-label="Rechercher"
+    >
+      <span class="material-symbols-outlined">search</span>
     </button>
 
+    <!-- 🌙 THÈME -->
+    <button
+      type="button"
+      class="bk-header__action-btn"
+      (click)="themeService.toggle()"
+      [attr.title]="themeService.theme() === 'dark' ? prefs.t().lightMode : prefs.t().darkMode"
+    >
+      @if (themeService.theme() === 'dark') {
+        <span class="material-symbols-outlined">light_mode</span>
+      } @else {
+        <span class="material-symbols-outlined">dark_mode</span>
+      }
+    </button>
 
-    <!-- NOTIFICATIONS -->
+    <!-- 🔔 NOTIFICATIONS -->
     <app-notifications-bell />
 
-
-    <!-- PROFIL -->
-    <div class="position-relative">
-
-      <button
-        type="button"
-        class="btn btn-outline-secondary d-flex align-items-center gap-2 p-1 pe-2 rounded-2"
-        (click)="toggleProfile()">
-
-        <span class="position-relative d-inline-flex bk-avatar">
+    <!-- 👤 AVATAR -->
+    <div class="bk-profile-wrapper" (click)="toggleProfile()">
+      <div class="bk-avatar-wrapper">
+        <span class="bk-avatar">
           @if (userStore.user()?.profilePicture && !profileImageError()) {
-            <img [src]="userStore.user()?.profilePicture" alt="Profile" class="rounded-circle object-fit-cover" style="width: 30px; height: 30px;" (error)="profileImageError.set(true)">
+            <img [src]="userStore.user()?.profilePicture" alt="Profile" (error)="profileImageError.set(true)">
           } @else {
-            <span
-              class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
-              style="width: 30px; height: 30px; font-size: 0.67rem;">
+            <span class="avatar-placeholder">
               {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
             </span>
           }
           <span class="bk-avatar__dot"></span>
         </span>
-
-        <span class="d-none d-md-flex flex-column align-items-start lh-sm">
-
-          <strong class="text-body"
-                  style="font-size: 0.76rem;">
-            {{ userStore.user()?.nom }} {{ userStore.user()?.subname }}
-          </strong>
-
-          <small class="text-muted"
-                 style="font-size: 0.62rem;">
-            {{ prefs.t().administrator }}
-          </small>
-
+        <span class="bk-avatar__name">
+          <strong>{{ userStore.user()?.nom }}</strong>
+          <small>{{ prefs.t().administrator }}</small>
         </span>
+        <span class="bk-avatar__chevron">▾</span>
+      </div>
 
-        <span class="text-muted d-none d-sm-inline"
-              style="font-size: 0.8rem;">
-          ▾
-        </span>
-
-      </button>
-
-
+      <!-- DROPDOWN PROFIL -->
       @if (profileOpen()) {
-
-        <div
-          class="dropdown-menu dropdown-menu-end show shadow-lg mt-2 p-0 overflow-hidden">
-
-          <div class="d-flex align-items-center gap-2 p-3 border-bottom">
-
-            <span class="position-relative d-inline-flex bk-avatar">
+        <div class="bk-profile-dropdown" (click)="$event.stopPropagation()">
+          <div class="bk-profile-dropdown__header">
+            <span class="bk-avatar">
               @if (userStore.user()?.profilePicture && !profileImageError()) {
-                <img [src]="userStore.user()?.profilePicture" alt="Profile" class="rounded-circle object-fit-cover" style="width: 38px; height: 38px;" (error)="profileImageError.set(true)">
+                <img [src]="userStore.user()?.profilePicture" alt="Profile" (error)="profileImageError.set(true)">
               } @else {
-                <span
-                  class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                  style="width: 38px; height: 38px; font-size: 0.85rem;">
+                <span class="avatar-placeholder">
                   {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
                 </span>
               }
               <span class="bk-avatar__dot"></span>
             </span>
-
-            <div class="d-flex flex-column lh-sm">
-
-              <strong class="text-body small">
-                {{ userStore.user()?.nom }} {{ userStore.user()?.subname }}
-              </strong>
-
-              <small class="text-muted"
-                     style="font-size: 0.68rem;">
-                {{ prefs.t().administrator }}
-              </small>
-
+            <div class="bk-profile-dropdown__info">
+              <strong>{{ userStore.user()?.nom }} {{ userStore.user()?.subname }}</strong>
+              <small>{{ userStore.user()?.email }}</small>
             </div>
-
           </div>
-
-          <div class="p-1">
-            <button
-              type="button"
-              class="dropdown-item d-flex align-items-center gap-2 text-danger rounded p-2"
-              (click)="logout()">
-              <span class="material-symbols-outlined fs-5">logout</span>
-              <span>{{ prefs.t().logout }}</span>
-            </button>
-          </div>
+          <button class="bk-profile-dropdown__action danger" (click)="logout()">
+            <span class="material-symbols-outlined">logout</span>
+            {{ prefs.t().logout }}
+          </button>
         </div>
       }
     </div>
   </div>
-
 </header>
+
+<!-- 🔍 POPUP DE RECHERCHE MOBILE -->
+@if (searchPopupOpen()) {
+  <div class="bk-search-popup" (click)="closeSearchPopup()">
+    <div class="bk-search-popup__content" (click)="$event.stopPropagation()">
+      <div class="bk-search-popup__header">
+        <span class="material-symbols-outlined">search</span>
+        <input
+          type="text"
+          class="bk-search-popup__input"
+          [placeholder]="prefs.t().searchPlaceholder"
+          [value]="searchTerm()"
+          (input)="onSearch($event)"
+          #searchInput
+          autofocus
+          autocomplete="off"
+        />
+        <button class="bk-search-popup__close" (click)="closeSearchPopup()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <!-- RÉSULTATS -->
+      @if (searchTerm()) {
+        <div class="bk-search-popup__results">
+          @if (searchResults().length === 0) {
+            <div class="bk-search-popup__empty">
+              <span class="material-symbols-outlined">search_off</span>
+              <p>{{ prefs.t().noResults }}</p>
+              <small>{{ prefs.t().searchHint }}</small>
+            </div>
+          }
+          @for (result of searchResults(); track result.type + '-' + result.id) {
+            <button class="bk-search-popup__result" (click)="openResult(result); closeSearchPopup()">
+              <span class="bk-search-popup__result-icon">
+                @if (result.type === 'produit') {
+                  <span class="material-symbols-outlined">inventory_2</span>
+                } @else {
+                  <span class="material-symbols-outlined">receipt_long</span>
+                }
+              </span>
+              <div class="bk-search-popup__result-info">
+                <strong>{{ result.title }}</strong>
+                <span>{{ result.subtitle }}</span>
+              </div>
+              <span class="bk-search-popup__result-arrow">→</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}
