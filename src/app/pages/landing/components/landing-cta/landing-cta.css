@@ -1,0 +1,184 @@
+/* src/app/pages/landing/components/landing-cta/landing-cta.component.css */
+
+/* ============================================================
+   CTA SECTION
+   ============================================================ */
+
+.cta-section {
+  padding: 100px 0;
+  background: var(--color-background);
+}
+
+.section-container {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+
+/* ============================================================
+   CTA CARD
+   ============================================================ */
+
+.cta-card {
+  position: relative;
+  overflow: hidden;
+  padding: 75px 40px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #063d25, #075b36);
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.14);
+  transition: all 0.4s ease;
+}
+
+.cta-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
+}
+
+.cta-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  top: -200px;
+  right: -100px;
+  border-radius: 50%;
+  background: rgba(5, 223, 114, 0.18);
+  filter: blur(70px);
+  transition: all 0.6s ease;
+}
+
+.cta-card:hover .cta-glow {
+  transform: scale(1.1);
+  background: rgba(5, 223, 114, 0.25);
+}
+
+.cta-content {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-eyebrow {
+  display: inline-block;
+  color: #6ee7a8;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.cta-card h2 {
+  max-width: 700px;
+  margin: 0 auto 18px;
+  color: #ffffff;
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+}
+
+.cta-card h2 span {
+  color: #5ef09e;
+}
+
+.cta-card p {
+  max-width: 570px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  line-height: 1.7;
+}
+
+.cta-button {
+  margin-top: 30px;
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 20px;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #064e2d;
+  font-size: clamp(0.78rem, 1.1vw, 0.84rem);
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cta-button:hover {
+  color: #064e2d;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.cta-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.cta-button svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s ease;
+}
+
+.cta-button:hover svg {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 650px) {
+  .cta-section {
+    padding: 70px 0;
+  }
+
+  .cta-card {
+    padding: 45px 22px;
+    border-radius: 16px;
+  }
+
+  .cta-card h2 {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+  }
+
+  .cta-button {
+    min-height: 46px;
+    padding: 0 16px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section-container {
+    width: min(100%, calc(100% - 24px));
+  }
+}
+
+@media (max-width: 420px) {
+  .cta-card {
+    padding: 35px 16px;
+    border-radius: 12px;
+  }
+
+  .cta-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .cta-card p {
+    font-size: 0.8rem;
+  }
+
+  .cta-button {
+    font-size: 0.75rem;
+    min-height: 42px;
+    padding: 0 14px;
+  }
+
+  .cta-eyebrow {
+    font-size: 0.6rem;
+  }
+}

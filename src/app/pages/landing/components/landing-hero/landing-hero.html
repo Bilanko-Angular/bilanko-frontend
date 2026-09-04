@@ -1,0 +1,170 @@
+<!-- src/app/pages/landing/components/landing-hero/landing-hero.html -->
+<section class="hero">
+  <div class="hero-background">
+    <div class="hero-glow hero-glow-one"></div>
+    <div class="hero-glow hero-glow-two"></div>
+  </div>
+
+  <div class="hero-container">
+    <!-- HERO TEXT -->
+    <div class="hero-content" appAnimateOnScroll [appAnimateOnScrollDelay]="0">
+      <h1>
+        Gérez votre activité.
+        <span>Préparez votre avenir.</span>
+      </h1>
+
+      <p class="hero-description">
+        Bilanko vous aide à suivre vos ventes, votre stock et vos finances
+        afin de transformer votre activité en données claires,
+        fiables et prêtes pour votre banque.
+      </p>
+
+      <div class="hero-actions">
+        <a routerLink="/inscription" class="primary-button">
+          Créer mon compte
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+          </svg>
+        </a>
+        <a href="#comment-ca-marche" class="secondary-button">Découvrir Bilanko</a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-item">
+          <span class="trust-icon"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+          Simple à utiliser
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          Données sécurisées
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          Pensé pour les PME
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO DASHBOARD -->
+    <div class="hero-visual" appAnimateOnScroll [appAnimateOnScrollDelay]="200">
+      <div class="dashboard-window">
+        <!-- Dashboard top -->
+        <div class="dashboard-top">
+          <div class="dashboard-brand">
+            <!-- ✅ MINI LOGO AVEC IMAGE -->
+            <img 
+              src="assets/images/logo.png" 
+              alt="Bilanko" 
+              class="mini-logo-img"
+            />
+            <span>Tableau de bord</span>
+          </div>
+          <div class="dashboard-user"><span></span><span></span></div>
+        </div>
+
+        <!-- Dashboard body -->
+        <div class="dashboard-body">
+          <div class="dashboard-heading">
+            <div>
+              <small>Vue générale</small>
+              <h3>Bonjour, bienvenue</h3>
+            </div>
+            <div class="dashboard-date">Cette semaine</div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Ventes</span>
+                <span class="stat-icon green">
+                  <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 16 4-5 3 3 5-7"/></svg>
+                </span>
+              </div>
+              <strong>1 284 500 FCFA</strong>
+              <small class="positive">+12,8% cette semaine</small>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Produits</span>
+                <span class="stat-icon blue">
+                  <svg viewBox="0 0 24 24"><path d="m21 8-9-5-9 5 9 5 9-5Z"/><path d="m3 8 9 5 9-5"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+                </span>
+              </div>
+              <strong>248</strong>
+              <small>18 produits à surveiller</small>
+            </div>
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Documents</span>
+                <span class="stat-icon orange">
+                  <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h6"/></svg>
+                </span>
+              </div>
+              <strong>12</strong>
+              <small>Documents disponibles</small>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <span>Évolution des ventes</span>
+                <strong>4 850 000 FCFA</strong>
+              </div>
+              <span class="chart-growth">+18.4%</span>
+            </div>
+            <div class="chart">
+              <div class="chart-grid-line line-one"></div>
+              <div class="chart-grid-line line-two"></div>
+              <div class="chart-grid-line line-three"></div>
+              <svg viewBox="0 0 600 180" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#05DF72" stop-opacity="0.28"/>
+                    <stop offset="100%" stop-color="#05DF72" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path class="chart-area" d="M0 145 C45 138 60 110 100 118 C140 126 155 85 200 94 C245 103 260 68 300 76 C340 84 365 55 405 64 C445 73 460 42 500 48 C540 54 560 25 600 30 L600 180 L0 180 Z"/>
+                <path class="chart-line" d="M0 145 C45 138 60 110 100 118 C140 126 155 85 200 94 C245 103 260 68 300 76 C340 84 365 55 405 64 C445 73 460 42 500 48 C540 54 560 25 600 30"/>
+                <circle cx="500" cy="48" r="5" class="chart-point"/>
+              </svg>
+            </div>
+            <div class="chart-labels">
+              <span>Lun</span><span>Mar</span><span>Mer</span>
+              <span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+            </div>
+          </div>
+
+          <!-- Activity -->
+          <div class="activity-card">
+            <div class="card-title">
+              <strong>Activité récente</strong>
+              <span>Voir tout</span>
+            </div>
+            <div class="activity-row">
+              <span class="activity-icon"><svg viewBox="0 0 24 24"><path d="M6 2h12v20H6z"/><path d="M9 6h6"/><path d="M9 10h6"/><path d="M9 14h4"/></svg></span>
+              <div><strong>Nouvelle vente</strong><small>Il y a 12 minutes</small></div>
+              <b>+125 000</b>
+            </div>
+            <div class="activity-row">
+              <span class="activity-icon"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M6 7V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/><path d="M5 7v12h14V7"/></svg></span>
+              <div><strong>Stock mis à jour</strong><small>Il y a 35 minutes</small></div>
+              <b>+24 produits</b>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating result -->
+      <div class="floating-result">
+        <span class="floating-check"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+        <div>
+          <strong>Document généré</strong>
+          <small>Votre dossier est prêt</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,52 +1,42 @@
-// src/app/pages/auth-user/mot-de-passe-oublie/mot-de-passe-oublie.ts
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Component, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthUser } from "../auth-user";
-import { PreferencesService } from '../../../services/preferences';
-
+import { VerifyMailComponent } from '../../../components/auth/verify-mail/verify-mail';
+import { InputOtpFormComponent } from '../../../components/auth/input-otp-form.component/input-otp-form.component';
+import { ResetYourPasswordComponent } from '../../../components/auth/reset-your-password/reset-your-password';
 
 @Component({
   selector: 'app-mot-de-passe-oublie',
   standalone: true,
-  imports: [AuthUser, ReactiveFormsModule, RouterLink],
+  imports: [AuthUser, VerifyMailComponent, InputOtpFormComponent, ResetYourPasswordComponent],
   templateUrl: './mot-de-passe-oublie.html',
   styleUrl: './mot-de-passe-oublie.css',
 })
 export class MotDePasseOublie {
-  private readonly fb = inject(FormBuilder);
-  protected readonly prefs = inject(PreferencesService);
+  step = signal<number>(1);
+  email = signal<string>('');
+  token = signal<string>('');
+  otp=signal<string>('');
+  newPassword=signal<string>('');
 
-  envoye = false;
-  isLoading = false;
-  errorMessage = '';
+  constructor(private router: Router) { }
 
-  readonly form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
-  });
-
-  get email() { return this.form.controls.email; }
-
-  soumettre(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    // Simuler une requête API
-    setTimeout(() => {
-      this.isLoading = false;
-      console.log('Lien envoyé à :', this.form.value.email);
-      this.envoye = true;
-    }, 800);
+  onMailVerified(email: string) {
+    this.email.set(email);
+    this.step.set(2);
   }
 
-  resetForm(): void {
-    this.envoye = false;
-    this.form.reset();
-    this.errorMessage = '';
+  onOtpVerified(token: string) {
+    this.token.set(token);
+    this.step.set(3);
+  }
+
+  onPasswordReset() {
+    this.router.navigate(['/connexion']);
+  }
+  
+  onRestart() {
+    this.step.set(1);
+    this.email.set('');
   }
 }

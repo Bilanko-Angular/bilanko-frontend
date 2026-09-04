@@ -5,6 +5,7 @@ import { ProduitService } from '../../services/produit.service';
 import { SalesService } from '../../services/sales.service';
 import { ChargesService } from '../../services/charges.service';
 import { Template } from '../../components/shared/template/template';
+import { PreferencesService } from '../../services/preferences';
 import {
   TypeDossier,
   RegimeFiscal,
@@ -30,7 +31,7 @@ export class BanqueFiscalite {
   private readonly produitService = inject(ProduitService);
   private readonly salesService = inject(SalesService);
   private readonly chargesService = inject(ChargesService);
-
+  protected readonly prefs = inject(PreferencesService);
   readonly objetsPret = OBJETS_PRET;
   readonly regimesFiscaux = REGIMES_FISCAUX;
 
@@ -42,7 +43,7 @@ export class BanqueFiscalite {
   readonly etape = signal<Etape>(1);
   readonly typeDossier = signal<TypeDossier | null>(null);
 
-  // --- Identification (commune) ---
+  // --- Identification (commune) ---//
   readonly raisonSociale = signal('');
   readonly activite = signal('');
   readonly adresse = signal('');
@@ -193,61 +194,56 @@ export class BanqueFiscalite {
     return resultat;
   }
 
-  genererDossier() {
-    if (!this.peutGenerer() || !this.typeDossier()) return;
+genererDossier() {
+  if (!this.peutGenerer() || !this.typeDossier()) return;
 
-    const commercant: InfosCommercant = {
-      raisonSociale: this.raisonSociale().trim(),
-      activite: this.activite().trim(),
-      adresse: this.adresse().trim(),
-      niu: this.niu().trim(),
-      regimeFiscal: this.typeDossier() === 'dsf_smt' ? (this.regimeFiscal() as RegimeFiscal) : undefined,
-      dateCreation: this.dateCreation(),
-    };
+  const commercant: InfosCommercant = {
+    raisonSociale: this.raisonSociale().trim(),
+    activite: this.activite().trim(),
+    adresse: this.adresse().trim(),
+    niu: this.niu().trim(),
+    regimeFiscal: this.typeDossier() === 'dsf_smt' ? (this.regimeFiscal() as RegimeFiscal) : undefined,
+    dateCreation: this.dateCreation(),
+  };
 
-    const demande: DemandeDossier = {
-      type: this.typeDossier()!,
-      commercant,
-      historique: this.historique(),
-      dureeHistorique: this.dureeHistorique(),
-      stockDisponible: this.stockDisponible(),
-      pretBancaire:
-        this.typeDossier() === 'pret_bancaire'
-          ? {
-              capitalPropre: Number(this.capitalPropre()),
-              objetPret: this.objetPret(),
-              montantDemande: Number(this.montantDemande()),
-              dureeMois: Number(this.dureeMois()),
-              garanties: this.garanties().trim(),
-            }
-          : undefined,
-      dsf:
-        this.typeDossier() === 'dsf_smt'
-          ? {
-              exerciceFiscal: this.exerciceFiscal(),
-              centreImpots: this.centreImpots().trim(),
-              chiffreAffairesAnnuelEstime: this.totalCA(),
-            }
-          : undefined,
-    };
+  const demande: DemandeDossier = {
+    type: this.typeDossier()!,
+    commercant,
+    historique: this.historique(),
+    dureeHistorique: this.dureeHistorique(),
+    stockDisponible: this.stockDisponible(),
+    pretBancaire: this.typeDossier() === 'pret_bancaire' ? {
+      capitalPropre: Number(this.capitalPropre()),
+      objetPret: this.objetPret(),
+      montantDemande: Number(this.montantDemande()),
+      dureeMois: Number(this.dureeMois()),
+      garanties: this.garanties().trim(),
+    } : undefined,
+    dsf: this.typeDossier() === 'dsf_smt' ? {
+      exerciceFiscal: this.exerciceFiscal(),
+      centreImpots: this.centreImpots().trim(),
+      chiffreAffairesAnnuelEstime: this.totalCA(),
+    } : undefined,
+  };
 
-    this.genereEnCours.set(true);
-    this.erreurGeneration.set(null);
+  this.genereEnCours.set(true);
+  this.erreurGeneration.set(null);
 
-    try {
-      const blob = this.documentService.genererDossier(demande);
-      const url = URL.createObjectURL(blob);
-      const lien = document.createElement('a');
-      const suffixe = demande.type === 'pret_bancaire' ? 'demande-pret' : 'dsf-simplifiee';
-      lien.href = url;
-      lien.download = `bilanko-${suffixe}-${commercant.raisonSociale.replace(/\s+/g, '-').toLowerCase() || 'dossier'}.pdf`;
-      lien.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error('Erreur génération dossier :', e);
-      this.erreurGeneration.set('La génération du dossier a échoué. Vérifiez les informations saisies et réessayez.');
-    } finally {
-      this.genereEnCours.set(false);
-    }
+  try {
+    const blob = this.documentService.genererDossier(demande);
+    const url = URL.createObjectURL(blob);
+    const lien = document.createElement('a');
+    const suffixe = demande.type === 'pret_bancaire' ? 'demande-pret' : 'dsf-simplifiee';
+    lien.href = url;
+    lien.download = `bilanko-${suffixe}-${commercant.raisonSociale.replace(/\s+/g, '-').toLowerCase() || 'dossier'}.pdf`;
+    lien.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    console.error('Erreur génération dossier :', e);
+    // ✅ Utiliser la traduction pour le message d'erreur
+    this.erreurGeneration.set(this.prefs.t().generationError);
+  } finally {
+    this.genereEnCours.set(false);
   }
+}
 }

@@ -1,521 +1,1459 @@
-<!-- src/app/pages/parametres/parametres.html -->
+<!-- =========================================================
+     PARAMÈTRES BILANKO
+     Material Symbols utilisés UNIQUEMENT sur cette page
+========================================================= -->
+
 <app-template>
+
   <div class="bk-settings">
 
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
     <header class="bk-settings__header">
-      <div>
-        <h1 class="bk-settings__title">{{ prefs.t().settingsTitle }}</h1>
-        <p class="bk-settings__subtitle">{{ prefs.t().settingsSubtitle }}</p>
+
+      <div class="bk-settings__header-content">
+
+        <div class="bk-settings__header-icon">
+          <span class="material-symbols-outlined">
+            settings
+          </span>
+        </div>
+
+        <div>
+          <h1 class="bk-settings__title">
+            {{ prefs.t().settingsTitle }}
+          </h1>
+
+          <p class="bk-settings__subtitle">
+            {{ prefs.t().settingsSubtitle }}
+          </p>
+        </div>
+
       </div>
+
     </header>
 
+
+    <!-- =====================================================
+         MESSAGE DE SUCCÈS
+    ====================================================== -->
     @if (showSuccess()) {
-      <div class="bk-settings__toast">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-        </svg>
-        <span>{{ showSuccessMessage() }}</span>
+
+      <div
+        class="bk-settings__toast"
+        role="status">
+
+        <span class="material-symbols-outlined">
+          check_circle
+        </span>
+
+        <span>
+          {{ showSuccessMessage() }}
+        </span>
+
       </div>
+
     }
 
-    <nav class="bk-settings__nav" role="tablist">
-      <button class="bk-settings__tab" [class.active]="activeTab() === 'general'" (click)="setActiveTab('general')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-          <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-        </svg>
-        <span>{{ prefs.t().general }}</span>
+
+    <!-- =====================================================
+         NAVIGATION DES ONGLETS
+    ====================================================== -->
+    <nav
+      class="bk-settings__nav"
+      role="tablist">
+
+      <!-- GENERAL -->
+      <button
+        type="button"
+        class="bk-settings__tab"
+        [class.active]="activeTab() === 'general'"
+        (click)="setActiveTab('general')">
+
+        <span class="material-symbols-outlined">
+          person
+        </span>
+
+        <span>
+          {{ prefs.t().general }}
+        </span>
+
       </button>
 
-      <button class="bk-settings__tab" [class.active]="activeTab() === 'compte'" (click)="setActiveTab('compte')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-        </svg>
-        <span>{{ prefs.t().accountSecurity }}</span>
+
+      <!-- COMPTE -->
+      <button
+        type="button"
+        class="bk-settings__tab"
+        [class.active]="activeTab() === 'compte'"
+        (click)="setActiveTab('compte')">
+
+        <span class="material-symbols-outlined">
+          security
+        </span>
+
+        <span>
+          {{ prefs.t().accountSecurity }}
+        </span>
+
       </button>
 
-      <button class="bk-settings__tab" [class.active]="activeTab() === 'notifications'" (click)="setActiveTab('notifications')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917z"/>
-        </svg>
-        <span>{{ prefs.t().notifications }}</span>
+
+      <!-- NOTIFICATIONS -->
+      <button
+        type="button"
+        class="bk-settings__tab"
+        [class.active]="activeTab() === 'notifications'"
+        (click)="setActiveTab('notifications')">
+
+        <span class="material-symbols-outlined">
+          notifications
+        </span>
+
+        <span>
+          {{ prefs.t().notifications }}
+        </span>
+
       </button>
 
-      <button class="bk-settings__tab" [class.active]="activeTab() === 'apparence'" (click)="setActiveTab('apparence')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 4a4 4 0 1 0 0 8A4 4 0 0 0 8 4z"/>
-          <path d="M8 .5a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0V1A.5.5 0 0 1 8 .5zM8 13.6a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0v-1.4a.5.5 0 0 1 .5-.5z"/>
-          <path d="M2.5 2.5a.5.5 0 0 1 .708 0l.99.99a.5.5 0 0 1-.707.707l-.99-.99a.5.5 0 0 1 0-.708zM13.5 2.5a.5.5 0 0 1 0 .708l-.99.99a.5.5 0 0 1-.707-.707l.99-.99a.5.5 0 0 1 .708 0z"/>
-        </svg>
-        <span>{{ prefs.t().appearance }}</span>
+
+      <!-- APPARENCE -->
+      <button
+        type="button"
+        class="bk-settings__tab"
+        [class.active]="activeTab() === 'apparence'"
+        (click)="setActiveTab('apparence')">
+
+        <span class="material-symbols-outlined">
+          palette
+        </span>
+
+        <span>
+          {{ prefs.t().appearance }}
+        </span>
+
       </button>
+
     </nav>
 
+
+    <!-- =====================================================
+         CONTENU
+    ====================================================== -->
     <div class="bk-settings__content">
 
-      <!-- ONGLET GÉNÉRAL -->
+
+      <!-- ===================================================
+           ONGLET GENERAL
+      ==================================================== -->
       @if (activeTab() === 'general') {
+
         <section class="bk-settings__section">
-          <h2 class="bk-settings__section-title">{{ prefs.t().generalInfo }}</h2>
-          <p class="bk-settings__section-desc">{{ prefs.t().generalInfoDesc }}</p>
 
-          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="bk-settings__section-heading">
+
+            <div class="bk-settings__section-icon">
+              <span class="material-symbols-outlined">
+                person
+              </span>
+            </div>
+
+            <div>
+
+              <h2 class="bk-settings__section-title">
+                {{ prefs.t().generalInfo }}
+              </h2>
+
+              <p class="bk-settings__section-desc">
+                {{ prefs.t().generalInfoDesc }}
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- ===============================================
+               PHOTO DE PROFIL
+          ================================================ -->
+          <div class="bk-profile-card">
+
+            <div class="bk-profile-avatar">
+
+              @if (profileImage()) {
+
+                <img
+                  [src]="profileImage()!"
+                  [alt]="prefs.t().profile">
+
+              } @else {
+
+                <div class="bk-profile-avatar__initials">
+                  {{ getInitials() }}
+                </div>
+
+              }
+
+            </div>
+
+
+            <div class="bk-profile-info">
+
+              <h3>
+                {{ prefs.t().profile }}
+              </h3>
+
+              <p>
+                {{ prefs.t().profilePhotoDesc }}
+              </p>
+
+
+              <div class="bk-profile-actions">
+
+                <label
+                  for="profilePhoto"
+                  class="btn bk-btn-primary">
+
+                  <span class="material-symbols-outlined">
+                    photo_camera
+                  </span>
+
+                  {{ prefs.t().changePhoto }}
+
+                </label>
+
+                <input
+                  id="profilePhoto"
+                  type="file"
+                  class="bk-file-input"
+                  accept="image/png,image/jpeg,image/webp"
+                  (change)="onPhotoSelected($event)">
+
+
+                @if (profileImage()) {
+
+                  <button
+                    type="button"
+                    class="btn bk-btn-outline"
+                    (click)="removePhoto()">
+
+                    <span class="material-symbols-outlined">
+                      delete
+                    </span>
+
+                    {{ prefs.t().removePhoto }}
+
+                  </button>
+
+                }
+
+              </div>
+
+              <small>
+                {{ prefs.t().photoFormats }}
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <!-- ===============================================
+               FORMULAIRE PROFIL
+          ================================================ -->
+          <form
+            [formGroup]="profileForm"
+            (ngSubmit)="saveProfile()">
+
             <div class="bk-settings__grid">
+
+
+              <!-- NOM -->
               <div class="bk-form-group">
-                <label for="nom" class="bk-form-label">{{ prefs.t().lastName }}</label>
-                <div class="input-group bk-input-group">
-                  <span class="input-group-text bk-input-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                      <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                    </svg>
+
+                <label
+                  for="nom"
+                  class="bk-form-label">
+
+                  <span class="material-symbols-outlined">
+                    badge
                   </span>
-                  <input type="text" id="nom" class="form-control bk-input" placeholder="{{ prefs.t().lastName }}" formControlName="nom">
+
+                  {{ prefs.t().lastName }}
+
+                </label>
+
+                <div class="input-group bk-input-group">
+
+                  <span class="input-group-text bk-input-icon">
+
+                    <span class="material-symbols-outlined">
+                      person
+                    </span>
+
+                  </span>
+
+                  <input
+                    type="text"
+                    id="nom"
+                    class="form-control bk-input"
+                    [placeholder]="prefs.t().lastName"
+                    formControlName="nom">
+
                 </div>
-                @if (f['nom'].touched && f['nom'].hasError('required')) {
+
+                @if (
+                  f['nom'].touched &&
+                  f['nom'].hasError('required')
+                ) {
+
                   <div class="bk-field-error">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                    </svg>
-                    {{ prefs.t().lastName }} {{ prefs.t().requiredField }}
+
+                    <span class="material-symbols-outlined">
+                      error
+                    </span>
+
+                    {{ prefs.t().lastName }}
+                    {{ prefs.t().requiredField }}
+
                   </div>
+
                 }
+
               </div>
 
+
+              <!-- PRENOM -->
               <div class="bk-form-group">
-                <label for="prenom" class="bk-form-label">{{ prefs.t().firstName }}</label>
-                <div class="input-group bk-input-group">
-                  <span class="input-group-text bk-input-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                      <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                    </svg>
+
+                <label
+                  for="prenom"
+                  class="bk-form-label">
+
+                  <span class="material-symbols-outlined">
+                    person
                   </span>
-                  <input type="text" id="prenom" class="form-control bk-input" placeholder="{{ prefs.t().firstName }}" formControlName="prenom">
+
+                  {{ prefs.t().firstName }}
+
+                </label>
+
+                <div class="input-group bk-input-group">
+
+                  <span class="input-group-text bk-input-icon">
+
+                    <span class="material-symbols-outlined">
+                      person
+                    </span>
+
+                  </span>
+
+                  <input
+                    type="text"
+                    id="prenom"
+                    class="form-control bk-input"
+                    [placeholder]="prefs.t().firstName"
+                    formControlName="prenom">
+
                 </div>
-                @if (f['prenom'].touched && f['prenom'].hasError('required')) {
+
+                @if (
+                  f['prenom'].touched &&
+                  f['prenom'].hasError('required')
+                ) {
+
                   <div class="bk-field-error">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                    </svg>
-                    {{ prefs.t().firstName }} {{ prefs.t().requiredField }}
+
+                    <span class="material-symbols-outlined">
+                      error
+                    </span>
+
+                    {{ prefs.t().firstName }}
+                    {{ prefs.t().requiredField }}
+
                   </div>
+
                 }
+
               </div>
 
+
+              <!-- EMAIL -->
               <div class="bk-form-group">
-                <label for="email" class="bk-form-label">{{ prefs.t().email }}</label>
-                <div class="input-group bk-input-group">
-                  <span class="input-group-text bk-input-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
-                    </svg>
+
+                <label
+                  for="email"
+                  class="bk-form-label">
+
+                  <span class="material-symbols-outlined">
+                    email
                   </span>
-                  <input type="email" id="email" class="form-control bk-input" placeholder="exemple@email.com" formControlName="email">
+
+                  {{ prefs.t().email }}
+
+                </label>
+
+                <div class="input-group bk-input-group">
+
+                  <span class="input-group-text bk-input-icon">
+
+                    <span class="material-symbols-outlined">
+                      mail
+                    </span>
+
+                  </span>
+
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control bk-input"
+                    placeholder="exemple@email.com"
+                    formControlName="email">
+
                 </div>
-                @if (f['email'].touched && f['email'].hasError('required')) {
+
+                @if (
+                  f['email'].touched &&
+                  f['email'].hasError('required')
+                ) {
+
                   <div class="bk-field-error">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                    </svg>
+
+                    <span class="material-symbols-outlined">
+                      error
+                    </span>
+
                     {{ prefs.t().emailRequired }}
+
                   </div>
+
                 }
-                @if (f['email'].touched && f['email'].hasError('email')) {
+
+                @if (
+                  f['email'].touched &&
+                  f['email'].hasError('email')
+                ) {
+
                   <div class="bk-field-error">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                    </svg>
+
+                    <span class="material-symbols-outlined">
+                      error
+                    </span>
+
                     {{ prefs.t().emailInvalid }}
+
                   </div>
+
                 }
+
               </div>
 
+
+              <!-- TELEPHONE -->
               <div class="bk-form-group">
-                <label for="telephone" class="bk-form-label">{{ prefs.t().phone }}</label>
-                <div class="input-group bk-input-group">
-                  <span class="input-group-text bk-input-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
-                    </svg>
+
+                <label
+                  for="telephone"
+                  class="bk-form-label">
+
+                  <span class="material-symbols-outlined">
+                    phone
                   </span>
-                  <input type="tel" id="telephone" class="form-control bk-input" placeholder="+237 6XX XX XX XX" formControlName="telephone">
+
+                  {{ prefs.t().phone }}
+
+                </label>
+
+                <div class="input-group bk-input-group">
+
+                  <span class="input-group-text bk-input-icon">
+
+                    <span class="material-symbols-outlined">
+                      phone
+                    </span>
+
+                  </span>
+
+                  <input
+                    type="tel"
+                    id="telephone"
+                    class="form-control bk-input"
+                    placeholder="+237 6XX XX XX XX"
+                    formControlName="telephone">
+
                 </div>
+
               </div>
 
-              <div class="bk-form-group bk-form-group--full">
-                <label for="entreprise" class="bk-form-label">{{ prefs.t().company }}</label>
-                <div class="input-group bk-input-group">
-                  <span class="input-group-text bk-input-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M4 0a1 1 0 0 0-1 1v1H1.5A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2H13V1a1 1 0 0 0-1-1H4zm7 2v1H5V2h6zM1.5 3h13a.5.5 0 0 1 .5.5V6H1V3.5a.5.5 0 0 1 .5-.5zM1 7h14v5.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7z"/>
-                    </svg>
+
+              <!-- ENTREPRISE -->
+              <div
+                class="bk-form-group bk-form-group--full">
+
+                <label
+                  for="entreprise"
+                  class="bk-form-label">
+
+                  <span class="material-symbols-outlined">
+                    business
                   </span>
-                  <input type="text" id="entreprise" class="form-control bk-input" placeholder="{{ prefs.t().company }}" formControlName="entreprise">
+
+                  {{ prefs.t().company }}
+
+                </label>
+
+                <div class="input-group bk-input-group">
+
+                  <span class="input-group-text bk-input-icon">
+
+                    <span class="material-symbols-outlined">
+                      business
+                    </span>
+
+                  </span>
+
+                  <input
+                    type="text"
+                    id="entreprise"
+                    class="form-control bk-input"
+                    [placeholder]="prefs.t().company"
+                    formControlName="entreprise">
+
                 </div>
+
               </div>
+
             </div>
 
+
+            <!-- BOUTON -->
             <div class="bk-settings__actions">
-              <button type="submit" class="btn bk-btn-primary" [disabled]="profileForm.invalid">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M13.5 1a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5v-12A1.5 1.5 0 0 1 2.5 1h11zm-1 1.5h-9a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-.5-.5z"/>
-                  <path d="M6 11a1 1 0 1 1 2 0v1h3v-1a4 4 0 0 0-8 0v1h3v-1z"/>
-                </svg>
+
+              <button
+                type="submit"
+                class="btn bk-btn-primary"
+                [disabled]="profileForm.invalid">
+
+                <span class="material-symbols-outlined">
+                  save
+                </span>
+
                 {{ prefs.t().saveChanges }}
+
               </button>
+
             </div>
+
           </form>
 
+
+          <!-- ===============================================
+               STATISTIQUES
+          ================================================ -->
           <div class="bk-settings__stats">
-            <h3 class="bk-settings__stats-title">{{ prefs.t().accountStats }}</h3>
+
+            <h3 class="bk-settings__stats-title">
+              {{ prefs.t().accountStats }}
+            </h3>
+
             <div class="bk-settings__stats-grid">
+
+
               <div class="bk-stat-card">
+
                 <span class="bk-stat-card__icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
-                  </svg>
+
+                  <span class="material-symbols-outlined">
+                    inventory_2
+                  </span>
+
                 </span>
+
                 <div>
-                  <span class="bk-stat-card__value">{{ accountStats().totalProduits }}</span>
-                  <span class="bk-stat-card__label">{{ prefs.t().totalProducts }}</span>
+
+                  <span class="bk-stat-card__value">
+                    {{ accountStats().totalProduits }}
+                  </span>
+
+                  <span class="bk-stat-card__label">
+                    {{ prefs.t().totalProducts }}
+                  </span>
+
                 </div>
+
               </div>
+
+
               <div class="bk-stat-card">
+
                 <span class="bk-stat-card__icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5z"/>
-                  </svg>
+
+                  <span class="material-symbols-outlined">
+                    shopping_cart
+                  </span>
+
                 </span>
+
                 <div>
-                  <span class="bk-stat-card__value">{{ accountStats().totalVentes }}</span>
-                  <span class="bk-stat-card__label">{{ prefs.t().sales }}</span>
+
+                  <span class="bk-stat-card__value">
+                    {{ accountStats().totalVentes }}
+                  </span>
+
+                  <span class="bk-stat-card__label">
+                    {{ prefs.t().sales }}
+                  </span>
+
                 </div>
+
               </div>
+
+
               <div class="bk-stat-card">
+
                 <span class="bk-stat-card__icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4z"/>
-                  </svg>
+
+                  <span class="material-symbols-outlined">
+                    payments
+                  </span>
+
                 </span>
+
                 <div>
-                  <span class="bk-stat-card__value">{{ accountStats().totalCharges }}</span>
-                  <span class="bk-stat-card__label">{{ prefs.t().charges }}</span>
+
+                  <span class="bk-stat-card__value">
+                    {{ accountStats().totalCharges }}
+                  </span>
+
+                  <span class="bk-stat-card__label">
+                    {{ prefs.t().charges }}
+                  </span>
+
                 </div>
+
               </div>
+
+
               <div class="bk-stat-card">
+
                 <span class="bk-stat-card__icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
-                  </svg>
+
+                  <span class="material-symbols-outlined">
+                    calendar_month
+                  </span>
+
                 </span>
+
                 <div>
-                  <span class="bk-stat-card__value">{{ accountStats().membreDepuis }}</span>
-                  <span class="bk-stat-card__label">{{ prefs.t().memberSince }}</span>
+
+                  <span class="bk-stat-card__value">
+                    {{ accountStats().membreDepuis }}
+                  </span>
+
+                  <span class="bk-stat-card__label">
+                    {{ prefs.t().memberSince }}
+                  </span>
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
+
         </section>
+
       }
 
-      <!-- ONGLET COMPTE & SÉCURITÉ -->
+
+      <!-- ===================================================
+           COMPTE & SECURITE
+      ==================================================== -->
       @if (activeTab() === 'compte') {
+
         <section class="bk-settings__section">
-          <h2 class="bk-settings__section-title">{{ prefs.t().accountSecurity }}</h2>
-          <p class="bk-settings__section-desc">{{ prefs.t().changePassword }}</p>
+
+          <div class="bk-settings__section-heading">
+
+            <div class="bk-settings__section-icon">
+              <span class="material-symbols-outlined">
+                security
+              </span>
+            </div>
+
+            <div>
+
+              <h2 class="bk-settings__section-title">
+                {{ prefs.t().accountSecurity }}
+              </h2>
+
+              <p class="bk-settings__section-desc">
+                {{ prefs.t().changePassword }}
+              </p>
+
+            </div>
+
+          </div>
+
 
           <div class="bk-settings__card">
-            <h3 class="bk-settings__card-title">{{ prefs.t().changePassword }}</h3>
-            <form [formGroup]="securityForm" (ngSubmit)="changePassword()">
+
+            <h3 class="bk-settings__card-title">
+
+              <span class="material-symbols-outlined">
+                lock
+              </span>
+
+              {{ prefs.t().changePassword }}
+
+            </h3>
+
+
+            <form
+              [formGroup]="securityForm"
+              (ngSubmit)="changePassword()">
+
               <div class="bk-settings__grid">
-                <div class="bk-form-group bk-form-group--full">
-                  <label for="currentPassword" class="bk-form-label">{{ prefs.t().currentPassword }}</label>
-                  <div class="input-group bk-input-group">
-                    <span class="input-group-text bk-input-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                      </svg>
+
+
+                <!-- MOT DE PASSE ACTUEL -->
+                <div
+                  class="bk-form-group bk-form-group--full">
+
+                  <label
+                    for="currentPassword"
+                    class="bk-form-label">
+
+                    <span class="material-symbols-outlined">
+                      lock
                     </span>
-                    <input type="password" id="currentPassword" class="form-control bk-input" placeholder="{{ prefs.t().currentPassword }}" formControlName="currentPassword">
+
+                    {{ prefs.t().currentPassword }}
+
+                  </label>
+
+                  <div class="input-group bk-input-group">
+
+                    <span class="input-group-text bk-input-icon">
+
+                      <span class="material-symbols-outlined">
+                        lock
+                      </span>
+
+                    </span>
+
+                    <input
+                      type="password"
+                      id="currentPassword"
+                      class="form-control bk-input"
+                      [placeholder]="prefs.t().currentPassword"
+                      formControlName="currentPassword">
+
                   </div>
-                  @if (s['currentPassword'].touched && s['currentPassword'].hasError('required')) {
+
+                  @if (
+                    s['currentPassword'].touched &&
+                    s['currentPassword'].hasError('required')
+                  ) {
+
                     <div class="bk-field-error">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                      </svg>
-                      {{ prefs.t().currentPassword }} {{ prefs.t().requiredField }}
+
+                      <span class="material-symbols-outlined">
+                        error
+                      </span>
+
+                      {{ prefs.t().currentPassword }}
+                      {{ prefs.t().requiredField }}
+
                     </div>
+
                   }
+
                 </div>
 
+
+                <!-- NOUVEAU MOT DE PASSE -->
                 <div class="bk-form-group">
-                  <label for="newPassword" class="bk-form-label">{{ prefs.t().newPassword }}</label>
-                  <div class="input-group bk-input-group">
-                    <span class="input-group-text bk-input-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                      </svg>
+
+                  <label
+                    for="newPassword"
+                    class="bk-form-label">
+
+                    <span class="material-symbols-outlined">
+                      lock_reset
                     </span>
-                    <input type="password" id="newPassword" class="form-control bk-input" placeholder="{{ prefs.t().newPassword }}" formControlName="newPassword">
+
+                    {{ prefs.t().newPassword }}
+
+                  </label>
+
+                  <div class="input-group bk-input-group">
+
+                    <span class="input-group-text bk-input-icon">
+
+                      <span class="material-symbols-outlined">
+                        lock
+                      </span>
+
+                    </span>
+
+                    <input
+                      type="password"
+                      id="newPassword"
+                      class="form-control bk-input"
+                      [placeholder]="prefs.t().newPassword"
+                      formControlName="newPassword">
+
                   </div>
-                  @if (s['newPassword'].touched && s['newPassword'].hasError('required')) {
+
+                  @if (
+                    s['newPassword'].touched &&
+                    s['newPassword'].hasError('required')
+                  ) {
+
                     <div class="bk-field-error">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                      </svg>
-                      {{ prefs.t().newPassword }} {{ prefs.t().requiredField }}
+
+                      <span class="material-symbols-outlined">
+                        error
+                      </span>
+
+                      {{ prefs.t().newPassword }}
+                      {{ prefs.t().requiredField }}
+
                     </div>
+
                   }
-                  @if (s['newPassword'].touched && s['newPassword'].hasError('pattern')) {
-                    <div class="bk-field-error">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                      </svg>
-                      8 caractères, majuscule, minuscule, chiffre et caractère spécial.
-                    </div>
-                  }
+
                 </div>
 
+
+                <!-- CONFIRMATION -->
                 <div class="bk-form-group">
-                  <label for="confirmPassword" class="bk-form-label">{{ prefs.t().confirmPassword }}</label>
-                  <div class="input-group bk-input-group">
-                    <span class="input-group-text bk-input-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                      </svg>
+
+                  <label
+                    for="confirmPassword"
+                    class="bk-form-label">
+
+                    <span class="material-symbols-outlined">
+                      verified_user
                     </span>
-                    <input type="password" id="confirmPassword" class="form-control bk-input" placeholder="{{ prefs.t().confirmPassword }}" formControlName="confirmPassword">
+
+                    {{ prefs.t().confirmPassword }}
+
+                  </label>
+
+                  <div class="input-group bk-input-group">
+
+                    <span class="input-group-text bk-input-icon">
+
+                      <span class="material-symbols-outlined">
+                        lock
+                      </span>
+
+                    </span>
+
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      class="form-control bk-input"
+                      [placeholder]="prefs.t().confirmPassword"
+                      formControlName="confirmPassword">
+
                   </div>
-                  @if (s['confirmPassword'].touched && securityForm.hasError('passwordMismatch')) {
+
+                  @if (
+                    s['confirmPassword'].touched &&
+                    securityForm.hasError('passwordMismatch')
+                  ) {
+
                     <div class="bk-field-error">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                      </svg>
-                      {{ prefs.t().passwordRequired }}
+
+                      <span class="material-symbols-outlined">
+                        error
+                      </span>
+
+                      {{ prefs.t().passwordMismatch }}
+
                     </div>
+
                   }
-                  @if (s['confirmPassword'].touched && s['confirmPassword'].hasError('required')) {
-                    <div class="bk-field-error">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                      </svg>
-                      {{ prefs.t().confirmPassword }} {{ prefs.t().requiredField }}
-                    </div>
-                  }
+
                 </div>
+
               </div>
+
 
               <div class="bk-settings__actions">
-                <button type="submit" class="btn bk-btn-primary" [disabled]="securityForm.invalid">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                  </svg>
-                  {{ prefs.t().changePassword }}
-                </button>
-              </div>
-            </form>
-          </div>
 
-          <div class="bk-settings__card bk-settings__card--danger">
-            <h3 class="bk-settings__card-title">{{ prefs.t().session }}</h3>
-            <p class="bk-settings__card-desc">{{ prefs.t().sessionDesc }}</p>
-            <button type="button" class="btn bk-btn-danger" (click)="logout()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-              </svg>
-              {{ prefs.t().logout }}
-            </button>
-          </div>
-        </section>
-      }
+                <button
+                  type="submit"
+                  class="btn bk-btn-primary"
+                  [disabled]="securityForm.invalid">
 
-      <!-- ONGLET NOTIFICATIONS -->
-      @if (activeTab() === 'notifications') {
-        <section class="bk-settings__section">
-          <h2 class="bk-settings__section-title">{{ prefs.t().notifications }}</h2>
-          <p class="bk-settings__section-desc">{{ prefs.t().notificationsDesc }}</p>
-
-          <div class="bk-settings__card">
-            @for (notif of notifications(); track notif.id) {
-              <div class="bk-settings__notification">
-                <div class="bk-settings__notification-info">
-                  <span class="bk-settings__notification-icon">
-                    @if (notif.type === 'stock') {
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5 8.186 1.113zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.76V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
-                      </svg>
-                    } @else if (notif.type === 'vente') {
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5z"/>
-                      </svg>
-                    } @else if (notif.type === 'rapport') {
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4z"/>
-                      </svg>
-                    } @else {
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917z"/>
-                      </svg>
-                    }
+                  <span class="material-symbols-outlined">
+                    lock_reset
                   </span>
-                  <div>
-                    <strong class="bk-settings__notification-title">{{ notif.label }}</strong>
-                    <p class="bk-settings__notification-desc">{{ notif.description }}</p>
-                  </div>
-                </div>
-                <div class="bk-toggle">
-                  <input type="checkbox" [id]="'notif-' + notif.id" class="bk-toggle__input" [checked]="notif.enabled" (change)="toggleNotification(notif.id)">
-                  <label [for]="'notif-' + notif.id" class="bk-toggle__label"></label>
-                </div>
+
+                  {{ prefs.t().changePassword }}
+
+                </button>
+
               </div>
-            }
+
+            </form>
+
           </div>
 
-          <div class="bk-settings__actions">
-            <button type="button" class="btn bk-btn-primary" (click)="saveAppearance()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M13.5 1a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5v-12A1.5 1.5 0 0 1 2.5 1h11zm-1 1.5h-9a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-.5-.5z"/>
-                <path d="M6 11a1 1 0 1 1 2 0v1h3v-1a4 4 0 0 0-8 0v1h3v-1z"/>
-              </svg>
-              {{ prefs.t().saveButton }}
+
+          <!-- DECONNEXION -->
+          <div class="bk-settings__card bk-settings__card--danger">
+
+            <h3 class="bk-settings__card-title">
+
+              <span class="material-symbols-outlined">
+                logout
+              </span>
+
+              {{ prefs.t().session }}
+
+            </h3>
+
+            <p class="bk-settings__card-desc">
+              {{ prefs.t().sessionDesc }}
+            </p>
+
+            <button
+              type="button"
+              class="btn bk-btn-danger"
+              (click)="logout()">
+
+              <span class="material-symbols-outlined">
+                logout
+              </span>
+
+              {{ prefs.t().logout }}
+
             </button>
+
           </div>
+
         </section>
+
       }
 
-      <!-- ONGLET APPAREANCE -->
-      @if (activeTab() === 'apparence') {
+
+      <!-- ===================================================
+           NOTIFICATIONS
+      ==================================================== -->
+      @if (activeTab() === 'notifications') {
+
         <section class="bk-settings__section">
-          <h2 class="bk-settings__section-title">{{ prefs.t().appearance }}</h2>
-          <p class="bk-settings__section-desc">{{ prefs.t().themeDesc }}</p>
+
+          <div class="bk-settings__section-heading">
+
+            <div class="bk-settings__section-icon">
+
+              <span class="material-symbols-outlined">
+                notifications
+              </span>
+
+            </div>
+
+            <div>
+
+              <h2 class="bk-settings__section-title">
+                {{ prefs.t().notifications }}
+              </h2>
+
+              <p class="bk-settings__section-desc">
+                {{ prefs.t().notificationsDesc }}
+              </p>
+
+            </div>
+
+          </div>
+
 
           <div class="bk-settings__card">
-            <!-- Thème -->
-            <div class="bk-settings__preference">
-              <div class="bk-settings__preference-info">
-                <span class="bk-settings__preference-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 4a4 4 0 1 0 0 8A4 4 0 0 0 8 4z"/>
-                    <path d="M8 .5a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0V1A.5.5 0 0 1 8 .5zM8 13.6a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0v-1.4a.5.5 0 0 1 .5-.5z"/>
-                    <path d="M2.5 2.5a.5.5 0 0 1 .708 0l.99.99a.5.5 0 0 1-.707.707l-.99-.99a.5.5 0 0 1 0-.708zM13.5 2.5a.5.5 0 0 1 0 .708l-.99.99a.5.5 0 0 1-.707-.707l.99-.99a.5.5 0 0 1 .708 0z"/>
-                  </svg>
-                </span>
-                <div>
-                  <strong class="bk-settings__preference-title">{{ prefs.t().theme }}</strong>
-                  <p class="bk-settings__preference-desc">{{ prefs.t().themeDesc }}</p>
-                </div>
-              </div>
-              <button type="button" class="bk-theme-toggle" (click)="themeService.toggle()">
-                @if (themeService.theme() === 'dark') {
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M6.7 1.2a.7.7 0 0 1 .07.8A6.2 6.2 0 0 0 6 4.9c0 3.5 2.8 6.3 6.3 6.3.9 0 1.8-.2 2.6-.5a.7.7 0 0 1 .8.1.7.7 0 0 1 .05.9A7.7 7.7 0 1 1 5.8 .35a.7.7 0 0 1 .9.85z"/>
-                  </svg>
-                  <span>{{ prefs.t().dark }}</span>
-                } @else {
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 4a4 4 0 1 0 0 8A4 4 0 0 0 8 4z"/>
-                    <path d="M8 .5a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0V1A.5.5 0 0 1 8 .5zM8 13.6a.5.5 0 0 1 .5.5v1.4a.5.5 0 0 1-1 0v-1.4a.5.5 0 0 1 .5-.5z"/>
-                  </svg>
-                  <span>{{ prefs.t().light }}</span>
-                }
-              </button>
-            </div>
 
-            <!-- Langue -->
-            <div class="bk-settings__preference">
-              <div class="bk-settings__preference-info">
-                <span class="bk-settings__preference-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4.5 4.5h2.5v1.5h-2.5v-1.5zm0 5.5h2.5V11h-2.5v-1zm4.5 0h2.5V11H9v-1zm0-5.5h2.5v1.5H9v-1z"/>
-                  </svg>
-                </span>
-                <div>
-                  <strong class="bk-settings__preference-title">{{ prefs.t().language }}</strong>
-                  <p class="bk-settings__preference-desc">{{ prefs.t().languageDesc }}</p>
-                </div>
-              </div>
-              <select class="bk-settings__select" [ngModel]="prefs.language()" (ngModelChange)="onLanguageChange($event)">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-              </select>
-            </div>
+            @for (
+              notif of notifications();
+              track notif.id
+            ) {
 
-            <!-- Format de date -->
-            <div class="bk-settings__preference">
-              <div class="bk-settings__preference-info">
-                <span class="bk-settings__preference-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
-                  </svg>
-                </span>
-                <div>
-                  <strong class="bk-settings__preference-title">{{ prefs.t().dateFormat }}</strong>
-                  <p class="bk-settings__preference-desc">{{ prefs.t().dateFormatDesc }}</p>
-                </div>
-              </div>
-              <select class="bk-settings__select" [ngModel]="prefs.dateFormat()" (ngModelChange)="onDateFormatChange($event)">
-                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-              </select>
-            </div>
+              <div class="bk-settings__notification">
 
-            <!-- Devise -->
-            <div class="bk-settings__preference">
-              <div class="bk-settings__preference-info">
-                <span class="bk-settings__preference-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4z"/>
-                  </svg>
-                </span>
-                <div>
-                  <strong class="bk-settings__preference-title">{{ prefs.t().currency }}</strong>
-                  <p class="bk-settings__preference-desc">{{ prefs.t().currencyDesc }}</p>
-                </div>
-              </div>
-              <select class="bk-settings__select" [ngModel]="prefs.currency()" (ngModelChange)="onCurrencyChange($event)">
-                <option value="XAF">FCFA (XAF)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="USD">Dollar (USD)</option>
-                <option value="GBP">Livre Sterling (GBP)</option>
-              </select>
-            </div>
+                <div class="bk-settings__notification-info">
 
-            <!-- Mode compact -->
-            <div class="bk-settings__preference">
-              <div class="bk-settings__preference-info">
-                <span class="bk-settings__preference-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/>
-                  </svg>
-                </span>
-                <div>
-                  <strong class="bk-settings__preference-title">{{ prefs.t().compactMode }}</strong>
-                  <p class="bk-settings__preference-desc">{{ prefs.t().compactModeDesc }}</p>
+                  <span class="bk-settings__notification-icon">
+
+                    @if (notif.type === 'stock') {
+
+                      <span class="material-symbols-outlined">
+                        inventory_2
+                      </span>
+
+                    } @else if (notif.type === 'vente') {
+
+                      <span class="material-symbols-outlined">
+                        shopping_cart
+                      </span>
+
+                    } @else if (notif.type === 'rapport') {
+
+                      <span class="material-symbols-outlined">
+                        payments
+                      </span>
+
+                    } @else {
+
+                      <span class="material-symbols-outlined">
+                        notifications
+                      </span>
+
+                    }
+
+                  </span>
+
+
+                  <div>
+
+                    <strong
+                      class="bk-settings__notification-title">
+
+                      {{ notif.label }}
+
+                    </strong>
+
+                    <p
+                      class="bk-settings__notification-desc">
+
+                      {{ notif.description }}
+
+                    </p>
+
+                  </div>
+
                 </div>
+
+
+                <div class="bk-toggle">
+
+                  <input
+                    type="checkbox"
+                    [id]="'notif-' + notif.id"
+                    class="bk-toggle__input"
+                    [checked]="notif.enabled"
+                    (change)="toggleNotification(notif.id)">
+
+                  <label
+                    [for]="'notif-' + notif.id"
+                    class="bk-toggle__label">
+                  </label>
+
+                </div>
+
               </div>
-              <div class="bk-toggle">
-                <input type="checkbox" id="compactMode" class="bk-toggle__input" [checked]="prefs.compactMode()" (change)="toggleCompactMode()">
-                <label for="compactMode" class="bk-toggle__label"></label>
-              </div>
-            </div>
+
+            }
+
           </div>
+
 
           <div class="bk-settings__actions">
-            <button type="button" class="btn bk-btn-primary" (click)="saveAppearance()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M13.5 1a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5v-12A1.5 1.5 0 0 1 2.5 1h11zm-1 1.5h-9a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-11a.5.5 0 0 0-.5-.5z"/>
-                <path d="M6 11a1 1 0 1 1 2 0v1h3v-1a4 4 0 0 0-8 0v1h3v-1z"/>
-              </svg>
+
+            <button
+              type="button"
+              class="btn bk-btn-primary"
+              (click)="saveAppearance()">
+
+              <span class="material-symbols-outlined">
+                save
+              </span>
+
               {{ prefs.t().saveButton }}
+
             </button>
+
           </div>
+
         </section>
+
+      }
+
+
+      <!-- ===================================================
+           APPARENCE
+      ==================================================== -->
+      @if (activeTab() === 'apparence') {
+
+        <section class="bk-settings__section">
+
+          <div class="bk-settings__section-heading">
+
+            <div class="bk-settings__section-icon">
+
+              <span class="material-symbols-outlined">
+                palette
+              </span>
+
+            </div>
+
+            <div>
+
+              <h2 class="bk-settings__section-title">
+                {{ prefs.t().appearance }}
+              </h2>
+
+              <p class="bk-settings__section-desc">
+                {{ prefs.t().themeDesc }}
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="bk-settings__card">
+
+
+            <!-- THEME -->
+            <div class="bk-settings__preference">
+
+              <div class="bk-settings__preference-info">
+
+                <span class="bk-settings__preference-icon">
+
+                  @if (
+                    themeService.theme() === 'dark'
+                  ) {
+
+                    <span class="material-symbols-outlined">
+                      dark_mode
+                    </span>
+
+                  } @else {
+
+                    <span class="material-symbols-outlined">
+                      light_mode
+                    </span>
+
+                  }
+
+                </span>
+
+
+                <div>
+
+                  <strong
+                    class="bk-settings__preference-title">
+
+                    {{ prefs.t().theme }}
+
+                  </strong>
+
+                  <p
+                    class="bk-settings__preference-desc">
+
+                    {{ prefs.t().themeDesc }}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="bk-theme-toggle"
+                (click)="themeService.toggle()">
+
+                @if (
+                  themeService.theme() === 'dark'
+                ) {
+
+                  <span class="material-symbols-outlined">
+                    dark_mode
+                  </span>
+
+                  <span>
+                    {{ prefs.t().dark }}
+                  </span>
+
+                } @else {
+
+                  <span class="material-symbols-outlined">
+                    light_mode
+                  </span>
+
+                  <span>
+                    {{ prefs.t().light }}
+                  </span>
+
+                }
+
+              </button>
+
+            </div>
+
+
+            <!-- LANGUE -->
+            <div class="bk-settings__preference">
+
+              <div class="bk-settings__preference-info">
+
+                <span class="bk-settings__preference-icon">
+
+                  <span class="material-symbols-outlined">
+                    language
+                  </span>
+
+                </span>
+
+
+                <div>
+
+                  <strong
+                    class="bk-settings__preference-title">
+
+                    {{ prefs.t().language }}
+
+                  </strong>
+
+                  <p
+                    class="bk-settings__preference-desc">
+
+                    {{ prefs.t().languageDesc }}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <select
+                class="bk-settings__select"
+                [ngModel]="prefs.language()"
+                (ngModelChange)="onLanguageChange($event)">
+
+                <option value="fr">
+                  🇫🇷 Français
+                </option>
+
+                <option value="en">
+                  🇬🇧 English
+                </option>
+
+                <option value="es">
+                  🇪🇸 Español
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- FORMAT DATE -->
+            <div class="bk-settings__preference">
+
+              <div class="bk-settings__preference-info">
+
+                <span class="bk-settings__preference-icon">
+
+                  <span class="material-symbols-outlined">
+                    calendar_month
+                  </span>
+
+                </span>
+
+
+                <div>
+
+                  <strong
+                    class="bk-settings__preference-title">
+
+                    {{ prefs.t().dateFormat }}
+
+                  </strong>
+
+                  <p
+                    class="bk-settings__preference-desc">
+
+                    {{ prefs.t().dateFormatDesc }}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <select
+                class="bk-settings__select"
+                [ngModel]="prefs.dateFormat()"
+                (ngModelChange)="onDateFormatChange($event)">
+
+                <option value="DD/MM/YYYY">
+                  DD/MM/YYYY
+                </option>
+
+                <option value="MM/DD/YYYY">
+                  MM/DD/YYYY
+                </option>
+
+                <option value="YYYY-MM-DD">
+                  YYYY-MM-DD
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- DEVISE -->
+            <div class="bk-settings__preference">
+
+              <div class="bk-settings__preference-info">
+
+                <span class="bk-settings__preference-icon">
+
+                  <span class="material-symbols-outlined">
+                    payments
+                  </span>
+
+                </span>
+
+
+                <div>
+
+                  <strong
+                    class="bk-settings__preference-title">
+
+                    {{ prefs.t().currency }}
+
+                  </strong>
+
+                  <p
+                    class="bk-settings__preference-desc">
+
+                    {{ prefs.t().currencyDesc }}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <select
+                class="bk-settings__select"
+                [ngModel]="prefs.currency()"
+                (ngModelChange)="onCurrencyChange($event)">
+
+                <option value="XAF">
+                  FCFA (XAF)
+                </option>
+
+                <option value="EUR">
+                  Euro (EUR)
+                </option>
+
+                <option value="USD">
+                  Dollar (USD)
+                </option>
+
+                <option value="GBP">
+                  Livre Sterling (GBP)
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- MODE COMPACT -->
+            <div class="bk-settings__preference">
+
+              <div class="bk-settings__preference-info">
+
+                <span class="bk-settings__preference-icon">
+
+                  <span class="material-symbols-outlined">
+                    view_compact
+                  </span>
+
+                </span>
+
+
+                <div>
+
+                  <strong
+                    class="bk-settings__preference-title">
+
+                    {{ prefs.t().compactMode }}
+
+                  </strong>
+
+                  <p
+                    class="bk-settings__preference-desc">
+
+                    {{ prefs.t().compactModeDesc }}
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div class="bk-toggle">
+
+                <input
+                  type="checkbox"
+                  id="compact-mode"
+                  class="bk-toggle__input"
+                  [checked]="prefs.compactMode()"
+                  (change)="toggleCompactMode()">
+
+                <label
+                  for="compact-mode"
+                  class="bk-toggle__label">
+                </label>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="bk-settings__actions">
+
+            <button
+              type="button"
+              class="btn bk-btn-primary"
+              (click)="saveAppearance()">
+
+              <span class="material-symbols-outlined">
+                save
+              </span>
+
+              {{ prefs.t().saveButton }}
+
+            </button>
+
+          </div>
+
+        </section>
+
       }
 
     </div>
+
   </div>
+
 </app-template>

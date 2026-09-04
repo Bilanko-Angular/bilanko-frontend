@@ -1,0 +1,71 @@
+<!-- src/app/pages/landing/components/landing-navbar/landing-navbar.html -->
+
+<header class="landing-header">
+  <nav class="landing-nav">
+    <!-- LOGO -->
+    <a routerLink="/" class="brand">
+      <img 
+        src="assets/images/logo.png" 
+        alt="Bilanko Logo" 
+        class="brand-logo-img"
+      />
+      <span class="brand-text">Bilanko</span>
+    </a>
+
+    <!-- NAVIGATION AVEC LIENS ACTIFS -->
+    <div class="nav-links">
+      <a 
+        href="#fonctionnalites" 
+        class="nav-link"
+        [class.active]="activeSection() === 'fonctionnalites'"
+        (click)="scrollTo('fonctionnalites', $event)"
+      >
+        Fonctionnalités
+      </a>
+      <a 
+        href="#comment-ca-marche" 
+        class="nav-link"
+        [class.active]="activeSection() === 'comment-ca-marche'"
+        (click)="scrollTo('comment-ca-marche', $event)"
+      >
+        Comment ça marche
+      </a>
+      <a 
+        href="#pourquoi-bilanko" 
+        class="nav-link"
+        [class.active]="activeSection() === 'pourquoi-bilanko'"
+        (click)="scrollTo('pourquoi-bilanko', $event)"
+      >
+        Pourquoi Bilanko
+      </a>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="nav-actions">
+      <!-- DARK MODE -->
+      <button type="button" class="theme-button" (click)="toggleTheme()"
+        [attr.aria-label]="isDark ? 'Activer le mode clair' : 'Activer le mode sombre'">
+        @if (isDark) {
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-icon">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
+            <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+            <path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/>
+            <path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
+        } @else {
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="theme-icon">
+            <path d="M21 12.8A8.5 8.5 0 0 1 11.2 3a8.5 8.5 0 1 0 9.8 9.8Z"/>
+          </svg>
+        }
+      </button>
+
+      <a routerLink="/connexion" class="login-link">Se connecter</a>
+      <a routerLink="/inscription" class="nav-cta">
+        Commencer
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+</header>

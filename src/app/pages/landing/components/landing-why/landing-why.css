@@ -1,0 +1,350 @@
+/* src/app/pages/landing/components/landing-why/landing-why.component.css */
+
+/* ============================================================
+   WHY SECTION
+   ============================================================ */
+
+.why-section {
+  padding: 110px 0;
+  background: var(--color-background);
+}
+
+.section-container {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+
+.why-container {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: start;
+  gap: 60px;
+}
+
+/* ============================================================
+   WHY HEADER (NOUVEAU - CENTRÉ)
+   ============================================================ */
+
+.why-header {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.section-eyebrow {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--color-primary);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.why-header h2 {
+  margin: 0 0 14px;
+  color: var(--color-text);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+
+.why-header h2 span {
+  color: var(--color-primary);
+}
+
+/* ✅ DESCRIPTION RÉDUITE ET CENTRÉE */
+.why-header-description {
+  max-width: 680px;
+  margin: 0 auto;
+  color: var(--color-text-muted);
+  font-size: 0.9rem; /* Taille réduite */
+  line-height: 1.6;
+}
+
+/* ============================================================
+   WHY CONTENT (LISTE DES POINTS)
+   ============================================================ */
+
+.why-content {
+  /* Rien de spécial, juste garder la marge */
+}
+
+.why-list {
+  margin-top: 10px;
+}
+
+.why-item {
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 18px;
+  padding: 21px 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.why-item:last-child {
+  border-bottom: none;
+}
+
+.why-item:hover {
+  padding-left: 10px;
+  border-color: var(--color-primary);
+}
+
+.why-number {
+  color: var(--color-primary);
+  font-size: 0.72rem;
+  font-weight: 800;
+  transition: all 0.3s ease;
+}
+
+.why-item:hover .why-number {
+  transform: scale(1.2);
+}
+
+.why-item h3 {
+  margin: 0 0 7px;
+  color: var(--color-text);
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  font-weight: 800;
+}
+
+.why-item p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: clamp(0.72rem, 1vw, 0.78rem);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   FINANCE CARD (VISUAL)
+   ============================================================ */
+
+.why-visual {
+  position: relative;
+}
+
+.finance-card {
+  padding: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: var(--color-surface);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+}
+
+.finance-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.12);
+  border-color: var(--color-primary);
+}
+
+.finance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.finance-header button {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.finance-header button:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  transform: rotate(90deg);
+}
+
+.finance-header svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.finance-main {
+  margin-top: 40px;
+}
+
+.finance-main small {
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+}
+
+.finance-main strong {
+  display: block;
+  margin: 7px 0;
+  color: var(--color-text);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  letter-spacing: -0.05em;
+}
+
+.finance-main span {
+  color: var(--color-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.finance-bars {
+  height: 190px;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: 45px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.finance-bars div {
+  flex: 1;
+  min-width: 15px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, var(--color-primary), rgba(5, 223, 114, 0.25));
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.finance-bars div:hover {
+  transform: scaleY(1.02);
+  background: var(--color-primary);
+}
+
+.finance-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  color: var(--color-text-muted);
+  font-size: 0.58rem;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .why-container {
+    gap: 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .why-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .why-visual {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .section-container {
+    width: min(100%, calc(100% - 24px));
+  }
+}
+
+@media (max-width: 650px) {
+  .why-section {
+    padding: 75px 0;
+  }
+
+  .why-header h2 {
+    font-size: 2.15rem;
+  }
+
+  /* ✅ Description encore plus réduite sur mobile */
+  .why-header-description {
+    font-size: 0.8rem;
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .finance-card {
+    padding: 20px;
+  }
+
+  .finance-main strong {
+    font-size: 2.2rem;
+  }
+
+  .finance-bars {
+    height: 145px;
+    gap: 8px;
+    margin-top: 30px;
+  }
+
+  .why-list {
+    margin-top: 10px;
+  }
+
+  .why-item {
+    padding: 16px 0;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .why-header h2 {
+    font-size: 1.9rem;
+  }
+
+  .why-header-description {
+    font-size: 0.75rem;
+  }
+
+  .finance-card {
+    padding: 16px;
+  }
+
+  .finance-main strong {
+    font-size: 1.8rem;
+  }
+
+  .finance-bars {
+    height: 120px;
+    gap: 6px;
+    padding: 0 4px;
+  }
+
+  .finance-footer {
+    font-size: 0.5rem;
+  }
+
+  .why-item {
+    grid-template-columns: 35px 1fr;
+    gap: 12px;
+    padding: 14px 0;
+  }
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+
+[data-theme='dark'] .finance-card {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme='dark'] .finance-card:hover {
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+}

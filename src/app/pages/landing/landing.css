@@ -1,0 +1,71 @@
+/* src/app/pages/landing/landing.component.css */
+
+.landing-page {
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overflow-x: hidden;
+}
+
+.landing-page a {
+  text-decoration: none;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+
+[data-theme='dark'] .landing-page {
+  background: var(--color-background);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   RESPONSIVE GLOBAL
+   ============================================================ */
+
+/* Ajustement des conteneurs pour éviter les débordements */
+.section-container {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+
+@media (max-width: 650px) {
+  .section-container {
+    width: min(100%, calc(100% - 24px));
+    padding: 0 0.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .section-container {
+    width: 100%;
+    padding: 0 0.75rem;
+  }
+}

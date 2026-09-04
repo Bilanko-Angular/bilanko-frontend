@@ -1,8 +1,28 @@
-<app-navbar-landing />
+<!-- src/app/pages/landing/landing.html -->
+
+<div class="landing-page">
+  <app-landing-navbar></app-landing-navbar>
+
   <main>
-    <app-hero />
-    <app-features />
-    <app-how-it-works />
-    <app-cta-banner />
+    <app-landing-hero></app-landing-hero>
+    
+    <!-- ✅ ID pour "fonctionnalites" -->
+    <div id="fonctionnalites">
+      <app-landing-features></app-landing-features>
+    </div>
+    
+    <!-- ✅ ID pour "comment-ca-marche" -->
+    <div id="comment-ca-marche">
+      <app-landing-steps></app-landing-steps>
+    </div>
+    
+    <!-- ✅ ID pour "pourquoi-bilanko" -->
+    <div id="pourquoi-bilanko">
+      <app-landing-why></app-landing-why>
+    </div>
+    
+    <app-landing-cta></app-landing-cta>
   </main>
-<app-footer-landing />
+
+  <app-landing-footer></app-landing-footer>
+</div>

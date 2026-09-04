@@ -9,4 +9,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('bilanko');
+  constructor() {
+    console.log('Je manipule bien l\'app');
+  }
 }

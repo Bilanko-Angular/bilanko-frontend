@@ -1,0 +1,48 @@
+<!-- src/app/pages/landing/components/landing-footer/landing-footer.html -->
+
+<footer class="landing-footer" appAnimateOnScroll [appAnimateOnScrollDelay]="0">
+  <div class="section-container footer-container">
+
+    <div class="footer-brand">
+      <a routerLink="/" class="brand">
+        <img 
+          src="assets/images/logo.png" 
+          alt="Bilanko Logo" 
+          class="brand-logo-img"
+        />
+        <span class="brand-text">Bilanko</span>
+      </a>
+      <p>
+        Des outils simples pour une gestion
+        plus claire et plus efficace.
+      </p>
+    </div>
+
+    <div class="footer-column">
+      <h4>Produit</h4>
+      <a href="#fonctionnalites">Fonctionnalités</a>
+      <a href="#comment-ca-marche">Comment ça marche</a>
+      <a href="#pourquoi-bilanko">Pourquoi Bilanko</a>
+    </div>
+
+    <div class="footer-column">
+      <h4>Compte</h4>
+      <a routerLink="/connexion">Se connecter</a>
+      <a routerLink="/inscription">Créer un compte</a>
+    </div>
+
+    <div class="footer-column">
+      <h4>Bilanko</h4>
+      <a href="#fonctionnalites">À propos</a>
+      <a href="#comment-ca-marche">Aide</a>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="section-container footer-bottom-inner">
+      <span>&copy; {{ currentYear }} Bilanko. Tous droits réservés.</span>
+      <span>Gestion simple. Décisions meilleures.</span>
+    </div>
+  </div>
+</footer>

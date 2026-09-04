@@ -1,13 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
 import { PreferencesService } from '../../../services/preferences';
+import { GoogleLoginButton } from '../../../components/shared/ui/google-login-button/google-login-button';
 
 @Component({
   selector: 'app-inscription',
   standalone: true,
-  imports: [ReactiveFormsModule, AuthUser, RouterLink],
+  imports: [ReactiveFormsModule, AuthUser, RouterLink, GoogleLoginButton],
   templateUrl: './inscription.html',
   styleUrl: './inscription.css',
 })
@@ -15,11 +16,11 @@ export class Inscription {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   protected readonly prefs = inject(PreferencesService);
+  @ViewChild('passwordInput') passwordInput!: HTMLInputElement;
 
   isLoading = false;
   registerError = '';
   registerSuccess = false;
-
   readonly inscriptionForm = this.fb.group(
     {
       nom: ['', [Validators.required, Validators.minLength(2)]],
@@ -43,6 +44,13 @@ export class Inscription {
   get password() { return this.inscriptionForm.controls.password; }
   get confirmPassword() { return this.inscriptionForm.controls.confirmPassword; }
 
+  togglePasswordVisibility(inputElement: HTMLInputElement): void {
+    if (inputElement.type === 'password') {
+      inputElement.type = 'text';
+    } else {
+      inputElement.type = 'password';
+    }
+  }
   hasMinLength(): boolean { return (this.password.value || '').length >= 8; }
   hasUpperCase(): boolean { return /[A-Z]/.test(this.password.value || ''); }
   hasLowerCase(): boolean { return /[a-z]/.test(this.password.value || ''); }
@@ -69,4 +77,13 @@ export class Inscription {
       }, 1500);
     }, 800);
   }
+  // connexion.ts
+  onGoogleSuccess(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  onGoogleError(message: string): void {
+    console.error(message);
+  }
+
 }

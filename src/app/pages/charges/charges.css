@@ -10,7 +10,54 @@
 .page-header h1 { color: var(--color-text); margin: 0 0 0.4rem 0; font-size: 1.5rem; }
 .page-header p { color: var(--color-text-muted); margin: 0; }
 
-.header-actions { display: flex; gap: 0.75rem; }
+.header-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+/* ── Barre de recherche inline ── */
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.65rem;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.search-input {
+  padding: 0.55rem 2rem 0.55rem 2.1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-family: inherit;
+  width: 220px;
+  transition: border-color 0.15s;
+}
+
+.search-input::placeholder { color: var(--color-text-muted); }
+.search-input:focus { outline: none; border-color: var(--color-primary); }
+
+.search-clear {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 0.1rem;
+}
+.search-clear:hover { color: var(--color-text); }
+
+.error-state { color: var(--color-negative); border-color: var(--color-negative); }
+
+
 
 /* ============================================================
    TABLEAU — CORRECTION ACTION MENU
@@ -226,4 +273,119 @@
   border-radius: 50%;
   background: var(--color-primary);
   margin-left: 2px;
+}
+
+/* src/app/pages/charges/charges.css - AJOUTER À LA FIN */
+
+/* ============================================================
+   BARRE DE RECHERCHE RAPIDE
+   ============================================================ */
+
+.search-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.search-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  transition: all 0.2s ease;
+  min-width: 220px;
+}
+
+.search-input-group:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0 10px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.search-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  outline: none;
+  min-width: 150px;
+}
+
+.search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.search-clear:hover {
+  color: var(--color-negative);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search-input-group {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .search-input {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .header-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

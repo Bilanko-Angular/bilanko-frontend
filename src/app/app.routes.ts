@@ -11,6 +11,7 @@ import { BanqueFiscalite } from './pages/banque-fiscalite/banque-fiscalite';
 import { Landing } from './pages/landing/landing';
 import { VenteDetail } from './pages/ventes/vente-detail/vente-detail';
 import {CatalogueStocks} from './refractor/catalogue-stocks/catalogue-stocks';
+import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
   { path: '', component: Landing },
@@ -19,9 +20,9 @@ export const routes: Routes = [
   { path: 'ventes', component: SalesComponent },
   { path: 'ventes/:id', component: VenteDetail },
   { path: 'charges', component: ChargesComponent },
-  { path: 'connexion', component: Connexion },
-  { path: 'inscription', component: Inscription },
-  { path: 'mot-de-passe-oublie', component: MotDePasseOublie },
+  { path: 'connexion', component: Connexion, canActivate: [guestGuard] },
+  { path: 'inscription', component: Inscription, canActivate: [guestGuard] },
+  { path: 'mot-de-passe-oublie', component: MotDePasseOublie, canActivate: [guestGuard] },
   { path: 'parametres', component: Parametres },
   {path: 'banque-fiscalite', component:BanqueFiscalite},
   { path: '**', redirectTo: '' }

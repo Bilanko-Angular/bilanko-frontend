@@ -78,7 +78,19 @@ export interface TranslationSet {
   previous: string; next: string;
   saleDetails: string; chargeDetails: string;
   clientSalesTitle: string; total: string;  noSalesForClient: string;
-  filterByDate: string; allDates: string; page: string; pageOf: string;
+  filterByDate: string; allDates: string; page: string; pageOf: string; profilePhotoDesc: string; removePhoto: string; photoFormats: string;photoInvalidType: string;
+  photoTooLarge: string; photoUpdated: string; photoRemoved: string;
+  changePhoto: string; documentsTitle: string; documentsSubtitle: string; documentType: string;
+  loanApplication: string; taxDeclaration: string; loanApplicationDesc: string;taxDeclarationDesc: string;
+  mandatory: string; selected: string; continue: string; back: string; merchantIdentification: string;
+  businessName: string; businessActivity: string; address: string; niu: string; creationDate: string;
+  capitalFinancing: string; stockAvailable: string; turnoverPeriod: string; ownCapital: string;
+  loanPurpose: string; loanAmount: string; loanDuration: string; proposedGuarantees: string;
+  estimatedMonthlyRepayment: string; indicativeMaxAmount: string; taxInformation: string; taxRegime: string; fiscalYear: string; taxOffice: string; turnoverHistory: string; noSalesWarning: string;
+  monthsWithoutSales: string; totalTurnover: string; averageMonthlyTurnover: string; estimatedGrossMargin: string; summary: string; summaryMerchant: string; summaryLoanRequest: string;
+  summaryFiscalYear: string; summaryTurnover: string; summaryGrossMargin: string; documentsChecklist: string; checklistHint: string; generatePDF: string; generating: string; generationError: string;
+  turnoverChart: string; chargesExpenses: string; grossMargin: string; amountRequested: string;
+  documentReady: string; yourDossierIsReady: string; optionalLabel: string; mandatoryLabel: string;totalCA: string; averageCA: string; marginBrute: string;
 }
 
 const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
@@ -188,7 +200,72 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     saleDetails: 'Détails de la vente', chargeDetails: 'Détails de la charge',
     clientSalesTitle: 'Ventes de', total: 'Total', noSalesForClient: 'Aucune vente trouvée.',
     filterByDate: 'Filtrer par date', allDates: 'Toutes les dates',
-    page: 'Page', pageOf: 'sur',
+    page: 'Page', pageOf: 'sur', profilePhotoDesc:
+  'Ajoutez une photo pour personnaliser votre profil.',removePhoto:'Supprimer la photo',photoFormats:
+  'JPG, PNG ou WEBP — 5 Mo maximum',photoInvalidType:'Format invalide. Utilisez JPG, PNG ou WEBP.',
+  photoTooLarge:'La photo ne doit pas dépasser 5 Mo.',photoUpdated:'Photo de profil mise à jour.',
+  photoRemoved:'Photo de profil supprimée.',changePhoto:
+  'Changer la photo', 
+  documentsTitle: 'Banque & Fiscalité',
+  documentsSubtitle: 'Générez en quelques étapes un dossier PDF prêt pour votre banque ou l\'administration fiscale.',
+  documentType: 'Type de dossier',
+  loanApplication: 'Demande de prêt bancaire',
+  taxDeclaration: 'Déclaration fiscale simplifiée',
+  loanApplicationDesc: 'Pour obtenir un financement : capital, garanties, montant demandé, appuyé par votre chiffre d\'affaires réel.',
+  taxDeclarationDesc: 'Pour être en règle avec le fisc : votre chiffre d\'affaires réel de la période, déclaré au centre des impôts.',
+  mandatory: 'Obligatoire',
+  selected: '✓ Sélectionné',
+  continue: 'Continuer',
+  back: 'Retour',
+  merchantIdentification: 'Identification du commerçant',
+  businessName: 'Raison sociale / Nom du commerce',
+  businessActivity: 'Activité',
+  address: 'Adresse',
+  niu: 'Numéro d\'Identifiant Unique (NIU)',
+  creationDate: 'Date de création de l\'activité',
+  capitalFinancing: 'Capital & besoin de financement',
+  stockAvailable: 'Stock disponible (garantie potentielle)',
+  turnoverPeriod: 'Chiffre d\'affaires sur {months} mois',
+  ownCapital: 'Capital propre / apport personnel (FCFA)',
+  loanPurpose: 'Objet du prêt',
+  loanAmount: 'Montant du prêt demandé (FCFA)',
+  loanDuration: 'Durée souhaitée (mois)',
+  proposedGuarantees: 'Garanties proposées',
+  estimatedMonthlyRepayment: 'Capacité de remboursement mensuelle estimée',
+  indicativeMaxAmount: 'Montant maximum indicatif sur {months} mois',
+  taxInformation: 'Informations fiscales',
+  taxRegime: 'Régime fiscal',
+  fiscalYear: 'Exercice fiscal',
+  taxOffice: 'Centre des impôts de rattachement',
+  turnoverHistory: 'Chiffre d\'affaires de l\'activité',
+  noSalesWarning: 'Aucune vente enregistrée sur cette période. Enregistrez vos ventes dans le module Ventes avant de générer ce dossier.',
+  monthsWithoutSales: '{count} mois sans aucune vente enregistrée sur la période — la moyenne ci-dessous peut être moins représentative tant que l\'historique n\'est pas complet.',
+  totalTurnover: 'CA total',
+  averageMonthlyTurnover: 'CA moyen / mois',
+  estimatedGrossMargin: 'Marge brute estimée',
+  summary: 'Récapitulatif',
+  summaryMerchant: 'Commerçant',
+  summaryLoanRequest: 'Prêt demandé',
+  summaryFiscalYear: 'Exercice fiscal',
+  summaryTurnover: 'Chiffre d\'affaires',
+  summaryGrossMargin: 'Marge brute estimée',
+  documentsChecklist: 'Avant de déposer votre dossier — pièces à préparer',
+  checklistHint: 'Cette checklist est pour vous uniquement : elle n\'apparaît pas dans le PDF généré, qui reste un document formel destiné à la banque.',
+  generatePDF: 'Générer le dossier PDF',
+  generating: 'Génération…',
+  generationError: 'La génération du dossier a échoué. Vérifiez les informations saisies et réessayez.',
+  turnoverChart: 'Chiffre d\'affaires',
+  chargesExpenses: 'Achats / Charges',
+  grossMargin: 'Marge brute',
+  amountRequested: 'Montant demandé',
+  documentReady: 'Document généré',
+  yourDossierIsReady: 'Votre dossier est prêt',
+  optionalLabel: 'Optionnel',
+  mandatoryLabel: 'Obligatoire',
+  totalCA: 'CA total',
+  averageCA: 'CA moyen',
+  marginBrute: 'Marge brute',
+
   },
   en: {
     dashboard: 'Home', catalogue: 'Catalog', sales: 'Sales', charges: 'Expenses',
@@ -295,7 +372,70 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     previous: 'Previous', next: 'Next',
     saleDetails: 'Sale details', chargeDetails: 'Expense details',
     clientSalesTitle: 'Sales from', total: 'Total', noSalesForClient: 'No sales found.', filterByDate: 'Filter by date', allDates: 'All dates',
-    page: 'Page', pageOf: 'of',
+    page: 'Page', pageOf: 'of', profilePhotoDesc:
+  'Add a photo to personalize your profile.',removePhoto:'Remove photo',photoFormats:
+  'JPG, PNG or WEBP — 5 MB maximum',photoInvalidType:'Invalid format. Use JPG, PNG or WEBP.',photoTooLarge:'The photo must not exceed 5 MB.',photoUpdated:'Profile photo updated.',
+  photoRemoved:'Profile photo removed.', changePhoto:'Change photo', 
+  documentsTitle: 'Banking & Taxation',
+  documentsSubtitle: 'Generate in a few steps a PDF file ready for your bank or tax administration.',
+  documentType: 'Document type',
+  loanApplication: 'Bank loan application',
+  taxDeclaration: 'Simplified tax declaration',
+  loanApplicationDesc: 'To obtain financing: capital, guarantees, requested amount, supported by your actual turnover.',
+  taxDeclarationDesc: 'To be compliant with tax authorities: your actual turnover for the period, declared to the tax office.',
+  mandatory: 'Mandatory',
+  selected: '✓ Selected',
+  continue: 'Continue',
+  back: 'Back',
+  merchantIdentification: 'Merchant identification',
+  businessName: 'Business name / Trade name',
+  businessActivity: 'Activity',
+  address: 'Address',
+  niu: 'Unique Identification Number (NIU)',
+  creationDate: 'Business creation date',
+  capitalFinancing: 'Capital & financing needs',
+  stockAvailable: 'Available stock (potential collateral)',
+  turnoverPeriod: 'Turnover over {months} months',
+  ownCapital: 'Own capital / personal contribution (FCFA)',
+  loanPurpose: 'Loan purpose',
+  loanAmount: 'Loan amount requested (FCFA)',
+  loanDuration: 'Desired duration (months)',
+  proposedGuarantees: 'Proposed guarantees',
+  estimatedMonthlyRepayment: 'Estimated monthly repayment capacity',
+  indicativeMaxAmount: 'Indicative maximum amount over {months} months',
+  taxInformation: 'Tax information',
+  taxRegime: 'Tax regime',
+  fiscalYear: 'Fiscal year',
+  taxOffice: 'Tax office',
+  turnoverHistory: 'Business turnover',
+  noSalesWarning: 'No sales recorded in this period. Record your sales in the Sales module before generating this file.',
+  monthsWithoutSales: '{count} months with no sales recorded in the period — the average below may be less representative until the history is complete.',
+  totalTurnover: 'Total turnover',
+  averageMonthlyTurnover: 'Average monthly turnover',
+  estimatedGrossMargin: 'Estimated gross margin',
+  summary: 'Summary',
+  summaryMerchant: 'Merchant',
+  summaryLoanRequest: 'Loan requested',
+  summaryFiscalYear: 'Fiscal year',
+  summaryTurnover: 'Turnover',
+  summaryGrossMargin: 'Estimated gross margin',
+  documentsChecklist: 'Before submitting your file — documents to prepare',
+  checklistHint: 'This checklist is for you only: it does not appear in the generated PDF, which remains a formal document intended for the bank.',
+  generatePDF: 'Generate PDF file',
+  generating: 'Generating…',
+  generationError: 'File generation failed. Check the entered information and try again.',
+  turnoverChart: 'Turnover',
+  chargesExpenses: 'Purchases / Expenses',
+  grossMargin: 'Gross margin',
+  amountRequested: 'Amount requested',
+  documentReady: 'Document generated',
+  yourDossierIsReady: 'Your file is ready',
+  optionalLabel: 'Optional',
+  mandatoryLabel: 'Mandatory',
+  totalCA: 'Total turnover',
+  averageCA: 'Average turnover',
+  marginBrute: 'Gross margin',
+
   },
   es: {
     dashboard: 'Inicio', catalogue: 'Catálogo', sales: 'Ventas', charges: 'Gastos',
@@ -402,10 +542,75 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     previous: 'Anterior', next: 'Siguiente',
     saleDetails: 'Detalles de la venta', chargeDetails: 'Detalles del gasto',
     clientSalesTitle: 'Ventas de', total: 'Total', noSalesForClient: 'No se encontraron ventas.',filterByDate: 'Filtrar por fecha', allDates: 'Todas las fechas',
-    page: 'Página', pageOf: 'de',
- }
+    page: 'Página', pageOf: 'de', profilePhotoDesc:
+  'Añade una foto para personalizar tu perfil.',removePhoto:'Eliminar foto',photoFormats:
+  'JPG, PNG o WEBP — máximo 5 MB',photoInvalidType:'Formato no válido. Utiliza JPG, PNG o WEBP.',
+  photoTooLarge:'La foto no debe superar los 5 MB.',photoUpdated:'Foto de perfil actualizada.',
+  photoRemoved:'Foto de perfil eliminada.', changePhoto:'Cambiar foto', 
+  documentsTitle: 'Banca y Fiscalidad',
+  documentsSubtitle: 'Genere en unos pocos pasos un archivo PDF listo para su banco o la administración fiscal.',
+  documentType: 'Tipo de documento',
+  loanApplication: 'Solicitud de préstamo bancario',
+  taxDeclaration: 'Declaración fiscal simplificada',
+  loanApplicationDesc: 'Para obtener financiación: capital, garantías, importe solicitado, respaldado por su facturación real.',
+  taxDeclarationDesc: 'Para estar al día con Hacienda: su facturación real del periodo, declarada en la agencia tributaria.',
 
+  mandatory: 'Obligatorio',
+  selected: '✓ Seleccionado',
+  continue: 'Continuar',
+  back: 'Volver',
+  merchantIdentification: 'Identificación del comerciante',
+  businessName: 'Razón social / Nombre del comercio',
+  businessActivity: 'Actividad',
+  address: 'Dirección',
+  niu: 'Número de Identificación Única (NIU)',
+  creationDate: 'Fecha de creación de la actividad',
+  capitalFinancing: 'Capital y necesidades de financiación',
+  stockAvailable: 'Stock disponible (garantía potencial)',
+  turnoverPeriod: 'Facturación en {months} meses',
+  ownCapital: 'Capital propio / aportación personal (FCFA)',
+  loanPurpose: 'Objeto del préstamo',
+  loanAmount: 'Importe del préstamo solicitado (FCFA)',
+  loanDuration: 'Duración deseada (meses)',
+  proposedGuarantees: 'Garantías propuestas',
+  estimatedMonthlyRepayment: 'Capacidad de reembolso mensual estimada',
+  indicativeMaxAmount: 'Importe máximo indicativo en {months} meses',
+  taxInformation: 'Información fiscal',
+  taxRegime: 'Régimen fiscal',
+  fiscalYear: 'Ejercicio fiscal',
+  taxOffice: 'Agencia tributaria',
+  turnoverHistory: 'Facturación de la actividad',
+  noSalesWarning: 'No hay ventas registradas en este periodo. Registre sus ventas en el módulo Ventas antes de generar este expediente.',
+  monthsWithoutSales: '{count} meses sin ventas registradas en el periodo — el promedio a continuación puede ser menos representativo hasta que el historial esté completo.',
+  totalTurnover: 'Facturación total',
+  averageMonthlyTurnover: 'Facturación media mensual',
+  estimatedGrossMargin: 'Margen bruto estimado',
+  summary: 'Resumen',
+  summaryMerchant: 'Comerciante',
+  summaryLoanRequest: 'Préstamo solicitado',
+  summaryFiscalYear: 'Ejercicio fiscal',
+  summaryTurnover: 'Facturación',
+  summaryGrossMargin: 'Margen bruto estimado',
+  documentsChecklist: 'Antes de presentar su expediente — documentos a preparar',
+  checklistHint: 'Esta lista es solo para usted: no aparece en el PDF generado, que sigue siendo un documento formal destinado al banco.',
+  generatePDF: 'Generar expediente PDF',
+  generating: 'Generando…',
+  generationError: 'Error al generar el expediente. Verifique la información ingresada e intente nuevamente.',
+  turnoverChart: 'Facturación',
+  chargesExpenses: 'Compras / Gastos',
+  grossMargin: 'Margen bruto',
+  amountRequested: 'Importe solicitado',
+  documentReady: 'Documento generado',
+  yourDossierIsReady: 'Su expediente está listo',
+  optionalLabel: 'Opcional',
+  mandatoryLabel: 'Obligatorio',
+  totalCA: 'Facturación total',
+  averageCA: 'Facturación media',
+  marginBrute: 'Margen bruto',
+ }
 };
+
+// src/app/services/preferences.ts
 
 @Injectable({ providedIn: 'root' })
 export class PreferencesService {
@@ -413,12 +618,94 @@ export class PreferencesService {
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly STORAGE_KEY = 'bilanko_preferences';
 
-  readonly language = signal<BilankoLanguage>('fr');
+  readonly language = signal<BilankoLanguage>(this.getInitialLanguage());
   readonly dateFormat = signal<string>('DD/MM/YYYY');
   readonly currency = signal<BilankoCurrency>('XAF');
   readonly compactMode = signal<boolean>(false);
 
   readonly t = computed(() => TRANSLATIONS[this.language()]);
+
+  // ✅ Méthode pour charger depuis localStorage
+  private loadFromStorage(): any {
+    if (!this.isBrowser) return null;
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  // ✅ Détecter la langue du navigateur
+  private getBrowserLanguage(): BilankoLanguage {
+    if (!this.isBrowser) return 'fr';
+    const browserLang = navigator.language || navigator.languages?.[0] || 'fr';
+    const lang = browserLang.split('-')[0].toLowerCase();
+    return lang === 'en' ? 'en' : lang === 'es' ? 'es' : 'fr';
+  }
+
+  // ✅ Vérifier si on est sur la landing page
+  private isLandingPage(): boolean {
+    if (!this.isBrowser) return false;
+    return window.location.pathname === '/' || window.location.pathname === '';
+  }
+
+  // ✅ Initialiser la langue
+  private getInitialLanguage(): BilankoLanguage {
+    if (this.isLandingPage()) {
+      return this.getBrowserLanguage();
+    }
+
+    const saved = this.loadFromStorage();
+    if (saved?.language) {
+      const lang = saved.language as BilankoLanguage;
+      return ['fr', 'en', 'es'].includes(lang) ? lang : 'fr';
+    }
+
+    return this.getBrowserLanguage();
+  }
+
+  // ✅ Pour la landing page
+  getSystemLanguage(): BilankoLanguage {
+    return this.getBrowserLanguage();
+  }
+
+  setLanguageFromSystem(): void {
+    this.language.set(this.getBrowserLanguage());
+  }
+
+  // ✅ Charger les préférences
+  private load(): void {
+    const prefs = this.loadFromStorage();
+    if (!prefs) return;
+    if (prefs.language) this.language.set(prefs.language);
+    if (prefs.dateFormat) this.dateFormat.set(prefs.dateFormat);
+    if (prefs.currency) this.currency.set(prefs.currency);
+    if (prefs.compactMode !== undefined) this.compactMode.set(prefs.compactMode);
+  }
+
+  // ✅ Sauvegarder (ne pas sauvegarder sur la landing page)
+  private save(): void {
+    if (!this.isBrowser) return;
+    if (this.isLandingPage()) return;
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
+        language: this.language(),
+        dateFormat: this.dateFormat(),
+        currency: this.currency(),
+        compactMode: this.compactMode(),
+      }));
+    } catch {}
+  }
+
+  // ✅ Appliquer au DOM
+  private applyDom(): void {
+    if (!this.isBrowser) return;
+    const html = document.documentElement;
+    html.setAttribute('lang', this.language());
+    html.setAttribute('data-compact', this.compactMode() ? 'true' : 'false');
+  }
 
   readonly angularDateFormat = computed(() => {
     switch (this.dateFormat()) {
@@ -434,37 +721,5 @@ export class PreferencesService {
       this.save();
       this.applyDom();
     });
-  }
-
-  private load(): void {
-    if (!this.isBrowser) return;
-    try {
-      const raw = localStorage.getItem(this.STORAGE_KEY);
-      if (!raw) return;
-      const prefs = JSON.parse(raw);
-      if (prefs.language) this.language.set(prefs.language);
-      if (prefs.dateFormat) this.dateFormat.set(prefs.dateFormat);
-      if (prefs.currency) this.currency.set(prefs.currency);
-      if (prefs.compactMode !== undefined) this.compactMode.set(prefs.compactMode);
-    } catch {}
-  }
-
-  private save(): void {
-    if (!this.isBrowser) return;
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
-        language: this.language(),
-        dateFormat: this.dateFormat(),
-        currency: this.currency(),
-        compactMode: this.compactMode(),
-      }));
-    } catch {}
-  }
-
-  private applyDom(): void {
-    if (!this.isBrowser) return;
-    const html = document.documentElement;
-    html.setAttribute('lang', this.language());
-    html.setAttribute('data-compact', this.compactMode() ? 'true' : 'false');
   }
 }
