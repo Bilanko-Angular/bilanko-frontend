@@ -1,0 +1,67 @@
+<section class="bk-settings__section">
+  <div class="bk-settings__section-heading">
+    <div class="bk-settings__section-icon"><span class="material-symbols-outlined">security</span></div>
+    <div>
+      <h2 class="bk-settings__section-title">{{ prefs.t().accountSecurity }}</h2>
+      <p class="bk-settings__section-desc">{{ prefs.t().changePassword }}</p>
+    </div>
+  </div>
+
+  <div class="bk-settings__card">
+    <h3 class="bk-settings__card-title"><span class="material-symbols-outlined">lock</span> {{ prefs.t().changePassword }}</h3>
+    <form [formGroup]="securityForm" (ngSubmit)="changePassword()">
+      <div class="bk-settings__grid">
+        <div class="bk-form-group bk-form-group--full">
+          <label for="currentPassword" class="bk-form-label"><span class="material-symbols-outlined">lock</span> {{ prefs.t().currentPassword }}</label>
+          <div class="input-group bk-input-group">
+            <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">lock</span></span>
+            <input type="password" id="currentPassword" class="form-control bk-input" [placeholder]="prefs.t().currentPassword" formControlName="currentPassword">
+          </div>
+          @if (s['currentPassword'].touched && s['currentPassword'].hasError('required')) {
+            <div class="bk-field-error"><span class="material-symbols-outlined">error</span> {{ prefs.t().currentPassword }} {{ prefs.t().requiredField }}</div>
+          }
+        </div>
+        <div class="bk-form-group">
+          <label for="newPassword" class="bk-form-label"><span class="material-symbols-outlined">lock_reset</span> {{ prefs.t().newPassword }}</label>
+          <div class="input-group bk-input-group">
+            <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">lock</span></span>
+            <input type="password" id="newPassword" class="form-control bk-input" [placeholder]="prefs.t().newPassword" formControlName="newPassword">
+          </div>
+          @if (s['newPassword'].touched && s['newPassword'].hasError('required')) {
+            <div class="bk-field-error"><span class="material-symbols-outlined">error</span> {{ prefs.t().newPassword }} {{ prefs.t().requiredField }}</div>
+          }
+        </div>
+        <div class="bk-form-group">
+          <label for="confirmPassword" class="bk-form-label"><span class="material-symbols-outlined">verified_user</span> {{ prefs.t().confirmPassword }}</label>
+          <div class="input-group bk-input-group">
+            <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">lock</span></span>
+            <input type="password" id="confirmPassword" class="form-control bk-input" [placeholder]="prefs.t().confirmPassword" formControlName="confirmPassword">
+          </div>
+          @if (s['confirmPassword'].touched && securityForm.hasError('passwordMismatch')) {
+            <div class="bk-field-error"><span class="material-symbols-outlined">error</span> {{ prefs.t().passwordMismatch }}</div>
+          }
+        </div>
+      </div>
+      <div class="bk-settings__actions">
+        <button type="submit" class="btn bk-btn-primary" [disabled]="securityForm.invalid || loading().password">
+          @if (loading().password) { <span class="material-symbols-outlined bk-spin">sync</span> } @else { <span class="material-symbols-outlined">lock_reset</span> }
+          {{ prefs.t().changePassword }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="bk-settings__card bk-settings__card--danger">
+    <h3 class="bk-settings__card-title"><span class="material-symbols-outlined">logout</span> {{ prefs.t().session }}</h3>
+    <p class="bk-settings__card-desc">{{ prefs.t().sessionDesc }}</p>
+    <div class="bk-settings__danger-actions">
+      <button type="button" class="btn bk-btn-outline-danger" [disabled]="loading().logoutAll" (click)="logoutAllDevices()">
+        @if (loading().logoutAll) { <span class="material-symbols-outlined bk-spin">sync</span> } @else { <span class="material-symbols-outlined">devices</span> }
+        Déconnecter tous les appareils
+      </button>
+      <button type="button" class="btn bk-btn-danger" (click)="logout()">
+        <span class="material-symbols-outlined">logout</span> {{ prefs.t().logout }}
+      </button>
+    </div>
+  </div>
+</section>

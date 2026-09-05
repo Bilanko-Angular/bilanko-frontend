@@ -18,6 +18,7 @@ export class UserStoreService {
   }
 
   async loadUser(): Promise<void> {
+    if (typeof localStorage === 'undefined') return;
     const token = localStorage.getItem('bilanko_jwt_token');
     if (!token) {
       this.router.navigate(['/connexion']);

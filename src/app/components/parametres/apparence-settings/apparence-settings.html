@@ -1,0 +1,101 @@
+<section class="bk-settings__section">
+  <div class="bk-settings__section-heading">
+    <div class="bk-settings__section-icon"><span class="material-symbols-outlined">palette</span></div>
+    <div>
+      <h2 class="bk-settings__section-title">{{ prefs.t().appearance }}</h2>
+      <p class="bk-settings__section-desc">{{ prefs.t().themeDesc }}</p>
+    </div>
+  </div>
+
+  <div class="bk-settings__card">
+    <!-- THEME -->
+    <div class="bk-settings__preference">
+      <div class="bk-settings__preference-info">
+        <span class="bk-settings__preference-icon">
+          @if (themeService.theme() === 'dark') { <span class="material-symbols-outlined">dark_mode</span> } 
+          @else { <span class="material-symbols-outlined">light_mode</span> }
+        </span>
+        <div>
+          <strong class="bk-settings__preference-title">{{ prefs.t().theme }}</strong>
+          <p class="bk-settings__preference-desc">{{ prefs.t().themeDesc }}</p>
+        </div>
+      </div>
+      <button type="button" class="bk-theme-toggle" (click)="themeService.toggle()">
+        @if (themeService.theme() === 'dark') { <span class="material-symbols-outlined">dark_mode</span> <span>{{ prefs.t().dark }}</span> } 
+        @else { <span class="material-symbols-outlined">light_mode</span> <span>{{ prefs.t().light }}</span> }
+      </button>
+    </div>
+
+    <!-- LANGUE -->
+    <div class="bk-settings__preference">
+      <div class="bk-settings__preference-info">
+        <span class="bk-settings__preference-icon"><span class="material-symbols-outlined">language</span></span>
+        <div>
+          <strong class="bk-settings__preference-title">{{ prefs.t().language }}</strong>
+          <p class="bk-settings__preference-desc">{{ prefs.t().languageDesc }}</p>
+        </div>
+      </div>
+      <select class="bk-settings__select" [ngModel]="prefs.language()" (ngModelChange)="onLanguageChange($event)">
+        <option value="fr">🇫🇷 Français</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="es">🇪🇸 Español</option>
+      </select>
+    </div>
+
+    <!-- FORMAT DATE -->
+    <div class="bk-settings__preference">
+      <div class="bk-settings__preference-info">
+        <span class="bk-settings__preference-icon"><span class="material-symbols-outlined">calendar_month</span></span>
+        <div>
+          <strong class="bk-settings__preference-title">{{ prefs.t().dateFormat }}</strong>
+          <p class="bk-settings__preference-desc">{{ prefs.t().dateFormatDesc }}</p>
+        </div>
+      </div>
+      <select class="bk-settings__select" [ngModel]="prefs.dateFormat()" (ngModelChange)="onDateFormatChange($event)">
+        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+      </select>
+    </div>
+
+    <!-- DEVISE -->
+    <div class="bk-settings__preference">
+      <div class="bk-settings__preference-info">
+        <span class="bk-settings__preference-icon"><span class="material-symbols-outlined">payments</span></span>
+        <div>
+          <strong class="bk-settings__preference-title">{{ prefs.t().currency }}</strong>
+          <p class="bk-settings__preference-desc">{{ prefs.t().currencyDesc }}</p>
+        </div>
+      </div>
+      <select class="bk-settings__select" [ngModel]="prefs.currency()" (ngModelChange)="onCurrencyChange($event)">
+        <option value="XAF">FCFA (XAF)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="USD">Dollar (USD)</option>
+        <option value="GBP">Livre Sterling (GBP)</option>
+      </select>
+    </div>
+
+    <!-- MODE COMPACT -->
+    <div class="bk-settings__preference">
+      <div class="bk-settings__preference-info">
+        <span class="bk-settings__preference-icon"><span class="material-symbols-outlined">view_compact</span></span>
+        <div>
+          <strong class="bk-settings__preference-title">{{ prefs.t().compactMode }}</strong>
+          <p class="bk-settings__preference-desc">{{ prefs.t().compactModeDesc }}</p>
+        </div>
+      </div>
+      <div class="bk-toggle">
+        <input type="checkbox" id="compact-mode" class="bk-toggle__input" [checked]="prefs.compactMode()" (change)="toggleCompactMode()">
+        <label for="compact-mode" class="bk-toggle__label"></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="bk-settings__actions">
+    <button type="button" class="btn bk-btn-primary" [disabled]="loading().appearance" (click)="saveAppearance()">
+      @if (loading().appearance) { <span class="material-symbols-outlined bk-spin">sync</span> } 
+      @else { <span class="material-symbols-outlined">save</span> }
+      {{ prefs.t().saveButton }}
+    </button>
+  </div>
+</section>

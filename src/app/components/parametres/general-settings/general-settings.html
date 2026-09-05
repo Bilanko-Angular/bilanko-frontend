@@ -1,0 +1,152 @@
+<section class="bk-settings__section">
+  <div class="bk-settings__section-heading">
+    <div class="bk-settings__section-icon">
+      <span class="material-symbols-outlined">person</span>
+    </div>
+    <div>
+      <h2 class="bk-settings__section-title">{{ prefs.t().generalInfo }}</h2>
+      <p class="bk-settings__section-desc">{{ prefs.t().generalInfoDesc }}</p>
+    </div>
+  </div>
+
+  <div class="bk-profile-card">
+    <div class="bk-profile-avatar">
+      @if (profileImage()) {
+        <img [src]="profileImage()!" [alt]="prefs.t().profile">
+      } @else {
+        <div class="bk-profile-avatar__initials">{{ getInitials() }}</div>
+      }
+    </div>
+    <div class="bk-profile-info">
+      <h3>{{ prefs.t().profile }}</h3>
+      <p>{{ prefs.t().profilePhotoDesc }}</p>
+      <div class="bk-profile-actions">
+        <label for="profilePhoto" class="btn bk-btn-primary">
+          <span class="material-symbols-outlined">photo_camera</span>
+          {{ prefs.t().changePhoto }}
+        </label>
+        <input id="profilePhoto" type="file" class="bk-file-input" accept="image/png,image/jpeg,image/webp" (change)="onPhotoSelected($event)">
+        @if (profileImage()) {
+          <button type="button" class="btn bk-btn-outline" (click)="removePhoto()">
+            <span class="material-symbols-outlined">delete</span>
+            {{ prefs.t().removePhoto }}
+          </button>
+        }
+      </div>
+      <small>{{ prefs.t().photoFormats }}</small>
+    </div>
+  </div>
+
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+    <div class="bk-settings__grid">
+      <!-- NOM -->
+      <div class="bk-form-group">
+        <label for="nom" class="bk-form-label">
+          <span class="material-symbols-outlined">badge</span> {{ prefs.t().lastName }}
+        </label>
+        <div class="input-group bk-input-group">
+          <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">person</span></span>
+          <input type="text" id="nom" class="form-control bk-input" [placeholder]="prefs.t().lastName" formControlName="nom">
+        </div>
+        @if (f['nom'].touched && f['nom'].hasError('required')) {
+          <div class="bk-field-error"><span class="material-symbols-outlined">error</span> {{ prefs.t().lastName }} {{ prefs.t().requiredField }}</div>
+        }
+      </div>
+
+      <!-- PRENOM -->
+      <div class="bk-form-group">
+        <label for="prenom" class="bk-form-label">
+          <span class="material-symbols-outlined">person</span> {{ prefs.t().firstName }}
+        </label>
+        <div class="input-group bk-input-group">
+          <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">person</span></span>
+          <input type="text" id="prenom" class="form-control bk-input" [placeholder]="prefs.t().firstName" formControlName="prenom">
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="bk-form-group">
+        <label for="email" class="bk-form-label">
+          <span class="material-symbols-outlined">email</span> {{ prefs.t().email }}
+        </label>
+        <div class="input-group bk-input-group">
+          <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">mail</span></span>
+          <input type="email" id="email" class="form-control bk-input" placeholder="exemple@email.com" formControlName="email">
+        </div>
+        @if (f['email'].touched && f['email'].hasError('required')) {
+          <div class="bk-field-error"><span class="material-symbols-outlined">error</span> {{ prefs.t().emailRequired }}</div>
+        }
+        @if (f['email'].touched && f['email'].hasError('email')) {
+          <div class="bk-field-error"><span class="material-symbols-outlined">error</span> {{ prefs.t().emailInvalid }}</div>
+        }
+      </div>
+
+      <!-- TELEPHONE -->
+      <div class="bk-form-group">
+        <label for="telephone" class="bk-form-label">
+          <span class="material-symbols-outlined">phone</span> {{ prefs.t().phone }}
+        </label>
+        <div class="input-group bk-input-group">
+          <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">phone</span></span>
+          <input type="tel" id="telephone" class="form-control bk-input" placeholder="+237 6XX XX XX XX" formControlName="telephone">
+        </div>
+      </div>
+
+      <!-- ENTREPRISE -->
+      <div class="bk-form-group bk-form-group--full">
+        <label for="entreprise" class="bk-form-label">
+          <span class="material-symbols-outlined">business</span> {{ prefs.t().company }}
+        </label>
+        <div class="input-group bk-input-group">
+          <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">business</span></span>
+          <input type="text" id="entreprise" class="form-control bk-input" [placeholder]="prefs.t().company" formControlName="entreprise">
+        </div>
+      </div>
+    </div>
+
+    <div class="bk-settings__actions">
+      <button type="submit" class="btn bk-btn-primary" [disabled]="profileForm.invalid || loading().profile">
+        @if (loading().profile) {
+          <span class="material-symbols-outlined bk-spin">sync</span>
+        } @else {
+          <span class="material-symbols-outlined">save</span>
+        }
+        {{ prefs.t().saveChanges }}
+      </button>
+    </div>
+  </form>
+
+  <div class="bk-settings__stats">
+    <h3 class="bk-settings__stats-title">{{ prefs.t().accountStats }}</h3>
+    <div class="bk-settings__stats-grid">
+      <div class="bk-stat-card">
+        <span class="bk-stat-card__icon"><span class="material-symbols-outlined">inventory_2</span></span>
+        <div>
+          <span class="bk-stat-card__value">{{ accountStats().totalProduits }}</span>
+          <span class="bk-stat-card__label">{{ prefs.t().totalProducts }}</span>
+        </div>
+      </div>
+      <div class="bk-stat-card">
+        <span class="bk-stat-card__icon"><span class="material-symbols-outlined">shopping_cart</span></span>
+        <div>
+          <span class="bk-stat-card__value">{{ accountStats().totalVentes }}</span>
+          <span class="bk-stat-card__label">{{ prefs.t().sales }}</span>
+        </div>
+      </div>
+      <div class="bk-stat-card">
+        <span class="bk-stat-card__icon"><span class="material-symbols-outlined">payments</span></span>
+        <div>
+          <span class="bk-stat-card__value">{{ accountStats().totalCharges }}</span>
+          <span class="bk-stat-card__label">{{ prefs.t().charges }}</span>
+        </div>
+      </div>
+      <div class="bk-stat-card">
+        <span class="bk-stat-card__icon"><span class="material-symbols-outlined">calendar_month</span></span>
+        <div>
+          <span class="bk-stat-card__value">{{ accountStats().membreDepuis }}</span>
+          <span class="bk-stat-card__label">{{ prefs.t().memberSince }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

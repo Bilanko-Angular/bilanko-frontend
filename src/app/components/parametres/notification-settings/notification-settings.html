@@ -1,0 +1,39 @@
+<section class="bk-settings__section">
+  <div class="bk-settings__section-heading">
+    <div class="bk-settings__section-icon">
+      <span class="material-symbols-outlined">notifications</span>
+    </div>
+    <div>
+      <h2 class="bk-settings__section-title">{{ prefs.t().notifications }}</h2>
+      <p class="bk-settings__section-desc">{{ prefs.t().notificationsDesc }}</p>
+    </div>
+  </div>
+
+  <div class="bk-settings__card">
+    @for (notif of notifications(); track notif.id) {
+      <div class="bk-settings__notification">
+        <div class="bk-settings__notification-info">
+          <span class="bk-settings__notification-icon">
+            @if (notif.id === 'stockAlerts') {
+              <span class="material-symbols-outlined">inventory_2</span>
+            } @else if (notif.id === 'newSales') {
+              <span class="material-symbols-outlined">shopping_cart</span>
+            } @else if (notif.id === 'monthlyReports') {
+              <span class="material-symbols-outlined">payments</span>
+            } @else {
+              <span class="material-symbols-outlined">notifications</span>
+            }
+          </span>
+          <div>
+            <strong class="bk-settings__notification-title">{{ notif.label }}</strong>
+            <p class="bk-settings__notification-desc">{{ notif.description }}</p>
+          </div>
+        </div>
+        <div class="bk-toggle">
+          <input type="checkbox" [id]="'notif-' + notif.id" class="bk-toggle__input" [checked]="notif.enabled" [disabled]="loading().notifications" (change)="toggleNotification(notif.id)">
+          <label [for]="'notif-' + notif.id" class="bk-toggle__label"></label>
+        </div>
+      </div>
+    }
+  </div>
+</section>
