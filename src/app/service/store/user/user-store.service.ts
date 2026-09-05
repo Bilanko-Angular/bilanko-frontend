@@ -4,7 +4,7 @@ import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, NotificationPreferences, AppearancePreferences } from '../../../models/person';
 import { UserApiService } from '../../api/user/user-api.service';
-import { UpdateProfileRequest } from '../../../models/DTO/UserDto';
+import { UpdateProfileRequest, ChangePasswordRequest } from '../../../models/DTO/UserDto';
 import { UserMapper } from '../../../mapper/UserMapper';
 
 @Injectable({
@@ -84,6 +84,14 @@ export class UserStoreService {
   async updateAppearance(prefs: AppearancePreferences): Promise<void> {
     const dto = await this.userApi.updateAppearance(prefs);
     this.appearancePreferences.set(dto);
+  }
+
+  async changePassword(request: ChangePasswordRequest): Promise<void> {
+    await this.userApi.changePassword(request);
+  }
+
+  async logoutAllDevices(): Promise<void> {
+    await this.userApi.logoutAllDevices();
   }
 
   // Déconnexion propre : vide le store, retire le token, redirige

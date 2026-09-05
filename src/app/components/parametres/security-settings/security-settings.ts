@@ -2,9 +2,9 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PreferencesService } from '../../../services/preferences';
-import { UserApiService } from '../../../service/api/user/user-api.service';
 import { ActionResponseService } from '../../../service/action-response/action-response.service';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
+import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { ChangePasswordRequest } from '../../../models/DTO/UserDto';
 
 @Component({
@@ -17,7 +17,7 @@ import { ChangePasswordRequest } from '../../../models/DTO/UserDto';
 export class SecuritySettingsComponent {
   private readonly fb = inject(FormBuilder);
   public prefs: PreferencesService = inject(PreferencesService);
-  private readonly userApi = inject(UserApiService);
+  private readonly userStore = inject(UserStoreService);
   private readonly feedback = inject(ActionResponseService);
   private readonly authStore = inject(AuthStoreService);
 
@@ -42,7 +42,7 @@ export class SecuritySettingsComponent {
 
     this.loading.update(l => ({ ...l, password: true }));
     try {
-      await this.userApi.changePassword(request);
+      await this.userStore.changePassword(request);
       this.securityForm.reset();
       this.feedback.success(this.prefs.t().passwordChanged);
     } catch (err) {
@@ -55,7 +55,7 @@ export class SecuritySettingsComponent {
   async logoutAllDevices(): Promise<void> {
     this.loading.update(l => ({ ...l, logoutAll: true }));
     try {
-      await this.userApi.logoutAllDevices();
+      await this.userStore.logoutAllDevices();
       this.authStore.logout();
     } catch (err) {
       this.feedback.error(err);

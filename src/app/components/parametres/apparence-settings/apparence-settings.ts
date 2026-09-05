@@ -1,11 +1,11 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PreferencesService, BilankoLanguage, BilankoCurrency } from '../../../services/preferences';
-import { UserApiService } from '../../../service/api/user/user-api.service';
 import { ActionResponseService } from '../../../service/action-response/action-response.service';
 import { ThemeService } from '../../../services/theme';
-import { AppearancePreferencesDto } from '../../../models/DTO/UserDto';
+import { UserStoreService } from '../../../service/store/user/user-store.service';
+import { AppearancePreferences } from '../../../models/person';
 
 @Component({
   selector: 'app-apparence-settings',
@@ -14,28 +14,25 @@ import { AppearancePreferencesDto } from '../../../models/DTO/UserDto';
   templateUrl: './apparence-settings.html',
   styleUrls: ['./apparence-settings.css']
 })
-export class ApparenceSettingsComponent implements OnInit {
+export class ApparenceSettingsComponent {
   public prefs: PreferencesService = inject(PreferencesService);
   public themeService: ThemeService = inject(ThemeService);
-  private readonly userApi = inject(UserApiService);
+  private readonly userStore = inject(UserStoreService);
   private readonly feedback = inject(ActionResponseService);
 
   loading = signal({ appearance: false });
 
-  async ngOnInit(): Promise<void> {
-    try {
-      const ap = await this.userApi.getAppearance();
-      if (ap) {
-        if (ap.language) this.prefs.language.set(ap.language as BilankoLanguage);
-        if (ap.currency) this.prefs.currency.set(ap.currency as BilankoCurrency);
-        if (ap.dateFormat) this.prefs.dateFormat.set(ap.dateFormat);
-        if (typeof ap.compactMode === 'boolean') {
-          this.prefs.compactMode.set(ap.compactMode);
-        }
+  constructor() {
+    effect(() => {
+      const ap = this.userStore.appearancePreferences();
+      if (!ap) return;
+      if (ap.language) this.prefs.language.set(ap.language as BilankoLanguage);
+      if (ap.currency) this.prefs.currency.set(ap.currency as BilankoCurrency);
+      if (ap.dateFormat) this.prefs.dateFormat.set(ap.dateFormat);
+      if (typeof ap.compactMode === 'boolean') {
+        this.prefs.compactMode.set(ap.compactMode);
       }
-    } catch (err) {
-      console.error('Erreur chargement apparence :', err);
-    }
+    }, { allowSignalWrites: true });
   }
 
   onLanguageChange(value: BilankoLanguage): void {
@@ -55,7 +52,7 @@ export class ApparenceSettingsComponent implements OnInit {
   }
 
   async saveAppearance(): Promise<void> {
-    const request: AppearancePreferencesDto = {
+    const request: AppearancePreferences = {
       theme: this.themeService.theme(),
       language: this.prefs.language(),
       dateFormat: this.prefs.dateFormat(),
@@ -65,7 +62,7 @@ export class ApparenceSettingsComponent implements OnInit {
 
     this.loading.update(l => ({ ...l, appearance: true }));
     try {
-      await this.userApi.updateAppearance(request);
+      await this.userStore.updateAppearance(request);
       this.feedback.success(this.prefs.t().preferencesSaved);
     } catch (err) {
       this.feedback.error(err);

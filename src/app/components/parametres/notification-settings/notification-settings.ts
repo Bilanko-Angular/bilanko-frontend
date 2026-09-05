@@ -1,12 +1,12 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PreferencesService } from '../../../services/preferences';
-import { UserApiService } from '../../../service/api/user/user-api.service';
 import { ActionResponseService } from '../../../service/action-response/action-response.service';
-import { NotificationPreferencesDto } from '../../../models/DTO/UserDto';
+import { UserStoreService } from '../../../service/store/user/user-store.service';
+import { NotificationPreferences } from '../../../models/person';
 
 interface NotificationItem {
-  id: keyof NotificationPreferencesDto;
+  id: keyof NotificationPreferences;
   label: string;
   description: string;
   enabled: boolean;
@@ -19,14 +19,14 @@ interface NotificationItem {
   templateUrl: './notification-settings.html',
   styleUrls: ['./notification-settings.css']
 })
-export class NotificationSettingsComponent implements OnInit {
+export class NotificationSettingsComponent {
   public prefs: PreferencesService = inject(PreferencesService);
-  private readonly userApi = inject(UserApiService);
+  private readonly userStore = inject(UserStoreService);
   private readonly feedback = inject(ActionResponseService);
 
   loading = signal({ notifications: false });
 
-  private notifState = signal<NotificationPreferencesDto>({
+  private notifState = signal<NotificationPreferences>({
     stockAlerts: true,
     newSales: true,
     monthlyReports: false,
@@ -44,21 +44,18 @@ export class NotificationSettingsComponent implements OnInit {
     ];
   });
 
-  async ngOnInit(): Promise<void> {
-    try {
-      const prefs = await this.userApi.getNotifications();
+  constructor() {
+    effect(() => {
+      const prefs = this.userStore.notificationPreferences();
       if (prefs) this.notifState.set(prefs);
-    } catch (err) {
-      console.error('Erreur chargement notifications :', err);
-    }
+    }, { allowSignalWrites: true });
   }
 
-  async toggleNotification(id: keyof NotificationPreferencesDto): Promise<void> {
+  async toggleNotification(id: keyof NotificationPreferences): Promise<void> {
     this.notifState.update(s => ({ ...s, [id]: !s[id] }));
     this.loading.update(l => ({ ...l, notifications: true }));
     try {
-      const updated = await this.userApi.updateNotifications(this.notifState());
-      this.notifState.set(updated);
+      await this.userStore.updateNotifications(this.notifState());
       this.feedback.success(this.prefs.t().notificationsUpdated);
     } catch (err) {
       this.notifState.update(s => ({ ...s, [id]: !s[id] }));

@@ -1,8 +1,7 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PreferencesService } from '../../../services/preferences';
-import { UserApiService } from '../../../service/api/user/user-api.service';
 import { ActionResponseService } from '../../../service/action-response/action-response.service';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { UpdateProfileRequest } from '../../../models/DTO/UserDto';
@@ -14,15 +13,20 @@ import { UpdateProfileRequest } from '../../../models/DTO/UserDto';
   templateUrl: './general-settings.html',
   styleUrls: ['./general-settings.css']
 })
-export class GeneralSettingsComponent implements OnInit {
+export class GeneralSettingsComponent {
   private readonly fb = inject(FormBuilder);
   public prefs: PreferencesService = inject(PreferencesService);
-  private readonly userApi = inject(UserApiService);
   private readonly feedback = inject(ActionResponseService);
-  private readonly userStore = inject(UserStoreService);
+  protected readonly userStore = inject(UserStoreService);
 
   loading = signal({ profile: false, photo: false });
-  profileImage = signal<string | null>(null);
+  private readonly photoCleared = signal(false);
+  private readonly localPhotoPreview = signal<string | null>(null);
+
+  readonly profileImage = computed(() => {
+    if (this.photoCleared()) return null;
+    return this.localPhotoPreview() ?? this.userStore.user()?.profilePicture ?? null;
+  });
 
   profileForm: FormGroup = this.fb.group({
     nom: ['', [Validators.required, Validators.minLength(2)]],
@@ -39,22 +43,20 @@ export class GeneralSettingsComponent implements OnInit {
     membreDepuis: '—',
   }));
 
-  async ngOnInit(): Promise<void> {
-    try {
-      const user = await this.userApi.getCurrentUser();
+  constructor() {
+    effect(() => {
+      const user = this.userStore.user();
+      if (!user) return;
       this.profileForm.patchValue({
-        nom: user.name ?? '',
+        nom: user.nom ?? '',
         prenom: user.subname ?? '',
         telephone: user.phoneNumber ?? '',
         entreprise: user.companyName ?? '',
         email: user.email ?? '',
       });
-      if (user.profilePictureUrl) {
-        this.profileImage.set(user.profilePictureUrl);
-      }
-    } catch (err) {
-      console.error('Erreur chargement profil :', err);
-    }
+      this.photoCleared.set(false);
+      this.localPhotoPreview.set(null);
+    }, { allowSignalWrites: true });
   }
 
   getInitials(): string {
@@ -83,13 +85,18 @@ export class GeneralSettingsComponent implements OnInit {
 
     this.loading.update(l => ({ ...l, photo: true }));
     try {
-      const user = await this.userApi.uploadPhoto(file);
-      if (user.profilePictureUrl) this.profileImage.set(user.profilePictureUrl);
       const reader = new FileReader();
-      reader.onload = () => this.profileImage.set(reader.result as string);
+      reader.onload = () => {
+        this.photoCleared.set(false);
+        this.localPhotoPreview.set(reader.result as string);
+      };
       reader.readAsDataURL(file);
+
+      await this.userStore.uploadPhoto(file);
+      this.localPhotoPreview.set(null);
       this.feedback.success(this.prefs.t().photoUpdated);
     } catch (err) {
+      this.localPhotoPreview.set(null);
       this.feedback.error(err);
     } finally {
       this.loading.update(l => ({ ...l, photo: false }));
@@ -98,7 +105,8 @@ export class GeneralSettingsComponent implements OnInit {
   }
 
   removePhoto(): void {
-    this.profileImage.set(null);
+    this.photoCleared.set(true);
+    this.localPhotoPreview.set(null);
     this.feedback.success(this.prefs.t().photoRemoved);
   }
 
@@ -116,8 +124,7 @@ export class GeneralSettingsComponent implements OnInit {
     };
     this.loading.update(l => ({ ...l, profile: true }));
     try {
-      await this.userApi.updateProfile(request);
-      await this.userStore.loadUser();
+      await this.userStore.updateProfile(request);
       this.feedback.success(this.prefs.t().profileSaved);
     } catch (err) {
       this.feedback.error(err);
