@@ -7,10 +7,15 @@
   align-items: center;
   gap: 1.25rem;
   padding: 1.25rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-}
+  justify-content: center !important;
+  }
+  .bk-profile-centralize{
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    display: flex;
+    gap: 1.5rem;
+  }
 
 /* PHOTO */
 .bk-profile-avatar {

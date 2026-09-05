@@ -62,6 +62,15 @@ export class UserStoreService {
     this.user.set(UserMapper.fromResponseDto(responseDto));
   }
 
+  // Supprime la photo de profil et resynchronise le signal
+  async deletePictureProfile(): Promise<void> {
+    await this.userApi.deletePictureProfile();
+    const current = this.user();
+    if (current) {
+      this.user.set({ ...current, profilePicture: undefined });
+    }
+  }
+
   // Récupère les préférences de notifications
   async loadNotifications(): Promise<void> {
     const dto = await this.userApi.getNotifications();
@@ -93,6 +102,7 @@ export class UserStoreService {
   async logoutAllDevices(): Promise<void> {
     await this.userApi.logoutAllDevices();
   }
+
 
   // Déconnexion propre : vide le store, retire le token, redirige
   clearUser(): void {

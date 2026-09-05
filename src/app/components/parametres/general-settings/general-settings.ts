@@ -104,10 +104,15 @@ export class GeneralSettingsComponent {
     }
   }
 
-  removePhoto(): void {
-    this.photoCleared.set(true);
-    this.localPhotoPreview.set(null);
-    this.feedback.success(this.prefs.t().photoRemoved);
+  async removePhoto(){
+    try {
+      await this.userStore.deletePictureProfile();
+      this.photoCleared.set(true);
+      this.localPhotoPreview.set(null);
+      this.feedback.success(this.prefs.t().photoRemoved);
+    } catch (error) {
+      this.feedback.error('Impossible de mettre à jour le profil');
+    }
   }
 
   async saveProfile(): Promise<void> {

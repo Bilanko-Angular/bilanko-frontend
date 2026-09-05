@@ -30,6 +30,11 @@ export class UserApiService {
     return response.data;
   }
 
+  // DELETE /me/delete-profile-picture - suprimer la photo de profile
+  async deletePictureProfile():Promise<void> {
+    await apiClient.delete(`${this.basePath}/me/delete-picture-profile`);
+  }
+
   // PUT /me/password — changement de mot de passe
   async changePassword(request: ChangePasswordRequest): Promise<void> {
     await apiClient.put(`${this.basePath}/me/password`, request);
@@ -73,4 +78,6 @@ export class UserApiService {
   async logoutAllDevices(): Promise<void> {
     await apiClient.post(`${this.basePath}/me/logout-all`);
   }
+
+
 }

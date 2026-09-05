@@ -8,32 +8,33 @@
       <p class="bk-settings__section-desc">{{ prefs.t().generalInfoDesc }}</p>
     </div>
   </div>
-
   <div class="bk-profile-card">
-    <div class="bk-profile-avatar">
-      @if (profileImage()) {
-        <img [src]="profileImage()!" [alt]="prefs.t().profile">
-      } @else {
-        <div class="bk-profile-avatar__initials">{{ getInitials() }}</div>
-      }
-    </div>
-    <div class="bk-profile-info">
-      <h3>{{ prefs.t().profile }}</h3>
-      <p>{{ prefs.t().profilePhotoDesc }}</p>
-      <div class="bk-profile-actions">
-        <label for="profilePhoto" class="btn bk-btn-primary">
-          <span class="material-symbols-outlined">photo_camera</span>
-          {{ prefs.t().changePhoto }}
-        </label>
-        <input id="profilePhoto" type="file" class="bk-file-input" accept="image/png,image/jpeg,image/webp" (change)="onPhotoSelected($event)">
+    <div class="bk-profile-centralize">
+      <div class="bk-profile-avatar">
         @if (profileImage()) {
-          <button type="button" class="btn bk-btn-outline" (click)="removePhoto()">
-            <span class="material-symbols-outlined">delete</span>
-            {{ prefs.t().removePhoto }}
-          </button>
+          <img [src]="profileImage()!" [alt]="prefs.t().profile">
+        } @else {
+          <div class="bk-profile-avatar__initials">{{ getInitials() }}</div>
         }
       </div>
-      <small>{{ prefs.t().photoFormats }}</small>
+      <div class="bk-profile-info">
+        <h3>{{ prefs.t().profile }}</h3>
+        <p>{{ prefs.t().profilePhotoDesc }}</p>
+        <div class="bk-profile-actions">
+          <label for="profilePhoto" class="btn btn-primary">
+            <span class="material-symbols-outlined">photo_camera</span>
+            {{ prefs.t().changePhoto }}
+          </label>
+          <input id="profilePhoto" type="file" class="bk-file-input" accept="image/png,image/jpeg,image/webp" (change)="onPhotoSelected($event)">
+          @if (profileImage()) {
+            <button type="button" class="btn btn-danger" (click)="removePhoto()">
+              <span class="material-symbols-outlined">delete</span>
+              {{ prefs.t().removePhoto }}
+            </button>
+          }
+        </div>
+        <small>{{ prefs.t().photoFormats }}</small>
+      </div>
     </div>
   </div>
 
