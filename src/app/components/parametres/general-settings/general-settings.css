@@ -163,6 +163,10 @@
     align-items: flex-start;
     flex-direction: column;
   }
+  .bk-profile-centralize{
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 @media (max-width: 576px) {
