@@ -43,7 +43,7 @@
       <!-- NOM -->
       <div class="bk-form-group">
         <label for="nom" class="bk-form-label">
-          <span class="material-symbols-outlined">badge</span> {{ prefs.t().lastName }}
+          {{ prefs.t().lastName }}
         </label>
         <div class="input-group bk-input-group">
           <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">person</span></span>
@@ -57,7 +57,7 @@
       <!-- PRENOM -->
       <div class="bk-form-group">
         <label for="prenom" class="bk-form-label">
-          <span class="material-symbols-outlined">person</span> {{ prefs.t().firstName }}
+          {{ prefs.t().firstName }}
         </label>
         <div class="input-group bk-input-group">
           <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">person</span></span>
@@ -68,7 +68,7 @@
       <!-- EMAIL -->
       <div class="bk-form-group">
         <label for="email" class="bk-form-label">
-          <span class="material-symbols-outlined">email</span> {{ prefs.t().email }}
+          {{ prefs.t().email }}
         </label>
         <div class="input-group bk-input-group">
           <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">mail</span></span>
@@ -85,7 +85,7 @@
       <!-- TELEPHONE -->
       <div class="bk-form-group">
         <label for="telephone" class="bk-form-label">
-          <span class="material-symbols-outlined">phone</span> {{ prefs.t().phone }}
+          {{ prefs.t().phone }}
         </label>
         <div class="input-group bk-input-group">
           <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">phone</span></span>
@@ -96,7 +96,7 @@
       <!-- ENTREPRISE -->
       <div class="bk-form-group bk-form-group--full">
         <label for="entreprise" class="bk-form-label">
-          <span class="material-symbols-outlined">business</span> {{ prefs.t().company }}
+          {{ prefs.t().company }}
         </label>
         <div class="input-group bk-input-group">
           <span class="input-group-text bk-input-icon"><span class="material-symbols-outlined">business</span></span>
@@ -106,7 +106,9 @@
     </div>
 
     <div class="bk-settings__actions">
-      <button type="submit" class="btn bk-btn-primary" [disabled]="profileForm.invalid || loading().profile">
+      <button type="submit" class="btn bk-btn-primary" 
+        style="margin-top:10px ;"
+        [disabled]="profileForm.invalid || loading().profile">
         @if (loading().profile) {
           <span class="material-symbols-outlined bk-spin">sync</span>
         } @else {
