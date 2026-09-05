@@ -20,6 +20,7 @@ export class UserApiService {
   // GET /me — profil complet
   async getCurrentUser(): Promise<UserResponseDto> {
     const response = await apiClient.get<UserResponseDto>(`${this.basePath}/me`);
+    console.log(response.data);
     return response.data;
   }
 
