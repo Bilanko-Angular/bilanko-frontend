@@ -36,25 +36,9 @@
 
 
     <!-- =====================================================
-         MESSAGE DE SUCCÈS
+         POPUP DE FEEDBACK (succès / erreur)
     ====================================================== -->
-    @if (showSuccess()) {
-
-      <div
-        class="bk-settings__toast"
-        role="status">
-
-        <span class="material-symbols-outlined">
-          check_circle
-        </span>
-
-        <span>
-          {{ showSuccessMessage() }}
-        </span>
-
-      </div>
-
-    }
+    <app-action-response-popup />
 
 
     <!-- =====================================================
@@ -533,11 +517,13 @@
               <button
                 type="submit"
                 class="btn bk-btn-primary"
-                [disabled]="profileForm.invalid">
+                [disabled]="profileForm.invalid || loading().profile">
 
-                <span class="material-symbols-outlined">
-                  save
-                </span>
+                @if (loading().profile) {
+                  <span class="material-symbols-outlined bk-spin">sync</span>
+                } @else {
+                  <span class="material-symbols-outlined">save</span>
+                }
 
                 {{ prefs.t().saveChanges }}
 
@@ -890,11 +876,13 @@
                 <button
                   type="submit"
                   class="btn bk-btn-primary"
-                  [disabled]="securityForm.invalid">
+                  [disabled]="securityForm.invalid || loading().password">
 
-                  <span class="material-symbols-outlined">
-                    lock_reset
-                  </span>
+                  @if (loading().password) {
+                    <span class="material-symbols-outlined bk-spin">sync</span>
+                  } @else {
+                    <span class="material-symbols-outlined">lock_reset</span>
+                  }
 
                   {{ prefs.t().changePassword }}
 
@@ -924,18 +912,40 @@
               {{ prefs.t().sessionDesc }}
             </p>
 
-            <button
-              type="button"
-              class="btn bk-btn-danger"
-              (click)="logout()">
+            <div class="bk-settings__danger-actions">
 
-              <span class="material-symbols-outlined">
-                logout
-              </span>
+              <!-- Déconnecter tous les appareils -->
+              <button
+                type="button"
+                class="btn bk-btn-outline-danger"
+                [disabled]="loading().logoutAll"
+                (click)="logoutAllDevices()">
 
-              {{ prefs.t().logout }}
+                @if (loading().logoutAll) {
+                  <span class="material-symbols-outlined bk-spin">sync</span>
+                } @else {
+                  <span class="material-symbols-outlined">devices</span>
+                }
 
-            </button>
+                Déconnecter tous les appareils
+
+              </button>
+
+              <!-- Déconnexion simple -->
+              <button
+                type="button"
+                class="btn bk-btn-danger"
+                (click)="logout()">
+
+                <span class="material-symbols-outlined">
+                  logout
+                </span>
+
+                {{ prefs.t().logout }}
+
+              </button>
+
+            </div>
 
           </div>
 
@@ -989,30 +999,14 @@
 
                   <span class="bk-settings__notification-icon">
 
-                    @if (notif.type === 'stock') {
-
-                      <span class="material-symbols-outlined">
-                        inventory_2
-                      </span>
-
-                    } @else if (notif.type === 'vente') {
-
-                      <span class="material-symbols-outlined">
-                        shopping_cart
-                      </span>
-
-                    } @else if (notif.type === 'rapport') {
-
-                      <span class="material-symbols-outlined">
-                        payments
-                      </span>
-
+                    @if (notif.id === 'stockAlerts') {
+                      <span class="material-symbols-outlined">inventory_2</span>
+                    } @else if (notif.id === 'newSales') {
+                      <span class="material-symbols-outlined">shopping_cart</span>
+                    } @else if (notif.id === 'monthlyReports') {
+                      <span class="material-symbols-outlined">payments</span>
                     } @else {
-
-                      <span class="material-symbols-outlined">
-                        notifications
-                      </span>
-
+                      <span class="material-symbols-outlined">notifications</span>
                     }
 
                   </span>
@@ -1020,18 +1014,12 @@
 
                   <div>
 
-                    <strong
-                      class="bk-settings__notification-title">
-
+                    <strong class="bk-settings__notification-title">
                       {{ notif.label }}
-
                     </strong>
 
-                    <p
-                      class="bk-settings__notification-desc">
-
+                    <p class="bk-settings__notification-desc">
                       {{ notif.description }}
-
                     </p>
 
                   </div>
@@ -1046,6 +1034,7 @@
                     [id]="'notif-' + notif.id"
                     class="bk-toggle__input"
                     [checked]="notif.enabled"
+                    [disabled]="loading().notifications"
                     (change)="toggleNotification(notif.id)">
 
                   <label
@@ -1062,22 +1051,7 @@
           </div>
 
 
-          <div class="bk-settings__actions">
-
-            <button
-              type="button"
-              class="btn bk-btn-primary"
-              (click)="saveAppearance()">
-
-              <span class="material-symbols-outlined">
-                save
-              </span>
-
-              {{ prefs.t().saveButton }}
-
-            </button>
-
-          </div>
+          <!-- Note: les notifications sont sauvegardées automatiquement au toggle -->
 
         </section>
 
@@ -1436,11 +1410,14 @@
             <button
               type="button"
               class="btn bk-btn-primary"
+              [disabled]="loading().appearance"
               (click)="saveAppearance()">
 
-              <span class="material-symbols-outlined">
-                save
-              </span>
+              @if (loading().appearance) {
+                <span class="material-symbols-outlined bk-spin">sync</span>
+              } @else {
+                <span class="material-symbols-outlined">save</span>
+              }
 
               {{ prefs.t().saveButton }}
 

@@ -657,6 +657,56 @@
     var(--color-negative);
 }
 
+.bk-btn-danger:hover {
+  filter: brightness(1.1);
+}
+
+
+/* OUTLINE DANGER */
+
+.bk-btn-outline-danger {
+  background: transparent;
+
+  color: var(--color-negative);
+
+  border: 1px solid var(--color-negative);
+}
+
+.bk-btn-outline-danger:hover {
+  background: color-mix(
+    in srgb,
+    var(--color-negative) 10%,
+    transparent
+  );
+}
+
+
+/* =========================================================
+   DANGER ACTIONS (Logout)
+========================================================= */
+
+.bk-settings__danger-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+
+/* =========================================================
+   SPINNER
+========================================================= */
+
+@keyframes bk-spin-anim {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.bk-spin {
+  display: inline-block;
+  animation: bk-spin-anim 0.7s linear infinite;
+}
+
 
 /* =========================================================
    STATISTICS

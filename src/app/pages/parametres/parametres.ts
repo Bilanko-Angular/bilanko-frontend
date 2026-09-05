@@ -4,165 +4,130 @@ import {
   Component,
   computed,
   inject,
-  signal
+  OnInit,
+  signal,
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import {
   FormsModule,
   ReactiveFormsModule,
   FormBuilder,
   FormGroup,
-  Validators
+  Validators,
 } from '@angular/forms';
 
 import { Template } from '../../components/shared/template/template';
-
-import { ThemeService } from '../../services/theme';
-
+import { ActionResponsePopup } from '../../components/globals/action-response-popup/action-response-popup';
+import { ActionResponseService } from '../../service/action-response/action-response.service';
+import { UserApiService } from '../../service/api/user/user-api.service';
 import { AuthStoreService } from '../../service/store/auth/auth-store.service';
-
+import { UserStoreService } from '../../service/store/user/user-store.service';
+import { ThemeService } from '../../services/theme';
 import {
   PreferencesService,
   BilankoLanguage,
-  BilankoCurrency
+  BilankoCurrency,
 } from '../../services/preferences';
+import {
+  NotificationPreferencesDto,
+  AppearancePreferencesDto,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
+} from '../../models/DTO/UserDto';
 
 
-interface NotificationPreference {
-  id: string;
+// ──────────────────────────────────────────────────────────────
+//  Types locaux
+// ──────────────────────────────────────────────────────────────
+
+type Tab = 'general' | 'compte' | 'notifications' | 'apparence';
+
+interface NotificationItem {
+  id: keyof NotificationPreferencesDto;
   label: string;
   description: string;
   enabled: boolean;
-  type: 'stock' | 'vente' | 'rapport' | 'systeme';
 }
 
 
 @Component({
   selector: 'app-parametres',
-
   standalone: true,
-
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    Template
+    Template,
+    ActionResponsePopup,
   ],
-
   templateUrl: './parametres.html',
-
-  styleUrls: ['./parametres.css']
+  styleUrls: ['./parametres.css'],
 })
-export class Parametres {
+export class Parametres implements OnInit {
 
   /* =====================================================
      SERVICES
   ====================================================== */
 
-  private readonly fb =
-    inject(FormBuilder);
-
-  protected readonly themeService =
-    inject(ThemeService);
-
-  private readonly authStore =
-    inject(AuthStoreService);
-
-  protected readonly prefs =
-    inject(PreferencesService);
+  private readonly fb            = inject(FormBuilder);
+  protected readonly themeService = inject(ThemeService);
+  private readonly authStore     = inject(AuthStoreService);
+  private readonly userStore     = inject(UserStoreService);
+  private readonly userApi       = inject(UserApiService);
+  private readonly feedback      = inject(ActionResponseService);
+  protected readonly prefs       = inject(PreferencesService);
 
 
   /* =====================================================
-     ONGLET ACTIF
+     ÉTAT DE L'INTERFACE
   ====================================================== */
 
-  activeTab =
-    signal<
-      'general' |
-      'compte' |
-      'notifications' |
-      'apparence'
-    >('general');
+  activeTab = signal<Tab>('general');
 
+  /** Indicateur de chargement par action */
+  loading = signal<{
+    profile: boolean;
+    photo: boolean;
+    password: boolean;
+    notifications: boolean;
+    appearance: boolean;
+    logoutAll: boolean;
+  }>({
+    profile: false,
+    photo: false,
+    password: false,
+    notifications: false,
+    appearance: false,
+    logoutAll: false,
+  });
 
-  /* =====================================================
-     MESSAGE SUCCÈS
-  ====================================================== */
+  profileImage = signal<string | null>(null);
 
-  showSuccessMessage =
-    signal<string>('');
-
-  showSuccess =
-    signal<boolean>(false);
-
-
-  /* =====================================================
-     PHOTO DE PROFIL
-  ====================================================== */
-
-  profileImage =
-    signal<string | null>(null);
+  /** Affiche/masque le mot de passe */
+  showCurrentPassword = signal(false);
+  showNewPassword     = signal(false);
+  showConfirmPassword = signal(false);
 
 
   /* =====================================================
      FORMULAIRE PROFIL
   ====================================================== */
 
-  profileForm: FormGroup =
-    this.fb.group({
-
-      nom: [
-        'Emmanuel',
-        [
-          Validators.required,
-          Validators.minLength(2)
-        ]
-      ],
-
-      prenom: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2)
-        ]
-      ],
-
-      email: [
-        'emmanuel@bilanko.com',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
-
-      telephone: [
-        '+237 6XX XX XX XX'
-      ],
-
-      entreprise: [
-        'Bilanko SARL'
-      ]
-
-    });
+  profileForm: FormGroup = this.fb.group({
+    nom:       ['', [Validators.required, Validators.minLength(2)]],
+    prenom:    [''],
+    telephone: [''],
+    entreprise:[''],
+  });
 
 
   /* =====================================================
-     FORMULAIRE SECURITE
+     FORMULAIRE SÉCURITÉ
   ====================================================== */
 
-  securityForm: FormGroup =
-    this.fb.group({
-
-      currentPassword: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6)
-        ]
-      ],
-
+  securityForm: FormGroup = this.fb.group(
+    {
+      currentPassword: ['', [Validators.required]],
       newPassword: [
         '',
         [
@@ -170,189 +135,195 @@ export class Parametres {
           Validators.minLength(8),
           Validators.pattern(
             /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*\-]).{8,}$/
-          )
-        ]
+          ),
+        ],
       ],
-
-      confirmPassword: [
-        '',
-        [
-          Validators.required
-        ]
-      ]
-
-    }, {
-      validators:
-        this.passwordsMatchValidator
-    });
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: this.passwordsMatchValidator }
+  );
 
 
   /* =====================================================
-     VALIDATION MOT DE PASSE
+     NOTIFICATIONS (état local, sync backend)
   ====================================================== */
 
-  private passwordsMatchValidator(
-    group: FormGroup
-  ): { [key: string]: boolean } | null {
+  private notifState = signal<NotificationPreferencesDto>({
+    stockAlerts: true,
+    newSales: true,
+    monthlyReports: false,
+    updates: true,
+  });
 
-    const newPassword =
-      group.get('newPassword')?.value;
+  readonly notifications = computed<NotificationItem[]>(() => {
+    const t = this.prefs.t();
+    const s = this.notifState();
+    return [
+      {
+        id: 'stockAlerts',
+        label: t.notifStockAlertTitle,
+        description: t.notifStockAlertDesc,
+        enabled: s.stockAlerts,
+      },
+      {
+        id: 'newSales',
+        label: t.notifNewSalesTitle,
+        description: t.notifNewSalesDesc,
+        enabled: s.newSales,
+      },
+      {
+        id: 'monthlyReports',
+        label: t.notifMonthlyReportTitle,
+        description: t.notifMonthlyReportDesc,
+        enabled: s.monthlyReports,
+      },
+      {
+        id: 'updates',
+        label: t.notifUpdatesTitle,
+        description: t.notifUpdatesDesc,
+        enabled: s.updates,
+      },
+    ];
+  });
 
-    const confirmPassword =
-      group.get('confirmPassword')?.value;
+  /* =====================================================
+     STATISTIQUES DU COMPTE
+  ====================================================== */
 
-    return newPassword === confirmPassword
-      ? null
-      : { passwordMismatch: true };
+  readonly accountStats = computed(() => ({
+    totalProduits: 0,
+    totalVentes: 0,
+    totalCharges: 0,
+    membreDepuis: '—',
+  }));
+
+
+  /* =====================================================
+     CONSTRUCTEUR / INIT
+  ====================================================== */
+
+  constructor() {}
+
+  async ngOnInit(): Promise<void> {
+    await this.loadUserData();
   }
 
 
   /* =====================================================
-     NOTIFICATIONS
+     CHARGEMENT INITIAL
   ====================================================== */
 
- // Dans parametres.ts
-private getDefaultNotifications(): NotificationPreference[] {
-  const t = this.prefs.t();
-  return [
-    {
-      id: 'stock',
-      label: t.notifStockAlertTitle,
-      description: t.notifStockAlertDesc,
-      enabled: true,
-      type: 'stock'
-    },
-    {
-      id: 'vente',
-      label: t.notifNewSalesTitle,
-      description: t.notifNewSalesDesc,
-      enabled: true,
-      type: 'vente'
-    },
-    {
-      id: 'rapport',
-      label: t.notifMonthlyReportTitle,
-      description: t.notifMonthlyReportDesc,
-      enabled: false,
-      type: 'rapport'
-    },
-    {
-      id: 'systeme',
-      label: t.notifUpdatesTitle,
-      description: t.notifUpdatesDesc,
-      enabled: true,
-      type: 'systeme'
-    }
-  ];
-}
-
-
-  readonly notifEnabledState =
-    signal<Record<string, boolean>>(
-      this.loadNotificationState()
-    );
-
-
-  readonly notifications =
-    computed<NotificationPreference[]>(() => {
-
-      return this.getDefaultNotifications().map(
-        notification => ({
-
-          ...notification,
-
-          enabled:
-            this.notifEnabledState()[
-              notification.id
-            ] ?? notification.enabled
-
-        })
-      );
-
-    });
-
-
-  /* =====================================================
-     STATISTIQUES
-  ====================================================== */
-
-  accountStats =
-    computed(() => ({
-
-      totalProduits: 12,
-
-      totalVentes: 20,
-
-      totalCharges: 17,
-
-      membreDepuis: 'Janvier 2026'
-
-    }));
-
-
-  /* =====================================================
-     CONSTRUCTEUR
-  ====================================================== */
-
-  constructor() {
-
-    this.loadProfile();
-
-    this.loadPhoto();
-
-  }
-
-
-  /* =====================================================
-     CHANGER D'ONGLET
-  ====================================================== */
-
-  setActiveTab(
-    tab:
-      'general' |
-      'compte' |
-      'notifications' |
-      'apparence'
-  ): void {
-
-    this.activeTab.set(tab);
-
-  }
-
-
-  /* =====================================================
-     CHARGER PROFIL
-  ====================================================== */
-
-  private loadProfile(): void {
-
+  private async loadUserData(): Promise<void> {
     try {
+      const user = await this.userApi.getCurrentUser();
 
-      const saved =
-        localStorage.getItem(
-          'bilanko_profile'
-        );
+      // Pré-remplir le formulaire profil
+      this.profileForm.patchValue({
+        nom:        user.name        ?? '',
+        prenom:     user.subname     ?? '',
+        telephone:  user.phoneNumber ?? '',
+        entreprise: user.companyName ?? '',
+      });
 
-      if (!saved) {
-        return;
+      // Photo de profil
+      if (user.profilePictureUrl) {
+        this.profileImage.set(user.profilePictureUrl);
       }
 
-      const profile =
-        JSON.parse(saved);
+      // Notifications
+      if (user.notificationPreferences) {
+        this.notifState.set(user.notificationPreferences);
+      }
 
-      this.profileForm.patchValue(
-        profile
-      );
+      // Apparence : synchroniser les préférences locales avec le backend
+      if (user.appearancePreferences) {
+        const ap = user.appearancePreferences;
+        if (ap.language) this.prefs.language.set(ap.language as BilankoLanguage);
+        if (ap.currency) this.prefs.currency.set(ap.currency as BilankoCurrency);
+        if (ap.dateFormat) this.prefs.dateFormat.set(ap.dateFormat);
+        if (typeof ap.compactMode === 'boolean') {
+          this.prefs.compactMode.set(ap.compactMode);
+        }
+      }
 
-    } catch (error) {
+    } catch (err) {
+      // Erreur silencieuse au chargement (pas de toast intrusif)
+      console.error('Erreur chargement profil :', err);
+    }
+  }
 
-      console.warn(
-        'Erreur chargement profil :',
-        error
-      );
 
+  /* =====================================================
+     ONGLETS
+  ====================================================== */
+
+  setActiveTab(tab: Tab): void {
+    this.activeTab.set(tab);
+  }
+
+
+  /* =====================================================
+     INITIALES (avatar fallback)
+  ====================================================== */
+
+  getInitials(): string {
+    const nom    = this.profileForm.get('nom')?.value?.charAt(0) || '';
+    const prenom = this.profileForm.get('prenom')?.value?.charAt(0) || '';
+    return `${nom}${prenom}`.toUpperCase() || 'B';
+  }
+
+
+  /* =====================================================
+     PHOTO DE PROFIL
+  ====================================================== */
+
+  async onPhotoSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file  = input.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      this.feedback.error({
+        isAxiosError: false,
+        response: { status: 400, data: { message: this.prefs.t().photoInvalidType } },
+      });
+      input.value = '';
+      return;
     }
 
+    if (file.size > 5 * 1024 * 1024) {
+      this.feedback.error({
+        isAxiosError: false,
+        response: { status: 400, data: { message: this.prefs.t().photoTooLarge } },
+      });
+      input.value = '';
+      return;
+    }
+
+    this.loading.update(l => ({ ...l, photo: true }));
+    try {
+      const user = await this.userApi.uploadPhoto(file);
+      if (user.profilePictureUrl) {
+        this.profileImage.set(user.profilePictureUrl);
+      }
+      // Aperçu local aussi
+      const reader = new FileReader();
+      reader.onload = () => this.profileImage.set(reader.result as string);
+      reader.readAsDataURL(file);
+
+      this.feedback.success(this.prefs.t().photoUpdated);
+    } catch (err) {
+      this.feedback.error(err);
+    } finally {
+      this.loading.update(l => ({ ...l, photo: false }));
+      input.value = '';
+    }
+  }
+
+  removePhoto(): void {
+    this.profileImage.set(null);
+    this.feedback.success(this.prefs.t().photoRemoved);
   }
 
 
@@ -360,488 +331,185 @@ private getDefaultNotifications(): NotificationPreference[] {
      SAUVEGARDER PROFIL
   ====================================================== */
 
-  saveProfile(): void {
-
+  async saveProfile(): Promise<void> {
     if (this.profileForm.invalid) {
-
       this.profileForm.markAllAsTouched();
-
-      return;
-
-    }
-
-
-    try {
-
-      localStorage.setItem(
-        'bilanko_profile',
-
-        JSON.stringify(
-          this.profileForm.value
-        )
-      );
-
-
-      this.showToast(
-        this.prefs.t().profileSaved
-      );
-
-    } catch (error) {
-
-      console.warn(
-        'Erreur sauvegarde profil :',
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =====================================================
-     INITIALS
-  ====================================================== */
-
-  getInitials(): string {
-
-    const nom =
-      this.profileForm
-        .get('nom')
-        ?.value
-        ?.charAt(0) || '';
-
-    const prenom =
-      this.profileForm
-        .get('prenom')
-        ?.value
-        ?.charAt(0) || '';
-
-    const initials =
-      `${nom}${prenom}`.toUpperCase();
-
-    return initials || 'B';
-
-  }
-
-
-  /* =====================================================
-     CHARGER PHOTO
-  ====================================================== */
-
-  private loadPhoto(): void {
-
-    try {
-
-      const saved =
-        localStorage.getItem(
-          'bilanko_profile_photo'
-        );
-
-      if (saved) {
-
-        this.profileImage.set(
-          saved
-        );
-
-      }
-
-    } catch (error) {
-
-      console.warn(
-        'Erreur chargement photo :',
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =====================================================
-     SELECTION PHOTO
-  ====================================================== */
-
-  onPhotoSelected(
-    event: Event
-  ): void {
-
-    const input =
-      event.target as HTMLInputElement;
-
-    const file =
-      input.files?.[0];
-
-    if (!file) {
       return;
     }
 
-
-    /* Types acceptés */
-
-    const allowedTypes = [
-      'image/jpeg',
-      'image/png',
-      'image/webp'
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-
-      this.showToast(
-        this.prefs.t().photoInvalidType
-      );
-
-      input.value = '';
-
-      return;
-
-    }
-
-
-    /* Maximum 5 MB */
-
-    if (
-      file.size >
-      5 * 1024 * 1024
-    ) {
-
-      this.showToast(
-        this.prefs.t().photoTooLarge
-      );
-
-      input.value = '';
-
-      return;
-
-    }
-
-
-    /* Lecture */
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload = () => {
-
-      const result =
-        reader.result as string;
-
-      this.profileImage.set(
-        result
-      );
-
-
-      try {
-
-        localStorage.setItem(
-          'bilanko_profile_photo',
-          result
-        );
-
-        this.showToast(
-          this.prefs.t().photoUpdated
-        );
-
-      } catch (error) {
-
-        console.warn(
-          'Impossible de sauvegarder la photo :',
-          error
-        );
-
-      }
-
+    const v = this.profileForm.value;
+    const request: UpdateProfileRequest = {
+      name:        v.nom,
+      subname:     v.prenom     || undefined,
+      phoneNumber: v.telephone  || undefined,
+      companyName: v.entreprise || undefined,
     };
 
-
-    reader.readAsDataURL(file);
-
+    this.loading.update(l => ({ ...l, profile: true }));
+    try {
+      await this.userApi.updateProfile(request);
+      // Rafraîchir le store global
+      await this.userStore.loadUser();
+      this.feedback.success(this.prefs.t().profileSaved);
+    } catch (err) {
+      this.feedback.error(err);
+    } finally {
+      this.loading.update(l => ({ ...l, profile: false }));
+    }
   }
 
 
   /* =====================================================
-     SUPPRIMER PHOTO
+     CHANGER LE MOT DE PASSE
   ====================================================== */
 
-  removePhoto(): void {
-
-    this.profileImage.set(null);
-
-    localStorage.removeItem(
-      'bilanko_profile_photo'
-    );
-
-    this.showToast(
-      this.prefs.t().photoRemoved
-    );
-
-  }
-
-
-  /* =====================================================
-     MOT DE PASSE
-  ====================================================== */
-
-  changePassword(): void {
-
+  async changePassword(): Promise<void> {
     if (this.securityForm.invalid) {
-
       this.securityForm.markAllAsTouched();
-
       return;
-
     }
 
+    const v = this.securityForm.value;
+    const request: ChangePasswordRequest = {
+      currentPassword: v.currentPassword,
+      newPassword:     v.newPassword,
+    };
 
-    console.log(
-      'Mot de passe changé'
-    );
-
-
-    this.securityForm.reset();
-
-
-    this.showToast(
-      this.prefs.t().passwordChanged
-    );
-
-  }
-
-
-  /* =====================================================
-     NOTIFICATION
-  ====================================================== */
-
-  toggleNotification(
-    id: string
-  ): void {
-
-    this.notifEnabledState.update(
-      state => ({
-
-        ...state,
-
-        [id]:
-          !state[id]
-
-      })
-    );
-
-
+    this.loading.update(l => ({ ...l, password: true }));
     try {
-
-      localStorage.setItem(
-        'bilanko_notifications',
-
-        JSON.stringify(
-          this.notifEnabledState()
-        )
-      );
-
-
-      this.showToast(
-        this.prefs.t().notificationsUpdated
-      );
-
-    } catch (error) {
-
-      console.warn(
-        'Erreur sauvegarde notifications :',
-        error
-      );
-
+      await this.userApi.changePassword(request);
+      this.securityForm.reset();
+      this.feedback.success(this.prefs.t().passwordChanged);
+    } catch (err) {
+      this.feedback.error(err);
+    } finally {
+      this.loading.update(l => ({ ...l, password: false }));
     }
-
   }
 
 
   /* =====================================================
-     CHARGER NOTIFICATIONS
+     NOTIFICATIONS
   ====================================================== */
 
-  private loadNotificationState():
-    Record<string, boolean> {
+  async toggleNotification(id: keyof NotificationPreferencesDto): Promise<void> {
+    // Mise à jour optimiste locale
+    this.notifState.update(s => ({ ...s, [id]: !s[id] }));
 
+    this.loading.update(l => ({ ...l, notifications: true }));
     try {
-
-      const saved =
-        localStorage.getItem(
-          'bilanko_notifications'
-        );
-
-      if (saved) {
-
-        return JSON.parse(
-          saved
-        );
-
-      }
-
-    } catch (error) {
-
-      console.warn(
-        'Erreur chargement notifications :',
-        error
-      );
-
+      const updated = await this.userApi.updateNotifications(this.notifState());
+      this.notifState.set(updated);
+      this.feedback.success(this.prefs.t().notificationsUpdated);
+    } catch (err) {
+      // Rollback en cas d'erreur
+      this.notifState.update(s => ({ ...s, [id]: !s[id] }));
+      this.feedback.error(err);
+    } finally {
+      this.loading.update(l => ({ ...l, notifications: false }));
     }
-
-    return {};
-
   }
 
 
   /* =====================================================
-     LANGUE
+     APPARENCE
   ====================================================== */
 
-  onLanguageChange(
-    value: BilankoLanguage
-  ): void {
-
-    this.prefs.language.set(
-      value
-    );
-
-
-    this.showToast(
-      this.prefs.t().languageChanged
-    );
-
+  onLanguageChange(value: BilankoLanguage): void {
+    this.prefs.language.set(value);
   }
 
-
-  /* =====================================================
-     FORMAT DATE
-  ====================================================== */
-
-  onDateFormatChange(
-    value: string
-  ): void {
-
-    this.prefs.dateFormat.set(
-      value
-    );
-
-
-    this.showToast(
-      this.prefs.t().dateFormatChanged
-    );
-
+  onDateFormatChange(value: string): void {
+    this.prefs.dateFormat.set(value);
   }
 
-
-  /* =====================================================
-     DEVISE
-  ====================================================== */
-
-  onCurrencyChange(
-    value: BilankoCurrency
-  ): void {
-
-    this.prefs.currency.set(
-      value
-    );
-
-
-    this.showToast(
-      this.prefs.t().currencyChanged
-    );
-
+  onCurrencyChange(value: BilankoCurrency): void {
+    this.prefs.currency.set(value);
   }
-
-
-  /* =====================================================
-     MODE COMPACT
-  ====================================================== */
 
   toggleCompactMode(): void {
+    this.prefs.compactMode.update(v => !v);
+  }
 
-    this.prefs.compactMode.update(
-      value => !value
-    );
+  async saveAppearance(): Promise<void> {
+    const request: AppearancePreferencesDto = {
+      theme:       this.themeService.theme(),
+      language:    this.prefs.language(),
+      dateFormat:  this.prefs.dateFormat(),
+      currency:    this.prefs.currency(),
+      compactMode: this.prefs.compactMode(),
+    };
 
-
-    this.showToast(
-
-      this.prefs.compactMode()
-
-        ? this.prefs.t().compactModeOn
-
-        : this.prefs.t().compactModeOff
-
-    );
-
+    this.loading.update(l => ({ ...l, appearance: true }));
+    try {
+      await this.userApi.updateAppearance(request);
+      this.feedback.success(this.prefs.t().preferencesSaved);
+    } catch (err) {
+      this.feedback.error(err);
+    } finally {
+      this.loading.update(l => ({ ...l, appearance: false }));
+    }
   }
 
 
   /* =====================================================
-     SAUVEGARDER APPARENCE
+     DÉCONNECTER TOUS LES APPAREILS
   ====================================================== */
 
-  saveAppearance(): void {
-
-    this.showToast(
-      this.prefs.t().preferencesSaved
-    );
-
+  async logoutAllDevices(): Promise<void> {
+    this.loading.update(l => ({ ...l, logoutAll: true }));
+    try {
+      await this.userApi.logoutAllDevices();
+      // Déconnexion locale ensuite
+      this.authStore.logout();
+    } catch (err) {
+      this.feedback.error(err);
+    } finally {
+      this.loading.update(l => ({ ...l, logoutAll: false }));
+    }
   }
 
 
   /* =====================================================
-     TOAST
-  ====================================================== */
-
-  private showToast(
-    message: string
-  ): void {
-
-    this.showSuccessMessage.set(
-      message
-    );
-
-    this.showSuccess.set(
-      true
-    );
-
-
-    setTimeout(() => {
-
-      this.showSuccess.set(
-        false
-      );
-
-    }, 3000);
-
-  }
-
-
-  /* =====================================================
-     LOGOUT
+     DÉCONNEXION SIMPLE
   ====================================================== */
 
   logout(): void {
-
     this.authStore.logout();
-
   }
 
 
   /* =====================================================
-     GETTERS FORM
+     GETTERS FORMULAIRES
   ====================================================== */
 
   get f() {
-
     return this.profileForm.controls;
-
   }
-
 
   get s() {
-
     return this.securityForm.controls;
-
   }
 
+
+  /* =====================================================
+     VALIDATEUR : MOTS DE PASSE IDENTIQUES
+  ====================================================== */
+
+  private passwordsMatchValidator(
+    group: FormGroup
+  ): { [key: string]: boolean } | null {
+    const newPwd     = group.get('newPassword')?.value;
+    const confirmPwd = group.get('confirmPassword')?.value;
+    return newPwd === confirmPwd ? null : { passwordMismatch: true };
+  }
+
+
+  /* =====================================================
+     HELPERS TEMPLATE
+  ====================================================== */
+
+  isLoading(key: keyof ReturnType<typeof this.loading>): boolean {
+    return this.loading()[key];
+  }
 }

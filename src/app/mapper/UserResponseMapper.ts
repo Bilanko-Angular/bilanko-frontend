@@ -4,10 +4,11 @@ import { User } from "../models/person";
 export class UserResponseMapper {
   static fromResponseDto(dto: UserResponseDto): User {
     return {
-      nom: dto.name,
-      subname: dto.subname,
-      email: dto.email,
-      profilePicture: dto.profilePicture
+      id:             dto.id,
+      nom:            dto.name,
+      subname:        dto.subname,
+      email:          dto.email,
+      profilePicture: dto.profilePictureUrl ?? undefined,
     };
   }
 }

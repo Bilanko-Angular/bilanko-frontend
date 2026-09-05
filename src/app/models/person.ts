@@ -5,4 +5,6 @@ export interface User {
   email?: string;
   password?: string;
   profilePicture?: string;
+  phoneNumber?: string;
+  companyName?: string;
 }
