@@ -212,4 +212,9 @@ export class Header {
     if (url.startsWith('/documents')) return 'Documents';
     return 'Accueil';
   }
+  onImageError(event: Event) {
+    console.error('Erreur de chargement image:', event);
+    console.log('URL tentée:', (event.target as HTMLImageElement).src);
+    this.profileImageError.set(true);
+  }
 }

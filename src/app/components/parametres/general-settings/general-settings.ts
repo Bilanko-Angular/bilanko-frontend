@@ -29,6 +29,7 @@ export class GeneralSettingsComponent implements OnInit {
     prenom: [''],
     telephone: [''],
     entreprise: [''],
+    email: ['', [Validators.required, Validators.email]]
   });
 
   readonly accountStats = computed(() => ({
@@ -46,6 +47,7 @@ export class GeneralSettingsComponent implements OnInit {
         prenom: user.subname ?? '',
         telephone: user.phoneNumber ?? '',
         entreprise: user.companyName ?? '',
+        email: user.email ?? '',
       });
       if (user.profilePictureUrl) {
         this.profileImage.set(user.profilePictureUrl);
