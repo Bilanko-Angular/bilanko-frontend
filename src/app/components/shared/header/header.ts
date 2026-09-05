@@ -8,7 +8,8 @@ import {
   ElementRef,
   HostListener,
   output,
-  viewChild  // ✅ AJOUTÉ
+  viewChild,  // ✅ AJOUTÉ
+  effect
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../../services/theme';
@@ -216,5 +217,12 @@ export class Header {
     console.error('Erreur de chargement image:', event);
     console.log('URL tentée:', (event.target as HTMLImageElement).src);
     this.profileImageError.set(true);
+  }
+
+  constructor() {
+    effect(() => {
+      this.userStore.user()?.profilePicture;
+      this.profileImageError.set(false);
+    });
   }
 }

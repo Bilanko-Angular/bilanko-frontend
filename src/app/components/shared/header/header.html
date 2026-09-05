@@ -72,14 +72,14 @@
     <!-- 👤 AVATAR -->
     <div class="bk-profile-wrapper" (click)="toggleProfile()">
       <div class="bk-avatar-wrapper">
-        <span class="bk-avatar">
-          @if (userStore.user()?.profilePicture && !profileImageError()) {
-            <img [src]="userStore.user()?.profilePicture" alt="Profile" (error)="profileImageError.set(true)">
-          } @else {
-            <span class="avatar-placeholder">
-              {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
-            </span>
-          }
+          <span class="bk-avatar">
+            @if (userStore.user()?.profilePicture && !profileImageError()) {
+              <img [src]="userStore.user()!.profilePicture" (error)="onImageError($event)">
+            } @else {
+              <span class="avatar-placeholder">
+                {{ (userStore.user()?.nom?.charAt(0) || '') + (userStore.user()?.subname?.charAt(0) || '') | uppercase }}
+              </span>
+            }
           <span class="bk-avatar__dot"></span>
         </span>
         <span class="bk-avatar__name">
