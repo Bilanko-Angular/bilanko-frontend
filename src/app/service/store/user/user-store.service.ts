@@ -1,5 +1,3 @@
-// src/app/service/store/user/user-store.service.ts
-
 import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { User, NotificationPreferences, AppearancePreferences } from '../../../models/person';
