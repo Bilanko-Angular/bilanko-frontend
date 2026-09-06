@@ -32,14 +32,15 @@ import { environment } from '../../../../../environments/environment';
     </div>
   `,
   styles: [`
-    .google-btn-wrapper {
-      /* Le wrapper définit la zone cliquable totale */
+    .google-btn-wrapper:hover button{
+      border:1px solid var(--color-primary);
     }
 
     .google-btn-overlay {
       opacity: 0.001; /* quasi invisible mais bien "affiché" pour Google */
       overflow: hidden;
       z-index: 1;
+      cursor:pointer;
     }
 
     .google-btn-overlay :global(iframe) {
@@ -52,6 +53,7 @@ import { environment } from '../../../../../environments/environment';
       position: relative;
       z-index: 0;
       pointer-events: none; /* les clics traversent jusqu'à l'overlay Google */
+      transition: all 0.3s ease-in;
     }
   `],
 })
