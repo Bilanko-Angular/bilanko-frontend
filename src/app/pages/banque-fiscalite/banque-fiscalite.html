@@ -1,348 +1,467 @@
-<!-- src/app/pages/banque-fiscalite/banque-fiscalite.html -->
-
 <app-template>
-  <div class="bk-page-header">
-    <div>
-      <h2 class="bk-page-title">{{ prefs.t().documentsTitle }}</h2>
-      <p class="bk-page-subtitle">{{ prefs.t().documentsSubtitle }}</p>
+  <div class="bk-shell">
+
+    <!-- ============================================================
+         EN-TÊTE HERO — propre à cette page, données en direct
+         ============================================================ -->
+    <div class="bk-hero">
+      <div class="bk-hero-decor" aria-hidden="true">
+        <span class="bk-hero-ring bk-hero-ring--a"></span>
+        <span class="bk-hero-ring bk-hero-ring--b"></span>
+        <span class="bk-hero-ring bk-hero-ring--c"></span>
+      </div>
+      <div class="bk-hero-content">
+        <span class="bk-hero-eyebrow">Dossiers professionnels</span>
+        <h2 class="bk-hero-title">Banque &amp; Fiscalité</h2>
+        <p class="bk-hero-subtitle">Un dossier bancaire ou une fiche fiscale prête à déposer, construite à partir de vos vraies données Bilanko.</p>
+
+        <div class="bk-hero-stats">
+          <div class="bk-hero-stat">
+            <span class="bk-hero-stat-label">Stock valorisé</span>
+            <strong class="bk-hero-stat-value">{{ stockDisponible().toLocaleString('fr-FR') }} FCFA</strong>
+          </div>
+          <span class="bk-hero-stat-sep"></span>
+          <div class="bk-hero-stat">
+            <span class="bk-hero-stat-label">CA sur {{ dureeHistorique() }} mois</span>
+            <strong class="bk-hero-stat-value">{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong>
+          </div>
+          <span class="bk-hero-stat-sep"></span>
+          <div class="bk-hero-stat">
+            <span class="bk-hero-stat-label">Progression</span>
+            <strong class="bk-hero-stat-value">Étape {{ etape() }} / 4</strong>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="bk-stepper">
-    <button class="bk-step" [class.actif]="etape() === 1" [class.fait]="etape() > 1" (click)="allerA(1)">
-      <span class="bk-step-num">1</span> {{ prefs.t().documentType }}
-    </button>
-    <span class="bk-step-line"></span>
-    <button class="bk-step" [class.actif]="etape() === 2" [class.fait]="etape() > 2" (click)="allerA(2)">
-      <span class="bk-step-num">2</span> {{ prefs.t().merchantIdentification }}
-    </button>
-    <span class="bk-step-line"></span>
-    <button class="bk-step" [class.actif]="etape() === 3" [class.fait]="etape() > 3" (click)="allerA(3)">
-      <span class="bk-step-num">3</span> {{ prefs.t().turnoverHistory }}
-    </button>
-    <span class="bk-step-line"></span>
-    <button class="bk-step" [class.actif]="etape() === 4" (click)="allerA(4)">
-      <span class="bk-step-num">4</span> {{ prefs.t().summary }}
-    </button>
-  </div>
+    <div class="bk-stepper">
+      <button class="bk-step" [class.actif]="etape() === 1" [class.fait]="etape() > 1" (click)="allerA(1)">
+        <span class="bk-step-num">1</span> Type de dossier
+      </button>
+      <span class="bk-step-line" [class.remplie]="etape() > 1"></span>
+      <button class="bk-step" [class.actif]="etape() === 2" [class.fait]="etape() > 2" (click)="allerA(2)">
+        <span class="bk-step-num">2</span> Informations
+      </button>
+      <span class="bk-step-line" [class.remplie]="etape() > 2"></span>
+      <button class="bk-step" [class.actif]="etape() === 3" [class.fait]="etape() > 3" (click)="allerA(3)">
+        <span class="bk-step-num">3</span> Chiffre d'affaires
+      </button>
+      <span class="bk-step-line" [class.remplie]="etape() > 3"></span>
+      <button class="bk-step" [class.actif]="etape() === 4" (click)="allerA(4)">
+        <span class="bk-step-num">4</span> Récapitulatif
+      </button>
+    </div>
 
-  <div class="bk-layout-split">
-    <div class="bk-card bk-step-card">
-      @switch (etape()) {
+    <div class="bk-layout-split">
+      <div class="bk-card bk-step-card bk-elevated">
+        @switch (etape()) {
 
-        @case (1) {
-          <h3>{{ prefs.t().documentType }}</h3>
-          <p class="bk-hint">{{ prefs.t().documentsSubtitle }}</p>
+          @case (1) {
+            <h3>Quel dossier voulez-vous préparer ?</h3>
+            <p class="bk-hint">Choisissez le type de dossier : le contenu généré s'adapte automatiquement aux exigences correspondantes.</p>
 
-          <div class="bk-type-grid">
-            <button type="button" class="bk-type-card" [class.selectionne]="typeDossier() === 'pret_bancaire'" (click)="choisirType('pret_bancaire')">
-              <span class="bk-type-icon bk-type-icon--pret">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="10" width="18" height="9" rx="1"></rect>
-                  <path d="M3 10 12 4l9 6"></path>
-                  <line x1="7" y1="13" x2="7" y2="16"></line>
-                  <line x1="12" y1="13" x2="12" y2="16"></line>
-                  <line x1="17" y1="13" x2="17" y2="16"></line>
-                </svg>
-              </span>
-              <span class="bk-type-badge bk-type-badge--optionnel">{{ prefs.t().optionalLabel }}</span>
-              <strong>{{ prefs.t().loanApplication }}</strong>
-              <span>{{ prefs.t().loanApplicationDesc }}</span>
-              @if (typeDossier() === 'pret_bancaire') { <span class="bk-type-check">{{ prefs.t().selected }}</span> }
-            </button>
-
-            <button type="button" class="bk-type-card" [class.selectionne]="typeDossier() === 'dsf_smt'" (click)="choisirType('dsf_smt')">
-              <span class="bk-type-icon bk-type-icon--dsf">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="8" y1="13" x2="16" y2="13"></line>
-                  <line x1="8" y1="17" x2="13" y2="17"></line>
-                </svg>
-              </span>
-              <span class="bk-type-badge bk-type-badge--obligatoire">{{ prefs.t().mandatoryLabel }}</span>
-              <strong>{{ prefs.t().taxDeclaration }}</strong>
-              <span>{{ prefs.t().taxDeclarationDesc }}</span>
-              @if (typeDossier() === 'dsf_smt') { <span class="bk-type-check">{{ prefs.t().selected }}</span> }
-            </button>
-          </div>
-
-          <div class="bk-form-actions">
-            <span></span>
-            <button class="btn btn-primary" [disabled]="!typeDossier()" (click)="etapeSuivante()">{{ prefs.t().continue }}</button>
-          </div>
-        }
-
-        @case (2) {
-          <h3>{{ prefs.t().merchantIdentification }}</h3>
-          <p class="bk-hint">{{ prefs.t().documentsSubtitle }}</p>
-
-          <div class="bk-field-grid">
-            <label>{{ prefs.t().businessName }}
-              <input type="text" [ngModel]="raisonSociale()" (ngModelChange)="raisonSociale.set($event)" placeholder="ex: Ets Mballa & Fils" />
-            </label>
-            <label>{{ prefs.t().businessActivity }}
-              <input type="text" [ngModel]="activite()" (ngModelChange)="activite.set($event)" placeholder="ex: Vente de matériel informatique" />
-            </label>
-            <label>{{ prefs.t().address }}
-              <input type="text" [ngModel]="adresse()" (ngModelChange)="adresse.set($event)" placeholder="ex: Marché Central, Yaoundé" />
-            </label>
-            <label>{{ prefs.t().niu }}
-              <input type="text" [ngModel]="niu()" (ngModelChange)="niu.set($event)" placeholder="ex: P012345678901Z" />
-            </label>
-            <label>{{ prefs.t().creationDate }}
-              <input type="date" [ngModel]="dateCreation()" (ngModelChange)="dateCreation.set($event)" />
-            </label>
-          </div>
-
-          @if (typeDossier() === 'pret_bancaire') {
-            <h4 class="bk-subheading">{{ prefs.t().capitalFinancing }}</h4>
-            <p class="bk-hint" style="margin-bottom: 0.75rem;">
-              {{ prefs.t().documentsSubtitle }}
-            </p>
-            <div class="bk-info-row">
-              <div class="bk-card bk-info-card">
-                <span>{{ prefs.t().stockAvailable }}</span>
-                <strong>{{ stockDisponible().toLocaleString('fr-FR') }} FCFA</strong>
-              </div>
-              <div class="bk-card bk-info-card bk-info-card--accent">
-                <span>{{ prefs.t().turnoverPeriod.replace('{months}', dureeHistorique().toString()) }}</span>
-                <strong>{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong>
-              </div>
-            </div>
-
-            <div class="bk-field-grid">
-              <label>{{ prefs.t().ownCapital }}
-                <input type="number" min="0" [ngModel]="capitalPropre()" (ngModelChange)="capitalPropre.set($event)" />
-              </label>
-              <label>{{ prefs.t().loanPurpose }}
-                <select [ngModel]="objetPret()" (ngModelChange)="objetPret.set($event)">
-                  <option value="" disabled>{{ prefs.t().loanPurpose }}</option>
-                  @for (o of objetsPret; track o) {
-                    <option [value]="o">{{ o }}</option>
-                  }
-                </select>
-              </label>
-              <label>{{ prefs.t().loanAmount }}
-                <input type="number" min="0" [ngModel]="montantDemande()" (ngModelChange)="montantDemande.set($event)" />
-              </label>
-              <label>{{ prefs.t().loanDuration }}
-                <input type="number" min="1" [ngModel]="dureeMois()" (ngModelChange)="dureeMois.set($event)" />
-              </label>
-              <label class="bk-field-full">{{ prefs.t().proposedGuarantees }} <span class="bk-optional">({{ prefs.t().optional }})</span>
-                <textarea rows="2" [ngModel]="garanties()" (ngModelChange)="garanties.set($event)" placeholder="ex: Nantissement du stock, caution d'un tiers..."></textarea>
-              </label>
-            </div>
-
-            <div class="bk-card bk-capacite-card" [class.bk-capacite-card--alerte]="montantDepasseCapacite()">
-              <div class="bk-capacite-row">
-                <span>{{ prefs.t().estimatedMonthlyRepayment }}</span>
-                <strong>{{ capaciteRemboursementMensuelle().toLocaleString('fr-FR') }} FCFA</strong>
-              </div>
-              <div class="bk-capacite-row">
-                <span>{{ prefs.t().indicativeMaxAmount.replace('{months}', dureeMois().toString()) }}</span>
-                <strong>{{ montantMaxIndicatif().toLocaleString('fr-FR') }} FCFA</strong>
-              </div>
-              <p class="bk-capacite-note">
-                {{ prefs.t().documentsSubtitle }}
-              </p>
-              @if (montantDepasseCapacite()) {
-                <p class="bk-warning-msg" style="margin: 0.6rem 0 0;">
-                  {{ prefs.t().noSalesWarning }}
-                </p>
-              }
-            </div>
-          }
-
-          @if (typeDossier() === 'dsf_smt') {
-            <h4 class="bk-subheading">{{ prefs.t().taxInformation }}</h4>
-            <div class="bk-field-grid">
-              <label>{{ prefs.t().taxRegime }}
-                <select [ngModel]="regimeFiscal()" (ngModelChange)="regimeFiscal.set($event)">
-                  <option value="" disabled>{{ prefs.t().taxRegime }}</option>
-                  @for (r of regimesFiscaux; track r.id) {
-                    <option [value]="r.id">{{ r.label }}</option>
-                  }
-                </select>
-              </label>
-              <label>{{ prefs.t().fiscalYear }}
-                <input type="text" [ngModel]="exerciceFiscal()" (ngModelChange)="exerciceFiscal.set($event)" placeholder="ex: 2026" />
-              </label>
-              <label>{{ prefs.t().taxOffice }}
-                <input type="text" [ngModel]="centreImpots()" (ngModelChange)="centreImpots.set($event)" placeholder="ex: CDI Yaoundé III" />
-              </label>
-            </div>
-          }
-
-          <div class="bk-form-actions">
-            <button class="btn btn-outline" (click)="etapePrecedente()">{{ prefs.t().back }}</button>
-            <button class="btn btn-primary" [disabled]="!peutContinuerEtape2()" (click)="etapeSuivante()">{{ prefs.t().continue }}</button>
-          </div>
-        }
-
-        @case (3) {
-          <h3>{{ prefs.t().turnoverHistory }}</h3>
-          <p class="bk-hint">{{ prefs.t().documentsSubtitle }}</p>
-
-          <div class="bk-format-group">
-            <label class="bk-format-option" [class.selectionne]="dureeHistorique() === 6">
-              <input type="radio" name="duree" [checked]="dureeHistorique() === 6" (change)="changerDureeHistorique(6)" />
-              6 {{ prefs.t().monthsWithoutSales.replace('{count}', '') }}
-            </label>
-            <label class="bk-format-option" [class.selectionne]="dureeHistorique() === 12">
-              <input type="radio" name="duree" [checked]="dureeHistorique() === 12" (change)="changerDureeHistorique(12)" />
-              12 {{ prefs.t().monthsWithoutSales.replace('{count}', '') }}
-            </label>
-          </div>
-
-          @if (!peutContinuerEtape3()) {
-            <p class="bk-error-msg">{{ prefs.t().noSalesWarning }}</p>
-          } @else if (moisSansVente() > 0) {
-            <p class="bk-warning-msg">{{ prefs.t().monthsWithoutSales.replace('{count}', moisSansVente().toString()) }}</p>
-          }
-
-          <div class="bk-historique-table">
-            <div class="bk-historique-head">
-              <span>{{ prefs.t().turnoverChart }}</span>
-              <span>{{ prefs.t().totalTurnover }}</span>
-              <span>{{ prefs.t().chargesExpenses }}</span>
-            </div>
-            @for (ligne of historique(); track ligne.mois) {
-              <div class="bk-historique-row">
-                <span class="bk-historique-mois">{{ ligne.mois }}</span>
-                <span class="bk-historique-bar-cell">
-                  <span class="bk-historique-bar" [style.width.%]="(ligne.chiffreAffaires / maxCA()) * 100"></span>
-                  <span class="bk-historique-valeur">{{ ligne.chiffreAffaires.toLocaleString('fr-FR') }} FCFA</span>
+            <div class="bk-type-grid">
+              <button type="button" class="bk-type-card" [class.selectionne]="typeDossier() === 'pret_bancaire'" (click)="choisirType('pret_bancaire')">
+                <span class="bk-type-icon bk-type-icon--pret" aria-hidden="true">
+                  <svg viewBox="0 0 48 48" width="26" height="26">
+                    <path d="M24 5 5 16.5h38L24 5Z" fill="currentColor"/>
+                    <rect x="9" y="19.5" width="4.2" height="16" rx="1.2" fill="currentColor"/>
+                    <rect x="19.2" y="19.5" width="4.2" height="16" rx="1.2" fill="currentColor"/>
+                    <rect x="29.4" y="19.5" width="4.2" height="16" rx="1.2" fill="currentColor"/>
+                    <rect x="39.6" y="19.5" width="0" height="0" fill="none"/>
+                    <rect x="38.6" y="19.5" width="0.4" height="16" fill="none"/>
+                    <rect x="5" y="37.5" width="38" height="4.5" rx="1.4" fill="currentColor"/>
+                  </svg>
                 </span>
-                <span class="bk-historique-valeur bk-historique-valeur--muted">{{ ligne.achatsCharges.toLocaleString('fr-FR') }} FCFA</span>
-              </div>
-            }
-          </div>
+                <span class="bk-type-badge bk-type-badge--optionnel">Optionnel</span>
+                <strong>Demande de prêt bancaire</strong>
+                <span>Pour obtenir un financement : capital, garanties, montant demandé, appuyé par votre chiffre d'affaires réel.</span>
+                @if (typeDossier() === 'pret_bancaire') {
+                  <span class="bk-type-check"><span class="bk-dot"></span> Sélectionné</span>
+                }
+              </button>
 
-          <div class="bk-historique-totaux">
-            <div><span>{{ prefs.t().totalTurnover }}</span><strong>{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong></div>
-            <div><span>{{ prefs.t().averageMonthlyTurnover }}</span><strong>{{ caMoyenMensuel().toLocaleString('fr-FR') }} FCFA</strong></div>
-            <div>
-              <span>{{ prefs.t().estimatedGrossMargin }}</span>
-              <strong>{{ margeBrute().toLocaleString('fr-FR') }} FCFA</strong>
-              <small class="bk-totaux-note">{{ prefs.t().grossMargin }}</small>
+              <button type="button" class="bk-type-card" [class.selectionne]="typeDossier() === 'dsf_smt'" (click)="choisirType('dsf_smt')">
+                <span class="bk-type-icon bk-type-icon--dsf" aria-hidden="true">
+                  <svg viewBox="0 0 48 48" width="26" height="26">
+                    <path d="M11 4h20l6 6v34l-4.5-3-4.5 3-4.5-3-4.5 3-4.5-3-3.5 2.4V10L11 4Z" fill="currentColor"/>
+                    <rect x="15.5" y="17" width="17" height="2.6" rx="1.3" fill="var(--color-surface)"/>
+                    <rect x="15.5" y="23.5" width="17" height="2.6" rx="1.3" fill="var(--color-surface)"/>
+                    <rect x="15.5" y="30" width="10.5" height="2.6" rx="1.3" fill="var(--color-surface)"/>
+                  </svg>
+                </span>
+                <span class="bk-type-badge bk-type-badge--obligatoire">Obligatoire</span>
+                <strong>Déclaration fiscale simplifiée</strong>
+                <span>Pour être en règle avec le fisc : votre chiffre d'affaires réel de la période, déclaré au centre des impôts.</span>
+                @if (typeDossier() === 'dsf_smt') {
+                  <span class="bk-type-check"><span class="bk-dot"></span> Sélectionné</span>
+                }
+              </button>
             </div>
-          </div>
 
-          <div class="bk-form-actions">
-            <button class="btn btn-outline" (click)="etapePrecedente()">{{ prefs.t().back }}</button>
-            <button class="btn btn-primary" [disabled]="!peutContinuerEtape3()" (click)="etapeSuivante()">{{ prefs.t().continue }}</button>
-          </div>
-        }
+            <div class="bk-form-actions">
+              <span></span>
+              <button class="btn btn-primary" [disabled]="!typeDossier()" (click)="etapeSuivante()">Continuer</button>
+            </div>
+          }
 
-        @case (4) {
-          <h3>{{ prefs.t().summary }}</h3>
-          <p class="bk-hint">{{ prefs.t().documentsSubtitle }}</p>
+          @case (2) {
+            <h3>Identification du commerçant</h3>
+            <p class="bk-hint">Ces informations figurent en en-tête de votre dossier.</p>
 
-          <div class="bk-recap-grid">
-            <div class="bk-recap-block">
-              <h5>{{ prefs.t().summaryMerchant }}</h5>
-              <p>{{ raisonSociale() }} — {{ activite() }}</p>
-              <p class="bk-muted">{{ adresse() }} · NIU {{ niu() }}</p>
+            <div class="bk-field-grid">
+              <label>Raison sociale / Nom du commerce
+                <input type="text" [ngModel]="raisonSociale()" (ngModelChange)="raisonSociale.set($event)" placeholder="ex: Ets Mballa & Fils" />
+              </label>
+              <label>Activité
+                <input type="text" [ngModel]="activite()" (ngModelChange)="activite.set($event)" placeholder="ex: Vente de matériel informatique" />
+              </label>
+              <label>Adresse
+                <input type="text" [ngModel]="adresse()" (ngModelChange)="adresse.set($event)" placeholder="ex: Marché Central, Yaoundé" />
+              </label>
+              <label>Numéro d'Identifiant Unique (NIU)
+                <input type="text" [ngModel]="niu()" (ngModelChange)="niu.set($event)" placeholder="ex: P012345678901Z" />
+              </label>
+              <label>Date de création de l'activité
+                <input type="date" [ngModel]="dateCreation()" (ngModelChange)="dateCreation.set($event)" />
+              </label>
             </div>
 
             @if (typeDossier() === 'pret_bancaire') {
-              <div class="bk-recap-block">
-                <h5>{{ prefs.t().summaryLoanRequest }}</h5>
-                <p class="bk-recap-montant">{{ montantDemande().toLocaleString('fr-FR') }} FCFA</p>
-                <p class="bk-muted">{{ objetPret() }} · {{ dureeMois() }} {{ prefs.t().monthsWithoutSales.replace('{count}', '') }}</p>
+              <h4 class="bk-subheading">Capital &amp; besoin de financement</h4>
+              <p class="bk-hint" style="margin-bottom: 0.75rem;">
+                Ces deux indicateurs sont calculés automatiquement depuis Bilanko et appuient votre dossier auprès de la banque.
+              </p>
+              <div class="bk-info-row">
+                <div class="bk-info-tile">
+                  <span class="bk-info-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                      <path d="M12 2 3 7v2h18V7l-9-5Z" fill="currentColor"/>
+                      <rect x="5" y="10" width="2.4" height="8" rx="0.8" fill="currentColor"/>
+                      <rect x="10.8" y="10" width="2.4" height="8" rx="0.8" fill="currentColor"/>
+                      <rect x="16.6" y="10" width="2.4" height="8" rx="0.8" fill="currentColor"/>
+                      <rect x="3" y="19.5" width="18" height="2.2" rx="1.1" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <span class="bk-info-label">Stock disponible (garantie potentielle)</span>
+                  <strong class="bk-info-value">{{ stockDisponible().toLocaleString('fr-FR') }} FCFA</strong>
+                </div>
+                <div class="bk-info-tile bk-info-tile--accent">
+                  <span class="bk-info-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                      <path d="M3 16 9 9l4 4 8-9" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M15 4h6v6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <span class="bk-info-label">Chiffre d'affaires sur {{ dureeHistorique() }} mois</span>
+                  <strong class="bk-info-value">{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong>
+                </div>
+              </div>
+
+              <div class="bk-field-grid">
+                <label>Banque destinataire
+                  <input type="text" [ngModel]="banque()" (ngModelChange)="banque.set($event)" placeholder="ex: Afriland First Bank" />
+                </label>
+                <label>Agence / centre d'affaires
+                  <input type="text" [ngModel]="agence()" (ngModelChange)="agence.set($event)" placeholder="ex: Agence Bonamoussadi" />
+                </label>
+                <label>Capital propre / apport personnel (FCFA)
+                  <input type="number" min="0" [ngModel]="capitalPropre()" (ngModelChange)="capitalPropre.set(normaliserNombre($event))" />
+                </label>
+                <label>Objet du prêt
+                  <select [ngModel]="objetPret()" (ngModelChange)="objetPret.set($event)">
+                    <option value="" disabled>Sélectionner un objet</option>
+                    @for (o of objetsPret; track o) {
+                      <option [value]="o">{{ o }}</option>
+                    }
+                  </select>
+                </label>
+                <label>Montant du prêt demandé (FCFA)
+                  <input type="number" min="0" [ngModel]="montantDemande()" (ngModelChange)="montantDemande.set(normaliserNombre($event))" />
+                </label>
+                <label>Durée souhaitée (mois)
+                  <input type="number" min="1" [ngModel]="dureeMois()" (ngModelChange)="dureeMois.set(normaliserNombre($event))" />
+                </label>
+                <label class="bk-field-full">Garanties proposées <span class="bk-optional">(optionnel)</span>
+                  <textarea rows="2" [ngModel]="garanties()" (ngModelChange)="garanties.set($event)" placeholder="ex: Nantissement du stock, caution d'un tiers... — laissez vide si aucune garantie n'est proposée"></textarea>
+                </label>
+              </div>
+
+              <!-- =========================================================
+                   SCORECARD — capacité d'emprunt, mise en scène visuelle
+                   ========================================================= -->
+              <div class="bk-score-card" [class.bk-score-card--alerte]="montantDepasseCapacite()">
+                <div class="bk-score-head">
+                  <span class="bk-score-badge">Estimation Bilanko</span>
+                  <h4 class="bk-score-title">Votre capacité d'emprunt en un coup d'œil</h4>
+                  <p class="bk-score-text">D'après votre chiffre d'affaires réel, voici jusqu'où vous pourriez aller sans mettre votre activité sous pression.</p>
+                </div>
+
+                <div class="bk-score-body">
+                  <div
+                    class="bk-gauge-ring"
+                    [class.bk-gauge-ring--alerte]="montantDepasseCapacite()"
+                    [attr.style]="'--pct: ' + (capaciteRemboursementMensuelle() > 0 ? (mensualiteEstimee() / capaciteRemboursementMensuelle()) * 100 : 0)"
+                  >
+                    <div class="bk-gauge-inner">
+                      <span class="bk-gauge-pct">{{ (capaciteRemboursementMensuelle() > 0 ? (mensualiteEstimee() / capaciteRemboursementMensuelle()) * 100 : 0).toFixed(0) }}%</span>
+                      <span class="bk-gauge-caption">du repère</span>
+                    </div>
+                  </div>
+
+                  <div class="bk-score-facts">
+                    <div class="bk-score-fact">
+                      <span>Revenu mensuel moyen</span>
+                      <strong>{{ caMoyenMensuel().toLocaleString('fr-FR') }} FCFA</strong>
+                    </div>
+                    <div class="bk-score-fact">
+                      <span>Vous pourriez rembourser</span>
+                      <strong>{{ capaciteRemboursementMensuelle().toLocaleString('fr-FR') }} FCFA / mois</strong>
+                    </div>
+                    <div class="bk-score-fact">
+                      <span>Emprunt total possible ≈</span>
+                      <strong>{{ montantMaxIndicatif().toLocaleString('fr-FR') }} FCFA</strong>
+                    </div>
+                  </div>
+                </div>
+
+                @if (montantDepasseCapacite()) {
+                  <p class="bk-score-verdict bk-score-verdict--alerte">
+                    <strong>Vigilance —</strong> votre demande dépasse ce repère. Réduire le montant, allonger la durée, ou attendre un peu plus d'historique peut renforcer votre dossier.
+                  </p>
+                } @else {
+                  <p class="bk-score-verdict bk-score-verdict--ok">
+                    <strong>Bon signal —</strong> votre demande reste dans ce repère.
+                  </p>
+                }
+
+                <p class="bk-score-footnote">Repère indicatif Bilanko (≈33% du chiffre d'affaires moyen) — pas un calcul bancaire officiel, chaque banque applique ses propres critères.</p>
               </div>
             }
 
             @if (typeDossier() === 'dsf_smt') {
-              <div class="bk-recap-block">
-                <h5>{{ prefs.t().summaryFiscalYear }}</h5>
-                <p class="bk-recap-montant">{{ exerciceFiscal() }}</p>
-                <p class="bk-muted">{{ centreImpots() }}</p>
+              <h4 class="bk-subheading">Informations fiscales et paiement</h4>
+              <p class="bk-hint bk-callout">Renseignez les éléments figurant sur votre avis, votre déclaration ou votre reçu de paiement. Bilanko ne détermine pas l'impôt dû et ce document doit être vérifié auprès de la DGI.</p>
+              <div class="bk-field-grid">
+                <label>Régime fiscal
+                  <select [ngModel]="regimeFiscal()" (ngModelChange)="regimeFiscal.set($event)">
+                    <option value="" disabled>Sélectionner un régime</option>
+                    @for (r of regimesFiscaux; track r.id) {
+                      <option [value]="r.id">{{ r.label }}</option>
+                    }
+                  </select>
+                </label>
+                <label>Exercice fiscal
+                  <input type="text" [ngModel]="exerciceFiscal()" (ngModelChange)="exerciceFiscal.set($event)" placeholder="ex: 2026" />
+                </label>
+                <label>Centre des impôts de rattachement
+                  <input type="text" [ngModel]="centreImpots()" (ngModelChange)="centreImpots.set($event)" placeholder="ex: CDI Yaoundé III" />
+                </label>
+                <label>Nature de l'impôt à payer
+                  <input type="text" [ngModel]="natureImpot()" (ngModelChange)="natureImpot.set($event)" placeholder="ex: TVA, patente, IRPP, acompte" />
+                </label>
+                <label>Période concernée
+                  <input type="text" [ngModel]="periodeDeclaration()" (ngModelChange)="periodeDeclaration.set($event)" placeholder="ex: août 2026 ou exercice 2026" />
+                </label>
+                <label>Montant de l'impôt (FCFA)
+                  <input type="number" min="0" [ngModel]="montantImpot()" (ngModelChange)="montantImpot.set(+$event)" />
+                </label>
+                <label>Date du paiement ou de l'échéance <span class="bk-optional">(si déjà connue)</span>
+                  <input type="date" [ngModel]="datePaiement()" (ngModelChange)="datePaiement.set($event)" />
+                </label>
+                <label>Mode de paiement <span class="bk-optional">(si déjà choisi)</span>
+                  <select [ngModel]="moyenPaiement()" (ngModelChange)="moyenPaiement.set($event)">
+                    <option value="" disabled>Sélectionner un mode</option>
+                    <option>Virement bancaire</option>
+                    <option>Mobile Money</option>
+                    <option>Carte bancaire</option>
+                    <option>Espèces au guichet</option>
+                    <option>Autre</option>
+                  </select>
+                </label>
+                <label>Référence de paiement / avis <span class="bk-optional">(si déjà disponible)</span>
+                  <input type="text" [ngModel]="referencePaiement()" (ngModelChange)="referencePaiement.set($event)" placeholder="Référence du reçu, de l'avis ou de la transaction" />
+                </label>
               </div>
             }
 
-            <div class="bk-recap-block">
-              <h5>{{ prefs.t().summaryTurnover }}</h5>
-              <p class="bk-recap-montant">{{ totalCA().toLocaleString('fr-FR') }} FCFA</p>
-              <p class="bk-muted">{{ prefs.t().totalCA }} {{ dureeHistorique() }} {{ prefs.t().monthsWithoutSales.replace('{count}', '') }}</p>
+            <div class="bk-form-actions">
+              <button class="btn btn-outline" (click)="etapePrecedente()">Retour</button>
+              <button class="btn btn-primary" [disabled]="!peutContinuerEtape2()" (click)="etapeSuivante()">Continuer</button>
+            </div>
+          }
+
+          @case (3) {
+            <h3>Chiffre d'affaires de l'activité</h3>
+            <p class="bk-hint">Calculé automatiquement à partir de vos ventes et charges enregistrées dans Bilanko — aucune saisie nécessaire.</p>
+
+            <div class="bk-format-group">
+              <label class="bk-format-option" [class.selectionne]="dureeHistorique() === 6">
+                <input type="radio" name="duree" [checked]="dureeHistorique() === 6" (change)="changerDureeHistorique(6)" />
+                6 derniers mois
+              </label>
+              <label class="bk-format-option" [class.selectionne]="dureeHistorique() === 12">
+                <input type="radio" name="duree" [checked]="dureeHistorique() === 12" (change)="changerDureeHistorique(12)" />
+                12 derniers mois
+              </label>
             </div>
 
-            <div class="bk-recap-block">
-              <h5>{{ prefs.t().summaryGrossMargin }}</h5>
-              <p class="bk-recap-montant">{{ margeBrute().toLocaleString('fr-FR') }} FCFA</p>
-              <p class="bk-muted">{{ prefs.t().grossMargin }}</p>
+            @if (!peutContinuerEtape3()) {
+              <p class="bk-error-msg">
+                Aucune vente enregistrée sur cette période. Enregistrez vos ventes dans le module <strong>Ventes</strong> avant de générer ce dossier.
+              </p>
+            } @else if (moisSansVente() > 0) {
+              <p class="bk-warning-msg">
+                {{ moisSansVente() }} mois sans aucune vente enregistrée sur la période — la moyenne ci-dessous peut être moins représentative tant que l'historique n'est pas complet.
+              </p>
+            }
+
+            <div class="bk-historique-table">
+              <div class="bk-historique-head">
+                <span>Mois</span>
+                <span>Chiffre d'affaires</span>
+                <span>Achats / Charges</span>
+              </div>
+              @for (ligne of historique(); track ligne.mois) {
+                <div class="bk-historique-row">
+                  <span class="bk-historique-mois">{{ ligne.mois }}</span>
+                  <span class="bk-historique-bar-cell">
+                    <span class="bk-historique-bar" [style.width.%]="(ligne.chiffreAffaires / maxCA()) * 100"></span>
+                    <span class="bk-historique-valeur">{{ ligne.chiffreAffaires.toLocaleString('fr-FR') }} FCFA</span>
+                  </span>
+                  <span class="bk-historique-valeur bk-historique-valeur--muted">{{ ligne.achatsCharges.toLocaleString('fr-FR') }} FCFA</span>
+                </div>
+              }
             </div>
+
+            <div class="bk-historique-totaux">
+              <div><span>CA total</span><strong>{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong></div>
+              <div><span>CA moyen / mois</span><strong>{{ caMoyenMensuel().toLocaleString('fr-FR') }} FCFA</strong></div>
+              <div>
+                <span>Marge brute estimée</span>
+                <strong>{{ margeBrute().toLocaleString('fr-FR') }} FCFA</strong>
+                <small class="bk-totaux-note">CA − charges enregistrées</small>
+              </div>
+            </div>
+
+            <div class="bk-form-actions">
+              <button class="btn btn-outline" (click)="etapePrecedente()">Retour</button>
+              <button class="btn btn-primary" [disabled]="!peutContinuerEtape3()" (click)="etapeSuivante()">Continuer</button>
+            </div>
+          }
+
+          @case (4) {
+            <h3>Récapitulatif</h3>
+            <p class="bk-hint">Vérifiez les informations avant de générer le PDF final.</p>
+
+            <div class="bk-recap-grid">
+              <div class="bk-recap-block">
+                <h5>Commerçant</h5>
+                <p>{{ raisonSociale() }} — {{ activite() }}</p>
+                <p class="bk-muted">{{ adresse() }} · NIU {{ niu() }}</p>
+              </div>
+
+              @if (typeDossier() === 'pret_bancaire') {
+                <div class="bk-recap-block">
+                  <h5>Prêt demandé</h5>
+                  <p class="bk-recap-montant">{{ montantDemande().toLocaleString('fr-FR') }} FCFA</p>
+                  <p class="bk-muted">{{ banque() }} · {{ agence() }}</p>
+                  <p class="bk-muted">{{ objetPret() }} · {{ dureeMois() }} mois</p>
+                </div>
+              }
+
+              @if (typeDossier() === 'dsf_smt') {
+                <div class="bk-recap-block">
+                  <h5>Paiement fiscal</h5>
+                  <p class="bk-recap-montant">{{ montantImpot().toLocaleString('fr-FR') }} FCFA</p>
+                  <p class="bk-muted">{{ natureImpot() }} · {{ periodeDeclaration() }}</p>
+                  <p class="bk-muted">{{ centreImpots() }} · Réf. {{ referencePaiement() }}</p>
+                </div>
+              }
+
+              <div class="bk-recap-block">
+                <h5>Chiffre d'affaires</h5>
+                <p class="bk-recap-montant">{{ totalCA().toLocaleString('fr-FR') }} FCFA</p>
+                <p class="bk-muted">Sur {{ dureeHistorique() }} mois</p>
+              </div>
+
+              <div class="bk-recap-block">
+                <h5>Marge brute estimée</h5>
+                <p class="bk-recap-montant">{{ margeBrute().toLocaleString('fr-FR') }} FCFA</p>
+                <p class="bk-muted">CA − charges enregistrées</p>
+              </div>
+            </div>
+
+            @if (typeDossier() === 'pret_bancaire') {
+              <div class="bk-pieces-card">
+                <h5>Avant de déposer votre dossier — pièces à préparer</h5>
+                <p class="bk-hint" style="margin-bottom: 0.75rem;">
+                  Cette checklist est pour vous uniquement : elle n'apparaît pas dans le PDF généré, qui reste un document formel destiné à la banque.
+                </p>
+                <ul class="bk-pieces-list">
+                  @for (piece of piecesAJoindre(); track piece) {
+                    <li>{{ piece }}</li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @if (erreurGeneration()) {
+              <p class="bk-error-msg">{{ erreurGeneration() }}</p>
+            }
+
+            <div class="bk-form-actions">
+              <button class="btn btn-outline" (click)="etapePrecedente()">Retour</button>
+              <button class="btn btn-primary" [disabled]="!peutGenerer() || genereEnCours()" (click)="genererDossier()">
+                @if (genereEnCours()) { Génération… } @else { Générer le dossier PDF }
+              </button>
+            </div>
+          }
+        }
+      </div>
+
+      <aside class="bk-card bk-summary-card bk-elevated">
+        <h4>Aperçu du dossier</h4>
+
+        <div class="bk-summary-row">
+          <span>Type</span>
+          <strong>
+            @if (typeDossier() === 'pret_bancaire') {
+              <span class="bk-pill bk-pill--vert">Prêt bancaire</span>
+            } @else if (typeDossier() === 'dsf_smt') {
+              <span class="bk-pill bk-pill--ocre">Déclaration fiscale</span>
+            } @else {
+              <span class="bk-pill bk-pill--muted">Non choisi</span>
+            }
+          </strong>
+        </div>
+
+        @if (typeDossier() === 'pret_bancaire') {
+          <div class="bk-summary-row">
+            <span>Montant demandé</span>
+            <strong>{{ montantDemande().toLocaleString('fr-FR') }} FCFA</strong>
           </div>
-
-          @if (typeDossier() === 'pret_bancaire') {
-            <div class="bk-pieces-card">
-              <h5>{{ prefs.t().documentsChecklist }}</h5>
-              <p class="bk-hint" style="margin-bottom: 0.75rem;">{{ prefs.t().checklistHint }}</p>
-              <ul class="bk-pieces-list">
-                @for (piece of piecesAJoindre(); track piece) {
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    {{ piece }}
-                  </li>
-                }
-              </ul>
-            </div>
-          }
-
-          @if (erreurGeneration()) {
-            <p class="bk-error-msg">{{ erreurGeneration() }}</p>
-          }
-
-          <div class="bk-form-actions">
-            <button class="btn btn-outline" (click)="etapePrecedente()">{{ prefs.t().back }}</button>
-            <button class="btn btn-primary" [disabled]="!peutGenerer() || genereEnCours()" (click)="genererDossier()">
-              @if (genereEnCours()) { {{ prefs.t().generating }} } @else { {{ prefs.t().generatePDF }} }
-            </button>
+          <div class="bk-summary-row">
+            <span>Stock disponible</span>
+            <strong>{{ stockDisponible().toLocaleString('fr-FR') }} FCFA</strong>
           </div>
         }
-      }
+
+        <div class="bk-summary-row">
+          <span>Période</span>
+          <strong>{{ dureeHistorique() }} mois</strong>
+        </div>
+
+        <div class="bk-summary-row">
+          <span>Chiffre d'affaires</span>
+          <strong>{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong>
+        </div>
+
+        <div class="bk-summary-row">
+          <span>Marge brute estimée</span>
+          <strong>{{ margeBrute().toLocaleString('fr-FR') }} FCFA</strong>
+        </div>
+      </aside>
     </div>
-
-    <aside class="bk-card bk-summary-card">
-      <h4>{{ prefs.t().summary }}</h4>
-
-      <div class="bk-summary-row">
-        <span>{{ prefs.t().documentType }}</span>
-        <strong>
-          @if (typeDossier() === 'pret_bancaire') { {{ prefs.t().loanApplication }} }
-          @else if (typeDossier() === 'dsf_smt') { {{ prefs.t().taxDeclaration }} }
-          @else { {{ prefs.t().documentType }} }
-        </strong>
-      </div>
-
-      @if (typeDossier() === 'pret_bancaire') {
-        <div class="bk-summary-row">
-          <span>{{ prefs.t().amountRequested }}</span>
-          <strong>{{ montantDemande().toLocaleString('fr-FR') }} FCFA</strong>
-        </div>
-        <div class="bk-summary-row">
-          <span>{{ prefs.t().stockAvailable }}</span>
-          <strong>{{ stockDisponible().toLocaleString('fr-FR') }} FCFA</strong>
-        </div>
-      }
-
-      <div class="bk-summary-row">
-        <span>{{ prefs.t().turnoverHistory }}</span>
-        <strong>{{ dureeHistorique() }} {{ prefs.t().monthsWithoutSales.replace('{count}', '') }}</strong>
-      </div>
-
-      <div class="bk-summary-row">
-        <span>{{ prefs.t().totalTurnover }}</span>
-        <strong>{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong>
-      </div>
-
-      <div class="bk-summary-row">
-        <span>{{ prefs.t().estimatedGrossMargin }}</span>
-        <strong>{{ margeBrute().toLocaleString('fr-FR') }} FCFA</strong>
-      </div>
-    </aside>
   </div>
 </app-template>

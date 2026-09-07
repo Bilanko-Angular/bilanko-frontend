@@ -6,12 +6,14 @@ export interface InfosCommercant {
   raisonSociale: string;
   activite: string;
   adresse: string;
-  niu: string; // Numéro d'Identifiant Unique — numéro fiscal délivré par la DGI
-  regimeFiscal?: RegimeFiscal; // uniquement pertinent pour la déclaration fiscale, pas pour un prêt
+  niu: string;
+  regimeFiscal?: RegimeFiscal;
   dateCreation: string;
 }
 
 export interface InfosPretBancaire {
+  banque: string;
+  agence: string;
   capitalPropre: number;
   objetPret: string;
   montantDemande: number;
@@ -22,7 +24,13 @@ export interface InfosPretBancaire {
 export interface InfosDsf {
   exerciceFiscal: string;
   centreImpots: string;
-  chiffreAffairesAnnuelEstime: number;
+  natureImpot: string;
+  periodeDeclaration: string;
+  montantImpot: number;
+  datePaiement: string;
+  moyenPaiement: string;
+  referencePaiement: string;
+  chiffreAffairesPeriode: number;
 }
 
 export interface LigneHistorique {
@@ -56,9 +64,7 @@ export const REGIMES_FISCAUX: { id: RegimeFiscal; label: string }[] = [
   { id: 'reel', label: 'Régime du Réel' },
 ];
 
-// Pièces physiques que le commerçant doit préparer lui-même — affichées
-// uniquement à l'écran (étape 4) comme checklist, jamais dans le PDF final :
-// la banque connaît déjà ses propres exigences documentaires.
+// Checklist affichée uniquement à l'écran (étape 4) — jamais dans le PDF.
 export const PIECES_A_JOINDRE: Record<TypeDossier, string[]> = {
   pret_bancaire: [
     "Carte Nationale d'Identité (CNI) du commerçant, en cours de validité",
