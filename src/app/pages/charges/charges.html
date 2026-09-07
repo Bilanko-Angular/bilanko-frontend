@@ -4,7 +4,7 @@
   <div class="bk-charges-page">
 
     <!-- =========================================================
-         EN-TÊTE AVEC BREADCRUMB
+         EN-TÊTE AVEC BREADCRUMB + ACTIONS
     ========================================================== -->
     <div class="page-header">
       <div class="header-text">
@@ -12,7 +12,31 @@
         <h1>{{ prefs.t().chargesManagement }}</h1>
         <p>{{ prefs.t().chargesManagementDesc }}</p>
       </div>
+
+      <!-- ACTIONS : Filtrer + Exporter + Ajouter -->
       <div class="header-actions">
+        <!-- FILTRER -->
+        <button class="btn btn-outline" (click)="toggleFilter()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          {{ prefs.t().filter }}
+          @if (hasActiveFilter()) {
+            <span class="filter-dot"></span>
+          }
+        </button>
+
+        <!-- EXPORTER -->
+        <button class="btn btn-outline" (click)="exporter()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          {{ prefs.t().export }}
+        </button>
+
+        <!-- AJOUTER -->
         <button class="btn btn-primary" (click)="openAdd()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z"/>
@@ -44,6 +68,56 @@
         }
       </div>
     </div>
+
+    <!-- =========================================================
+         FILTRE POPUP
+    ========================================================== -->
+    @if (filterOpen()) {
+      <div class="filter-overlay" (click)="toggleFilter()">
+        <div class="filter-popup" (click)="$event.stopPropagation()">
+          <div class="filter-popup__header">
+            <strong>Filtrer les charges</strong>
+            <button class="filter-popup__close" (click)="toggleFilter()">✕</button>
+          </div>
+
+          <!-- Période -->
+          <div class="filter-popup__group">
+            <label>{{ prefs.t().period }}</label>
+            <div class="filter-popup__options">
+              <button class="filter-popup__option" [class.active]="filterPeriod() === 'all'" (click)="setFilterPeriod('all')">
+                {{ prefs.t().allDates }}
+              </button>
+              <button class="filter-popup__option" [class.active]="filterPeriod() === 'today'" (click)="setFilterPeriod('today')">
+                {{ prefs.t().today }}
+              </button>
+              <button class="filter-popup__option" [class.active]="filterPeriod() === 'week'" (click)="setFilterPeriod('week')">
+                {{ prefs.t().thisWeek }}
+              </button>
+              <button class="filter-popup__option" [class.active]="filterPeriod() === 'month'" (click)="setFilterPeriod('month')">
+                {{ prefs.t().thisMonth }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Fournisseur -->
+          <div class="filter-popup__group">
+            <label>{{ prefs.t().supplier }}</label>
+            <select class="filter-popup__select" [(ngModel)]="filterSupplier">
+              <option value="">Tous les fournisseurs</option>
+              @for (fournisseur of fournisseurs(); track fournisseur) {
+                <option [value]="fournisseur">{{ fournisseur }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Actions -->
+          <div class="filter-popup__actions">
+            <button class="btn btn-outline btn-sm" (click)="resetFilter()">{{ prefs.t().reset }}</button>
+            <button class="btn btn-primary btn-sm" (click)="applyFilter()">{{ prefs.t().apply }}</button>
+          </div>
+        </div>
+      </div>
+    }
 
     <!-- =========================================================
          TABLEAU ET ÉTATS
