@@ -4,7 +4,7 @@
   @if (isSale()) {
     <div class="bk-form-grid">
       <div class="bk-form-group bk-form-group--full">
-        <label for="product">{{ prefs.t().product }} <span class="bk-required">*</span></label>
+        <label for="product">{{ prefs.t().product }}</label>
         <input id="product" formControlName="product" [placeholder]="prefs.t().productPlaceholder" />
         @if (form.get('product')?.touched && form.get('product')?.invalid) {
           <span class="bk-field-error">{{ prefs.t().product }} {{ prefs.t().requiredField }}</span>
@@ -12,7 +12,7 @@
       </div>
 
       <div class="bk-form-group">
-        <label for="quantity">{{ prefs.t().quantity }} <span class="bk-required">*</span></label>
+        <label for="quantity">{{ prefs.t().quantity }}</label>
         <input id="quantity" type="number" min="1" formControlName="quantity" />
         @if (form.get('quantity')?.touched && form.get('quantity')?.invalid) {
           <span class="bk-field-error">{{ prefs.t().invalidQuantity }}</span>
@@ -39,7 +39,7 @@
   @if (!isSale()) {
     <div class="bk-form-grid">
       <div class="bk-form-group bk-form-group--full">
-        <label for="label">{{ prefs.t().label }} <span class="bk-required">*</span></label>
+        <label for="label">{{ prefs.t().label }}</label>
         <input id="label" formControlName="label" [placeholder]="prefs.t().chargeLabelPlaceholder" />
         @if (form.get('label')?.touched && form.get('label')?.invalid) {
           <span class="bk-field-error">{{ prefs.t().label }} {{ prefs.t().requiredField }}</span>
@@ -47,7 +47,7 @@
       </div>
 
       <div class="bk-form-group">
-        <label for="amount">{{ prefs.t().amount }} ({{ prefs.t().fcfa }}) <span class="bk-required">*</span></label>
+        <label for="amount">{{ prefs.t().amount }} ({{ prefs.t().fcfa }})</label>
         <input id="amount" type="number" min="0" formControlName="amount" />
         @if (form.get('amount')?.touched && form.get('amount')?.invalid) {
           <span class="bk-field-error">{{ prefs.t().invalidAmount }}</span>
