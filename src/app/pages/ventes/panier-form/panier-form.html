@@ -3,11 +3,21 @@
   <div class="bk-form-grid">
     <div class="bk-form-group">
       <label>{{ prefs.t().client }}</label>
-      <input [(ngModel)]="customerName" name="customerName" [placeholder]="prefs.t().clientCashIfEmpty" />
+      <input
+        [ngModel]="customerName()"
+        (ngModelChange)="customerName.set($event)"
+        name="customerName"
+        [placeholder]="prefs.t().clientCashIfEmpty"
+      />
     </div>
     <div class="bk-form-group">
       <label>{{ prefs.t().date }}</label>
-      <input type="datetime-local" [(ngModel)]="saleDateTime" name="saleDateTime" />
+      <input
+        type="datetime-local"
+        [ngModel]="saleDateTime()"
+        (ngModelChange)="saleDateTime.set($event)"
+        name="saleDateTime"
+      />
     </div>
   </div>
 
@@ -40,7 +50,13 @@
     </div>
     <div class="bk-form-group bk-form-group--qty">
       <label>{{ prefs.t().quantity }}</label>
-      <input type="number" min="1" [(ngModel)]="selectedQuantity" name="qty" />
+      <input
+        type="number"
+        min="1"
+        [ngModel]="selectedQuantity()"
+        (ngModelChange)="selectedQuantity.set(+$event)"
+        name="qty"
+      />
     </div>
     <div class="bk-form-group bk-form-group--btn">
       <label class="bk-label-spacer">&nbsp;</label>

@@ -78,6 +78,7 @@ export interface TranslationSet {
   previous: string; next: string;
   saleDetails: string; chargeDetails: string;
   clientSalesTitle: string; total: string;  noSalesForClient: string;
+  backToSales: string; downloadInvoice: string; exportSalesPdf: string; searchSalesPlaceholder: string;
   filterByDate: string; allDates: string; page: string; pageOf: string; profilePhotoDesc: string; removePhoto: string; photoFormats: string;photoInvalidType: string;
   photoTooLarge: string; photoUpdated: string; photoRemoved: string;
   changePhoto: string; documentsTitle: string; documentsSubtitle: string; documentType: string;
@@ -199,6 +200,8 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     previous: 'Précédent', next: 'Suivant',
     saleDetails: 'Détails de la vente', chargeDetails: 'Détails de la charge',
     clientSalesTitle: 'Ventes de', total: 'Total', noSalesForClient: 'Aucune vente trouvée.',
+    backToSales: 'Retour aux ventes', downloadInvoice: 'Télécharger la facture',
+    exportSalesPdf: 'Exporter PDF', searchSalesPlaceholder: 'Rechercher un client, un produit…',
     filterByDate: 'Filtrer par date', allDates: 'Toutes les dates',
     page: 'Page', pageOf: 'sur', profilePhotoDesc:
   'Ajoutez une photo pour personnaliser votre profil.',removePhoto:'Supprimer la photo',photoFormats:
@@ -371,7 +374,10 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     preferencesSaved: 'Preferences saved successfully!',
     previous: 'Previous', next: 'Next',
     saleDetails: 'Sale details', chargeDetails: 'Expense details',
-    clientSalesTitle: 'Sales from', total: 'Total', noSalesForClient: 'No sales found.', filterByDate: 'Filter by date', allDates: 'All dates',
+    clientSalesTitle: 'Sales from', total: 'Total', noSalesForClient: 'No sales found.',
+    backToSales: 'Back to sales', downloadInvoice: 'Download invoice',
+    exportSalesPdf: 'Export PDF', searchSalesPlaceholder: 'Search a client, a product…',
+    filterByDate: 'Filter by date', allDates: 'All dates',
     page: 'Page', pageOf: 'of', profilePhotoDesc:
   'Add a photo to personalize your profile.',removePhoto:'Remove photo',photoFormats:
   'JPG, PNG or WEBP — 5 MB maximum',photoInvalidType:'Invalid format. Use JPG, PNG or WEBP.',photoTooLarge:'The photo must not exceed 5 MB.',photoUpdated:'Profile photo updated.',
@@ -541,7 +547,10 @@ const TRANSLATIONS: Record<BilankoLanguage, TranslationSet> = {
     preferencesSaved: '¡Preferencias guardadas con éxito!',
     previous: 'Anterior', next: 'Siguiente',
     saleDetails: 'Detalles de la venta', chargeDetails: 'Detalles del gasto',
-    clientSalesTitle: 'Ventas de', total: 'Total', noSalesForClient: 'No se encontraron ventas.',filterByDate: 'Filtrar por fecha', allDates: 'Todas las fechas',
+    clientSalesTitle: 'Ventas de', total: 'Total', noSalesForClient: 'No se encontraron ventas.',
+    backToSales: 'Volver a ventas', downloadInvoice: 'Descargar factura',
+    exportSalesPdf: 'Exportar PDF', searchSalesPlaceholder: 'Buscar un cliente, un producto…',
+    filterByDate: 'Filtrar por fecha', allDates: 'Todas las fechas',
     page: 'Página', pageOf: 'de', profilePhotoDesc:
   'Añade una foto para personalizar tu perfil.',removePhoto:'Eliminar foto',photoFormats:
   'JPG, PNG o WEBP — máximo 5 MB',photoInvalidType:'Formato no válido. Utiliza JPG, PNG o WEBP.',
