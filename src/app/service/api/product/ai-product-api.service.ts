@@ -6,7 +6,7 @@ import { ProductDescriptionClean } from '../../../models/DTO/AiProductDto';
   providedIn: 'root',
 })
 export class AiProductApiService {
-  private readonly basePath = '/api/ai/products';
+  private readonly basePath = '/ai/products';
 
   /**
    * Envoie une image au backend et reçoit les informations pré-remplies du produit.
