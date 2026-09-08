@@ -10,7 +10,7 @@ import { Parametres } from './pages/parametres/parametres';
 import { BanqueFiscalite } from './pages/banque-fiscalite/banque-fiscalite';
 import { Landing } from './pages/landing/landing';
 import { VenteDetail } from './pages/ventes/vente-detail/vente-detail';
-import {CatalogueStocks} from './refractor/catalogue-stocks/catalogue-stocks';
+import {CatalogueStocks} from './pages/catalogue-stocks/catalogue-stocks';
 import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [

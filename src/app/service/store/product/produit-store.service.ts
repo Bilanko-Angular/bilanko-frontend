@@ -13,6 +13,8 @@ export class ProduitStoreService {
   private readonly productApi = new ProductApiService(); // ou inject() si tu restes en DI standard
 
   readonly produits = signal<Produit[]>([]);
+  /** Catalogue complet pour le panier de vente (indépendant de la pagination catalogue) */
+  readonly catalogueVente = signal<Produit[]>([]);
   readonly isLoading = signal(false);
   readonly error = signal<string | null>(null);
   readonly totalElements = signal(0);
@@ -20,6 +22,16 @@ export class ProduitStoreService {
   readonly pageCourante = signal(0); // 0-indexée, alignée sur Spring Data
 
   private dernierParams: RechercheParams = {};
+
+  /** Charge tous les produits de l'utilisateur pour le sélecteur de vente */
+  async loadCatalogueVente(): Promise<void> {
+    try {
+      this.catalogueVente.set(await this.productApi.getMine());
+    } catch (e) {
+      console.error('Erreur chargement catalogue vente :', e);
+      this.catalogueVente.set([]);
+    }
+  }
 
   async rechercher(params: RechercheParams): Promise<void> {
     this.dernierParams = params;
