@@ -1,0 +1,58 @@
+<div class="panel charges-panel">
+  <div class="panel-head">
+    <h2>Répartition des charges</h2>
+    <a routerLink="/charges" class="link">Détails</a>
+  </div>
+
+  @if (segments().length === 0) {
+    <p class="bk-charges-donut__status">Aucune charge enregistrée.</p>
+  } @else {
+    <div class="donut-container" id="donutContainer">
+      @if (tooltip(); as tip) {
+        <div class="supplier-tooltip active" id="supplierTooltip">{{ tip }}</div>
+      }
+
+      <svg class="donut-svg" viewBox="0 0 160 160">
+        @for (segment of segments(); track segment.supplier) {
+          <circle
+            class="donut-segment"
+            cx="80"
+            cy="80"
+            [attr.r]="radius"
+            [attr.stroke]="segment.color"
+            [attr.stroke-dasharray]="segment.dasharray"
+            [attr.stroke-dashoffset]="segment.dashoffset"
+            (mouseenter)="showTooltip(segment)"
+            (mouseleave)="hideTooltip()"
+          />
+        }
+      </svg>
+
+      <div class="donut-center-info">
+        <div class="donut-center-amount">
+          {{ totalCharges() | number: '1.0-0' : 'fr-FR' }} FCFA
+        </div>
+        <div class="donut-center-badge">Fournisseurs</div>
+      </div>
+    </div>
+
+    <div class="supplier-charges-list">
+      @for (segment of segments(); track segment.supplier) {
+        <div class="supplier-item">
+          <div
+            class="supplier-rect"
+            [style.background-color]="segment.color"
+            [style.border]="segment.color === '#D1FAE5' ? '1px solid #A7F3D0' : null"
+          ></div>
+          <div class="supplier-info">
+            <div class="supplier-name">{{ segment.supplier }}</div>
+            <div class="supplier-desc">{{ segment.frequency }}</div>
+          </div>
+          <div class="supplier-amount">
+            {{ segment.amount | number: '1.0-0' : 'fr-FR' }} FCFA
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

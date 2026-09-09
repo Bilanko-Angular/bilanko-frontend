@@ -3,42 +3,47 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  inject
+  inject,
 } from '@angular/core';
-import { DecimalPipe, CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Template } from '../../components/shared/template/template';
-import { SalesService } from '../../services/sales.service';
-import { ChargesService } from '../../services/charges.service';
+import { KpiRowComponent } from '../../components/accueil/kpi-row.component/kpi-row.component';
+import { ActivityChartComponent } from '../../components/accueil/activity-chart.component/activity-chart.component';
+import { SalesTableComponent } from '../../components/accueil/sale-table.component/sale-table.component';
+import { StockAlertsComponent } from '../../components/accueil/stock-alert.component/stock-alert.component';
+import { ChargesDonutComponent } from '../../components/accueil/charges-donut.component/charges-donut.component';
+import { UserStoreService } from '../../service/store/user/user-store.service';
 import { PreferencesService } from '../../services/preferences';
-import { EvolutionChart } from '../../components/shared/evolution-chart/evolution-chart';
 
 @Component({
   selector: 'app-acceuil',
   standalone: true,
-  imports: [Template, CurrencyPipe, RouterLink, EvolutionChart],
+  imports: [
+    Template,
+    RouterLink,
+    KpiRowComponent,
+    ActivityChartComponent,
+    SalesTableComponent,
+    StockAlertsComponent,
+    ChargesDonutComponent,
+  ],
   templateUrl: './acceuil.html',
   styleUrls: ['./acceuil.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Acceuil {
-  private readonly salesService = inject(SalesService);
-  private readonly chargesService = inject(ChargesService);
+  private readonly userStore = inject(UserStoreService);
   protected readonly prefs = inject(PreferencesService);
 
-  readonly sales = this.salesService.sales;
-  readonly charges = this.chargesService.charges;
+  protected readonly firstName = computed(() => {
+    const nom = this.userStore.user()?.nom?.trim();
+    return nom || 'marchand';
+  });
 
-  readonly chiffreAffaires = computed(() =>
-    this.sales().reduce((total, vente) => total + vente.totalAmount, 0)
+  protected readonly todayLabel = computed(() =>
+    new Date().toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+    })
   );
-
-  readonly totalCharges = computed(() =>
-    this.charges().reduce((total, charge) => total + charge.amount, 0)
-  );
-
-  readonly marge = computed(() => this.chiffreAffaires() - this.totalCharges());
-  readonly nombreVentes = computed(() => this.sales().length);
-  readonly dernieresVentes = computed(() => this.sales().slice(0, 5));
-  readonly dernieresCharges = computed(() => this.charges().slice(0, 5));
 }

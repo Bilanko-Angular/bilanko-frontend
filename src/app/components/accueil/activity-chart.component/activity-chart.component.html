@@ -1,0 +1,108 @@
+<div class="panel activity-graph-panel">
+  <div class="panel-head">
+    <h2>Évolution de l'activité</h2>
+    <div class="period-picker">
+      <div class="date-input-group">
+        <label for="activity-date-start">Du</label>
+        <input
+          id="activity-date-start"
+          type="date"
+          [value]="overviewStore.filterFrom() ?? ''"
+          (change)="setPeriod($any($event.target).value, overviewStore.filterTo() ?? '')"
+        />
+      </div>
+      <span class="date-separator">au</span>
+      <div class="date-input-group">
+        <label for="activity-date-end">Au</label>
+        <input
+          id="activity-date-end"
+          type="date"
+          [value]="overviewStore.filterTo() ?? ''"
+          (change)="setPeriod(overviewStore.filterFrom() ?? '', $any($event.target).value)"
+        />
+      </div>
+    </div>
+  </div>
+
+  @if (chart(); as c) {
+    <div class="activity-chart-container">
+      <svg
+        class="activity-chart-svg"
+        [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="gradCA" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#05DF72" stop-opacity="0.45" />
+            <stop offset="100%" stop-color="#05DF72" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="gradMarge" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#065F46" stop-opacity="0.4" />
+            <stop offset="100%" stop-color="#065F46" stop-opacity="0.05" />
+          </linearGradient>
+          <linearGradient id="gradCharges" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#DC2626" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#DC2626" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+
+        <g stroke="#E2EFE9" stroke-width="1">
+          @for (tick of c.yTicks; track tick.value) {
+            <line
+              [attr.x1]="60"
+              [attr.x2]="680"
+              [attr.y1]="tick.y"
+              [attr.y2]="tick.y"
+              attr.stroke="#E2EFE9"
+              [attr.stroke-width]="tick.value === 0 ? 1.5 : 1"
+              [style.stroke]="tick.value === 0 ? '#83A393' : undefined"
+            />
+            <text [attr.x]="50" [attr.y]="tick.y + 4" text-anchor="end" font-size="11" fill="#526E60">{{ tick.label }}</text>
+          }
+        </g>
+
+        <g stroke="#E2EFE9" stroke-width="1">
+          @for (axis of c.xTicks; track axis.label) {
+            <line [attr.x1]="axis.x" [attr.x2]="axis.x" [attr.y1]="c.plotTop" [attr.y2]="c.plotBottom" />
+            <text [attr.x]="axis.x" [attr.y]="316" [attr.text-anchor]="axis.anchor" font-size="10.5" fill="#526E60">{{ axis.label }}</text>
+          }
+        </g>
+
+        <path [attr.d]="c.revenue.area" fill="url(#gradCA)" />
+        <path [attr.d]="c.margin.area" fill="url(#gradMarge)" />
+        <path [attr.d]="c.charges.area" fill="url(#gradCharges)" />
+
+        <path [attr.d]="c.revenue.line" fill="none" stroke="#05DF72" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path [attr.d]="c.margin.line" fill="none" stroke="#065F46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        <path [attr.d]="c.charges.line" fill="none" stroke="#DC2626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+        @for (dot of c.revenue.dots; track $index) {
+          <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#05DF72" stroke-width="2.5" />
+        }
+        @for (dot of c.margin.dots; track $index) {
+          <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#065F46" stroke-width="2.5" />
+        }
+        @for (dot of c.charges.dots; track $index) {
+          <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2.5" />
+        }
+      </svg>
+    </div>
+
+    <div class="chart-legend">
+      <div class="legend-item">
+        <span class="legend-box ca"></span>
+        Chiffre d'affaires
+      </div>
+      <div class="legend-item">
+        <span class="legend-box marge"></span>
+        Marge
+      </div>
+      <div class="legend-item">
+        <span class="legend-box charges"></span>
+        Charges
+      </div>
+    </div>
+  } @else {
+    <p class="bk-activity-chart__empty">Aucune donnée sur cette période.</p>
+  }
+</div>
