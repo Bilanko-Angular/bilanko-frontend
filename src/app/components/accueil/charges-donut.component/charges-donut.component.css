@@ -1,64 +1,152 @@
-.bk-charges-donut h3 {
-  margin-bottom: 12px;
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
+.panel-head h2 { font-size: 15px; margin: 0; font-weight: 700; color: var(--color-text); }
+.panel-head .link { font-size: 13px; color: var(--color-primary-active); font-weight: var(--font-weight-medium); cursor: pointer; text-decoration: none; }
+.panel-head .link:hover { text-decoration: underline; }
 
 .bk-charges-donut__status {
   color: var(--color-text-muted);
   padding: 24px 0;
   text-align: center;
+  margin: 0;
 }
 
-.bk-charges-donut__body {
+/* ====================== Section Charges / Fournisseurs ====================== */
+.charges-panel {
+  background: #FFFFFF;
   display: flex;
-  align-items: center;
-  gap: 24px;
+  flex-direction: column;
 }
 
-.bk-charges-donut__svg {
-  width: 140px;
-  height: 140px;
-  flex-shrink: 0;
+/* Donut Chart Container */
+.donut-container {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  margin: 10px auto 18px auto;
+}
+.donut-svg {
+  width: 100%;
+  height: 100%;
   transform: rotate(-90deg);
 }
-
-.bk-charges-donut__track {
+.donut-segment {
   fill: none;
-  stroke: var(--color-border);
-  stroke-width: 18;
+  stroke-width: 28;
+  cursor: pointer;
+  transition: opacity 0.2s ease, stroke-width 0.2s ease;
+}
+.donut-segment:hover {
+  opacity: 0.85;
+  stroke-width: 31;
 }
 
-.bk-charges-donut__segment {
-  fill: none;
-  stroke-width: 18;
-  transition: stroke-dashoffset 0.3s ease;
+/* Center total info */
+.donut-center-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+.donut-center-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.1;
+}
+.donut-center-badge {
+  display: inline-block;
+  margin-top: 4px;
+  background: var(--color-primary-subtle);
+  color: var(--color-positive);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
-.bk-charges-donut__total {
-  transform: rotate(90deg);
-  transform-origin: center;
-  font-weight: var(--font-weight-bold);
-  font-size: 14px;
-  fill: var(--color-text);
+/* Tooltip Popup survol donut */
+.supplier-tooltip {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: #FFFFFF;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.supplier-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px 4px 0 4px;
+  border-style: solid;
+  border-color: #111827 transparent transparent transparent;
+}
+.donut-container:hover .supplier-tooltip.active {
+  opacity: 1;
+  visibility: visible;
 }
 
-.bk-charges-donut__legend {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 0.85rem;
+/* Liste des Charges par Fournisseurs */
+.supplier-charges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-
-.bk-charges-donut__legend li {
+.supplier-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 0;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: var(--radius-base);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 }
-
-.bk-charges-donut__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
+.supplier-rect {
+  width: 14px;
+  height: 34px;
+  border-radius: 3px;
   flex-shrink: 0;
+}
+.supplier-info {
+  flex: 1;
+  min-width: 0;
+}
+.supplier-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+.supplier-desc {
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+.supplier-amount {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: right;
+  font-feature-settings: var(--font-feature-tabular);
+  white-space: nowrap;
 }

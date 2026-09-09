@@ -1,10 +1,83 @@
 <!-- src/app/pages/acceuil/acceuil.html -->
 <app-template>
-  <div class="bk-dashboard">
-    <app-kpi-row class="bk-dashboard__kpis" />
-    <app-activity-chart class="bk-dashboard__chart bk-panel" />
-    <app-sales-table class="bk-dashboard__sales bk-panel" />
-    <app-stock-alerts class="bk-dashboard__stock bk-panel" />
-    <app-charges-donut class="bk-dashboard__donut bk-panel" />
-  </div>
+  <main class="main">
+    <div class="page-heading">
+      <h1>Bonjour {{ firstName() }}</h1>
+      <p>Voici l'activité de ta boutique aujourd'hui, {{ todayLabel() }}.</p>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+      <a routerLink="/ventes" class="qa-card primary">
+        <div class="qa-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+          </svg>
+        </div>
+        <div class="qa-text">
+          <div class="qa-title">{{ prefs.t().addSale }}</div>
+          <div class="qa-sub">{{ prefs.t().addSaleDesc }}</div>
+        </div>
+      </a>
+
+      <a routerLink="/charges" class="qa-card">
+        <div class="qa-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="6" width="20" height="13" rx="2"/>
+            <path d="M2 10h20"/>
+          </svg>
+        </div>
+        <div class="qa-text">
+          <div class="qa-title">{{ prefs.t().addCharge }}</div>
+          <div class="qa-sub">{{ prefs.t().addChargeDesc }}</div>
+        </div>
+        <div class="qa-arrow" aria-hidden="true">→</div>
+      </a>
+
+      <a routerLink="/catalogue" class="qa-card">
+        <div class="qa-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 8l-9-5-9 5 9 5 9-5z"/>
+            <path d="M3 8v8l9 5 9-5V8"/>
+            <path d="M12 13v8"/>
+          </svg>
+        </div>
+        <div class="qa-text">
+          <div class="qa-title">{{ prefs.t().productManagement }}</div>
+          <div class="qa-sub">{{ prefs.t().productManagementDesc }}</div>
+        </div>
+        <div class="qa-arrow" aria-hidden="true">→</div>
+      </a>
+
+      <a routerLink="/banque-fiscalite" class="qa-card">
+        <div class="qa-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+          </svg>
+        </div>
+        <div class="qa-text">
+          <div class="qa-title">{{ prefs.t().documents }}</div>
+          <div class="qa-sub">{{ prefs.t().documentsDesc }}</div>
+        </div>
+        <div class="qa-arrow" aria-hidden="true">→</div>
+      </a>
+    </div>
+
+    <!-- KPI ROW -->
+    <app-kpi-row></app-kpi-row>
+
+    <!-- MAIN DASHBOARD GRID -->
+    <div class="dashboard-grid">
+      <div class="left-column">
+        <app-activity-chart></app-activity-chart>
+        <app-sales-table></app-sales-table>
+      </div>
+      <div class="right-column">
+        <app-stock-alerts></app-stock-alerts>
+        <app-charges-donut></app-charges-donut>
+      </div>
+    </div>
+  </main>
 </app-template>

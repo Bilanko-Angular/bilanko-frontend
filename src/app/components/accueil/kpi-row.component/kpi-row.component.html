@@ -1,22 +1,30 @@
-<div class="bk-kpi-row">
+<div class="kpi-row">
   @for (kpi of kpis(); track kpi.label) {
-    <div class="bk-kpi-card">
-      <span class="bk-kpi-card__label">{{ kpi.label }}</span>
-      <span class="bk-kpi-card__value">
+    <div class="kpi-card">
+      <div class="kpi-label">{{ kpi.label }}</div>
+      <div
+        class="kpi-value"
+        [style.color]="kpi.tone === 'negative' ? 'var(--color-negative)' : (kpi.tone === 'positive' ? 'var(--color-positive)' : null)"
+      >
         @if (kpi.format === 'currency') {
           {{ kpi.value | number: '1.0-0' : 'fr-FR' }} FCFA
         } @else {
           {{ kpi.value }}
+          <span style="font-size:14px; font-weight:var(--font-weight-medium); color:var(--color-text-muted);">Ventes</span>
         }
-      </span>
+      </div>
       @if (kpi.trend) {
-        <span
-          class="bk-kpi-card__trend"
-          [class.bk-kpi-card__trend--up]="kpi.trend.direction === 'up'"
-          [class.bk-kpi-card__trend--down]="kpi.trend.direction === 'down'"
+        <div
+          class="kpi-trend"
+          [class.up]="kpi.trend.direction === 'up'"
+          [class.down]="kpi.trend.direction === 'down'"
         >
-          {{ kpi.trend.direction === 'up' ? '↑' : '↓' }} {{ kpi.trend.percent | number: '1.1-1' }}% vs période précédente
-        </span>
+          {{ kpi.trend.direction === 'up' ? '↑' : '↓' }}
+          {{ kpi.trend.percent | number: '1.1-1' : 'fr-FR' }}%
+          <span class="muted">vs période précédente</span>
+        </div>
+      } @else {
+        <div class="kpi-trend"><span class="muted">vs hier</span></div>
       }
     </div>
   }

@@ -16,6 +16,7 @@ interface KpiDef {
   value: number;
   trend: KpiTrend | null;
   format: 'currency' | 'count';
+  tone?: 'positive' | 'negative';
 }
 
 @Component({
@@ -80,10 +81,32 @@ export class KpiRowComponent {
     const s = this.overviewStore.summary();
     const p = this.previousSummary();
     return [
-      { label: "Chiffre d'affaires", value: s?.revenue ?? 0, trend: this.trend(s?.revenue, p?.revenue), format: 'currency' },
-      { label: 'Charges', value: s?.totalCharges ?? 0, trend: this.trend(s?.totalCharges, p?.totalCharges), format: 'currency' },
-      { label: 'Marge', value: s?.grossMargin ?? 0, trend: this.trend(s?.grossMargin, p?.grossMargin), format: 'currency' },
-      { label: 'Ventes', value: s?.salesCount ?? 0, trend: this.trend(s?.salesCount, p?.salesCount), format: 'count' },
+      {
+        label: "Chiffre d'affaires",
+        value: s?.revenue ?? 0,
+        trend: this.trend(s?.revenue, p?.revenue),
+        format: 'currency',
+      },
+      {
+        label: 'Charges',
+        value: s?.totalCharges ?? 0,
+        trend: this.trend(s?.totalCharges, p?.totalCharges),
+        format: 'currency',
+        tone: 'negative',
+      },
+      {
+        label: 'Marge simplifiée',
+        value: s?.grossMargin ?? 0,
+        trend: this.trend(s?.grossMargin, p?.grossMargin),
+        format: 'currency',
+        tone: 'positive',
+      },
+      {
+        label: 'Nombre de ventes',
+        value: s?.salesCount ?? 0,
+        trend: this.trend(s?.salesCount, p?.salesCount),
+        format: 'count',
+      },
     ];
   });
 }

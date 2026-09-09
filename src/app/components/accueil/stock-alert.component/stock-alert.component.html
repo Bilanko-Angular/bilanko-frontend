@@ -1,26 +1,27 @@
-<div class="bk-stock-alerts">
-  <h3>Alertes de stock</h3>
+<div class="panel">
+  <div class="panel-head">
+    <h2>Alertes de stock</h2>
+    <a routerLink="/catalogue" class="link">Tout voir</a>
+  </div>
 
-  @if (stock(); as s) {
-    <div class="bk-stock-alerts__summary">
-      <span class="bk-stock-alerts__badge bk-stock-alerts__badge--low">{{ s.lowStockCount }} en stock bas</span>
-      <span class="bk-stock-alerts__badge bk-stock-alerts__badge--out">{{ s.outOfStockCount }} en rupture</span>
-    </div>
-  }
-
-  @if (produitStore.isLoading()) {
+  @if (isLoading()) {
     <p class="bk-stock-alerts__status">Chargement…</p>
-  } @else if (produitStore.produits().length === 0) {
+  } @else if (!hasAlerts()) {
     <p class="bk-stock-alerts__status">Aucun produit en alerte.</p>
   } @else {
-    <ul class="bk-stock-alerts__list">
-      <!-- ⚠️ produit.name / produit.stock : à vérifier contre l'interface Produit réelle, non fournie -->
-      @for (produit of produitStore.produits(); track produit.id) {
-        <li class="bk-stock-alerts__item">
-          <span>{{ produit.nom }}</span>
-          <span class="bk-stock-alerts__qty">{{ produit.quantiteStock }} restant(s)</span>
-        </li>
-      }
-    </ul>
+    @for (alert of alerts(); track alert.id) {
+      <div class="alert-row">
+        <span
+          class="alert-dot"
+          [class.low]="alert.severity === 'low'"
+          [class.mid]="alert.severity === 'mid'"
+        ></span>
+        <div class="alert-text">
+          <div class="name">{{ alert.name }}</div>
+          <div class="sub">{{ alert.subtitle }}</div>
+        </div>
+        <div class="alert-qty">{{ alert.qty }} restant{{ alert.qty > 1 ? 's' : '' }}</div>
+      </div>
+    }
   }
 </div>

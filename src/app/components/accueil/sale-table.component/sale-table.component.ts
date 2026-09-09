@@ -1,14 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
+import { RouterLink } from '@angular/router';
 import type { Sale } from '../../../models/sale';
-import {VenteStoreService} from '../../../service/store/vente/vente-store.service';
+import { VenteStoreService } from '../../../service/store/vente/vente-store.service';
 
 @Component({
   selector: 'app-sales-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './sale-table.component.html',
   styleUrl: './sale-table.component.css',
 })
