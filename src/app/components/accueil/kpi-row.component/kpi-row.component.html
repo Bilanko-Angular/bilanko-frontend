@@ -1,0 +1,23 @@
+<div class="bk-kpi-row">
+  @for (kpi of kpis(); track kpi.label) {
+    <div class="bk-kpi-card">
+      <span class="bk-kpi-card__label">{{ kpi.label }}</span>
+      <span class="bk-kpi-card__value">
+        @if (kpi.format === 'currency') {
+          {{ kpi.value | number: '1.0-0' : 'fr-FR' }} FCFA
+        } @else {
+          {{ kpi.value }}
+        }
+      </span>
+      @if (kpi.trend) {
+        <span
+          class="bk-kpi-card__trend"
+          [class.bk-kpi-card__trend--up]="kpi.trend.direction === 'up'"
+          [class.bk-kpi-card__trend--down]="kpi.trend.direction === 'down'"
+        >
+          {{ kpi.trend.direction === 'up' ? '↑' : '↓' }} {{ kpi.trend.percent | number: '1.1-1' }}% vs période précédente
+        </span>
+      }
+    </div>
+  }
+</div>

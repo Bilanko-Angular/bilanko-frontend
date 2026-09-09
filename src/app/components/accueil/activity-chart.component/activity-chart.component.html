@@ -1,0 +1,35 @@
+<div class="bk-activity-chart">
+  <div class="bk-activity-chart__header">
+    <h3>Activité</h3>
+    <div class="bk-activity-chart__filters">
+      <input
+        type="date"
+        [value]="overviewStore.filterFrom() ?? ''"
+        (change)="setPeriod($any($event.target).value, overviewStore.filterTo() ?? '')"
+      />
+      <span>→</span>
+      <input
+        type="date"
+        [value]="overviewStore.filterTo() ?? ''"
+        (change)="setPeriod(overviewStore.filterFrom() ?? '', $any($event.target).value)"
+      />
+    </div>
+  </div>
+
+  <div class="bk-activity-chart__legend">
+    <span class="bk-legend-item bk-legend-item--revenue">Chiffre d'affaires</span>
+    <span class="bk-legend-item bk-legend-item--margin">Marge simplifiée</span>
+    <span class="bk-legend-item bk-legend-item--charges">Charges</span>
+  </div>
+
+  @if (chart(); as c) {
+    <svg [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight" class="bk-activity-chart__svg">
+      <line [attr.x1]="0" [attr.x2]="chartWidth" [attr.y1]="c.zeroY" [attr.y2]="c.zeroY" class="bk-activity-chart__zero-line" />
+      <path [attr.d]="c.chargesPath" class="bk-activity-chart__line bk-activity-chart__line--charges" />
+      <path [attr.d]="c.marginPath" class="bk-activity-chart__line bk-activity-chart__line--margin" />
+      <path [attr.d]="c.revenuePath" class="bk-activity-chart__line bk-activity-chart__line--revenue" />
+    </svg>
+  } @else {
+    <p class="bk-activity-chart__empty">Aucune donnée sur cette période.</p>
+  }
+</div>

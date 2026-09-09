@@ -1,0 +1,36 @@
+<div class="bk-charges-donut">
+  <h3>Charges par fournisseur</h3>
+
+  @if (segments().length === 0) {
+    <p class="bk-charges-donut__status">Aucune charge enregistrée.</p>
+  } @else {
+    <div class="bk-charges-donut__body">
+      <svg viewBox="0 0 160 160" class="bk-charges-donut__svg">
+        <circle cx="80" cy="80" [attr.r]="radius" class="bk-charges-donut__track" />
+        @for (segment of segments(); track segment.supplier) {
+          <circle
+            cx="80"
+            cy="80"
+            [attr.r]="radius"
+            [attr.stroke]="segment.color"
+            [attr.stroke-dasharray]="segment.dasharray"
+            [attr.stroke-dashoffset]="segment.dashoffset"
+            class="bk-charges-donut__segment"
+          />
+        }
+        <text x="80" y="80" text-anchor="middle" dominant-baseline="middle" class="bk-charges-donut__total">
+          {{ totalCharges() | number: '1.0-0' : 'fr-FR' }}
+        </text>
+      </svg>
+
+      <ul class="bk-charges-donut__legend">
+        @for (segment of segments(); track segment.supplier) {
+          <li>
+            <span class="bk-charges-donut__dot" [style.background]="segment.color"></span>
+            {{ segment.supplier }} — {{ segment.percent | number: '1.0-1' }}%
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

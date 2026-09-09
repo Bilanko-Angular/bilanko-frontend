@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KpiCardsComponent } from './kpi-cards.component';
+import { ChargesDonutComponent } from './charges-donut.component';
 
-describe('KpiCardsComponent', () => {
-  let component: KpiCardsComponent;
-  let fixture: ComponentFixture<KpiCardsComponent>;
+describe('ChargesDonutComponent', () => {
+  let component: ChargesDonutComponent;
+  let fixture: ComponentFixture<ChargesDonutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KpiCardsComponent]
+      imports: [ChargesDonutComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(KpiCardsComponent);
+    fixture = TestBed.createComponent(ChargesDonutComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

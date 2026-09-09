@@ -1,0 +1,91 @@
+.bk-activity-chart__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.bk-activity-chart__filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+}
+
+.bk-activity-chart__filters input[type='date'] {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 4px 8px;
+}
+
+.bk-activity-chart__legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.bk-activity-chart__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.bk-activity-chart__zero-line {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.bk-activity-chart__line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.bk-activity-chart__line--revenue {
+  stroke: var(--color-primary);
+}
+
+.bk-activity-chart__line--margin {
+  stroke: var(--color-accent);
+}
+
+.bk-activity-chart__line--charges {
+  stroke: var(--color-negative);
+}
+
+.bk-activity-chart__empty {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+.bk-legend-item {
+  position: relative;
+  padding-left: 16px;
+}
+
+.bk-legend-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.bk-legend-item--revenue::before {
+  background: var(--color-primary);
+}
+
+.bk-legend-item--margin::before {
+  background: var(--color-accent);
+}
+
+.bk-legend-item--charges::before {
+  background: var(--color-negative);
+}

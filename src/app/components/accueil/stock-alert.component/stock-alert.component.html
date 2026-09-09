@@ -1,0 +1,26 @@
+<div class="bk-stock-alerts">
+  <h3>Alertes de stock</h3>
+
+  @if (stock(); as s) {
+    <div class="bk-stock-alerts__summary">
+      <span class="bk-stock-alerts__badge bk-stock-alerts__badge--low">{{ s.lowStockCount }} en stock bas</span>
+      <span class="bk-stock-alerts__badge bk-stock-alerts__badge--out">{{ s.outOfStockCount }} en rupture</span>
+    </div>
+  }
+
+  @if (produitStore.isLoading()) {
+    <p class="bk-stock-alerts__status">Chargement…</p>
+  } @else if (produitStore.produits().length === 0) {
+    <p class="bk-stock-alerts__status">Aucun produit en alerte.</p>
+  } @else {
+    <ul class="bk-stock-alerts__list">
+      <!-- ⚠️ produit.name / produit.stock : à vérifier contre l'interface Produit réelle, non fournie -->
+      @for (produit of produitStore.produits(); track produit.id) {
+        <li class="bk-stock-alerts__item">
+          <span>{{ produit.name }}</span>
+          <span class="bk-stock-alerts__qty">{{ produit.stock }} restant(s)</span>
+        </li>
+      }
+    </ul>
+  }
+</div>
