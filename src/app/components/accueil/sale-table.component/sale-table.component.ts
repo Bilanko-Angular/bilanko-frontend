@@ -9,8 +9,8 @@ import {VenteStoreService} from '../../../service/store/vente/vente-store.servic
   selector: 'app-sales-table',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './sales-table.component.html',
-  styleUrl: './sales-table.component.css',
+  templateUrl: './sale-table.component.html',
+  styleUrl: './sale-table.component.css',
 })
 export class SalesTableComponent {
   protected readonly venteStore = inject(VenteStoreService);

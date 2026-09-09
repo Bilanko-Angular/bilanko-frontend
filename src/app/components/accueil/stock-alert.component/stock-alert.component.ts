@@ -9,8 +9,8 @@ import {OverviewStoreService} from '../../../service/store/overview/overview-sto
   selector: 'app-stock-alerts',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './stock-alerts.component.html',
-  styleUrl: './stock-alerts.component.css',
+  templateUrl: './stock-alert.component.html',
+  styleUrl: './stock-alert.component.css',
 })
 export class StockAlertsComponent {
   protected readonly produitStore = inject(ProduitStoreService);
@@ -20,8 +20,9 @@ export class StockAlertsComponent {
   protected readonly stock = computed(() => this.overviewStore.summary()?.stock ?? null);
 
   constructor() {
-    // La liste nominative (nom produit + quantité restante) n'existe pas dans StockOverview,
-    // on la charge séparément via le filtre stockStatus de ProduitStoreService.
-    void this.produitStore.rechercher({ stockStatus: 'LOW' });
+    // ⚠️ 'warning' est une supposition pour "stock bas" (RechercheParams n'a que
+    // 'tous' | 'ok' | 'warning' | 'error') — confirme la sémantique exacte de ces
+    // 3 statuts côté backend avant de considérer ce filtre comme définitif.
+    void this.produitStore.rechercher({ stockStatus: 'warning' });
   }
 }

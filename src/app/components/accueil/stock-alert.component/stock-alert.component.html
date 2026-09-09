@@ -17,8 +17,8 @@
       <!-- ⚠️ produit.name / produit.stock : à vérifier contre l'interface Produit réelle, non fournie -->
       @for (produit of produitStore.produits(); track produit.id) {
         <li class="bk-stock-alerts__item">
-          <span>{{ produit.name }}</span>
-          <span class="bk-stock-alerts__qty">{{ produit.stock }} restant(s)</span>
+          <span>{{ produit.nom }}</span>
+          <span class="bk-stock-alerts__qty">{{ produit.quantiteStock }} restant(s)</span>
         </li>
       }
     </ul>
