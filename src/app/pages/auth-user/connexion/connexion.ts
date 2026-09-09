@@ -59,6 +59,15 @@ export class Connexion {
       this.isLoading = false;
     }
   }
+  
+  togglePasswordVisibility(inputElement: HTMLInputElement): void {
+    if (inputElement.type === 'password') {
+      inputElement.type = 'text';
+    } else {
+      inputElement.type = 'password';
+    }
+  }
+
   onGoogleSuccess(): void {
     this.router.navigate(['/dashboard']);
   }

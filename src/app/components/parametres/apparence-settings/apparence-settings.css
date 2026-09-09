@@ -1,0 +1,109 @@
+/* =========================================================
+   PREFERENCES
+========================================================= */
+
+.bk-settings__preference {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.bk-settings__preference:last-child {
+  border-bottom: none;
+}
+
+.bk-settings__preference-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.bk-settings__preference-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.bk-settings__preference-title {
+  display: block;
+  color: var(--color-text);
+  font-size: 0.85rem;
+}
+
+.bk-settings__preference-desc {
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.bk-settings__select {
+  min-width: 155px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background: var(--color-background);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.bk-settings__select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+/* =========================================================
+   THEME
+========================================================= */
+
+.bk-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 105px;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  background: var(--color-background);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-medium);
+}
+
+.bk-theme-toggle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+  .bk-settings__preference {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .bk-settings__select,
+  .bk-theme-toggle {
+    margin-left: 48px;
+  }
+}

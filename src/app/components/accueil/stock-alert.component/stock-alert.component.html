@@ -1,0 +1,27 @@
+<div class="panel">
+  <div class="panel-head">
+    <h2>Alertes de stock</h2>
+    <a routerLink="/catalogue" class="link">Tout voir</a>
+  </div>
+
+  @if (isLoading()) {
+    <p class="bk-stock-alerts__status">Chargement…</p>
+  } @else if (!hasAlerts()) {
+    <p class="bk-stock-alerts__status">Aucun produit en alerte.</p>
+  } @else {
+    @for (alert of alerts(); track alert.id) {
+      <div class="alert-row">
+        <span
+          class="alert-dot"
+          [class.low]="alert.severity === 'low'"
+          [class.mid]="alert.severity === 'mid'"
+        ></span>
+        <div class="alert-text">
+          <div class="name">{{ alert.name }}</div>
+          <div class="sub">{{ alert.subtitle }}</div>
+        </div>
+        <div class="alert-qty">{{ alert.qty }} restant{{ alert.qty > 1 ? 's' : '' }}</div>
+      </div>
+    }
+  }
+</div>

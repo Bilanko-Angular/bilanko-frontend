@@ -1,0 +1,47 @@
+<div class="panel">
+  <div class="panel-head">
+    <h2>Dernières ventes</h2>
+    <a routerLink="/ventes" class="link">Voir toutes les ventes</a>
+  </div>
+
+  @if (venteStore.isLoading()) {
+    <p class="bk-sales-table__status">Chargement…</p>
+  } @else if (latestSales().length === 0) {
+    <p class="bk-sales-table__status">Aucune vente récente.</p>
+  } @else {
+    <table class="bk-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Client</th>
+          <th class="num">Produits</th>
+          <th class="num">Montant total</th>
+          <th class="num">Marge simplifiée</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (sale of latestSales(); track sale.id) {
+          <tr>
+            <td>{{ sale.saleDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              <a class="client-link" [routerLink]="['/ventes', sale.id]">
+                {{ sale.customerName || 'Client comptant' }}
+              </a>
+            </td>
+            <td class="num">{{ sale.items.length }}</td>
+            <td class="num bilanko-amount">
+              {{ sale.totalAmount | number: '1.0-0' : 'fr-FR' }} FCFA
+            </td>
+            <td
+              class="num bilanko-amount"
+              [class.bilanko-amount--positive]="(sale.totalMargin ?? 0) >= 0"
+              [class.bilanko-amount--negative]="(sale.totalMargin ?? 0) < 0"
+            >
+              {{ sale.totalMargin | number: '1.0-0' : 'fr-FR' }} FCFA
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

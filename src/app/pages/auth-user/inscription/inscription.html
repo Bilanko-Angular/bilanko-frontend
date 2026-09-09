@@ -97,7 +97,7 @@
             <span class="input-group-text bk-input-icon">
               <span class="material-icons fs-6">lock</span>
             </span>
-            <input type="password" id="password" class="form-control bk-input" formControlName="password" autocomplete="new-password" #passwordInput>
+            <input type="password" id="password" class="form-control bk-input" formControlName="password" autocomplete="new-password" #passwordInput [placeholder]="prefs.t().yourPassword">
             <button type="button" class="input-group-text bk-input-icon" (click)="togglePasswordVisibility(passwordInput)">
               <span class="material-icons fs-6">{{ passwordInput.type === 'password' ? 'visibility' : 'visibility_off' }}</span>
             </button>

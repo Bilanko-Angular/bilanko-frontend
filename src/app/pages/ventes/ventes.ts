@@ -5,12 +5,14 @@ import { DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import type { Sale } from '../../models/sale';
-import { Template } from "../../components/shared/template/template";
+import { Template } from '../../components/shared/template/template';
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { PanierForm } from './panier-form/panier-form';
-import { SalesService } from '../../services/sales.service';
 import { PreferencesService } from '../../services/preferences';
+import { VenteStoreService } from '../../service/store/vente/vente-store.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-ventes',
@@ -18,11 +20,11 @@ import { PreferencesService } from '../../services/preferences';
   imports: [DatePipe, CurrencyPipe, FormsModule, Template, ConfirmDialog, ActionMenu, PanierForm],
   templateUrl: './ventes.html',
   styleUrls: ['./ventes.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SalesComponent {
-  private salesService = inject(SalesService);
-  private router = inject(Router);
+  protected readonly store = inject(VenteStoreService);
+  private readonly router = inject(Router);
   protected readonly prefs = inject(PreferencesService);
 
   isAddModalOpen = signal(false);
@@ -30,67 +32,23 @@ export class SalesComponent {
   confirmDeleteId = signal<string | null>(null);
   editingSale: Sale | null = null;
 
-  sales = this.salesService.sales;
+  /** Valeur temporaire dans la modale filtre (date) */
+  filterDateDraft = signal('');
 
-  // --- BARRE DE RECHERCHE (RAPIDE) ---
-  searchTerm = signal('');           // Texte tapé dans la barre de recherche
-  filteredBySearch = computed(() => {
-    const term = this.searchTerm().trim().toLowerCase();
-    if (!term) return this.sales();
-    
-    return this.sales().filter(s =>
-      s.customerName.toLowerCase().includes(term) ||
-      s.items.some(i => i.productName.toLowerCase().includes(term)) ||
-      s.id.toLowerCase().includes(term)
-    );
-  });
-
-  // --- FILTRE AVANCÉ (Modale) ---
-  filterSearchTerm = signal('');
-  filterDate = signal('');
-  appliedSearchTerm = signal('');
-  appliedDate = signal('');
-
-  // Combine recherche rapide + filtres avancés
-  readonly filteredSales = computed(() => {
-    const term = this.appliedSearchTerm().trim().toLowerCase();
-    const date = this.appliedDate();
-    let results = this.filteredBySearch(); // Déjà filtré par la recherche rapide
-
-    // Appliquer le filtre avancé par texte (si différent de la recherche rapide)
-    if (term && this.searchTerm().trim().toLowerCase() !== term) {
-      results = results.filter(s =>
-        s.customerName.toLowerCase().includes(term) ||
-        s.items.some(i => i.productName.toLowerCase().includes(term))
-      );
-    }
-
-    // Filtrer par date
-    if (date) {
-      results = results.filter(s => s.saleDate.startsWith(date));
-    }
-
-    return results;
-  });
-
-  // --- Indicateur de filtre actif ---
-  readonly hasActiveFilter = computed(() =>
-    this.searchTerm().trim().length > 0 ||
-    this.appliedSearchTerm().trim().length > 0 ||
-    this.appliedDate().length > 0
+  readonly hasActiveFilter = computed(
+    () => this.store.searchTerm().trim().length > 0 || this.store.filterDate().length > 0
   );
 
-  // --- Pagination ---
   readonly pageCourante = signal(1);
   readonly parPage = 6;
 
   readonly nombrePages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredSales().length / this.parPage))
+    Math.max(1, Math.ceil(this.store.filteredSales().length / this.parPage))
   );
 
   readonly salesPage = computed(() => {
     const debut = (this.pageCourante() - 1) * this.parPage;
-    return this.filteredSales().slice(debut, debut + this.parPage);
+    return this.store.filteredSales().slice(debut, debut + this.parPage);
   });
 
   constructor() {
@@ -98,83 +56,134 @@ export class SalesComponent {
       const max = this.nombrePages();
       if (this.pageCourante() > max) this.pageCourante.set(max);
     });
+    effect(() => {
+      this.store.searchTerm();
+      this.store.filterDate();
+      this.pageCourante.set(1);
+    });
   }
 
-  // --- Actions de recherche ---
   onSearchChange(value: string): void {
-    this.searchTerm.set(value);
-    this.pageCourante.set(1);
+    this.store.setSearchTerm(value);
   }
 
   clearSearch(): void {
-    this.searchTerm.set('');
-    this.pageCourante.set(1);
+    this.store.setSearchTerm('');
   }
 
-  // --- Filtres avancés ---
+  openFilterModal(): void {
+    this.filterDateDraft.set(this.store.filterDate());
+    this.isFilterModalOpen.set(true);
+  }
+
+  closeFilterModal(): void {
+    this.isFilterModalOpen.set(false);
+  }
+
   applyFilter(): void {
-    this.appliedSearchTerm.set(this.filterSearchTerm());
-    this.appliedDate.set(this.filterDate());
-    this.pageCourante.set(1);
+    this.store.setFilterDate(this.filterDateDraft());
     this.closeFilterModal();
   }
 
   resetFilter(): void {
-    this.filterSearchTerm.set('');
-    this.filterDate.set('');
-    this.appliedSearchTerm.set('');
-    this.appliedDate.set('');
-    this.searchTerm.set('');
-    this.pageCourante.set(1);
+    this.filterDateDraft.set('');
+    this.store.clearFilters();
     this.closeFilterModal();
   }
 
-  // --- Pagination ---
-  pageSuivante() { this.pageCourante.update(v => Math.min(v + 1, this.nombrePages())); }
-  pagePrecedente() { this.pageCourante.update(v => Math.max(v - 1, 1)); }
-
-  // --- Modales ---
-  openAddModal() { this.editingSale = null; this.isAddModalOpen.set(true); }
-  closeAddModal() { this.isAddModalOpen.set(false); this.editingSale = null; }
-
-  openFilterModal() {
-    this.filterSearchTerm.set(this.appliedSearchTerm());
-    this.filterDate.set(this.appliedDate());
-    this.isFilterModalOpen.set(true);
+  pageSuivante(): void {
+    this.pageCourante.update((v) => Math.min(v + 1, this.nombrePages()));
   }
-  closeFilterModal() { this.isFilterModalOpen.set(false); }
 
-  voirVente(id: string) {
+  pagePrecedente(): void {
+    this.pageCourante.update((v) => Math.max(v - 1, 1));
+  }
+
+  openAddModal(): void {
+    this.editingSale = null;
+    this.isAddModalOpen.set(true);
+  }
+
+  closeAddModal(): void {
+    this.isAddModalOpen.set(false);
+    this.editingSale = null;
+  }
+
+  voirVente(id: string): void {
     this.router.navigate(['/ventes', id]);
   }
 
-  editSale(id: string) {
-    const s = this.salesService.getById(id) || null;
+  editSale(id: string): void {
+    const s = this.store.findById(id) ?? null;
     if (s) {
       this.editingSale = s;
       this.isAddModalOpen.set(true);
     }
   }
 
-  onRowAction(actionType: string, id: string) {
+  onRowAction(actionType: string, id: string): void {
     if (actionType === 'view') this.voirVente(id);
     if (actionType === 'edit') this.editSale(id);
     if (actionType === 'delete') this.confirmDeleteId.set(id);
   }
 
-  confirmDelete() {
+  async confirmDelete(): Promise<void> {
     const id = this.confirmDeleteId();
-    if (id) this.salesService.delete(id);
+    if (id) await this.store.delete(id);
     this.confirmDeleteId.set(null);
   }
-  cancelDelete() { this.confirmDeleteId.set(null); }
 
-  handleSaleSubmit(payload: Omit<Sale, 'id'>) {
-    if (this.editingSale) {
-      this.salesService.update(this.editingSale.id, payload);
-    } else {
-      this.salesService.add(payload);
+  cancelDelete(): void {
+    this.confirmDeleteId.set(null);
+  }
+
+  async handleSaleSubmit(payload: Omit<Sale, 'id'>): Promise<void> {
+    try {
+      if (this.editingSale) {
+        await this.store.update(this.editingSale.id, payload);
+      } else {
+        await this.store.add(payload);
+      }
+      this.closeAddModal();
+    } catch {
+      // erreur déjà signalée dans le store
     }
-    this.closeAddModal();
+  }
+
+  exporterPdf(): void {
+    const liste = this.store.filteredSales();
+    if (liste.length === 0) return;
+
+    const doc = new jsPDF();
+    const dateStr = new Date().toLocaleDateString('fr-FR');
+    const currency = this.prefs.currency();
+
+    doc.setFontSize(16);
+    doc.setTextColor(15, 23, 42);
+    doc.text('Bilanko — Historique des ventes', 14, 20);
+
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Généré le : ${dateStr} | Total : ${liste.length} vente(s)`, 14, 27);
+
+    const colonnes = ['Date', 'Client', 'Produits', `Montant (${currency})`, `Marge (${currency})`];
+    const donnees = liste.map((s) => [
+      new Date(s.saleDate).toLocaleString('fr-FR'),
+      s.customerName || this.prefs.t().comptantClient,
+      s.items.length.toString(),
+      s.totalAmount.toLocaleString('fr-FR'),
+      (s.totalMargin ?? 0).toLocaleString('fr-FR'),
+    ]);
+
+    autoTable(doc, {
+      startY: 35,
+      head: [colonnes],
+      body: donnees,
+      theme: 'striped',
+      headStyles: { fillColor: [16, 185, 129] },
+      styles: { fontSize: 9 },
+    });
+
+    doc.save(`ventes-bilanko-${dateStr.replace(/\//g, '-')}.pdf`);
   }
 }

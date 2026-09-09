@@ -15,7 +15,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -35,7 +35,11 @@
   max-width: 500px;
 }
 
-.header-actions { display: flex; gap: 0.75rem; }
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
 
 .btn {
   padding: 0.6rem 1.2rem;
@@ -51,32 +55,125 @@
   gap: 0.4rem;
 }
 
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-on-brand);
 }
-.btn-primary:hover { background-color: var(--color-primary-hover); }
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
 
 .btn-secondary {
   background-color: var(--color-surface);
   color: var(--color-text);
   border-color: var(--color-border);
 }
-.btn-secondary:hover { background-color: var(--color-primary-subtle); }
-
-/* ============================================================
-   TABLEAU — CORRECTION ACTION MENU
-   ============================================================ */
-
-.table-container { 
-  overflow: visible !important;
-  position: relative !important;
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-primary-subtle);
 }
 
-.registry-table { 
-  width: 100%; 
+.btn-secondary--active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+.bk-filter-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  margin-left: 2px;
+}
+
+/* ============================================================
+   BARRE DE RECHERCHE — séparée, largeur limitée
+   ============================================================ */
+
+.search-row {
+  margin-bottom: 1.25rem;
+}
+
+.search-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  max-width: 360px;
+  width: 100%;
+}
+
+.search-input-group:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0 10px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  outline: none;
+  min-width: 0;
+}
+
+.search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.search-clear:hover {
+  color: var(--color-negative);
+}
+
+/* ============================================================
+   TABLEAU
+   ============================================================ */
+
+.table-container {
+  overflow: visible;
+  position: relative;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.registry-table {
+  width: 100%;
   border-collapse: collapse;
-  overflow: visible !important;
+  min-width: 640px;
 }
 
 .registry-table th,
@@ -87,7 +184,6 @@
   font-size: 0.9rem;
   vertical-align: middle;
   color: var(--color-text);
-  overflow: visible !important;
 }
 
 .registry-table thead th {
@@ -96,36 +192,41 @@
   font-size: 0.78rem;
   text-transform: uppercase;
   border-bottom: 2px solid var(--color-text);
+  white-space: nowrap;
 }
 
-.registry-table tbody tr:hover { background-color: var(--color-primary-subtle); }
+.registry-table tbody tr:hover {
+  background-color: var(--color-primary-subtle);
+}
 
-/* ← MODIFIÉ : Colonne des actions */
 .registry-table td:last-child {
-  width: 90px !important;
-  min-width: 90px !important;
-  text-align: center !important;
-  overflow: visible !important;
-  /* position: relative; ← SUPPRIMÉ pour éviter le stacking context */
-}
-
-/* ← AJOUTÉ : S'assure que les lignes du tableau ne créent pas de stacking context */
-.registry-table tbody tr {
-  /* pas de position:relative ni z-index ici */
+  width: 90px;
+  min-width: 90px;
+  text-align: center;
+  overflow: visible;
 }
 
 .align-left { text-align: left; }
 .align-center { text-align: center; }
 .align-right { text-align: right; }
 
-.amount-positive { color: var(--color-positive); font-weight: 500; }
+.amount-positive {
+  color: var(--color-positive);
+  font-weight: 500;
+}
 
 .empty-state {
-  padding: 3rem;
+  padding: 3rem 1.5rem;
   text-align: center;
   color: var(--color-text-muted);
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-base);
+}
+
+.error-state {
+  color: var(--color-negative);
+  border-color: var(--color-negative);
+  margin-bottom: 1rem;
 }
 
 .bk-client-link {
@@ -138,16 +239,16 @@
   text-decoration: underline;
   font-size: inherit;
   font-family: inherit;
+  text-align: left;
 }
-.bk-client-link:hover { color: var(--color-primary-hover); }
+.bk-client-link:hover {
+  color: var(--color-primary-hover);
+}
 
 /* --- Modales --- */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
@@ -162,6 +263,8 @@
   border-radius: 6px;
   width: 100%;
   max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
   color: var(--color-text);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
@@ -174,6 +277,7 @@
   align-items: center;
   padding: 1.5rem;
   border-bottom: 1px solid var(--color-border);
+  gap: 1rem;
 }
 
 .modal-header h2 {
@@ -204,8 +308,7 @@
   color: var(--color-text);
 }
 
-.form-group input,
-.form-group select {
+.form-group input {
   width: 100%;
   padding: 0.7rem;
   border: 1px solid var(--color-border);
@@ -214,24 +317,11 @@
   font-size: 1rem;
   background-color: var(--color-surface);
   color: var(--color-text);
+  box-sizing: border-box;
 }
-.form-group input:focus,
-.form-group select:focus {
+.form-group input:focus {
   outline: none;
   border-color: var(--color-primary);
-}
-
-.error-text { display: block; color: var(--color-negative); font-size: 0.85rem; margin-top: 0.4rem; }
-
-.checkbox-group { display: flex; flex-direction: column; gap: 0.5rem; }
-.checkbox-group .checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 400;
-  cursor: pointer;
-  font-size: 0.95rem;
-  color: var(--color-text);
 }
 
 .modal-actions {
@@ -239,6 +329,7 @@
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
 .bk-pagination {
@@ -248,6 +339,7 @@
   gap: 1.25rem;
   margin-top: 1.25rem;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .bk-page-btn {
@@ -264,7 +356,6 @@
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 500;
-  transition: all 0.15s ease;
 }
 
 .bk-page-btn:hover:not(:disabled) {
@@ -273,120 +364,16 @@
   background: var(--color-primary-subtle);
 }
 
-.bk-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.bk-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
 .bk-page-indicator {
   color: var(--color-text-muted);
   font-size: 0.85rem;
   font-weight: 500;
   white-space: nowrap;
-}
-
-.bk-view-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--color-border);
-  font-size: 0.9rem;
-}
-.bk-view-row:last-child { border-bottom: none; }
-.bk-view-row span:first-child { color: var(--color-text-muted); }
-.bk-view-row span:last-child { color: var(--color-text); font-weight: 500; }
-
-.bk-client-total {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-top: 2px solid var(--color-border);
-  font-weight: 700;
-  color: var(--color-text);
-}
-.bk-client-total strong { color: var(--color-positive); }
-
-.btn-secondary--active {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  background: var(--color-primary-subtle);
-}
-.bk-filter-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  margin-left: 2px;
-}
-
-/* src/app/pages/ventes/ventes.css - AJOUTER À LA FIN */
-
-/* ============================================================
-   BARRE DE RECHERCHE RAPIDE
-   ============================================================ */
-
-.search-wrapper {
-  display: inline-flex;
-  align-items: center;
-}
-
-.search-input-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-base);
-  transition: all 0.2s ease;
-  min-width: 220px;
-}
-
-.search-input-group:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-subtle);
-}
-
-.search-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0 0 10px;
-  color: var(--color-text-muted);
-  flex-shrink: 0;
-}
-
-.search-icon svg {
-  width: 16px;
-  height: 16px;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: var(--color-text);
-  padding: 8px 10px;
-  font-size: 0.9rem;
-  outline: none;
-  min-width: 150px;
-}
-
-.search-input::placeholder {
-  color: var(--color-text-muted);
-}
-
-.search-clear {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-}
-
-.search-clear:hover {
-  color: var(--color-negative);
 }
 
 /* ============================================================
@@ -401,22 +388,70 @@
   }
 
   .header-actions {
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    width: 100%;
   }
 
-  .search-wrapper {
-    width: 100%;
+  .header-actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
   }
 
   .search-input-group {
-    width: 100%;
-    min-width: unset;
+    max-width: 100%;
   }
 
-  .search-input {
-    min-width: unset;
+  .registry-table {
+    min-width: 0;
+  }
+
+  .registry-table thead {
+    display: none;
+  }
+
+  .registry-table,
+  .registry-table tbody,
+  .registry-table tr,
+  .registry-table td {
+    display: block;
     width: 100%;
+  }
+
+  .registry-table tbody tr {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-surface);
+  }
+
+  .registry-table tbody tr:hover {
+    background: var(--color-surface);
+  }
+
+  .registry-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.65rem 0;
+    text-align: right !important;
+  }
+
+  .registry-table td:last-child {
+    width: 100%;
+    min-width: 0;
+    border-bottom: none;
+    justify-content: flex-end;
+  }
+
+  .registry-table td::before {
+    content: attr(data-label);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-align: left;
   }
 }
 
@@ -427,6 +462,14 @@
 
   .header-actions .btn {
     width: 100%;
-    justify-content: center;
+  }
+
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-header,
+  .modal-form {
+    padding: 1rem;
   }
 }

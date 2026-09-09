@@ -1,8 +1,19 @@
 <app-template>
-  @if (sale(); as s) {
+  @if (isLoading()) {
+    <div class="empty-state">Chargement…</div>
+  } @else if (sale(); as s) {
     <div class="bk-detail-header">
-      <button class="bk-back-btn" (click)="retour()">← {{ prefs.t().backToLogin }}</button>
-      <h1>{{ prefs.t().saleDetails }}</h1>
+      <button class="bk-back-btn" (click)="retour()" type="button">← {{ prefs.t().backToSales }}</button>
+      <div class="bk-detail-title-row">
+        <h1>{{ prefs.t().saleDetails }}</h1>
+        <button class="bk-invoice-btn" (click)="telechargerFacture()" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+          </svg>
+          {{ prefs.t().downloadInvoice }}
+        </button>
+      </div>
     </div>
 
     <div class="bk-detail-card">
@@ -11,39 +22,49 @@
           <span class="bk-detail-label">{{ prefs.t().client }}</span>
           <strong>{{ s.customerName || prefs.t().comptantClient }}</strong>
         </div>
-       <div>
+        <div>
           <span class="bk-detail-label">{{ prefs.t().date }}</span>
           <strong>{{ s.saleDate | date: prefs.angularDateFormat() + ' à HH:mm' }}</strong>
         </div>
       </div>
 
-      <table class="registry-table">
-        <thead>
-          <tr>
-            <th class="align-left">{{ prefs.t().product }}</th>
-            <th class="align-center">{{ prefs.t().quantity }}</th>
-            <th class="align-right">{{ prefs.t().unitPrice }}</th>
-            <th class="align-right">{{ prefs.t().totalAmount }}</th>
-            <th class="align-right">{{ prefs.t().simplifiedMargin }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of s.items; track item.productId + '-' + $index) {
+      <div class="table-scroll">
+        <table class="registry-table">
+          <thead>
             <tr>
-              <td class="align-left">{{ item.productName }}</td>
-              <td class="align-center">{{ item.quantity }}</td>
-              <td class="align-right">{{ item.unitSellingPrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
-              <td class="align-right amount-positive">{{ item.unitSellingPrice * item.quantity | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
-              <td class="align-right">{{ item.margin | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+              <th class="align-left">{{ prefs.t().product }}</th>
+              <th class="align-center">{{ prefs.t().quantity }}</th>
+              <th class="align-right">{{ prefs.t().unitPrice }}</th>
+              <th class="align-right">{{ prefs.t().totalAmount }}</th>
+              <th class="align-right">{{ prefs.t().simplifiedMargin }}</th>
             </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (item of s.items; track item.id ?? (item.productId + '-' + $index)) {
+              <tr>
+                <td class="align-left" [attr.data-label]="prefs.t().product">{{ item.productName }}</td>
+                <td class="align-center" [attr.data-label]="prefs.t().quantity">{{ item.quantity }}</td>
+                <td class="align-right" [attr.data-label]="prefs.t().unitPrice">
+                  {{ item.unitSellingPrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}
+                </td>
+                <td class="align-right amount-positive" [attr.data-label]="prefs.t().totalAmount">
+                  {{ item.unitSellingPrice * item.quantity | currency: prefs.currency() : 'symbol' : '1.0-0' }}
+                </td>
+                <td class="align-right" [attr.data-label]="prefs.t().simplifiedMargin">
+                  {{ item.margin | currency: prefs.currency() : 'symbol' : '1.0-0' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
 
       <div class="bk-detail-totals">
         <div>
           <span>{{ prefs.t().totalAmount }}</span>
-          <strong class="amount-positive">{{ s.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+          <strong class="amount-positive">
+            {{ s.totalAmount | currency: prefs.currency() : 'symbol' : '1.0-0' }}
+          </strong>
         </div>
         <div>
           <span>{{ prefs.t().simplifiedMargin }}</span>
