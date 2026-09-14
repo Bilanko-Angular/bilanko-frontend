@@ -1,9 +1,7 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DocumentService } from '../../services/document.service';
-import { ProduitService } from '../../services/produit.service';
-import { SalesService } from '../../services/sales.service';
-import { ChargesService } from '../../services/charges.service';
+import { DocumentStoreService } from '../../service/store/document/document-store.service';
 import { Template } from '../../components/shared/template/template';
 import {
   TypeDossier,
@@ -11,10 +9,8 @@ import {
   InfosCommercant,
   DemandeDossier,
   LigneHistorique,
-  OBJETS_PRET,
-  REGIMES_FISCAUX,
-  PIECES_A_JOINDRE,
 } from '../../models/document-fiscal';
+import { CreateDocumentPretRequest, CreateDocumentFiscalRequest, RegimeFiscalDTO } from '../../models/DTO/DocumentDto';
 import { HeroBank } from '../../components/banque-fiscalite/hero-bank/hero-bank';
 import { SelectTypeDocument } from '../../components/banque-fiscalite/select-type-document/select-type-document';
 import { IdentificationMachand } from '../../components/banque-fiscalite/identification-machand/identification-machand';
@@ -46,19 +42,26 @@ type Etape = 1 | 2 | 3 | 4;
   templateUrl: './banque-fiscalite.html',
   styleUrl: './banque-fiscalite.css',
 })
-export class BanqueFiscalite {
+export class BanqueFiscalite implements OnInit {
+  // Service hérité (uniquement pour la génération du PDF local en attendant que le backend s'en charge)
   private readonly documentService = inject(DocumentService);
-  private readonly produitService = inject(ProduitService);
-  private readonly salesService = inject(SalesService);
-  private readonly chargesService = inject(ChargesService);
-
-  readonly objetsPret = OBJETS_PRET;
-  readonly regimesFiscaux = REGIMES_FISCAUX;
+  // Nouveau service de gestion d'état lié au backend
+  readonly documentStore = inject(DocumentStoreService);
 
   readonly TAUX_ENDETTEMENT_INDICATIF = 0.33;
 
   readonly etape = signal<Etape>(1);
   readonly typeDossier = signal<TypeDossier | null>(null);
+
+  // --- Catalogues (provenant du backend) ---
+  readonly objetsPret = computed(() => this.documentStore.bootstrapData()?.objetsPret ?? []);
+  readonly regimesFiscaux = computed(() => this.documentStore.bootstrapData()?.regimesFiscaux ?? []);
+  
+  // Le front utilise des strings pour RegimeFiscal au lieu d'un objet id/label
+  // On mappe les regimesFiscaux DTO vers le format attendu par le frontend si besoin.
+  readonly regimesFiscauxFront = computed(() => {
+    return this.regimesFiscaux().map((r: RegimeFiscalDTO) => ({ id: r.id as RegimeFiscal, label: r.label }));
+  });
 
   // --- Identification (commune) ---
   readonly raisonSociale = signal('');
@@ -66,6 +69,8 @@ export class BanqueFiscalite {
   readonly adresse = signal('');
   readonly niu = signal('');
   readonly dateCreation = signal('');
+  // Option pour mettre à jour le profil avec ces données
+  readonly updateProfil = signal(true);
 
   // --- Uniquement pour la déclaration fiscale ---
   readonly regimeFiscal = signal<RegimeFiscal | ''>('');
@@ -92,76 +97,25 @@ export class BanqueFiscalite {
     return Number.isFinite(nombre) ? nombre : 0;
   }
 
-  // --- Chiffre d'affaires (calculé, jamais saisi) ---
+  // --- Chiffre d'affaires ---
   readonly dureeHistorique = signal<6 | 12>(6);
 
   readonly genereEnCours = signal(false);
   readonly erreurGeneration = signal<string | null>(null);
 
-  // Stock disponible = ce que le commerçant possède déjà en marchandises
-  // (quantité × prix d'achat, issu du catalogue). NOTE : ceci ne bouge PAS
-  // quand une vente est enregistrée ou supprimée — il n'existe actuellement
-  // aucune liaison entre le module Ventes et le module Catalogue. Ce chiffre
-  // reflète uniquement l'état du catalogue lui-même.
-  readonly stockDisponible = computed(() => {
-    const liste = this.produitService.catalogue.value() ?? [];
-    return liste.reduce((total, p) => total + p.quantiteStock * p.prixAchat, 0);
-  });
+  // Valeur issue du bootstrap
+  readonly stockDisponible = computed(() => this.documentStore.bootstrapData()?.stockDisponible ?? 0);
 
-  private readonly moisCouverts = computed(() => this.genererMoisCles(this.dureeHistorique()));
-
-  private extraireCleMois(date: unknown): string | null {
-    if (!date) return null;
-
-    // Objet Date natif — cas probable si le formulaire stocke un vrai Date
-    if (date instanceof Date) {
-      if (isNaN(date.getTime())) return null;
-      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    }
-
-    // Timestamp numérique
-    if (typeof date === 'number') {
-      const d = new Date(date);
-      if (isNaN(d.getTime())) return null;
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    }
-
-    if (typeof date !== 'string') return null;
-    const dateStr = date.trim();
-
-    // ISO : "2026-08-15" ou "2026-08-15T10:30:00"
-    let m = dateStr.match(/^(\d{4})-(\d{2})-\d{2}/);
-    if (m) return `${m[1]}-${m[2]}`;
-
-    // Français : "15/08/2026" ou "15/08/2026 10:30"
-    m = dateStr.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
-    if (m) return `${m[3]}-${m[2]}`;
-
-    // Dernier recours : parsing natif du navigateur
-    const parsed = new Date(dateStr);
-    if (!isNaN(parsed.getTime())) {
-      return `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}`;
-    }
-
-    return null;
-  }
-
-  // Chiffre d'affaires réel : agrège les ventes et charges enregistrées, mois par mois.
-  // Formule : CA du mois = somme des `totalAmount` de toutes les ventes de ce mois.
+  // Historique issu du Store (et donc du backend)
   readonly historique = computed<LigneHistorique[]>(() => {
-    const ventes = this.salesService.sales();
-    const charges = this.chargesService.charges();
-
-    return this.moisCouverts().map(({ cle, label }) => {
-      const chiffreAffaires = ventes
-        .filter((v) => this.extraireCleMois(v.saleDate ?? v.date) === cle)
-        .reduce((s, v) => s + v.totalAmount, 0);
-      const achatsCharges = charges
-        .filter((c) => this.extraireCleMois((c as any).date) === cle)
-        .reduce((s, c) => s + c.amount, 0);
-      return { mois: label, chiffreAffaires, achatsCharges };
-    });
+    const lignes = this.documentStore.historique();
+    return lignes.map(l => ({
+      mois: l.mois,
+      chiffreAffaires: l.chiffreAffaires,
+      achatsCharges: l.achatsCharges
+    }));
   });
+
   readonly totalCA = computed(() => this.historique().reduce((s, l) => s + l.chiffreAffaires, 0));
   readonly totalAchats = computed(() => this.historique().reduce((s, l) => s + l.achatsCharges, 0));
   readonly margeBrute = computed(() => this.totalCA() - this.totalAchats());
@@ -187,7 +141,13 @@ export class BanqueFiscalite {
 
   readonly piecesAJoindre = computed(() => {
     const t = this.typeDossier();
-    return t ? PIECES_A_JOINDRE[t] : [];
+    const map = this.documentStore.bootstrapData()?.piecesAJoindre;
+    if (!t || !map) return [];
+    
+    // Le typeDossier front est "pret_bancaire" ou "dsf_smt"
+    // Le backend utilise des clés enum "PRET_BANCAIRE", "DSF_SMT"
+    const backendKey = t.toUpperCase();
+    return map[backendKey] || map[t] || [];
   });
 
   readonly peutContinuerEtape2 = computed(() => {
@@ -228,6 +188,21 @@ export class BanqueFiscalite {
 
   readonly peutGenerer = computed(() => this.peutContinuerEtape2() && this.peutContinuerEtape3());
 
+  ngOnInit() {
+    // Charger le bootstrap via le store (catalogues + infos profil utilisateur)
+    this.documentStore.loadBootstrap(this.dureeHistorique()).then(() => {
+      const commercant = this.documentStore.bootstrapData()?.commercant;
+      if (commercant) {
+        // Préremplir avec les données du backend si les champs sont vides
+        if (!this.raisonSociale() && commercant.raisonSociale) this.raisonSociale.set(commercant.raisonSociale);
+        if (!this.activite() && commercant.activite) this.activite.set(commercant.activite);
+        if (!this.adresse() && commercant.adresse) this.adresse.set(commercant.adresse);
+        if (!this.niu() && commercant.niu) this.niu.set(commercant.niu);
+        if (!this.dateCreation() && commercant.dateCreationActivite) this.dateCreation.set(commercant.dateCreationActivite);
+      }
+    });
+  }
+
   choisirType(t: TypeDossier) {
     this.typeDossier.set(t);
   }
@@ -252,70 +227,112 @@ export class BanqueFiscalite {
 
   changerDureeHistorique(duree: 6 | 12) {
     this.dureeHistorique.set(duree);
-  }
-
-  private genererMoisCles(duree: 6 | 12): { cle: string; label: string }[] {
-    const moisNoms = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
-    const maintenant = new Date();
-    const resultat: { cle: string; label: string }[] = [];
-    for (let i = duree - 1; i >= 0; i--) {
-      const d = new Date(maintenant.getFullYear(), maintenant.getMonth() - i, 1);
-      const cle = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-      resultat.push({ cle, label: `${moisNoms[d.getMonth()]} ${d.getFullYear()}` });
-    }
-    return resultat;
+    this.documentStore.reloadHistorique(duree);
   }
 
   async genererDossier() {
     if (!this.peutGenerer() || !this.typeDossier()) return;
 
-    const commercant: InfosCommercant = {
+    this.genereEnCours.set(true);
+    this.erreurGeneration.set(null);
+
+    const infosCommercantPayload = {
       raisonSociale: this.raisonSociale().trim(),
       activite: this.activite().trim(),
       adresse: this.adresse().trim(),
       niu: this.niu().trim(),
-      regimeFiscal: this.typeDossier() === 'dsf_smt' ? (this.regimeFiscal() as RegimeFiscal) : undefined,
-      dateCreation: this.dateCreation(),
+      dateCreationActivite: this.dateCreation(),
     };
 
-    const demande: DemandeDossier = {
-      type: this.typeDossier()!,
-      commercant,
-      historique: this.historique(),
-      dureeHistorique: this.dureeHistorique(),
-      stockDisponible: this.stockDisponible(),
-      pretBancaire:
-        this.typeDossier() === 'pret_bancaire'
-          ? {
-              banque: this.banque().trim(),
-              agence: this.agence().trim(),
-              capitalPropre: Number(this.capitalPropre()),
-              objetPret: this.objetPret(),
-              montantDemande: Number(this.montantDemande()),
-              dureeMois: Number(this.dureeMois()),
-              garanties: this.garanties().trim(),
-            }
-          : undefined,
-      dsf:
-        this.typeDossier() === 'dsf_smt'
-          ? {
-              exerciceFiscal: this.exerciceFiscal(),
-              centreImpots: this.centreImpots().trim(),
-              natureImpot: this.natureImpot().trim(),
-              periodeDeclaration: this.periodeDeclaration().trim(),
-              montantImpot: Number(this.montantImpot()),
-              datePaiement: this.datePaiement(),
-              moyenPaiement: this.moyenPaiement(),
-              referencePaiement: this.referencePaiement().trim(),
-              chiffreAffairesPeriode: this.totalCA(),
-            }
-          : undefined,
-    };
-
-    this.genereEnCours.set(true);
-    this.erreurGeneration.set(null);
+    let apiSuccess = false;
 
     try {
+      if (this.typeDossier() === 'pret_bancaire') {
+        const req: CreateDocumentPretRequest = {
+          commercant: infosCommercantPayload,
+          updateProfil: this.updateProfil(),
+          objetPretSlug: this.objetPret(),
+          banque: this.banque().trim(),
+          agence: this.agence().trim(),
+          capitalPropre: Number(this.capitalPropre()),
+          montantDemande: Number(this.montantDemande()),
+          dureeMois: Number(this.dureeMois()),
+          garanties: this.garanties().trim(),
+          dureeHistorique: this.dureeHistorique(),
+        };
+        const res = await this.documentStore.creerDocumentPret(req);
+        if (res) apiSuccess = true;
+      } else if (this.typeDossier() === 'dsf_smt') {
+        const req: CreateDocumentFiscalRequest = {
+          commercant: infosCommercantPayload,
+          updateProfil: this.updateProfil(),
+          regimeFiscal: this.regimeFiscal(),
+          exerciceFiscal: this.exerciceFiscal(),
+          centreImpots: this.centreImpots().trim(),
+          natureImpot: this.natureImpot().trim(),
+          debutPeriodeDeclaration: this.periodeDeclaration().trim(), // Le back attend debut et fin
+          finPeriodeDeclaration: this.periodeDeclaration().trim(),   // temporaire si le front n'a qu'un champ
+          montantImpot: this.montantImpot().toString(),
+          datePaiement: this.datePaiement(),
+          moyenPaiement: this.moyenPaiement(),
+          referencePaiement: this.referencePaiement().trim(),
+          chiffreAffairesPeriode: this.totalCA(),
+          dureeHistorique: this.dureeHistorique(),
+        };
+        const res = await this.documentStore.creerDocumentFiscal(req);
+        if (res) apiSuccess = true;
+      }
+      
+      if (!apiSuccess) {
+        this.erreurGeneration.set('La génération du dossier a échoué via le serveur. Vérifiez les informations.');
+        this.genereEnCours.set(false);
+        return;
+      }
+
+      // -- Génération PDF local en fallback pour l'UX existante --
+      const commercant: InfosCommercant = {
+        raisonSociale: this.raisonSociale().trim(),
+        activite: this.activite().trim(),
+        adresse: this.adresse().trim(),
+        niu: this.niu().trim(),
+        regimeFiscal: this.typeDossier() === 'dsf_smt' ? (this.regimeFiscal() as RegimeFiscal) : undefined,
+        dateCreation: this.dateCreation(),
+      };
+
+      const demande: DemandeDossier = {
+        type: this.typeDossier()!,
+        commercant,
+        historique: this.historique(),
+        dureeHistorique: this.dureeHistorique(),
+        stockDisponible: this.stockDisponible(),
+        pretBancaire:
+          this.typeDossier() === 'pret_bancaire'
+            ? {
+                banque: this.banque().trim(),
+                agence: this.agence().trim(),
+                capitalPropre: Number(this.capitalPropre()),
+                objetPret: this.objetPret(),
+                montantDemande: Number(this.montantDemande()),
+                dureeMois: Number(this.dureeMois()),
+                garanties: this.garanties().trim(),
+              }
+            : undefined,
+        dsf:
+          this.typeDossier() === 'dsf_smt'
+            ? {
+                exerciceFiscal: this.exerciceFiscal(),
+                centreImpots: this.centreImpots().trim(),
+                natureImpot: this.natureImpot().trim(),
+                periodeDeclaration: this.periodeDeclaration().trim(),
+                montantImpot: Number(this.montantImpot()),
+                datePaiement: this.datePaiement(),
+                moyenPaiement: this.moyenPaiement(),
+                referencePaiement: this.referencePaiement().trim(),
+                chiffreAffairesPeriode: this.totalCA(),
+              }
+            : undefined,
+      };
+
       const blob = await this.documentService.genererDossier(demande);
       const url = URL.createObjectURL(blob);
       const lien = document.createElement('a');
@@ -326,7 +343,7 @@ export class BanqueFiscalite {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error('Erreur génération dossier :', e);
-      this.erreurGeneration.set('La génération du dossier a échoué. Vérifiez les informations saisies et réessayez.');
+      this.erreurGeneration.set('La génération locale du PDF a échoué.');
     } finally {
       this.genereEnCours.set(false);
     }

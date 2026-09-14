@@ -46,8 +46,8 @@
       Cette checklist est pour vous uniquement : elle n'apparaît pas dans le PDF généré, qui reste un document formel destiné à la banque.
     </p>
     <ul class="bk-pieces-list">
-      @for (piece of piecesAJoindre; track piece) {
-        <li>{{ piece }}</li>
+      @for (piece of piecesAJoindre; track piece.id) {
+        <li>{{ piece.label }}</li>
       }
     </ul>
   </div>

@@ -41,8 +41,8 @@
   <label>Objet du prêt
     <select [ngModel]="objetPret" (ngModelChange)="objetPretChange.emit($event)">
       <option value="" disabled>Sélectionner un objet</option>
-      @for (o of objetsPret; track o) {
-        <option [value]="o">{{ o }}</option>
+      @for (o of objetsPret; track o.id) {
+        <option [value]="o.id">{{ o.label }}</option>
       }
     </select>
   </label>

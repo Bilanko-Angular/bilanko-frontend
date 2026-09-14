@@ -10,7 +10,7 @@ import { RegimeFiscal, REGIMES_FISCAUX } from '../../../models/document-fiscal';
   styleUrl: './fiscality-information.css',
 })
 export class FiscalityInformation {
-  readonly regimesFiscaux = REGIMES_FISCAUX;
+  @Input() regimesFiscaux: {id: string, label: string}[] = [];
 
   @Input() regimeFiscal!: RegimeFiscal | '';
   @Output() regimeFiscalChange = new EventEmitter<RegimeFiscal | ''>();

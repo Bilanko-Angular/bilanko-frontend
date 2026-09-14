@@ -55,7 +55,7 @@
                 (agenceChange)="agence.set($event)"
                 [capitalPropre]="capitalPropre()"
                 (capitalPropreChange)="capitalPropre.set($event)"
-                [objetsPret]="objetsPret"
+                [objetsPret]="objetsPret()"
                 [objetPret]="objetPret()"
                 (objetPretChange)="objetPret.set($event)"
                 [montantDemande]="montantDemande()"
@@ -75,6 +75,7 @@
             @if (typeDossier() === 'dsf_smt') {
               <!-- Informations fiscales (déclaration fiscale) -->
               <app-fiscality-information
+                [regimesFiscaux]="regimesFiscauxFront()"
                 [regimeFiscal]="regimeFiscal()"
                 (regimeFiscalChange)="regimeFiscal.set($event)"
                 [exerciceFiscal]="exerciceFiscal()"

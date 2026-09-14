@@ -22,7 +22,7 @@ export class CapitalFinancialNeeds {
   @Input() capitalPropre!: number;
   @Output() capitalPropreChange = new EventEmitter<number>();
 
-  @Input() objetsPret!: readonly string[];
+  @Input() objetsPret!: readonly {id: string, label: string}[];
   
   @Input() objetPret!: string;
   @Output() objetPretChange = new EventEmitter<string>();

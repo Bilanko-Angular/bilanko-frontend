@@ -29,7 +29,7 @@ export class Summary {
   @Input() totalCA!: number;
   @Input() dureeHistorique!: number;
   @Input() margeBrute!: number;
-  @Input() piecesAJoindre!: readonly string[];
+  @Input() piecesAJoindre!: readonly {id: string; label: string}[];
   
   @Input() erreurGeneration!: string | null;
   @Input() genereEnCours!: boolean;
