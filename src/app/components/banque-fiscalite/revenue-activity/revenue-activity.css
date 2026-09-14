@@ -1,0 +1,85 @@
+/* ============================================================
+   CHIFFRE D'AFFAIRES — Historique des ventes
+   ============================================================ */
+h3 {
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: 0.4rem;
+}
+
+.bk-hint { color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 1.25rem; line-height: 1.5; }
+
+.bk-format-group { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.bk-format-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.bk-format-option input { accent-color: var(--color-primary); }
+.bk-format-option.selectionne { border-color: var(--color-primary); color: var(--color-primary); background: var(--color-primary-subtle); }
+
+.bk-historique-table { border: 1px solid var(--color-border); border-radius: var(--radius-base); overflow: hidden; margin-bottom: 1.25rem; }
+.bk-historique-head {
+  display: grid; grid-template-columns: 110px 1fr 160px; gap: 0.75rem; padding: 0.6rem 0.9rem;
+  background: var(--color-background); font-size: 0.72rem; font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.03em;
+}
+.bk-historique-row {
+  display: grid; grid-template-columns: 110px 1fr 160px; gap: 0.75rem; align-items: center;
+  padding: 0.65rem 0.9rem; border-top: 1px solid var(--color-border);
+}
+.bk-historique-mois { font-size: 0.82rem; color: var(--color-text); font-weight: var(--font-weight-medium); }
+.bk-historique-bar-cell {
+  position: relative; display: flex; align-items: center; height: 26px;
+  background: var(--color-background); border-radius: var(--radius-base); overflow: hidden;
+}
+.bk-historique-bar {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--color-primary-subtle);
+  border-left: 3px solid var(--color-primary);
+  transition: width .3s ease;
+}
+.bk-historique-valeur {
+  position: relative; z-index: 1; padding-left: 10px; font-size: 0.82rem;
+  font-weight: var(--font-weight-medium); color: var(--color-text); font-variant-numeric: tabular-nums;
+}
+.bk-historique-valeur--muted { color: var(--color-text-muted); font-weight: var(--font-weight-regular); padding-left: 0; }
+
+.bk-historique-totaux { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+.bk-historique-totaux div {
+  padding: 0.85rem 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-base);
+  background: var(--color-background); display: flex; flex-direction: column; gap: 0.3rem;
+}
+.bk-historique-totaux span { font-size: 0.75rem; color: var(--color-text-muted); }
+.bk-historique-totaux strong { font-size: 1rem; color: var(--color-text); }
+.bk-totaux-note { font-size: 0.68rem; color: var(--color-text-muted); font-weight: var(--font-weight-regular); }
+
+.bk-error-msg { color: var(--color-negative); background: var(--color-negative-subtle); padding: 0.7rem 0.9rem; border-radius: var(--radius-base); font-size: 0.83rem; margin-bottom: 1rem; }
+.bk-warning-msg { color: var(--color-accent); background: var(--color-accent-subtle); padding: 0.7rem 0.9rem; border-radius: var(--radius-base); font-size: 0.83rem; margin-bottom: 1rem; }
+
+.bk-form-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 1.25rem; border-top: 1px solid var(--color-border); }
+.bk-form-actions .btn { min-height: 42px; }
+
+@media (max-width: 640px) {
+  .bk-historique-head, .bk-historique-row { grid-template-columns: 80px 1fr 1fr; font-size: 0.72rem; }
+  .bk-historique-totaux { grid-template-columns: 1fr; }
+  .bk-form-actions { flex-direction: column-reverse; gap: 0.6rem; align-items: stretch; }
+  .bk-form-actions button { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .bk-historique-table { overflow-x: auto; }
+  .bk-historique-head, .bk-historique-row { min-width: 440px; }
+}
+
+@media (max-width: 420px) {
+  .bk-historique-head, .bk-historique-row { grid-template-columns: 62px 1fr 1fr; gap: 0.4rem; font-size: 0.68rem; }
+  .bk-historique-valeur { font-size: 0.72rem; padding-left: 6px; }
+}

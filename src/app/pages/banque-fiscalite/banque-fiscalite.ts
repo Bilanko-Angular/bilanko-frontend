@@ -22,6 +22,8 @@ import { CapitalFinancialNeeds } from '../../components/banque-fiscalite/capital
 import { RevenueActivity } from '../../components/banque-fiscalite/revenue-activity/revenue-activity';
 import { Summary } from '../../components/banque-fiscalite/summary/summary';
 import { AsideBankFiscality } from '../../components/banque-fiscalite/aside-bank-fiscality/aside-bank-fiscality';
+import { StepperDocument } from '../../components/banque-fiscalite/stepper-document/stepper-document';
+import { FiscalityInformation } from '../../components/banque-fiscalite/fiscality-information/fiscality-information';
 
 type Etape = 1 | 2 | 3 | 4;
 
@@ -32,9 +34,11 @@ type Etape = 1 | 2 | 3 | 4;
     FormsModule,
     Template,
     HeroBank,
+    StepperDocument,
     SelectTypeDocument,
     IdentificationMachand,
     CapitalFinancialNeeds,
+    FiscalityInformation,
     RevenueActivity,
     Summary,
     AsideBankFiscality,

@@ -10,23 +10,10 @@
     ></app-hero-bank>
 
     <!-- Stepper -->
-    <div class="bk-stepper">
-      <button class="bk-step" [class.actif]="etape() === 1" [class.fait]="etape() > 1" (click)="allerA(1)">
-        <span class="bk-step-num">1</span> Type de dossier
-      </button>
-      <span class="bk-step-line" [class.remplie]="etape() > 1"></span>
-      <button class="bk-step" [class.actif]="etape() === 2" [class.fait]="etape() > 2" (click)="allerA(2)">
-        <span class="bk-step-num">2</span> Informations
-      </button>
-      <span class="bk-step-line" [class.remplie]="etape() > 2"></span>
-      <button class="bk-step" [class.actif]="etape() === 3" [class.fait]="etape() > 3" (click)="allerA(3)">
-        <span class="bk-step-num">3</span> Chiffre d'affaires
-      </button>
-      <span class="bk-step-line" [class.remplie]="etape() > 3"></span>
-      <button class="bk-step" [class.actif]="etape() === 4" (click)="allerA(4)">
-        <span class="bk-step-num">4</span> Récapitulatif
-      </button>
-    </div>
+    <app-stepper-document
+      [etape]="etape()"
+      (allerA)="allerA($event)"
+    ></app-stepper-document>
 
     <div class="bk-layout-split">
       <div class="bk-card bk-step-card bk-elevated">
@@ -87,49 +74,26 @@
 
             @if (typeDossier() === 'dsf_smt') {
               <!-- Informations fiscales (déclaration fiscale) -->
-              <h4 class="bk-subheading">Informations fiscales et paiement</h4>
-              <p class="bk-hint bk-callout">Renseignez les éléments figurant sur votre avis, votre déclaration ou votre reçu de paiement. Bilanko ne détermine pas l'impôt dû et ce document doit être vérifié auprès de la DGI.</p>
-              <div class="bk-field-grid">
-                <label>Régime fiscal
-                  <select [ngModel]="regimeFiscal()" (ngModelChange)="regimeFiscal.set($event)">
-                    <option value="" disabled>Sélectionner un régime</option>
-                    @for (r of regimesFiscaux; track r.id) {
-                      <option [value]="r.id">{{ r.label }}</option>
-                    }
-                  </select>
-                </label>
-                <label>Exercice fiscal
-                  <input type="text" [ngModel]="exerciceFiscal()" (ngModelChange)="exerciceFiscal.set($event)" placeholder="ex: 2026" />
-                </label>
-                <label>Centre des impôts de rattachement
-                  <input type="text" [ngModel]="centreImpots()" (ngModelChange)="centreImpots.set($event)" placeholder="ex: CDI Yaoundé III" />
-                </label>
-                <label>Nature de l'impôt à payer
-                  <input type="text" [ngModel]="natureImpot()" (ngModelChange)="natureImpot.set($event)" placeholder="ex: TVA, patente, IRPP, acompte" />
-                </label>
-                <label>Période concernée
-                  <input type="text" [ngModel]="periodeDeclaration()" (ngModelChange)="periodeDeclaration.set($event)" placeholder="ex: août 2026 ou exercice 2026" />
-                </label>
-                <label>Montant de l'impôt (FCFA)
-                  <input type="number" min="0" [ngModel]="montantImpot()" (ngModelChange)="montantImpot.set(+$event)" />
-                </label>
-                <label>Date du paiement ou de l'échéance <span class="bk-optional">(si déjà connue)</span>
-                  <input type="date" [ngModel]="datePaiement()" (ngModelChange)="datePaiement.set($event)" />
-                </label>
-                <label>Mode de paiement <span class="bk-optional">(si déjà choisi)</span>
-                  <select [ngModel]="moyenPaiement()" (ngModelChange)="moyenPaiement.set($event)">
-                    <option value="" disabled>Sélectionner un mode</option>
-                    <option>Virement bancaire</option>
-                    <option>Mobile Money</option>
-                    <option>Carte bancaire</option>
-                    <option>Espèces au guichet</option>
-                    <option>Autre</option>
-                  </select>
-                </label>
-                <label>Référence de paiement / avis <span class="bk-optional">(si déjà disponible)</span>
-                  <input type="text" [ngModel]="referencePaiement()" (ngModelChange)="referencePaiement.set($event)" placeholder="Référence du reçu, de l'avis ou de la transaction" />
-                </label>
-              </div>
+              <app-fiscality-information
+                [regimeFiscal]="regimeFiscal()"
+                (regimeFiscalChange)="regimeFiscal.set($event)"
+                [exerciceFiscal]="exerciceFiscal()"
+                (exerciceFiscalChange)="exerciceFiscal.set($event)"
+                [centreImpots]="centreImpots()"
+                (centreImpotsChange)="centreImpots.set($event)"
+                [natureImpot]="natureImpot()"
+                (natureImpotChange)="natureImpot.set($event)"
+                [periodeDeclaration]="periodeDeclaration()"
+                (periodeDeclarationChange)="periodeDeclaration.set($event)"
+                [montantImpot]="montantImpot()"
+                (montantImpotChange)="montantImpot.set($event)"
+                [datePaiement]="datePaiement()"
+                (datePaiementChange)="datePaiement.set($event)"
+                [moyenPaiement]="moyenPaiement()"
+                (moyenPaiementChange)="moyenPaiement.set($event)"
+                [referencePaiement]="referencePaiement()"
+                (referencePaiementChange)="referencePaiement.set($event)"
+              ></app-fiscality-information>
             }
 
             <div class="bk-form-actions">

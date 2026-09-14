@@ -1,0 +1,87 @@
+/* ============================================================
+   ÉTAPE 1 — Sélection du type de dossier
+   ============================================================ */
+.bk-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 560px) {
+  .bk-type-grid { grid-template-columns: 1fr; }
+}
+
+.bk-type-card {
+  text-align: left;
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  background: var(--color-background);
+  cursor: pointer;
+  transition: border-color .18s ease, background-color .18s ease, transform .18s ease, box-shadow .18s ease;
+  position: relative;
+}
+.bk-type-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.3);
+}
+.bk-type-card.selectionne {
+  border-color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+.bk-type-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: transform .25s ease;
+}
+.bk-type-card:hover .bk-type-icon { transform: rotate(-4deg) scale(1.05); }
+.bk-type-icon--pret { background: linear-gradient(140deg, var(--bilanko-vert-bilanko, #63b78d), var(--bilanko-vert-fonce, #2e5f45)); }
+.bk-type-icon--dsf { background: linear-gradient(140deg, var(--bilanko-ocre-marche, #c98a3d), #9c6a2c); }
+
+.bk-type-card strong { color: var(--color-text); font-size: 0.97rem; }
+.bk-type-card span:not(.bk-type-check):not(.bk-type-badge) { color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.45; }
+
+.bk-type-check {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+.bk-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+.bk-type-badge {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.bk-type-badge--optionnel { background: var(--color-primary-subtle); color: var(--color-primary); }
+.bk-type-badge--obligatoire { background: var(--color-accent-subtle); color: var(--color-accent); }
+
+/* Actions */
+.bk-form-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 1.25rem; border-top: 1px solid var(--color-border); }
+.bk-form-actions .btn { min-height: 42px; }
+.bk-hint { color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 1.25rem; line-height: 1.5; }
+
+@media (max-width: 640px) {
+  .bk-type-card { padding: 0.9rem; }
+  .bk-type-icon { width: 40px; height: 40px; }
+  .bk-form-actions { flex-direction: column-reverse; gap: 0.6rem; align-items: stretch; }
+  .bk-form-actions button { width: 100%; }
+}
