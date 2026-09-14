@@ -1,42 +1,25 @@
-import { Component, inject, signal, computed } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { DocumentService } from '../../services/document.service';
-import { ProduitService } from '../../services/produit.service';
-import { SalesService } from '../../services/sales.service';
-import { ChargesService } from '../../services/charges.service';
-import { Template } from '../../components/shared/template/template';
+import {Component, computed, inject, Input, signal} from '@angular/core';
+import {ProduitService} from '../../../services/produit.service';
 import {
-  TypeDossier,
-  RegimeFiscal,
-  InfosCommercant,
-  DemandeDossier,
   LigneHistorique,
-  OBJETS_PRET,
-  REGIMES_FISCAUX,
-  PIECES_A_JOINDRE,
-} from '../../models/document-fiscal';
-
-type Etape = 1 | 2 | 3 | 4;
+  RegimeFiscal,
+  TypeDossier
+} from '../../../models/document-fiscal';
+import {SalesService} from '../../../services/sales.service';
+import {ChargesService} from '../../../services/charges.service';
 
 @Component({
-  selector: 'app-banque-fiscalite',
-  standalone: true,
-  imports: [FormsModule, Template],
-  templateUrl: './banque-fiscalite.html',
-  styleUrl: './banque-fiscalite.css',
+  selector: 'app-hero-bank',
+  imports: [],
+  templateUrl: './hero-bank.html',
+  styleUrl: './hero-bank.css',
 })
-export class BanqueFiscalite {
-  private readonly documentService = inject(DocumentService);
+export class HeroBank {
   private readonly produitService = inject(ProduitService);
   private readonly salesService = inject(SalesService);
   private readonly chargesService = inject(ChargesService);
 
-  readonly objetsPret = OBJETS_PRET;
-  readonly regimesFiscaux = REGIMES_FISCAUX;
-
   readonly TAUX_ENDETTEMENT_INDICATIF = 0.33;
-
-  readonly etape = signal<Etape>(1);
   readonly typeDossier = signal<TypeDossier | null>(null);
 
   // --- Identification (commune) ---
@@ -53,29 +36,16 @@ export class BanqueFiscalite {
   readonly natureImpot = signal('');
   readonly periodeDeclaration = signal('');
   readonly montantImpot = signal(0);
-  readonly datePaiement = signal('');
-  readonly moyenPaiement = signal('');
-  readonly referencePaiement = signal('');
 
   // --- Uniquement pour le prêt bancaire ---
-  readonly capitalPropre = signal(0);
   readonly banque = signal('');
   readonly agence = signal('');
   readonly objetPret = signal('');
   readonly montantDemande = signal(0);
   readonly dureeMois = signal(12);
-  readonly garanties = signal('');
-
-  normaliserNombre(value: unknown): number {
-    const nombre = typeof value === 'number' ? value : Number(value);
-    return Number.isFinite(nombre) ? nombre : 0;
-  }
 
   // --- Chiffre d'affaires (calculé, jamais saisi) ---
   readonly dureeHistorique = signal<6 | 12>(6);
-
-  readonly genereEnCours = signal(false);
-  readonly erreurGeneration = signal<string | null>(null);
 
   // Stock disponible = ce que le commerçant possède déjà en marchandises
   // (quantité × prix d'achat, issu du catalogue). NOTE : ceci ne bouge PAS
@@ -143,32 +113,15 @@ export class BanqueFiscalite {
     });
   });
   readonly totalCA = computed(() => this.historique().reduce((s, l) => s + l.chiffreAffaires, 0));
-  readonly totalAchats = computed(() => this.historique().reduce((s, l) => s + l.achatsCharges, 0));
-  readonly margeBrute = computed(() => this.totalCA() - this.totalAchats());
   readonly caMoyenMensuel = computed(() => Math.round(this.totalCA() / (this.historique().length || 1)));
-  readonly maxCA = computed(() => Math.max(1, ...this.historique().map((l) => l.chiffreAffaires)));
-  readonly moisSansVente = computed(() => this.historique().filter((l) => l.chiffreAffaires === 0).length);
 
   readonly capaciteRemboursementMensuelle = computed(() =>
     Math.round(this.caMoyenMensuel() * this.TAUX_ENDETTEMENT_INDICATIF)
   );
-  readonly montantMaxIndicatif = computed(() =>
-    Math.round(this.capaciteRemboursementMensuelle() * this.dureeMois())
-  );
+
   readonly mensualiteEstimee = computed(() =>
     this.dureeMois() > 0 ? Math.round(this.montantDemande() / this.dureeMois()) : 0
   );
-  readonly montantDepasseCapacite = computed(
-    () =>
-      this.typeDossier() === 'pret_bancaire' &&
-      this.montantDemande() > 0 &&
-      this.mensualiteEstimee() > this.capaciteRemboursementMensuelle()
-  );
-
-  readonly piecesAJoindre = computed(() => {
-    const t = this.typeDossier();
-    return t ? PIECES_A_JOINDRE[t] : [];
-  });
 
   readonly peutContinuerEtape2 = computed(() => {
     const baseOk =
@@ -208,32 +161,6 @@ export class BanqueFiscalite {
 
   readonly peutGenerer = computed(() => this.peutContinuerEtape2() && this.peutContinuerEtape3());
 
-  choisirType(t: TypeDossier) {
-    this.typeDossier.set(t);
-  }
-
-  etapeSuivante() {
-    if (this.etape() === 1 && !this.typeDossier()) return;
-    if (this.etape() === 2 && !this.peutContinuerEtape2()) return;
-    if (this.etape() === 3 && !this.peutContinuerEtape3()) return;
-    this.etape.update((e) => (e < 4 ? ((e + 1) as Etape) : e));
-  }
-
-  etapePrecedente() {
-    this.etape.update((e) => (e > 1 ? ((e - 1) as Etape) : e));
-  }
-
-  allerA(e: Etape) {
-    if (e >= 2 && !this.typeDossier()) return;
-    if (e >= 3 && !this.peutContinuerEtape2()) return;
-    if (e >= 4 && !this.peutContinuerEtape3()) return;
-    this.etape.set(e);
-  }
-
-  changerDureeHistorique(duree: 6 | 12) {
-    this.dureeHistorique.set(duree);
-  }
-
   private genererMoisCles(duree: 6 | 12): { cle: string; label: string }[] {
     const moisNoms = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
     const maintenant = new Date();
@@ -246,69 +173,5 @@ export class BanqueFiscalite {
     return resultat;
   }
 
-  async genererDossier() {
-    if (!this.peutGenerer() || !this.typeDossier()) return;
-
-    const commercant: InfosCommercant = {
-      raisonSociale: this.raisonSociale().trim(),
-      activite: this.activite().trim(),
-      adresse: this.adresse().trim(),
-      niu: this.niu().trim(),
-      regimeFiscal: this.typeDossier() === 'dsf_smt' ? (this.regimeFiscal() as RegimeFiscal) : undefined,
-      dateCreation: this.dateCreation(),
-    };
-
-    const demande: DemandeDossier = {
-      type: this.typeDossier()!,
-      commercant,
-      historique: this.historique(),
-      dureeHistorique: this.dureeHistorique(),
-      stockDisponible: this.stockDisponible(),
-      pretBancaire:
-        this.typeDossier() === 'pret_bancaire'
-          ? {
-              banque: this.banque().trim(),
-              agence: this.agence().trim(),
-              capitalPropre: Number(this.capitalPropre()),
-              objetPret: this.objetPret(),
-              montantDemande: Number(this.montantDemande()),
-              dureeMois: Number(this.dureeMois()),
-              garanties: this.garanties().trim(),
-            }
-          : undefined,
-      dsf:
-        this.typeDossier() === 'dsf_smt'
-          ? {
-              exerciceFiscal: this.exerciceFiscal(),
-              centreImpots: this.centreImpots().trim(),
-              natureImpot: this.natureImpot().trim(),
-              periodeDeclaration: this.periodeDeclaration().trim(),
-              montantImpot: Number(this.montantImpot()),
-              datePaiement: this.datePaiement(),
-              moyenPaiement: this.moyenPaiement(),
-              referencePaiement: this.referencePaiement().trim(),
-              chiffreAffairesPeriode: this.totalCA(),
-            }
-          : undefined,
-    };
-
-    this.genereEnCours.set(true);
-    this.erreurGeneration.set(null);
-
-    try {
-      const blob = await this.documentService.genererDossier(demande);
-      const url = URL.createObjectURL(blob);
-      const lien = document.createElement('a');
-      const suffixe = demande.type === 'pret_bancaire' ? 'demande-pret' : 'dsf-simplifiee';
-      lien.href = url;
-      lien.download = `bilanko-${suffixe}-${commercant.raisonSociale.replace(/\s+/g, '-').toLowerCase() || 'dossier'}.pdf`;
-      lien.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error('Erreur génération dossier :', e);
-      this.erreurGeneration.set('La génération du dossier a échoué. Vérifiez les informations saisies et réessayez.');
-    } finally {
-      this.genereEnCours.set(false);
-    }
-  }
+  @Input() etape=signal<Etape>(1)
 }

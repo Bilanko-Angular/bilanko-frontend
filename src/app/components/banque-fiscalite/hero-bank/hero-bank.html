@@ -1,0 +1,29 @@
+<div class="bk-hero">
+  <div class="bk-hero-decor" aria-hidden="true">
+    <span class="bk-hero-ring bk-hero-ring--a"></span>
+    <span class="bk-hero-ring bk-hero-ring--b"></span>
+    <span class="bk-hero-ring bk-hero-ring--c"></span>
+  </div>
+  <div class="bk-hero-content">
+    <span class="bk-hero-eyebrow">Dossiers professionnels</span>
+    <h2 class="bk-hero-title">Banque &amp; Fiscalité</h2>
+    <p class="bk-hero-subtitle">Un dossier bancaire ou une fiche fiscale prête à déposer, construite à partir de vos vraies données Bilanko.</p>
+
+    <div class="bk-hero-stats">
+      <div class="bk-hero-stat">
+        <span class="bk-hero-stat-label">Stock valorisé</span>
+        <strong class="bk-hero-stat-value">{{ stockDisponible().toLocaleString('fr-FR') }} FCFA</strong>
+      </div>
+      <span class="bk-hero-stat-sep"></span>
+      <div class="bk-hero-stat">
+        <span class="bk-hero-stat-label">CA sur {{ dureeHistorique() }} mois</span>
+        <strong class="bk-hero-stat-value">{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong>
+      </div>
+      <span class="bk-hero-stat-sep"></span>
+      <div class="bk-hero-stat">
+        <span class="bk-hero-stat-label">Progression</span>
+        <strong class="bk-hero-stat-value">Étape {{ etape() }} / 4</strong>
+      </div>
+    </div>
+  </div>
+</div>
