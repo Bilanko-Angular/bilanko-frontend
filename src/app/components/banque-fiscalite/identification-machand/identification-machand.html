@@ -1,1 +1,20 @@
-<p>identification-machand works!</p>
+<h3>Identification du commerçant</h3>
+<p class="bk-hint">Ces informations figurent en en-tête de votre dossier.</p>
+
+<div class="bk-field-grid">
+  <label>Raison sociale / Nom du commerce
+    <input type="text" [ngModel]="raisonSociale" (ngModelChange)="raisonSocialeChange.emit($event)" placeholder="ex: Ets Mballa & Fils" />
+  </label>
+  <label>Activité
+    <input type="text" [ngModel]="activite" (ngModelChange)="activiteChange.emit($event)" placeholder="ex: Vente de matériel informatique" />
+  </label>
+  <label>Adresse
+    <input type="text" [ngModel]="adresse" (ngModelChange)="adresseChange.emit($event)" placeholder="ex: Marché Central, Yaoundé" />
+  </label>
+  <label>Numéro d'Identifiant Unique (NIU)
+    <input type="text" [ngModel]="niu" (ngModelChange)="niuChange.emit($event)" placeholder="ex: P012345678901Z" />
+  </label>
+  <label>Date de création de l'activité
+    <input type="date" [ngModel]="dateCreation" (ngModelChange)="dateCreationChange.emit($event)" />
+  </label>
+</div>

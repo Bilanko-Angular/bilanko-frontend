@@ -1,1 +1,65 @@
-<p>summary works!</p>
+<h3>Récapitulatif</h3>
+<p class="bk-hint">Vérifiez les informations avant de générer le PDF final.</p>
+
+<div class="bk-recap-grid">
+  <div class="bk-recap-block">
+    <h5>Commerçant</h5>
+    <p>{{ raisonSociale }} — {{ activite }}</p>
+    <p class="bk-muted">{{ adresse }} · NIU {{ niu }}</p>
+  </div>
+
+  @if (typeDossier === 'pret_bancaire') {
+    <div class="bk-recap-block">
+      <h5>Prêt demandé</h5>
+      <p class="bk-recap-montant">{{ montantDemande.toLocaleString('fr-FR') }} FCFA</p>
+      <p class="bk-muted">{{ banque }} · {{ agence }}</p>
+      <p class="bk-muted">{{ objetPret }} · {{ dureeMois }} mois</p>
+    </div>
+  }
+
+  @if (typeDossier === 'dsf_smt') {
+    <div class="bk-recap-block">
+      <h5>Paiement fiscal</h5>
+      <p class="bk-recap-montant">{{ montantImpot.toLocaleString('fr-FR') }} FCFA</p>
+      <p class="bk-muted">{{ natureImpot }} · {{ periodeDeclaration }}</p>
+      <p class="bk-muted">{{ centreImpots }} · Réf. {{ referencePaiement }}</p>
+    </div>
+  }
+
+  <div class="bk-recap-block">
+    <h5>Chiffre d'affaires</h5>
+    <p class="bk-recap-montant">{{ totalCA.toLocaleString('fr-FR') }} FCFA</p>
+    <p class="bk-muted">Sur {{ dureeHistorique }} mois</p>
+  </div>
+
+  <div class="bk-recap-block">
+    <h5>Marge brute estimée</h5>
+    <p class="bk-recap-montant">{{ margeBrute.toLocaleString('fr-FR') }} FCFA</p>
+    <p class="bk-muted">CA − charges enregistrées</p>
+  </div>
+</div>
+
+@if (typeDossier === 'pret_bancaire') {
+  <div class="bk-pieces-card">
+    <h5>Avant de déposer votre dossier — pièces à préparer</h5>
+    <p class="bk-hint" style="margin-bottom: 0.75rem;">
+      Cette checklist est pour vous uniquement : elle n'apparaît pas dans le PDF généré, qui reste un document formel destiné à la banque.
+    </p>
+    <ul class="bk-pieces-list">
+      @for (piece of piecesAJoindre; track piece) {
+        <li>{{ piece }}</li>
+      }
+    </ul>
+  </div>
+}
+
+@if (erreurGeneration) {
+  <p class="bk-error-msg">{{ erreurGeneration }}</p>
+}
+
+<div class="bk-form-actions">
+  <button class="btn btn-outline" (click)="etapePrecedente.emit()">Retour</button>
+  <button class="btn btn-primary" [disabled]="!peutGenerer || genereEnCours" (click)="genererDossier.emit()">
+    @if (genereEnCours) { Génération… } @else { Générer le dossier PDF }
+  </button>
+</div>

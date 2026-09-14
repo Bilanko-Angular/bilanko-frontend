@@ -1,1 +1,42 @@
-<p>aside-bank-fiscality works!</p>
+<aside class="bk-card bk-summary-card bk-elevated">
+  <h4>Aperçu du dossier</h4>
+
+  <div class="bk-summary-row">
+    <span>Type</span>
+    <strong>
+      @if (typeDossier === 'pret_bancaire') {
+        <span class="bk-pill bk-pill--vert">Prêt bancaire</span>
+      } @else if (typeDossier === 'dsf_smt') {
+        <span class="bk-pill bk-pill--ocre">Déclaration fiscale</span>
+      } @else {
+        <span class="bk-pill bk-pill--muted">Non choisi</span>
+      }
+    </strong>
+  </div>
+
+  @if (typeDossier === 'pret_bancaire') {
+    <div class="bk-summary-row">
+      <span>Montant demandé</span>
+      <strong>{{ montantDemande.toLocaleString('fr-FR') }} FCFA</strong>
+    </div>
+    <div class="bk-summary-row">
+      <span>Stock disponible</span>
+      <strong>{{ stockDisponible.toLocaleString('fr-FR') }} FCFA</strong>
+    </div>
+  }
+
+  <div class="bk-summary-row">
+    <span>Période</span>
+    <strong>{{ dureeHistorique }} mois</strong>
+  </div>
+
+  <div class="bk-summary-row">
+    <span>Chiffre d'affaires</span>
+    <strong>{{ totalCA.toLocaleString('fr-FR') }} FCFA</strong>
+  </div>
+
+  <div class="bk-summary-row">
+    <span>Marge brute estimée</span>
+    <strong>{{ margeBrute.toLocaleString('fr-FR') }} FCFA</strong>
+  </div>
+</aside>

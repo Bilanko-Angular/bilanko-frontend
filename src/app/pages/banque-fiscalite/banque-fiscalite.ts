@@ -15,13 +15,30 @@ import {
   REGIMES_FISCAUX,
   PIECES_A_JOINDRE,
 } from '../../models/document-fiscal';
+import { HeroBank } from '../../components/banque-fiscalite/hero-bank/hero-bank';
+import { SelectTypeDocument } from '../../components/banque-fiscalite/select-type-document/select-type-document';
+import { IdentificationMachand } from '../../components/banque-fiscalite/identification-machand/identification-machand';
+import { CapitalFinancialNeeds } from '../../components/banque-fiscalite/capital-financial-needs/capital-financial-needs';
+import { RevenueActivity } from '../../components/banque-fiscalite/revenue-activity/revenue-activity';
+import { Summary } from '../../components/banque-fiscalite/summary/summary';
+import { AsideBankFiscality } from '../../components/banque-fiscalite/aside-bank-fiscality/aside-bank-fiscality';
 
 type Etape = 1 | 2 | 3 | 4;
 
 @Component({
   selector: 'app-banque-fiscalite',
   standalone: true,
-  imports: [FormsModule, Template],
+  imports: [
+    FormsModule,
+    Template,
+    HeroBank,
+    SelectTypeDocument,
+    IdentificationMachand,
+    CapitalFinancialNeeds,
+    RevenueActivity,
+    Summary,
+    AsideBankFiscality,
+  ],
   templateUrl: './banque-fiscalite.html',
   styleUrl: './banque-fiscalite.css',
 })
@@ -88,7 +105,6 @@ export class BanqueFiscalite {
   });
 
   private readonly moisCouverts = computed(() => this.genererMoisCles(this.dureeHistorique()));
-
 
   private extraireCleMois(date: unknown): string | null {
     if (!date) return null;

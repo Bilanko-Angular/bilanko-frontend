@@ -12,17 +12,17 @@
     <div class="bk-hero-stats">
       <div class="bk-hero-stat">
         <span class="bk-hero-stat-label">Stock valorisé</span>
-        <strong class="bk-hero-stat-value">{{ stockDisponible().toLocaleString('fr-FR') }} FCFA</strong>
+        <strong class="bk-hero-stat-value">{{ stockDisponible.toLocaleString('fr-FR') }} FCFA</strong>
       </div>
       <span class="bk-hero-stat-sep"></span>
       <div class="bk-hero-stat">
-        <span class="bk-hero-stat-label">CA sur {{ dureeHistorique() }} mois</span>
-        <strong class="bk-hero-stat-value">{{ totalCA().toLocaleString('fr-FR') }} FCFA</strong>
+        <span class="bk-hero-stat-label">CA sur {{ dureeHistorique }} mois</span>
+        <strong class="bk-hero-stat-value">{{ totalCA.toLocaleString('fr-FR') }} FCFA</strong>
       </div>
       <span class="bk-hero-stat-sep"></span>
       <div class="bk-hero-stat">
         <span class="bk-hero-stat-label">Progression</span>
-        <strong class="bk-hero-stat-value">Étape {{ etape() }} / 4</strong>
+        <strong class="bk-hero-stat-value">Étape {{ etape }} / 4</strong>
       </div>
     </div>
   </div>

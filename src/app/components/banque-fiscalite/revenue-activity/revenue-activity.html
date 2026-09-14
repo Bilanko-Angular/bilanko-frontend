@@ -1,1 +1,56 @@
-<p>revenue-activity works!</p>
+<h3>Chiffre d'affaires de l'activité</h3>
+<p class="bk-hint">Calculé automatiquement à partir de vos ventes et charges enregistrées dans Bilanko — aucune saisie nécessaire.</p>
+
+<div class="bk-format-group">
+  <label class="bk-format-option" [class.selectionne]="dureeHistorique === 6">
+    <input type="radio" name="duree" [checked]="dureeHistorique === 6" (change)="changerDureeHistorique(6)" />
+    6 derniers mois
+  </label>
+  <label class="bk-format-option" [class.selectionne]="dureeHistorique === 12">
+    <input type="radio" name="duree" [checked]="dureeHistorique === 12" (change)="changerDureeHistorique(12)" />
+    12 derniers mois
+  </label>
+</div>
+
+@if (!peutContinuerEtape3) {
+  <p class="bk-error-msg">
+    Aucune vente enregistrée sur cette période. Enregistrez vos ventes dans le module <strong>Ventes</strong> avant de générer ce dossier.
+  </p>
+} @else if (moisSansVente > 0) {
+  <p class="bk-warning-msg">
+    {{ moisSansVente }} mois sans aucune vente enregistrée sur la période — la moyenne ci-dessous peut être moins représentative tant que l'historique n'est pas complet.
+  </p>
+}
+
+<div class="bk-historique-table">
+  <div class="bk-historique-head">
+    <span>Mois</span>
+    <span>Chiffre d'affaires</span>
+    <span>Achats / Charges</span>
+  </div>
+  @for (ligne of historique; track ligne.mois) {
+    <div class="bk-historique-row">
+      <span class="bk-historique-mois">{{ ligne.mois }}</span>
+      <span class="bk-historique-bar-cell">
+        <span class="bk-historique-bar" [style.width.%]="(ligne.chiffreAffaires / maxCA) * 100"></span>
+        <span class="bk-historique-valeur">{{ ligne.chiffreAffaires.toLocaleString('fr-FR') }} FCFA</span>
+      </span>
+      <span class="bk-historique-valeur bk-historique-valeur--muted">{{ ligne.achatsCharges.toLocaleString('fr-FR') }} FCFA</span>
+    </div>
+  }
+</div>
+
+<div class="bk-historique-totaux">
+  <div><span>CA total</span><strong>{{ totalCA.toLocaleString('fr-FR') }} FCFA</strong></div>
+  <div><span>CA moyen / mois</span><strong>{{ caMoyenMensuel.toLocaleString('fr-FR') }} FCFA</strong></div>
+  <div>
+    <span>Marge brute estimée</span>
+    <strong>{{ margeBrute.toLocaleString('fr-FR') }} FCFA</strong>
+    <small class="bk-totaux-note">CA − charges enregistrées</small>
+  </div>
+</div>
+
+<div class="bk-form-actions">
+  <button class="btn btn-outline" (click)="etapePrecedente.emit()">Retour</button>
+  <button class="btn btn-primary" [disabled]="!peutContinuerEtape3" (click)="etapeSuivante.emit()">Continuer</button>
+</div>
