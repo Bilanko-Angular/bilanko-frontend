@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RegimeFiscal, REGIMES_FISCAUX } from '../../../models/document-fiscal';
+import { InfoCleDTO } from '../../../models/DTO/DocumentDto';
 
 @Component({
   selector: 'app-fiscality-information',
@@ -10,17 +10,23 @@ import { RegimeFiscal, REGIMES_FISCAUX } from '../../../models/document-fiscal';
   styleUrl: './fiscality-information.css',
 })
 export class FiscalityInformation {
-  @Input() regimesFiscaux: {id: string, label: string}[] = [];
+  /** Catalogues backend : `nom` affiché, `slug` sélectionné / envoyé */
+  @Input() regimesFiscaux: readonly InfoCleDTO[] = [];
+  @Input() centresImpots: readonly InfoCleDTO[] = [];
+  @Input() naturesImpot: readonly InfoCleDTO[] = [];
 
-  @Input() regimeFiscal!: RegimeFiscal | '';
-  @Output() regimeFiscalChange = new EventEmitter<RegimeFiscal | ''>();
+  /** Slug du régime fiscal sélectionné */
+  @Input() regimeFiscal!: string;
+  @Output() regimeFiscalChange = new EventEmitter<string>();
 
   @Input() exerciceFiscal!: string;
   @Output() exerciceFiscalChange = new EventEmitter<string>();
 
+  /** Slug du centre des impôts */
   @Input() centreImpots!: string;
   @Output() centreImpotsChange = new EventEmitter<string>();
 
+  /** Slug de la nature d'impôt */
   @Input() natureImpot!: string;
   @Output() natureImpotChange = new EventEmitter<string>();
 

@@ -39,7 +39,7 @@ export class DocumentApiService {
     return response.data;
   }
 
-  async createPret(request: CreateDocumentPretRequest): Promise<DocumentResponseDTO> {
+  async createLoan(request: CreateDocumentPretRequest): Promise<DocumentResponseDTO> {
     const response = await apiClient.post<DocumentResponseDTO>(`${this.basePath}/pret`, request);
     return response.data;
   }

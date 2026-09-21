@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { InfoCleDTO } from '../../../models/DTO/DocumentDto';
 
 @Component({
   selector: 'app-capital-financial-needs',
@@ -22,8 +23,10 @@ export class CapitalFinancialNeeds {
   @Input() capitalPropre!: number;
   @Output() capitalPropreChange = new EventEmitter<number>();
 
-  @Input() objetsPret!: readonly {id: string, label: string}[];
-  
+  /** Catalogue backend : `nom` affiché, `slug` sélectionné / envoyé */
+  @Input() objetsPret!: readonly InfoCleDTO[];
+
+  /** Slug de l'objet du prêt sélectionné */
   @Input() objetPret!: string;
   @Output() objetPretChange = new EventEmitter<string>();
 

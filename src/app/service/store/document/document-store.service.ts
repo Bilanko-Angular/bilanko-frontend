@@ -19,6 +19,8 @@ export class DocumentStoreService {
   readonly isLoadingBootstrap = signal(false);
   readonly isCreating = signal(false);
   readonly error = signal<string | null>(null);
+  /** Message d'erreur de validation retourné par le backend (400, 422, etc.) */
+  readonly errorDetail = signal<string | null>(null);
 
   // Historique (mis à jour à la demande)
   readonly historique = signal<LigneHistoriqueDTO[]>([]);
@@ -68,13 +70,17 @@ export class DocumentStoreService {
   async creerDocumentPret(request: CreateDocumentPretRequest): Promise<DocumentResponseDTO | null> {
     this.isCreating.set(true);
     this.error.set(null);
+    this.errorDetail.set(null);
     try {
-      const doc = await this.documentApi.createPret(request);
+      const doc = await this.documentApi.createLoan(request);
       this.lastCreatedDocument.set(doc);
       return doc;
     } catch (err: any) {
-      console.error('Erreur création document prêt', err);
+      const detail = this.extractErrorMessage(err);
+      console.error('[DocumentStore] Erreur création prêt — payload envoyé:', JSON.stringify(request, null, 2));
+      console.error('[DocumentStore] Réponse backend:', err?.response?.data);
       this.error.set('Échec de la création du document de prêt.');
+      this.errorDetail.set(detail);
       return null;
     } finally {
       this.isCreating.set(false);
@@ -84,16 +90,37 @@ export class DocumentStoreService {
   async creerDocumentFiscal(request: CreateDocumentFiscalRequest): Promise<DocumentResponseDTO | null> {
     this.isCreating.set(true);
     this.error.set(null);
+    this.errorDetail.set(null);
     try {
       const doc = await this.documentApi.createFiscal(request);
       this.lastCreatedDocument.set(doc);
       return doc;
     } catch (err: any) {
-      console.error('Erreur création document fiscal', err);
+      const detail = this.extractErrorMessage(err);
+      console.error('[DocumentStore] Erreur création fiscal — payload envoyé:', JSON.stringify(request, null, 2));
+      console.error('[DocumentStore] Réponse backend:', err?.response?.data);
       this.error.set('Échec de la création de la déclaration fiscale.');
+      this.errorDetail.set(detail);
       return null;
     } finally {
       this.isCreating.set(false);
     }
+  }
+
+  /**
+   * Extrait un message lisible depuis une erreur Axios.
+   * Prend en charge les formats Spring Boot (message, errors[], violations[]).
+   */
+  private extractErrorMessage(err: any): string {
+    const data = err?.response?.data;
+    if (!data) return err?.message ?? 'Erreur inconnue';
+    if (typeof data === 'string') return data;
+    // Spring validation errors
+    if (data.message) return data.message;
+    if (Array.isArray(data.errors) && data.errors.length)
+      return data.errors.map((e: any) => e.defaultMessage ?? e.message ?? e).join(' · ');
+    if (Array.isArray(data.violations) && data.violations.length)
+      return data.violations.map((v: any) => `${v.field}: ${v.message}`).join(' · ');
+    return JSON.stringify(data);
   }
 }

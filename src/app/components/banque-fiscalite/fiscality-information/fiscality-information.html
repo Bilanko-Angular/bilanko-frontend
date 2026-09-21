@@ -4,8 +4,8 @@
   <label>Régime fiscal
     <select [ngModel]="regimeFiscal" (ngModelChange)="regimeFiscalChange.emit($event)">
       <option value="" disabled>Sélectionner un régime</option>
-      @for (r of regimesFiscaux; track r.id) {
-        <option [value]="r.id">{{ r.label }}</option>
+      @for (r of regimesFiscaux; track r.slug) {
+        <option [value]="r.slug">{{ r.nom }}</option>
       }
     </select>
   </label>
@@ -13,10 +13,20 @@
     <input type="text" [ngModel]="exerciceFiscal" (ngModelChange)="exerciceFiscalChange.emit($event)" placeholder="ex: 2026" />
   </label>
   <label>Centre des impôts de rattachement
-    <input type="text" [ngModel]="centreImpots" (ngModelChange)="centreImpotsChange.emit($event)" placeholder="ex: CDI Yaoundé III" />
+    <select [ngModel]="centreImpots" (ngModelChange)="centreImpotsChange.emit($event)">
+      <option value="" disabled>Sélectionner un centre</option>
+      @for (c of centresImpots; track c.slug) {
+        <option [value]="c.slug">{{ c.nom }}</option>
+      }
+    </select>
   </label>
   <label>Nature de l'impôt à payer
-    <input type="text" [ngModel]="natureImpot" (ngModelChange)="natureImpotChange.emit($event)" placeholder="ex: TVA, patente, IRPP, acompte" />
+    <select [ngModel]="natureImpot" (ngModelChange)="natureImpotChange.emit($event)">
+      <option value="" disabled>Sélectionner une nature</option>
+      @for (n of naturesImpot; track n.slug) {
+        <option [value]="n.slug">{{ n.nom }}</option>
+      }
+    </select>
   </label>
   <label>Période concernée
     <input type="text" [ngModel]="periodeDeclaration" (ngModelChange)="periodeDeclarationChange.emit($event)" placeholder="ex: août 2026 ou exercice 2026" />

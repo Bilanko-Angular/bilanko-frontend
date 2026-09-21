@@ -75,7 +75,9 @@
             @if (typeDossier() === 'dsf_smt') {
               <!-- Informations fiscales (déclaration fiscale) -->
               <app-fiscality-information
-                [regimesFiscaux]="regimesFiscauxFront()"
+                [regimesFiscaux]="regimesFiscaux()"
+                [centresImpots]="centresImpotsCatalogue()"
+                [naturesImpot]="naturesImpotCatalogue()"
                 [regimeFiscal]="regimeFiscal()"
                 (regimeFiscalChange)="regimeFiscal.set($event)"
                 [exerciceFiscal]="exerciceFiscal()"
@@ -131,12 +133,12 @@
               [montantDemande]="montantDemande()"
               [banque]="banque()"
               [agence]="agence()"
-              [objetPret]="objetPret()"
+              [objetPret]="objetPretNom()"
               [dureeMois]="dureeMois()"
               [montantImpot]="montantImpot()"
-              [natureImpot]="natureImpot()"
+              [natureImpot]="natureImpotNom()"
               [periodeDeclaration]="periodeDeclaration()"
-              [centreImpots]="centreImpots()"
+              [centreImpots]="centreImpotsNom()"
               [referencePaiement]="referencePaiement()"
               [totalCA]="totalCA()"
               [dureeHistorique]="dureeHistorique()"

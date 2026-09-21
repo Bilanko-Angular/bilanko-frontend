@@ -1,17 +1,22 @@
+/** Entrée de catalogue backend (objets prêt, pièces, régimes, centres, natures…) */
+export interface InfoCleDTO {
+  id: number;
+  slug: string;
+  type: string;
+  nom: string;
+  information?: string;
+}
+
 export interface TypeDocumentDTO {
   id: string;
   label: string;
+  /** Présent si le backend aligne les types sur le même format catalogue */
+  slug?: string;
+  nom?: string;
 }
 
-export interface InfoCleDTO {
-  id: string;
-  label: string;
-}
-
-export interface RegimeFiscalDTO {
-  id: string;
-  label: string;
-}
+/** Alias — les régimes fiscaux suivent le même format catalogue */
+export type RegimeFiscalDTO = InfoCleDTO;
 
 export interface InfosCommercantDTO {
   raisonSociale: string;

@@ -7,7 +7,8 @@ export interface InfosCommercant {
   activite: string;
   adresse: string;
   niu: string;
-  regimeFiscal?: RegimeFiscal;
+  /** Libellé affiché dans le PDF (nom catalogue) */
+  regimeFiscal?: string;
   dateCreation: string;
 }
 

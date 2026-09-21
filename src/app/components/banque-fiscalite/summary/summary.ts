@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TypeDossier } from '../../../models/document-fiscal';
+import { InfoCleDTO } from '../../../models/DTO/DocumentDto';
 
 @Component({
   selector: 'app-summary',
@@ -17,20 +18,22 @@ export class Summary {
   @Input() montantDemande!: number;
   @Input() banque!: string;
   @Input() agence!: string;
+  /** Libellé affiché (nom), pas le slug */
   @Input() objetPret!: string;
   @Input() dureeMois!: number;
-  
+
   @Input() montantImpot!: number;
+  /** Libellés affichés (nom), pas les slugs */
   @Input() natureImpot!: string;
   @Input() periodeDeclaration!: string;
   @Input() centreImpots!: string;
   @Input() referencePaiement!: string;
-  
+
   @Input() totalCA!: number;
   @Input() dureeHistorique!: number;
   @Input() margeBrute!: number;
-  @Input() piecesAJoindre!: readonly {id: string; label: string}[];
-  
+  @Input() piecesAJoindre!: readonly InfoCleDTO[];
+
   @Input() erreurGeneration!: string | null;
   @Input() genereEnCours!: boolean;
   @Input() peutGenerer!: boolean;
