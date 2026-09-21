@@ -1,0 +1,48 @@
+/* ============================================================
+   RÉCAPITULATIF — Étape 4
+   ============================================================ */
+h3 {
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: 0.4rem;
+}
+
+.bk-hint { color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 1.25rem; line-height: 1.5; }
+
+.bk-recap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.bk-recap-block { border: 1px solid var(--color-border); border-radius: var(--radius-base); padding: 1rem; background: var(--color-background); }
+.bk-recap-block h5 { font-size: 0.72rem; font-weight: var(--font-weight-bold); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem; }
+.bk-recap-block p { font-size: 0.85rem; color: var(--color-text); margin: 0; }
+.bk-recap-montant { font-size: 1.1rem; font-weight: var(--font-weight-bold); color: var(--color-primary); }
+.bk-muted { color: var(--color-text-muted); font-size: 0.8rem; }
+
+.bk-pieces-card { border: 1px solid var(--color-border); border-radius: var(--radius-base); padding: 1rem 1.1rem; margin-bottom: 1.5rem; background: var(--color-background); }
+.bk-pieces-card h5 { font-size: 0.85rem; font-weight: var(--font-weight-bold); color: var(--color-text); margin: 0 0 0.3rem; }
+.bk-pieces-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin: 0; padding: 0; }
+.bk-pieces-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+.bk-pieces-list li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0.5em;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.bk-error-msg { color: var(--color-negative); background: var(--color-negative-subtle); padding: 0.7rem 0.9rem; border-radius: var(--radius-base); font-size: 0.83rem; margin-bottom: 1rem; }
+
+.bk-form-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 1.25rem; border-top: 1px solid var(--color-border); }
+.bk-form-actions .btn { min-height: 42px; }
+
+@media (max-width: 640px) {
+  .bk-recap-grid { grid-template-columns: 1fr; }
+  .bk-form-actions { flex-direction: column-reverse; gap: 0.6rem; align-items: stretch; }
+  .bk-form-actions button { width: 100%; }
+}

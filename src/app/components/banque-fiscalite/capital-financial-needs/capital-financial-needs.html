@@ -1,0 +1,109 @@
+<h4 class="bk-subheading">Capital &amp; besoin de financement</h4>
+<p class="bk-hint" style="margin-bottom: 0.75rem;">
+  Ces deux indicateurs sont calculés automatiquement depuis Bilanko et appuient votre dossier auprès de la banque.
+</p>
+<div class="bk-info-row">
+  <div class="bk-info-tile">
+    <span class="bk-info-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18">
+        <path d="M12 2 3 7v2h18V7l-9-5Z" fill="currentColor"/>
+        <rect x="5" y="10" width="2.4" height="8" rx="0.8" fill="currentColor"/>
+        <rect x="10.8" y="10" width="2.4" height="8" rx="0.8" fill="currentColor"/>
+        <rect x="16.6" y="10" width="2.4" height="8" rx="0.8" fill="currentColor"/>
+        <rect x="3" y="19.5" width="18" height="2.2" rx="1.1" fill="currentColor"/>
+      </svg>
+    </span>
+    <span class="bk-info-label">Stock disponible (garantie potentielle)</span>
+    <strong class="bk-info-value">{{ stockDisponible.toLocaleString('fr-FR') }} FCFA</strong>
+  </div>
+  <div class="bk-info-tile bk-info-tile--accent">
+    <span class="bk-info-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18">
+        <path d="M3 16 9 9l4 4 8-9" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 4h6v6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="bk-info-label">Chiffre d'affaires sur {{ dureeHistorique }} mois</span>
+    <strong class="bk-info-value">{{ totalCA.toLocaleString('fr-FR') }} FCFA</strong>
+  </div>
+</div>
+
+<div class="bk-field-grid">
+  <label>Banque destinataire
+    <input type="text" [ngModel]="banque" (ngModelChange)="banqueChange.emit($event)" placeholder="ex: Afriland First Bank" />
+  </label>
+  <label>Agence / centre d'affaires
+    <input type="text" [ngModel]="agence" (ngModelChange)="agenceChange.emit($event)" placeholder="ex: Agence Bonamoussadi" />
+  </label>
+  <label>Capital propre / apport personnel (FCFA)
+    <input type="number" min="0" [ngModel]="capitalPropre" (ngModelChange)="capitalPropreChange.emit(normaliserNombre($event))" />
+  </label>
+  <label>Objet du prêt
+    <select [ngModel]="objetPret" (ngModelChange)="objetPretChange.emit($event)">
+      <option value="" disabled>Sélectionner un objet</option>
+      @for (o of objetsPret; track o.slug) {
+        <option [value]="o.slug">{{ o.nom }}</option>
+      }
+    </select>
+  </label>
+  <label>Montant du prêt demandé (FCFA)
+    <input type="number" min="0" [ngModel]="montantDemande" (ngModelChange)="montantDemandeChange.emit(normaliserNombre($event))" />
+  </label>
+  <label>Durée souhaitée (mois)
+    <input type="number" min="1" [ngModel]="dureeMois" (ngModelChange)="dureeMoisChange.emit(normaliserNombre($event))" />
+  </label>
+  <label class="bk-field-full">Garanties proposées <span class="bk-optional">(optionnel)</span>
+    <textarea rows="2" [ngModel]="garanties" (ngModelChange)="garantiesChange.emit($event)" placeholder="ex: Nantissement du stock, caution d'un tiers... — laissez vide si aucune garantie n'est proposée"></textarea>
+  </label>
+</div>
+
+<!-- =========================================================
+     SCORECARD — capacité d'emprunt, mise en scène visuelle
+     ========================================================= -->
+<div class="bk-score-card" [class.bk-score-card--alerte]="montantDepasseCapacite">
+  <div class="bk-score-head">
+    <span class="bk-score-badge">Estimation Bilanko</span>
+    <h4 class="bk-score-title">Votre capacité d'emprunt en un coup d'œil</h4>
+    <p class="bk-score-text">D'après votre chiffre d'affaires réel, voici jusqu'où vous pourriez aller sans mettre votre activité sous pression.</p>
+  </div>
+
+  <div class="bk-score-body">
+    <div
+      class="bk-gauge-ring"
+      [class.bk-gauge-ring--alerte]="montantDepasseCapacite"
+      [attr.style]="'--pct: ' + (capaciteRemboursementMensuelle > 0 ? (mensualiteEstimee / capaciteRemboursementMensuelle) * 100 : 0)"
+    >
+      <div class="bk-gauge-inner">
+        <span class="bk-gauge-pct">{{ (capaciteRemboursementMensuelle > 0 ? (mensualiteEstimee / capaciteRemboursementMensuelle) * 100 : 0).toFixed(0) }}%</span>
+        <span class="bk-gauge-caption">du repère</span>
+      </div>
+    </div>
+
+    <div class="bk-score-facts">
+      <div class="bk-score-fact">
+        <span>Revenu mensuel moyen</span>
+        <strong>{{ caMoyenMensuel.toLocaleString('fr-FR') }} FCFA</strong>
+      </div>
+      <div class="bk-score-fact">
+        <span>Vous pourriez rembourser</span>
+        <strong>{{ capaciteRemboursementMensuelle.toLocaleString('fr-FR') }} FCFA / mois</strong>
+      </div>
+      <div class="bk-score-fact">
+        <span>Emprunt total possible ≈</span>
+        <strong>{{ montantMaxIndicatif.toLocaleString('fr-FR') }} FCFA</strong>
+      </div>
+    </div>
+  </div>
+
+  @if (montantDepasseCapacite) {
+    <p class="bk-score-verdict bk-score-verdict--alerte">
+      <strong>Vigilance —</strong> votre demande dépasse ce repère. Réduire le montant, allonger la durée, ou attendre un peu plus d'historique peut renforcer votre dossier.
+    </p>
+  } @else {
+    <p class="bk-score-verdict bk-score-verdict--ok">
+      <strong>Bon signal —</strong> votre demande reste dans ce repère.
+    </p>
+  }
+
+  <p class="bk-score-footnote">Repère indicatif Bilanko (≈33% du chiffre d'affaires moyen) — pas un calcul bancaire officiel, chaque banque applique ses propres critères.</p>
+</div>

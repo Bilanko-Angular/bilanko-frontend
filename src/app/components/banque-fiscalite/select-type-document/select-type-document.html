@@ -1,0 +1,46 @@
+<h3>Quel dossier voulez-vous préparer ?</h3>
+<p class="bk-hint">Choisissez le type de dossier : le contenu généré s'adapte automatiquement aux exigences correspondantes.</p>
+
+<div class="bk-type-grid">
+  <button type="button" class="bk-type-card" [class.selectionne]="typeDossier === 'pret_bancaire'" (click)="choisirType('pret_bancaire')">
+    <span class="bk-type-icon bk-type-icon--pret" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="26" height="26">
+        <path d="M24 5 5 16.5h38L24 5Z" fill="currentColor"/>
+        <rect x="9" y="19.5" width="4.2" height="16" rx="1.2" fill="currentColor"/>
+        <rect x="19.2" y="19.5" width="4.2" height="16" rx="1.2" fill="currentColor"/>
+        <rect x="29.4" y="19.5" width="4.2" height="16" rx="1.2" fill="currentColor"/>
+        <rect x="39.6" y="19.5" width="0" height="0" fill="none"/>
+        <rect x="38.6" y="19.5" width="0.4" height="16" fill="none"/>
+        <rect x="5" y="37.5" width="38" height="4.5" rx="1.4" fill="currentColor"/>
+      </svg>
+    </span>
+    <span class="bk-type-badge bk-type-badge--optionnel">Optionnel</span>
+    <strong>Demande de prêt bancaire</strong>
+    <span>Pour obtenir un financement : capital, garanties, montant demandé, appuyé par votre chiffre d'affaires réel.</span>
+    @if (typeDossier === 'pret_bancaire') {
+      <span class="bk-type-check"><span class="bk-dot"></span> Sélectionné</span>
+    }
+  </button>
+
+  <button type="button" class="bk-type-card" [class.selectionne]="typeDossier === 'dsf_smt'" (click)="choisirType('dsf_smt')">
+    <span class="bk-type-icon bk-type-icon--dsf" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="26" height="26">
+        <path d="M11 4h20l6 6v34l-4.5-3-4.5 3-4.5-3-4.5 3-4.5-3-3.5 2.4V10L11 4Z" fill="currentColor"/>
+        <rect x="15.5" y="17" width="17" height="2.6" rx="1.3" fill="var(--color-surface)"/>
+        <rect x="15.5" y="23.5" width="17" height="2.6" rx="1.3" fill="var(--color-surface)"/>
+        <rect x="15.5" y="30" width="10.5" height="2.6" rx="1.3" fill="var(--color-surface)"/>
+      </svg>
+    </span>
+    <span class="bk-type-badge bk-type-badge--obligatoire">Obligatoire</span>
+    <strong>Déclaration fiscale simplifiée</strong>
+    <span>Pour être en règle avec le fisc : votre chiffre d'affaires réel de la période, déclaré au centre des impôts.</span>
+    @if (typeDossier === 'dsf_smt') {
+      <span class="bk-type-check"><span class="bk-dot"></span> Sélectionné</span>
+    }
+  </button>
+</div>
+
+<div class="bk-form-actions">
+  <span></span>
+  <button class="btn btn-primary" [disabled]="!typeDossier" (click)="continuer()">Continuer</button>
+</div>

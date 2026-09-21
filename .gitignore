@@ -43,6 +43,7 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
-#local environment files
+#local environment files by Emmanuel Seujip
 environment.local.ts
 fix-environment-imports.sh
+/extra_doc_emmanuel/

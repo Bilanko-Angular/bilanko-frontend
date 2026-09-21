@@ -1,0 +1,17 @@
+<div class="bk-stepper">
+  <button class="bk-step" [class.actif]="etape === 1" [class.fait]="etape > 1" (click)="allerA.emit(1)">
+    <span class="bk-step-num">1</span> Type de dossier
+  </button>
+  <span class="bk-step-line" [class.remplie]="etape > 1"></span>
+  <button class="bk-step" [class.actif]="etape === 2" [class.fait]="etape > 2" (click)="allerA.emit(2)">
+    <span class="bk-step-num">2</span> Informations
+  </button>
+  <span class="bk-step-line" [class.remplie]="etape > 2"></span>
+  <button class="bk-step" [class.actif]="etape === 3" [class.fait]="etape > 3" (click)="allerA.emit(3)">
+    <span class="bk-step-num">3</span> Chiffre d'affaires
+  </button>
+  <span class="bk-step-line" [class.remplie]="etape > 3"></span>
+  <button class="bk-step" [class.actif]="etape === 4" (click)="allerA.emit(4)">
+    <span class="bk-step-num">4</span> Récapitulatif
+  </button>
+</div>

@@ -1,0 +1,53 @@
+<h4 class="bk-subheading">Informations fiscales et paiement</h4>
+<p class="bk-hint bk-callout">Renseignez les éléments figurant sur votre avis, votre déclaration ou votre reçu de paiement. Bilanko ne détermine pas l'impôt dû et ce document doit être vérifié auprès de la DGI.</p>
+<div class="bk-field-grid">
+  <label>Régime fiscal
+    <select [ngModel]="regimeFiscal" (ngModelChange)="regimeFiscalChange.emit($event)">
+      <option value="" disabled>Sélectionner un régime</option>
+      @for (r of regimesFiscaux; track r.slug) {
+        <option [value]="r.slug">{{ r.nom }}</option>
+      }
+    </select>
+  </label>
+  <label>Exercice fiscal
+    <input type="text" [ngModel]="exerciceFiscal" (ngModelChange)="exerciceFiscalChange.emit($event)" placeholder="ex: 2026" />
+  </label>
+  <label>Centre des impôts de rattachement
+    <select [ngModel]="centreImpots" (ngModelChange)="centreImpotsChange.emit($event)">
+      <option value="" disabled>Sélectionner un centre</option>
+      @for (c of centresImpots; track c.slug) {
+        <option [value]="c.slug">{{ c.nom }}</option>
+      }
+    </select>
+  </label>
+  <label>Nature de l'impôt à payer
+    <select [ngModel]="natureImpot" (ngModelChange)="natureImpotChange.emit($event)">
+      <option value="" disabled>Sélectionner une nature</option>
+      @for (n of naturesImpot; track n.slug) {
+        <option [value]="n.slug">{{ n.nom }}</option>
+      }
+    </select>
+  </label>
+  <label>Période concernée
+    <input type="text" [ngModel]="periodeDeclaration" (ngModelChange)="periodeDeclarationChange.emit($event)" placeholder="ex: août 2026 ou exercice 2026" />
+  </label>
+  <label>Montant de l'impôt (FCFA)
+    <input type="number" min="0" [ngModel]="montantImpot" (ngModelChange)="montantImpotChange.emit(+$event)" />
+  </label>
+  <label>Date du paiement ou de l'échéance <span class="bk-optional">(si déjà connue)</span>
+    <input type="date" [ngModel]="datePaiement" (ngModelChange)="datePaiementChange.emit($event)" />
+  </label>
+  <label>Mode de paiement <span class="bk-optional">(si déjà choisi)</span>
+    <select [ngModel]="moyenPaiement" (ngModelChange)="moyenPaiementChange.emit($event)">
+      <option value="" disabled>Sélectionner un mode</option>
+      <option>Virement bancaire</option>
+      <option>Mobile Money</option>
+      <option>Carte bancaire</option>
+      <option>Espèces au guichet</option>
+      <option>Autre</option>
+    </select>
+  </label>
+  <label>Référence de paiement / avis <span class="bk-optional">(si déjà disponible)</span>
+    <input type="text" [ngModel]="referencePaiement" (ngModelChange)="referencePaiementChange.emit($event)" placeholder="Référence du reçu, de l'avis ou de la transaction" />
+  </label>
+</div>
