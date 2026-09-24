@@ -29,6 +29,7 @@
 
 /* Puce indiquant le type de notification, cohérente avec la charte Bilanko */
 .bk-bell__dot {
+  display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -41,4 +42,15 @@
 }
 .bk-bell__dot--systeme {
   background-color: var(--color-text-muted);
+}
+
+.bk-bell__list {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+@media (min-width: 576px) {
+  .bk-bell__list {
+    max-height: 400px;
+  }
 }

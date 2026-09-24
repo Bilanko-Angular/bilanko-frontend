@@ -9,7 +9,7 @@ import {
 import { Router } from '@angular/router';
 
 import { PreferencesService } from '../../../../services/preferences';
-import { NotificationItem, NotificationsService } from '../../../../services/notifications.service';
+import { NotificationsStoreService, ExtendedNotificationItem } from '../../../../service/store/notifications/notifications-store.service';
 
 
 @Component({
@@ -24,11 +24,12 @@ export class NotificationsBell {
   private readonly router = inject(Router);
   private readonly elementRef = inject(ElementRef);
 
-  protected readonly notificationsService = inject(NotificationsService);
+  protected readonly notificationsStore = inject(NotificationsStoreService);
   protected readonly prefs = inject(PreferencesService);
 
-  readonly notifications = this.notificationsService.notifications;
-  readonly count = this.notificationsService.count;
+  readonly notifications = this.notificationsStore.notifications;
+  readonly count = this.notificationsStore.unreadCount;
+  readonly hasMore = this.notificationsStore.hasMore;
 
   readonly open = signal(false);
 
@@ -40,7 +41,11 @@ export class NotificationsBell {
     this.open.set(false);
   }
 
-  goToTarget(notif: NotificationItem): void {
+  goToTarget(notif: ExtendedNotificationItem): void {
+    if (!notif.read) {
+      this.notificationsStore.markAsRead(notif.id);
+    }
+    
     this.close();
 
     if (notif.type === 'stock') {
@@ -54,8 +59,11 @@ export class NotificationsBell {
   }
 
   clearAll(): void {
-    this.notificationsService.clear();
-    this.close();
+    this.notificationsStore.markAllAsRead();
+  }
+
+  loadMore(): void {
+    this.notificationsStore.loadMore();
   }
 
 
