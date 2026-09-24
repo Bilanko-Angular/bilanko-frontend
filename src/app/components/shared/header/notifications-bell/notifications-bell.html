@@ -14,7 +14,7 @@
       <span
         class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-2 border-body p-1 bk-bell__badge"
         style="font-size: 0.58rem; min-width: 16px;">
-        {{ count() }}
+        {{ count() > 99 ? '99+' : count() }}
       </span>
     }
 
@@ -25,9 +25,9 @@
 
     <div
       class="dropdown-menu dropdown-menu-end show shadow-lg mt-2 p-0 overflow-hidden bk-bell__panel"
-      style="width: 300px;">
+      style="width: 320px; max-width: 90vw; position: absolute; right: -10px; left: auto;">
 
-      <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+      <div class="d-flex align-items-center justify-content-between p-3 border-bottom bg-light">
 
         <strong class="small mb-0 text-body">
           {{ prefs.t().notifications }}
@@ -38,7 +38,7 @@
             type="button"
             class="btn btn-link p-0 text-primary text-decoration-none small fw-semibold"
             (click)="clearAll()">
-            {{ prefs.t().clearAll }}
+            {{ prefs.t().clearAll || 'Tout marquer comme lu' }}
           </button>
         }
 
@@ -51,30 +51,45 @@
           <span class="material-symbols-outlined d-block mb-1 text-muted" style="font-size: 26px;">
             notifications_off
           </span>
-          {{ prefs.t().noNotifications }}
+          {{ prefs.t().noNotifications || 'Aucune notification' }}
         </div>
 
       } @else {
 
-        <div class="list-group list-group-flush overflow-auto" style="max-height: 320px;">
+        <div class="list-group list-group-flush overflow-auto bk-bell__list">
 
           @for (notif of notifications(); track notif.id) {
 
             <button
               type="button"
               class="list-group-item list-group-item-action d-flex align-items-start gap-2 p-3 text-start bk-bell__item"
+              [class.bg-light]="!notif.read"
               (click)="goToTarget(notif)">
 
-              <span class="bk-bell__dot bk-bell__dot--{{ notif.type }} mt-1 flex-shrink-0"></span>
+              <div class="position-relative mt-1">
+                <span class="bk-bell__dot bk-bell__dot--{{ notif.type }} flex-shrink-0"></span>
+                @if (!notif.read) {
+                  <span class="position-absolute top-0 start-100 translate-middle p-1 bg-primary border border-light rounded-circle" style="width: 8px; height: 8px; margin-left: 2px;"></span>
+                }
+              </div>
 
-              <span class="d-flex flex-column gap-1 min-w-0">
-                <span class="fw-bold small text-body">{{ notif.title }}</span>
-                <span class="text-muted small" style="font-size: 0.72rem;">{{ notif.detail }}</span>
+              <span class="d-flex flex-column gap-1 min-w-0 flex-grow-1">
+                <span class="small text-body" [class.fw-bold]="!notif.read" [class.fw-medium]="notif.read" style="word-break: break-word;">{{ notif.title }}</span>
+                <span class="text-muted small" style="font-size: 0.72rem; word-break: break-word;">{{ notif.detail }}</span>
                 <span class="text-muted" style="font-size: 0.65rem;">{{ notif.time }}</span>
               </span>
 
             </button>
 
+          }
+
+          @if (hasMore()) {
+            <button
+              type="button"
+              class="list-group-item list-group-item-action text-center p-2 text-primary fw-medium small"
+              (click)="loadMore()">
+              Voir plus
+            </button>
           }
 
         </div>
