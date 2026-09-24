@@ -1,7 +1,8 @@
 import { Injectable, signal, computed, inject, OnDestroy } from '@angular/core';
 import {NotificationApiService} from '../../api/notification/notification-api.service';
 import { NotificationMapper } from '../../../mapper/NotificationMapper';
-import { NotificationItem } from '../../../services/notifications.service';
+
+import {NotificationItem} from '../../../models/notificationItem';
 
 export type ExtendedNotificationItem = NotificationItem & { read: boolean, referenceId: number | null, originalType: string };
 

@@ -5,7 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
 import { User } from '../../../models/person';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import { GoogleLoginButton } from '../../../components/shared/ui/google-login-button/google-login-button';
 
 @Component({
@@ -59,7 +59,7 @@ export class Connexion {
       this.isLoading = false;
     }
   }
-  
+
   togglePasswordVisibility(inputElement: HTMLInputElement): void {
     if (inputElement.type === 'password') {
       inputElement.type = 'text';

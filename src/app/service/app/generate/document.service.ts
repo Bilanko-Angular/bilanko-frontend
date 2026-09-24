@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { DemandeDossier, REGIMES_FISCAUX } from '../models/document-fiscal';
+import { DemandeDossier, REGIMES_FISCAUX } from '../../../models/document-fiscal';
 
 type RGB = [number, number, number];
 

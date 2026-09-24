@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import { ActionResponseService } from '../../../service/action-response/action-response.service';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 import { UserStoreService } from '../../../service/store/user/user-store.service';

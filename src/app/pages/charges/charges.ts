@@ -9,7 +9,7 @@ import { Sale } from '../../models/sale';
 import { FinanceForm } from '../../components/shared/finance-form/finance-form';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
-import { PreferencesService } from '../../services/preferences';
+import { PreferencesService } from '../../service/app/preference/preferences';
 import { ChargeStoreService } from '../../service/store/charge/charge-store.service';
 
 @Component({
@@ -60,7 +60,7 @@ export class ChargesComponent {
     if (period !== 'all') {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      
+
       charges = charges.filter(c => {
         const date = new Date(c.date);
         if (period === 'today') {

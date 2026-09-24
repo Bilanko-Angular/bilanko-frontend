@@ -5,7 +5,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { AuthApiService } from '../../api/auth/auth-api.service';
 import { User } from '../../../models/person';
 import { UserStoreService } from '../user/user-store.service';
-import { ThemeService } from '../../../services/theme'; // ← AJOUTER
+import { ThemeService } from '../../app/theme/theme'; // ← AJOUTER
 
 @Injectable({
   providedIn: 'root',

@@ -1,10 +1,11 @@
 import { NotificationResponseDTO } from '../models/DTO/NotificationDto';
-import { NotificationItem } from '../services/notifications.service';
+
+import {NotificationItem} from "../models/notificationItem";
 
 export class NotificationMapper {
   static toClient(dto: NotificationResponseDTO): NotificationItem & { read: boolean, referenceId: number | null, originalType: string } {
     let type: 'stock' | 'vente' | 'systeme' = 'systeme';
-    
+
     if (dto.type === 'NEW_SALE') {
       type = 'vente';
     } else if (dto.type === 'NEW_CHARGE') {

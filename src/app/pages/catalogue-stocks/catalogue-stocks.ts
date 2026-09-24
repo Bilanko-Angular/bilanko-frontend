@@ -8,7 +8,7 @@ import { ProductPagination } from '../../components/catalogue-stock/product-pagi
 import { ProductDeleteModal } from '../../components/catalogue-stock/product-delete-modal/product-delete-modal';
 import { ProduitForm } from '../../components/catalogue-stock/produit-form/produit-form';
 import { Template } from '../../components/shared/template/template';
-import { PreferencesService } from '../../services/preferences';
+import { PreferencesService } from '../../service/app/preference/preferences';
 import { Produit } from '../../models/produit';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';

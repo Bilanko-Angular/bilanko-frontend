@@ -13,7 +13,7 @@ import { SalesTableComponent } from '../../components/accueil/sale-table.compone
 import { StockAlertsComponent } from '../../components/accueil/stock-alert.component/stock-alert.component';
 import { ChargesDonutComponent } from '../../components/accueil/charges-donut.component/charges-donut.component';
 import { UserStoreService } from '../../service/store/user/user-store.service';
-import { PreferencesService } from '../../services/preferences';
+import { PreferencesService } from '../../service/app/preference/preferences';
 
 @Component({
   selector: 'app-acceuil',

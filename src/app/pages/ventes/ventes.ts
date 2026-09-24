@@ -9,7 +9,7 @@ import { Template } from '../../components/shared/template/template';
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { PanierForm } from './panier-form/panier-form';
-import { PreferencesService } from '../../services/preferences';
+import { PreferencesService } from '../../service/app/preference/preferences';
 import { VenteStoreService } from '../../service/store/vente/vente-store.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { Template } from '../../components/shared/template/template';
 import { ActionResponsePopup } from '../../components/globals/action-response-popup/action-response-popup';
-import { PreferencesService } from '../../services/preferences';
+import { PreferencesService } from '../../service/app/preference/preferences';
 
 import { GeneralSettingsComponent } from '../../components/parametres/general-settings/general-settings';
 import { SecuritySettingsComponent } from '../../components/parametres/security-settings/security-settings';
