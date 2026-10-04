@@ -52,7 +52,7 @@ export class Connexion {
 
     try {
       await this.authStore.login(user);
-      this.router.navigate(['/dashboard']);
+      await this.router.navigate(['/dashboard']);
     } catch (error: any) {
       this.loginError = error?.message || 'Identifiants incorrects ou erreur serveur.';
     } finally {
