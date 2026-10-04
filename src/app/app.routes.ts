@@ -12,6 +12,7 @@ import { Landing } from './pages/landing/landing';
 import { VenteDetail } from './pages/ventes/vente-detail/vente-detail';
 import {CatalogueStocks} from './pages/catalogue-stocks/catalogue-stocks';
 import { guestGuard } from './guards/guest.guard';
+import { SupportMessaging } from './pages/support-messaging/support-messaging';
 
 export const routes: Routes = [
   { path: '', component: Landing },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'inscription', component: Inscription, canActivate: [guestGuard] },
   { path: 'mot-de-passe-oublie', component: MotDePasseOublie, canActivate: [guestGuard] },
   { path: 'parametres', component: Parametres },
+  { path: 'messagerie-support', component: SupportMessaging },
   {path: 'banque-fiscalite', component:BanqueFiscalite},
   { path: '**', redirectTo: '' }
 ];
