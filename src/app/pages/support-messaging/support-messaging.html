@@ -1,0 +1,129 @@
+<app-template>
+  <section class="support-page">
+    <header class="support-header">
+      <div>
+        <p class="support-eyebrow">ASSISTANCE</p>
+        <h1>Service client</h1>
+        <p class="support-subtitle">Échangez directement avec notre équipe.</p>
+      </div>
+      <span class="support-header-icon material-symbols-outlined">support_agent</span>
+    </header>
+
+    @if (error()) {
+      <div class="support-alert" role="alert">
+        <span class="material-symbols-outlined">error</span>
+        {{ error() }}
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="support-card support-loading">
+        <span class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></span>
+        Chargement de votre conversation…
+      </div>
+    } @else if (!conversation()) {
+      <div class="support-card empty-state">
+        <div class="empty-icon material-symbols-outlined">forum</div>
+        <h2>Besoin d’aide ?</h2>
+        <p>Ouvrez une conversation avec le service client. Un administrateur vous répondra dès qu’il aura pris en charge votre demande.</p>
+        <button class="btn btn-primary" type="button" [disabled]="starting()" (click)="startConversation()">
+          @if (starting()) {
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            Ouverture…
+          } @else {
+            <span class="material-symbols-outlined">chat</span>
+            Démarrer une conversation
+          }
+        </button>
+      </div>
+    } @else {
+      <div class="conversation-layout">
+        <aside class="support-card conversation-details">
+          <div class="status-row">
+            <span class="status-dot" [class.status-dot--active]="conversation()?.canWrite"></span>
+            <span>{{ conversation()?.canWrite ? 'Conversation ouverte' : 'En attente de prise en charge' }}</span>
+          </div>
+          <div class="details-divider"></div>
+          <p class="details-label">Votre interlocuteur</p>
+          @if (conversation()?.currentAdminId) {
+            <div class="admin-identity">
+              <span class="admin-avatar material-symbols-outlined">support_agent</span>
+              <div>
+                <strong>{{ displayName(conversation()?.currentAdminName ?? null, conversation()?.currentAdminSubname ?? null) }}</strong>
+                <small>Administrateur du service client</small>
+              </div>
+            </div>
+          } @else {
+            <div class="waiting-identity">
+              <span class="material-symbols-outlined">hourglass_top</span>
+              <span>Un administrateur va bientôt prendre en charge votre demande.</span>
+            </div>
+          }
+          @if (conversation()?.transferPending) {
+            <div class="transfer-notice">
+              <span class="material-symbols-outlined">swap_horiz</span>
+              Votre conversation est en cours de transfert vers un autre administrateur.
+            </div>
+          }
+        </aside>
+
+        <section class="support-card chat-card" aria-label="Conversation avec le service client">
+          <div class="chat-header">
+            <div>
+              <h2>Votre conversation</h2>
+              <p>Les messages sont actualisés automatiquement.</p>
+            </div>
+            <span class="material-symbols-outlined">lock</span>
+          </div>
+
+          <div class="messages" aria-live="polite">
+            @if (!messages().length) {
+              <div class="messages-empty">
+                <span class="material-symbols-outlined">waving_hand</span>
+                <p>Votre demande est bien enregistrée.</p>
+                <small>Écrivez votre premier message ci-dessous.</small>
+              </div>
+            } @else {
+              @for (message of messages(); track message.id) {
+                <article class="message" [class.message--merchant]="isMerchantMessage(message)">
+                  <div class="message-meta">
+                    <strong>{{ isMerchantMessage(message) ? 'Vous' : displayName(message.senderName, message.senderSubname) }}</strong>
+                    <time [attr.datetime]="message.createdAt">{{ message.createdAt | date:'dd/MM à HH:mm' }}</time>
+                  </div>
+                  <p>{{ message.content }}</p>
+                </article>
+              }
+            }
+          </div>
+
+          @if (conversation()?.canWrite) {
+            <form class="composer" (ngSubmit)="sendMessage()">
+              <label class="visually-hidden" for="support-message">Votre message</label>
+              <textarea
+                id="support-message"
+                name="message"
+                [(ngModel)]="draft"
+                rows="2"
+                maxlength="2000"
+                placeholder="Écrivez votre message…"
+                [disabled]="sending()"></textarea>
+              <button class="btn btn-primary send-button" type="submit" [disabled]="sending() || !draft.trim()">
+                @if (sending()) {
+                  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                } @else {
+                  <span class="material-symbols-outlined">send</span>
+                }
+                <span class="visually-hidden">Envoyer</span>
+              </button>
+            </form>
+          } @else {
+            <div class="composer-disabled">
+              <span class="material-symbols-outlined">hourglass_empty</span>
+              Vous pourrez écrire dès qu’un administrateur aura pris en charge la conversation.
+            </div>
+          }
+        </section>
+      </div>
+    }
+  </section>
+</app-template>
