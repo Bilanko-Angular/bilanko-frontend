@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { Template } from '../../../components/shared/template/template';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import { VenteStoreService } from '../../../service/store/vente/vente-store.service';
 import type { Sale } from '../../../models/sale';
 import jsPDF from 'jspdf';

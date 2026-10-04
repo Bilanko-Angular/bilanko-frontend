@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
- 
-import { PreferencesService } from '../../../services/preferences';
+
+import { PreferencesService } from '../../../service/app/preference/preferences';
 
 @Component({
   selector: 'app-confirm',
@@ -13,7 +13,7 @@ export class ConfirmDialog {
   @Input() confirmLabel = 'Supprimer';
   @Input() cancelLabel = 'Annuler';
   @Output() confirm = new EventEmitter<void>();
-  
+
   @Output() cancel = new EventEmitter<void>();
   protected readonly prefs = inject(PreferencesService);
 

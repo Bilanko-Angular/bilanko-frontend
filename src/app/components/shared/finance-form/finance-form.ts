@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import type { Charge } from '../../../models/finance';
 import type { Sale } from '../../../models/sale';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 
 @Component({
   selector: 'app-finance-form',
@@ -41,20 +41,20 @@ export class FinanceForm {
     // Vérifier si c'est une vente (possède 'product')
     if ('product' in this.initial) {
       const s = this.initial as Sale;
-      this.form.patchValue({ 
-        product: s.product || s.items?.[0]?.productName || '', 
-        quantity: s.quantity || s.items?.[0]?.quantity || 1, 
-        unitPrice: s.unitPrice || s.items?.[0]?.unitSellingPrice || 0, 
-        client: s.client || s.customerName || '', 
+      this.form.patchValue({
+        product: s.product || s.items?.[0]?.productName || '',
+        quantity: s.quantity || s.items?.[0]?.quantity || 1,
+        unitPrice: s.unitPrice || s.items?.[0]?.unitSellingPrice || 0,
+        client: s.client || s.customerName || '',
         date: s.date || s.saleDate?.split('T')[0] || new Date().toISOString().split('T')[0]
       });
     } else {
       const c = this.initial as Charge;
-      this.form.patchValue({ 
-        label: c.label, 
-        amount: c.amount, 
-        supplier: c.supplier, 
-        date: c.date 
+      this.form.patchValue({
+        label: c.label,
+        amount: c.amount,
+        supplier: c.supplier,
+        date: c.date
       });
     }
   }

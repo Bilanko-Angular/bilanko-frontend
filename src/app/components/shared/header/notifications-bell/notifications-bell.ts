@@ -8,7 +8,7 @@ import {
 
 import { Router } from '@angular/router';
 
-import { PreferencesService } from '../../../../services/preferences';
+import { PreferencesService } from '../../../../service/app/preference/preferences';
 import { NotificationsStoreService, ExtendedNotificationItem } from '../../../../service/store/notifications/notifications-store.service';
 
 
@@ -45,7 +45,7 @@ export class NotificationsBell {
     if (!notif.read) {
       this.notificationsStore.markAsRead(notif.id);
     }
-    
+
     this.close();
 
     if (notif.type === 'stock') {

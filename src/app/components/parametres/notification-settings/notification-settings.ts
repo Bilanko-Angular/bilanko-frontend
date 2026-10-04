@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import { ActionResponseService } from '../../../service/action-response/action-response.service';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { NotificationPreferences } from '../../../models/person';

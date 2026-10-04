@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CategorieOption } from '../../../components/catalogue-stock/product-filter-dropdown/product-filter-dropdown';
 import { CategoryApiDto } from '../../../models/DTO/CategoryDto';
 import { apiClient } from '../../../core/axios/axios.config';
+import {CategoryType} from '../../../models/category';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,9 @@ export class CategoryApiService {
   private readonly basePath = '/categories';
 
   async getAll(): Promise<CategorieOption[]> {
-    const response = await apiClient.get<CategoryApiDto[]>(this.basePath + '/all');
+    const response = await apiClient.get<CategoryApiDto[]>(this.basePath + '/all',{
+      params:{categoryType:CategoryType.PRODUCT}
+    });
     return response.data.map((dto) => ({ id: dto.id, name: dto.name }));
   }
 

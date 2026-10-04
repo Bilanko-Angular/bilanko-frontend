@@ -10,7 +10,7 @@ import {
 
 import { CommonModule } from '@angular/common';
 
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 
 @Component({
   selector: 'app-action-menu',

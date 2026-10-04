@@ -3,7 +3,7 @@
 import { Component, inject, signal, HostListener, PLATFORM_ID, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
-import { ThemeService } from '../../../../services/theme';
+import { ThemeService } from '../../../../service/app/theme/theme';
 
 @Component({
   selector: 'app-landing-navbar',
@@ -34,9 +34,9 @@ export class LandingNavbar implements OnInit {
   // ✅ Scroll fluide vers une section
   scrollTo(sectionId: string, event: Event): void {
     event.preventDefault();
-    
+
     if (!this.isBrowser) return;
-    
+
     const element = document.getElementById(sectionId);
     if (element) {
       const navbarHeight = 80; // Hauteur de la navbar + marge

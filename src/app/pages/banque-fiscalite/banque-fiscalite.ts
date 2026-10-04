@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, OnInit, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DocumentService } from '../../services/document.service';
+import { DocumentService } from '../../service/app/generate/document.service';
 import { DocumentStoreService } from '../../service/store/document/document-store.service';
 import { Template } from '../../components/shared/template/template';
 import {

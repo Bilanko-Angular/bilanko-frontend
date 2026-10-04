@@ -12,10 +12,10 @@ import {
   effect
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { ThemeService } from '../../../services/theme';
+import { ThemeService } from '../../../service/app/theme/theme';
 import { SalesService } from '../../../services/sales.service';
 import type { Produit } from '../../../models/produit';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import type { Sale } from '../../../models/sale';
 import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
@@ -51,7 +51,7 @@ export class Header {
 
   readonly profileImageError = signal(false);
   readonly searchTerm = signal('');
-  
+
   // ✅ NOUVEAU : Popup de recherche
   readonly searchPopupOpen = signal(false);
 

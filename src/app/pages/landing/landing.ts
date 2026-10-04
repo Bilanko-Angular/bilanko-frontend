@@ -1,8 +1,8 @@
 // src/app/pages/landing/landing.ts
 
 import { Component, inject, OnInit } from '@angular/core';
-import { ThemeService } from '../../services/theme';
-import { PreferencesService } from '../../services/preferences';
+import { ThemeService } from '../../service/app/theme/theme';
+import { PreferencesService } from '../../service/app/preference/preferences';
 import { LandingNavbar } from './components/landing-navbar/landing-navbar';
 import { LandingHero } from './components/landing-hero/landing-hero';
 import { LandingFeatures } from './components/landing-features/landing-features';

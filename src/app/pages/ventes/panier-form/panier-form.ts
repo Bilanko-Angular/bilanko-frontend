@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, inject, signal, computed, effect, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
 import type { Produit } from '../../../models/produit';
 import type { Sale, SaleItem } from '../../../models/sale';

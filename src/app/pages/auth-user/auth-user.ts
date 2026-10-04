@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService } from '../../services/theme';
-import { PreferencesService } from '../../services/preferences';
+import { ThemeService } from '../../service/app/theme/theme';
+import { PreferencesService } from '../../service/app/preference/preferences';
 
 @Component({
   selector: 'app-auth-user',

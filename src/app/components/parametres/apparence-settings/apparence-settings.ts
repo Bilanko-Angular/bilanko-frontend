@@ -1,9 +1,9 @@
 import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PreferencesService, BilankoLanguage, BilankoCurrency } from '../../../services/preferences';
+import { PreferencesService, BilankoLanguage, BilankoCurrency } from '../../../service/app/preference/preferences';
 import { ActionResponseService } from '../../../service/action-response/action-response.service';
-import { ThemeService } from '../../../services/theme';
+import { ThemeService } from '../../../service/app/theme/theme';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { AppearancePreferences } from '../../../models/person';
 

@@ -1,7 +1,7 @@
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Component, effect, inject, signal, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 import { UpperCasePipe } from '@angular/common';

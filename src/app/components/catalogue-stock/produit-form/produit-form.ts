@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Produit } from '../../../models/produit';
-import { PreferencesService } from '../../../services/preferences';
+import { PreferencesService } from '../../../service/app/preference/preferences';
 import { CategoryApiService } from '../../../service/api/product/category-api.service';
 import { AiProductApiService } from '../../../service/api/product/ai-product-api.service';
 import { CategorieOption } from '../../../components/catalogue-stock/product-filter-dropdown/product-filter-dropdown';
