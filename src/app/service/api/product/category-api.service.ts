@@ -18,7 +18,7 @@ export class CategoryApiService {
   }
 
   async search(name: string): Promise<CategorieOption[]> {
-    const response = await apiClient.get<CategoryApiDto[]>(this.basePath + '/search', {
+    const response = await apiClient.get<CategoryApiDto[]>(this.basePath + '/all', {
       params: { name },
     });
     return response.data.map((dto) => ({ id: dto.id, name: dto.name }));
