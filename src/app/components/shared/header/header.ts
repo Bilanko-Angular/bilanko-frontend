@@ -21,6 +21,7 @@ import { ProduitStoreService } from '../../../service/store/product/produit-stor
 import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { NotificationsBell } from './notifications-bell/notifications-bell';
 import { UpperCasePipe } from '@angular/common';
+import {SearchHeader} from './search-header/search-header';
 
 interface SearchResult {
   type: 'produit' | 'vente';
@@ -34,7 +35,7 @@ interface SearchResult {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NotificationsBell, UpperCasePipe],
+  imports: [NotificationsBell, UpperCasePipe, SearchHeader],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
 })
