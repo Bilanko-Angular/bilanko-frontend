@@ -11,13 +11,14 @@ import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { PanierForm } from './panier-form/panier-form';
 import { PreferencesService } from '../../service/app/preference/preferences';
 import { VenteStoreService } from '../../service/store/vente/vente-store.service';
+import { BasicSearchBar } from '../../components/shared/ui/basic-search-bar/basic-search-bar';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-ventes',
   standalone: true,
-  imports: [DatePipe, CurrencyPipe, FormsModule, Template, ConfirmDialog, ActionMenu, PanierForm],
+  imports: [DatePipe, CurrencyPipe, FormsModule, Template, ConfirmDialog, ActionMenu, PanierForm, BasicSearchBar],
   templateUrl: './ventes.html',
   styleUrls: ['./ventes.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
