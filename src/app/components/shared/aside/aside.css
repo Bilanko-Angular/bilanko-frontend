@@ -67,7 +67,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
   min-height: 76px;
 }
@@ -176,4 +175,8 @@
   .bk-aside-nav .material-symbols-outlined {
     font-size: 20px !important;
   }
+}
+
+.active{
+  color:white !important;
 }

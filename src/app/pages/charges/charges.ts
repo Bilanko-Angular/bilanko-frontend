@@ -11,11 +11,12 @@ import { ActionMenu } from '../../components/shared/action-menu/action-menu';
 import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { PreferencesService } from '../../service/app/preference/preferences';
 import { ChargeStoreService } from '../../service/store/charge/charge-store.service';
+import { BasicSearchBar } from '../../components/shared/ui/basic-search-bar/basic-search-bar';
 
 @Component({
   selector: 'app-charges',
   standalone: true,
-  imports: [CommonModule, DatePipe, CurrencyPipe, FormsModule, Template, ActionMenu, ConfirmDialog, FinanceForm],
+  imports: [CommonModule, DatePipe, CurrencyPipe, FormsModule, Template, ActionMenu, ConfirmDialog, FinanceForm, BasicSearchBar],
   templateUrl: './charges.html',
   styleUrls: ['./charges.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

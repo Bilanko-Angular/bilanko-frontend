@@ -91,6 +91,23 @@
   margin-left: 2px;
 }
 
+.product-search-bar {
+  width: 50%;
+  margin: 0 auto 1.25rem;
+}
+
+@media screen and (max-width: 1024px) and (min-width: 768px) {
+  .product-search-bar {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .product-search-bar {
+    width: 100%;
+  }
+}
+
 /* ============================================================
    BARRE DE RECHERCHE — séparée, largeur limitée
    ============================================================ */

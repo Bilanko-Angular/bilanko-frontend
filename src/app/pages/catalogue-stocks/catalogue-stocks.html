@@ -18,7 +18,7 @@
           {{ prefs.t().export }}
         </button>
 
-        <button class="btn btn-success btn-sm d-flex align-items-center gap-1" (click)="ouvrirCreation()">
+        <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" (click)="ouvrirCreation()">
           <i class="bi bi-plus-lg"></i>
           {{ prefs.t().add }}
         </button>
@@ -26,7 +26,10 @@
     </div>
 
     <!-- Barre de recherche -->
-    <app-product-search-bar (rechercheChange)="onRechercheChange($event)" />
+    <div class="product-search-bar">
+      <app-basic-search-bar (rechercheChange)="onRechercheChange($event)" [placeholder]="'Recherchez un produit ...'" />
+    </div>
+
 
     <!-- Tableau -->
     <div class="card border rounded" style="border-color: var(--color-border) !important; background-color: var(--color-surface);">

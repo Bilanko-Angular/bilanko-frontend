@@ -12,6 +12,7 @@ import { PreferencesService } from '../../service/app/preference/preferences';
 import { Produit } from '../../models/produit';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import {BasicSearchBar} from '../../components/shared/ui/basic-search-bar/basic-search-bar';
 
 @Component({
   selector: 'app-catalogue-stocks',
@@ -24,8 +25,10 @@ import autoTable from 'jspdf-autotable';
     ProductDeleteModal,
     ProduitForm,
     Template,
+    BasicSearchBar,
   ],
   templateUrl: './catalogue-stocks.html',
+  styleUrl:'catalogue-stocks.css'
 })
 export class CatalogueStocks {
   protected readonly prefs = inject(PreferencesService);

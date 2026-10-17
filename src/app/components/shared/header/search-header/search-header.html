@@ -1,0 +1,66 @@
+<div class="bk-header-search bk-header-search--desktop">
+  <div class="input-group">
+      <span class="input-group-text">
+        <span class="material-symbols-outlined">search</span>
+      </span>
+    <input
+      type="search"
+      class="form-control"
+      [placeholder]="prefs.t().searchPlaceholder"
+      [value]="searchTerm()"
+      (input)="onSearch($event)"
+      autocomplete="off"
+    />
+  </div>
+</div>
+@if (searchPopupOpen()) {
+  <div class="bk-search-popup" (click)="searchPopupOpen.set(false)">
+    <div class="bk-search-popup__content" (click)="$event.stopPropagation()">
+      <div class="bk-search-popup__header">
+        <span class="material-symbols-outlined">search</span>
+        <input
+          type="text"
+          class="bk-search-popup__input"
+          [placeholder]="prefs.t().searchPlaceholder"
+          [value]="searchTerm()"
+          (input)="onSearch($event)"
+          #searchInput
+          autofocus
+          autocomplete="off"
+        />
+        <button class="bk-search-popup__close" (click)="searchPopupOpen.set(false)">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- RÉSULTATS -->
+      @if (searchTerm()) {
+        <div class="bk-search-popup__results">
+          @if (searchResults().length === 0) {
+            <div class="bk-search-popup__empty">
+              <span class="material-symbols-outlined">search_off</span>
+              <p>{{ prefs.t().noResults }}</p>
+              <small>{{ prefs.t().searchHint }}</small>
+            </div>
+          }
+          @for (result of searchResults(); track result.type + '-' + result.id) {
+            <button class="bk-search-popup__result" (click)="openResult(result); searchPopupOpen.set(false)">
+              <span class="bk-search-popup__result-icon">
+                @if (result.type === 'produit') {
+                  <span class="material-symbols-outlined">inventory_2</span>
+                } @else {
+                  <span class="material-symbols-outlined">receipt_long</span>
+                }
+              </span>
+              <div class="bk-search-popup__result-info">
+                <strong>{{ result.title }}</strong>
+                <span>{{ result.subtitle }}</span>
+              </div>
+              <span class="bk-search-popup__result-arrow">→</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}
