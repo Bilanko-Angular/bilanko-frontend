@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+svg {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #0C1310;
+  pointer-events: none; /* le clic traverse l'icône et atteint l'input */
+  transition: color 0.2s ease;
+}
+
+.input-search {
+  flex: 1;
+  height: 50px;
+  padding: 0 16px 0 44px; /* 44px à gauche pour laisser la place à l'icône */
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-search:focus {
+  border-color: var(--color-primary);
+  box-shadow:
+    0 4px 12px rgba(5, 223, 14, 0.12); /* légère ombre portée */
+}
+
+/* L'icône prend la couleur primaire quand l'input est focus */
+.search-box:has(.input-search:focus) svg {
+  color: var(--color-primary);
+}

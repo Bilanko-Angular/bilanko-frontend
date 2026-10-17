@@ -18,7 +18,7 @@
           {{ prefs.t().export }}
         </button>
 
-        <button class="btn btn-success btn-sm d-flex align-items-center gap-1" (click)="ouvrirCreation()">
+        <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" (click)="ouvrirCreation()">
           <i class="bi bi-plus-lg"></i>
           {{ prefs.t().add }}
         </button>
@@ -27,7 +27,7 @@
 
     <!-- Barre de recherche -->
     <div class="product-search-bar">
-      <app-product-search-bar (rechercheChange)="onRechercheChange($event)" />
+      <app-basic-search-bar (rechercheChange)="onRechercheChange($event)" [placeholder]="'Recherchez un produit ...'" />
     </div>
 
 
