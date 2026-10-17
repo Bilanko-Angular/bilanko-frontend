@@ -111,7 +111,7 @@ export class SearchHeader {
     const search = this.elementRef.nativeElement.querySelector('.bk-header-search--desktop') as HTMLElement | null;
     if (!search) return;
     const rect = search.getBoundingClientRect();
-    this.desktopPosition.set({ left: rect.left, top: rect.bottom + 6, width: rect.width });
+    this.desktopPosition.set({ left: rect.left, top: rect.bottom, width: rect.width });
   }
 
   private asRecord(value: unknown): Record<string, any> | null {

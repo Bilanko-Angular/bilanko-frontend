@@ -36,10 +36,7 @@ export class ProductDetail {
     }
 
     try {
-      const products = await this.productApi.getMineDetails();
-      const product = products.find((item) => item.reference === reference);
-      if (!product) this.error.set('Produit introuvable.');
-      this.product.set(product);
+      this.product.set(await this.productApi.getByReference(reference));
     } catch (err) {
       console.error('Erreur chargement détail produit :', err);
       this.error.set('Impossible de charger ce produit.');
