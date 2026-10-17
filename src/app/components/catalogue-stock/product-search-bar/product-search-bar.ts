@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './product-search-bar.html',
+  styleUrl: 'product-search-bar.css'
 })
 export class ProductSearchBar {
   readonly rechercheChange = output<string>();
