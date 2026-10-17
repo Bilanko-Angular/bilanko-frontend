@@ -2,7 +2,7 @@
 .bk-header-search--desktop {
   flex: 1;
   min-width: 120px;
-  max-width: 380px;
+  max-width: 100%;
 }
 
 .bk-header-search--desktop .input-group {
