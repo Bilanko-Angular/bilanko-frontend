@@ -43,6 +43,11 @@ export class ActionResponseService {
 
   /** Affiche un toast d'erreur avec un message lisible */
   error(err: unknown): void {
+    if (typeof err === 'string' && err.trim()) {
+      this.show(err.trim(), false);
+      return;
+    }
+
     const message = this.extractUserFriendlyMessage(err);
     this.show(message, false);
   }
