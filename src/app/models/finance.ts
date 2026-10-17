@@ -15,6 +15,8 @@ export interface Charge {
   category?: string;
   amount: number;
   supplier?: string;
+  categoryId?: number;
+  categoryName?: string;
   paymentMethod?: string;
   notes?: string;
 }

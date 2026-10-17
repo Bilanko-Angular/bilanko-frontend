@@ -12,6 +12,33 @@
       autocomplete="off"
     />
   </div>
+  @if (searchTerm() && (isLoading() || searchResults().length > 0 || searchError())) {
+    <div
+      class="bk-global-search-results"
+      [style.left.px]="desktopPosition().left"
+      [style.top.px]="desktopPosition().top"
+      [style.width.px]="desktopPosition().width"
+    >
+      @if (isLoading()) {
+        <div class="bk-global-search-state">Recherche en cours…</div>
+      } @else if (searchError()) {
+        <div class="bk-global-search-state bk-global-search-state--error">{{ searchError() }}</div>
+      } @else {
+        @for (result of searchResults(); track result.type + '-' + result.id) {
+          <button type="button" class="bk-global-search-result" (click)="openResult(result)">
+            <span class="bk-search-popup__result-icon">
+              <span class="material-symbols-outlined">{{ resultIcon(result.type) }}</span>
+            </span>
+            <span class="bk-search-popup__result-info">
+              <strong>{{ resultTitle(result) }}</strong>
+              <span>{{ resultSubtitle(result) }}</span>
+            </span>
+            <span class="bk-search-popup__result-arrow">→</span>
+          </button>
+        }
+      }
+    </div>
+  }
 </div>
 @if (searchPopupOpen()) {
   <div class="bk-search-popup" (click)="searchPopupOpen.set(false)">
@@ -36,7 +63,17 @@
       <!-- RÉSULTATS -->
       @if (searchTerm()) {
         <div class="bk-search-popup__results">
-          @if (searchResults().length === 0) {
+          @if (isLoading()) {
+            <div class="bk-search-popup__empty">
+              <span class="material-symbols-outlined">progress_activity</span>
+              <p>Recherche en cours…</p>
+            </div>
+          } @else if (searchError()) {
+            <div class="bk-search-popup__empty">
+              <span class="material-symbols-outlined">error</span>
+              <p>{{ searchError() }}</p>
+            </div>
+          } @else if (searchResults().length === 0) {
             <div class="bk-search-popup__empty">
               <span class="material-symbols-outlined">search_off</span>
               <p>{{ prefs.t().noResults }}</p>
@@ -44,17 +81,13 @@
             </div>
           }
           @for (result of searchResults(); track result.type + '-' + result.id) {
-            <button class="bk-search-popup__result" (click)="openResult(result); searchPopupOpen.set(false)">
+            <button class="bk-search-popup__result" (click)="openResult(result)">
               <span class="bk-search-popup__result-icon">
-                @if (result.type === 'produit') {
-                  <span class="material-symbols-outlined">inventory_2</span>
-                } @else {
-                  <span class="material-symbols-outlined">receipt_long</span>
-                }
+                <span class="material-symbols-outlined">{{ resultIcon(result.type) }}</span>
               </span>
               <div class="bk-search-popup__result-info">
-                <strong>{{ result.title }}</strong>
-                <span>{{ result.subtitle }}</span>
+                <strong>{{ resultTitle(result) }}</strong>
+                <span>{{ resultSubtitle(result) }}</span>
               </div>
               <span class="bk-search-popup__result-arrow">→</span>
             </button>

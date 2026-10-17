@@ -13,6 +13,7 @@ import { Produit } from '../../models/produit';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import {BasicSearchBar} from '../../components/shared/ui/basic-search-bar/basic-search-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-catalogue-stocks',
@@ -34,6 +35,7 @@ export class CatalogueStocks {
   protected readonly prefs = inject(PreferencesService);
   private readonly store = inject(ProduitStoreService);
   private readonly categoryApi = inject(CategoryApiService);
+  private readonly router = inject(Router);
 
   // ── État issu du store (produits, pagination, chargement) ────────────
   readonly produits = this.store.produits;
@@ -143,6 +145,10 @@ export class CatalogueStocks {
   ouvrirEdition(p: Produit): void {
     this.produitEnEdition.set(p);
     this.afficherFormulaire.set(true);
+  }
+
+  voirProduit(p: Produit): void {
+    void this.router.navigate(['/catalogue', p.reference]);
   }
 
   fermerFormulaire(): void {

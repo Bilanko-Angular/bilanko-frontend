@@ -1,6 +1,7 @@
 // src/app/pages/charges/charges.ts
 
 import { Component, signal, computed, effect, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Template } from "../../components/shared/template/template";
@@ -24,6 +25,7 @@ import { BasicSearchBar } from '../../components/shared/ui/basic-search-bar/basi
 export class ChargesComponent {
   protected readonly prefs = inject(PreferencesService);
   protected readonly store = inject(ChargeStoreService);
+  private readonly route = inject(ActivatedRoute);
 
   editingCharge: Charge | null = null;
   isAddModalOpen = signal(false);
@@ -117,6 +119,13 @@ export class ChargesComponent {
       this.filterSupplier();
       this.pageCourante.set(1);
     });
+    const viewId = this.route.snapshot.queryParamMap.get('viewId');
+    if (viewId) {
+      effect(() => {
+        const charge = this.store.charges().find((item) => item.id === viewId);
+        if (charge) this.viewingCharge.set(charge);
+      });
+    }
   }
 
   // --- RECHERCHE ---

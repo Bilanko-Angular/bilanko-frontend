@@ -1,0 +1,57 @@
+<app-template>
+  @if (isLoading()) {
+    <div class="product-detail-state">Chargement du produit…</div>
+  } @else if (error()) {
+    <div class="product-detail-state product-detail-state--error">{{ error() }}</div>
+  } @else if (product(); as p) {
+    <div class="product-detail">
+      <button type="button" class="btn btn-outline-secondary btn-sm mb-3" (click)="retour()">
+        ← Retour au catalogue
+      </button>
+
+      <div class="product-detail__header">
+        <div>
+          <div class="text-uppercase fw-bold small text-primary">BILANKO › CATALOGUE › PRODUIT</div>
+          <h1>{{ p.name }}</h1>
+          <p>Référence : {{ p.reference }}</p>
+        </div>
+        <span class="material-symbols-outlined product-detail__icon">inventory_2</span>
+      </div>
+
+      <div class="product-detail__grid">
+        <div class="product-detail__card">
+          <span>Catégorie</span>
+          <strong>
+            @for (category of p.categories; track category.id; let last = $last) {
+              {{ category.name }}@if (!last) {, }
+            }
+          </strong>
+        </div>
+        <div class="product-detail__card">
+          <span>Stock disponible</span>
+          <strong>{{ p.quantity }}</strong>
+        </div>
+        <div class="product-detail__card">
+          <span>Seuil d’alerte</span>
+          <strong>{{ p.alertThreshold }}</strong>
+        </div>
+        <div class="product-detail__card">
+          <span>Prix d’achat</span>
+          <strong>{{ p.purchasePrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+        </div>
+        <div class="product-detail__card">
+          <span>Prix de vente</span>
+          <strong>{{ p.price | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+        </div>
+        <div class="product-detail__card">
+          <span>Marge unitaire</span>
+          <strong>{{ p.price - p.purchasePrice | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+        </div>
+        <div class="product-detail__card">
+          <span>Créé le</span>
+          <strong>{{ p.createdAt | date: prefs.angularDateFormat() }}</strong>
+        </div>
+      </div>
+    </div>
+  }
+</app-template>

@@ -2,35 +2,20 @@
 
 import {
   Component,
-  computed,
   inject,
   signal,
   ElementRef,
   HostListener,
   output,
-  viewChild,  // ✅ AJOUTÉ
   effect
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../../service/app/theme/theme';
-import { SalesService } from '../../../services/sales.service';
-import type { Produit } from '../../../models/produit';
 import { PreferencesService } from '../../../service/app/preference/preferences';
-import type { Sale } from '../../../models/sale';
-import { ProduitStoreService } from '../../../service/store/product/produit-store.service';
 import { UserStoreService } from '../../../service/store/user/user-store.service';
 import { NotificationsBell } from './notifications-bell/notifications-bell';
 import { UpperCasePipe } from '@angular/common';
 import {SearchHeader} from './search-header/search-header';
-
-interface SearchResult {
-  type: 'produit' | 'vente';
-  id: string;
-  title: string;
-  subtitle: string;
-  produit?: Produit;
-  vente?: Sale;
-}
 
 @Component({
   selector: 'app-header',
@@ -45,65 +30,13 @@ export class Header {
   protected readonly themeService = inject(ThemeService);
   private readonly router = inject(Router);
   private readonly elementRef = inject(ElementRef);
-  private readonly produitStore = inject(ProduitStoreService);
-  private readonly salesService = inject(SalesService);
   protected readonly prefs = inject(PreferencesService);
   protected readonly userStore = inject(UserStoreService);
 
   readonly profileImageError = signal(false);
-  readonly searchTerm = signal('');
 
-  // ✅ NOUVEAU : Popup de recherche
   readonly searchPopupOpen = signal(false);
 
-  readonly ventes = this.salesService.sales;
-
-  readonly searchResults = computed<SearchResult[]>(() => {
-    const terme = this.searchTerm().trim().toLowerCase();
-    if (!terme) return [];
-
-    const results: SearchResult[] = [];
-    const produits = this.produitStore.produits() ?? [];
-
-    for (const produit of produits) {
-      const correspond =
-        produit.nom.toLowerCase().includes(terme) ||
-        produit.reference.toLowerCase().includes(terme) ||
-        produit.categorie.toLowerCase().includes(terme);
-
-      if (correspond) {
-        results.push({
-          type: 'produit',
-          id: produit.id,
-          title: produit.nom,
-          subtitle: `${produit.reference} · ${produit.categorie}`,
-          produit
-        });
-      }
-    }
-
-    for (const vente of this.ventes()) {
-      const produitNom = vente.product || (vente.items && vente.items.length > 0 ? vente.items[0].productName : 'Vente');
-      const clientNom = vente.client || vente.customerName || 'Client comptant';
-      const correspond =
-        produitNom.toLowerCase().includes(terme) ||
-        clientNom.toLowerCase().includes(terme);
-
-      if (correspond) {
-        results.push({
-          type: 'vente',
-          id: vente.id,
-          title: produitNom,
-          subtitle: `Vente · ${clientNom}`,
-          vente
-        });
-      }
-    }
-
-    return results.slice(0, 8);
-  });
-
-  // ✅ OUVRE LE POPUP DE RECHERCHE
   openSearchPopup(): void {
     this.searchPopupOpen.set(true);
     // Focus sur l'input après l'ouverture
@@ -113,48 +46,12 @@ export class Header {
     }, 100);
   }
 
-  // ✅ FERME LE POPUP DE RECHERCHE
   closeSearchPopup(): void {
     this.searchPopupOpen.set(false);
   }
 
   toggleMenu(): void {
     this.menuToggle.emit();
-  }
-
-  onSearch(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.searchTerm.set(input.value);
-  }
-
-  clearSearch(): void {
-    this.searchTerm.set('');
-  }
-
-  onSearchKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      const premier = this.searchResults()[0];
-      if (premier) {
-        this.openResult(premier);
-        this.closeSearchPopup();
-      }
-    }
-  }
-
-  openResult(result: SearchResult): void {
-    this.searchTerm.set('');
-    if (result.type === 'produit') {
-      this.router.navigate(['/catalogue']);
-      return;
-    }
-    if (result.type === 'vente') {
-      this.router.navigate(['/ventes']);
-    }
-  }
-
-  openCatalogue(): void {
-    this.clearSearch();
-    this.router.navigate(['/catalogue']);
   }
 
   // ============================================================

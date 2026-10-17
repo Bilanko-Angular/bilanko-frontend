@@ -23,6 +23,11 @@ export class ProductApiService {
     return ProductMapper.toProduitList(response.data);
   }
 
+  async getMineDetails(): Promise<ProductApiDto[]> {
+    const response = await apiClient.get<ProductApiDto[]>(`${this.basePath}/ref`);
+    return response.data;
+  }
+
   async getById(id: string): Promise<Produit> {
     const response = await apiClient.get<ProductApiDto>(`${this.basePath}/${id}`);
     return ProductMapper.toProduit(response.data);

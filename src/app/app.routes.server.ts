@@ -8,5 +8,9 @@ export const serverRoutes: ServerRoute[] = [
   {
     path: 'ventes/:id',
     renderMode: RenderMode.Server
+  },
+  {
+    path: 'catalogue/:ref',
+    renderMode: RenderMode.Server
   }
 ];

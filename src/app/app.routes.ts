@@ -13,11 +13,13 @@ import { VenteDetail } from './pages/ventes/vente-detail/vente-detail';
 import {CatalogueStocks} from './pages/catalogue-stocks/catalogue-stocks';
 import { guestGuard } from './guards/guest.guard';
 import { SupportMessaging } from './pages/support-messaging/support-messaging';
+import { ProductDetail } from './pages/catalogue-stocks/product-detail/product-detail';
 
 export const routes: Routes = [
   { path: '', component: Landing },
   { path: 'dashboard', component: Acceuil },
   { path: 'catalogue', component: CatalogueStocks },
+  { path: 'catalogue/:ref', component: ProductDetail },
   { path: 'ventes', component: SalesComponent },
   { path: 'ventes/:id', component: VenteDetail },
   { path: 'charges', component: ChargesComponent },
