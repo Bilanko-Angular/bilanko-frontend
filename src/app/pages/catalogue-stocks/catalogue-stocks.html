@@ -26,7 +26,10 @@
     </div>
 
     <!-- Barre de recherche -->
-    <app-product-search-bar (rechercheChange)="onRechercheChange($event)" />
+    <div class="product-search-bar">
+      <app-product-search-bar (rechercheChange)="onRechercheChange($event)" />
+    </div>
+
 
     <!-- Tableau -->
     <div class="card border rounded" style="border-color: var(--color-border) !important; background-color: var(--color-surface);">

@@ -26,6 +26,7 @@ import autoTable from 'jspdf-autotable';
     Template,
   ],
   templateUrl: './catalogue-stocks.html',
+  styleUrl:'catalogue-stocks.css'
 })
 export class CatalogueStocks {
   protected readonly prefs = inject(PreferencesService);
