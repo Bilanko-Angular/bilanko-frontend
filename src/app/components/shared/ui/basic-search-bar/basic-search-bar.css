@@ -1,5 +1,10 @@
 :host {
   display: block;
+  background-color: var(--color-surface);
+}
+
+:host-context([data-theme="dark"]) .input-search {
+  background-color: var(--color-surface);
 }
 
 svg {
@@ -9,7 +14,7 @@ svg {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  color: #0C1310;
+  color: var(--color-text);
   pointer-events: none; /* le clic traverse l'icône et atteint l'input */
   transition: color 0.2s ease;
 }

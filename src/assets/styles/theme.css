@@ -38,6 +38,7 @@
   --color-text:       var(--bilanko-text);
   --color-text-muted: var(--bilanko-text-muted);
   --color-on-brand:   var(--bilanko-on-brand);
+  --color-surface-clean: white;
 
   --font-family-base: 'Outfit', system-ui, -apple-system, sans-serif;
   --font-weight-regular: 400;
@@ -65,6 +66,7 @@
 
     --color-background: #0C1310;
     --color-surface:    #141F1A;
+    --color-surface-clean: #141F1A;
     --color-border:     #23352C;
     --color-text:       #F0FDF4;
     --color-text-muted: #83A393;
