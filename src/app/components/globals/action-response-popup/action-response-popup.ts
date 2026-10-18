@@ -1,8 +1,6 @@
-// src/app/components/globals/action-response-popup/action-response-popup.ts
-
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActionResponseService } from '../../../service/action-response/action-response.service';
+import {ActionResponseService} from '../../../service/action-response/action-response.service';
 
 @Component({
   selector: 'app-action-response-popup',
