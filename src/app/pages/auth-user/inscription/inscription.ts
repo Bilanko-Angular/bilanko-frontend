@@ -1,9 +1,10 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import {Component, inject, signal, ViewChild} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
 import { PreferencesService } from '../../../service/app/preference/preferences';
 import { GoogleLoginButton } from '../../../components/shared/ui/google-login-button/google-login-button';
+import {ActionResponseService} from '../../../service/action-response/action-response.service';
 
 @Component({
   selector: 'app-inscription',
@@ -16,11 +17,12 @@ export class Inscription {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   protected readonly prefs = inject(PreferencesService);
+  private readonly action =inject(ActionResponseService);
   @ViewChild('passwordInput') passwordInput!: HTMLInputElement;
 
-  isLoading = false;
+  isLoading = signal(false);
   registerError = '';
-  registerSuccess = false;
+  registerSuccess = signal(false);
   readonly inscriptionForm = this.fb.group(
     {
       nom: ['', [Validators.required, Validators.minLength(2)]],
@@ -63,13 +65,13 @@ export class Inscription {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.registerError = '';
-    this.registerSuccess = false;
+    this.registerSuccess.set(true);
 
     setTimeout(() => {
-      this.isLoading = false;
-      this.registerSuccess = true;
+      this.isLoading.set(false);
+      this.registerSuccess.set(true);
       console.log('Inscription réussie :', this.inscriptionForm.value);
 
       setTimeout(() => {
@@ -84,6 +86,7 @@ export class Inscription {
 
   onGoogleError(message: string): void {
     console.error(message);
+    this.action.error("Service google temporairement indisponible veuillez réessayer plus tard")
   }
 
 }

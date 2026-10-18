@@ -108,8 +108,8 @@
       <button
         type="submit"
         class="btn bk-btn-submit w-100 d-flex align-items-center justify-content-center gap-2"
-        [disabled]="connectionForm.invalid || isLoading">
-        @if (isLoading) {
+        [disabled]="connectionForm.invalid || isLoading()">
+        @if (isLoading()) {
           <span class="bk-spinner"></span>
           <span>{{ prefs.t().loggingIn }}</span>
         } @else {
