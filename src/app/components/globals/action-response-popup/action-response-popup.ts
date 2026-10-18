@@ -9,6 +9,7 @@ import { ActionResponseService } from '../../../service/action-response/action-r
   imports: [CommonModule],
   templateUrl: './action-response-popup.html',
   styleUrl: './action-response-popup.css',
+  standalone: true
 })
 export class ActionResponsePopup {
 

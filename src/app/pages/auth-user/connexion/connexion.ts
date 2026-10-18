@@ -1,5 +1,5 @@
 // src/app/pages/auth-user/connexion/connexion.ts
-import { Component, inject } from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthUser } from "../auth-user";
@@ -7,6 +7,7 @@ import { User } from '../../../models/person';
 import { AuthStoreService } from '../../../service/store/auth/auth-store.service';
 import { PreferencesService } from '../../../service/app/preference/preferences';
 import { GoogleLoginButton } from '../../../components/shared/ui/google-login-button/google-login-button';
+import {ActionResponseService} from '../../../service/action-response/action-response.service';
 
 @Component({
   selector: 'app-connexion',
@@ -20,13 +21,14 @@ export class Connexion {
   private readonly router = inject(Router);
   private readonly authStore = inject(AuthStoreService);
   protected readonly prefs = inject(PreferencesService);
+  private readonly action =inject(ActionResponseService);
 
   readonly connectionForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  isLoading = false;
+  isLoading = signal(false);
   loginError = '';
 
   get email() { return this.connectionForm.controls.email; }
@@ -41,7 +43,7 @@ export class Connexion {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.loginError = '';
 
     const formValue = this.connectionForm.value;
@@ -55,8 +57,10 @@ export class Connexion {
       await this.router.navigate(['/dashboard']);
     } catch (error: any) {
       this.loginError = error?.message || 'Identifiants incorrects ou erreur serveur.';
+      this.action.error("Identifiants incorrects ou erreur serveur.")
+
     } finally {
-      this.isLoading = false;
+      this.isLoading.set(false);
     }
   }
 

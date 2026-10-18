@@ -21,6 +21,7 @@ svg {
 
 .input-search {
   flex: 1;
+  overflow: hidden;
   height: 50px;
   padding: 0 16px 0 44px; /* 44px à gauche pour laisser la place à l'icône */
   border: 1px solid var(--color-border);

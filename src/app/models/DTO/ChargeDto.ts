@@ -13,4 +13,6 @@ export interface ChargeResponseDTO {
   supplier: string;
   amount: number;
   date: string; // ISO date string retourné par le backend
+  categoryId?: number;
+  categoryName?: string;
 }

@@ -21,7 +21,10 @@
     </p>
     <h1 class="bk-header-title">{{ pageTitle }}</h1>
   </div>
-  <app-search-header [(searchPopupOpen)]="searchPopupOpen"/>
+  <div style="width: 40% ; cursor: pointer ; margin: auto">
+    <app-search-header [(searchPopupOpen)]="searchPopupOpen"/>
+  </div>
+
   <!-- ACTIONS -->
   <div class="bk-header-actions">
     <!-- 🔍 RECHERCHE SUR MOBILE (icône qui ouvre le popup) -->

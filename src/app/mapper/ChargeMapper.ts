@@ -12,6 +12,8 @@ export class ChargeMapper {
       supplier: dto.supplier,
       amount: dto.amount,
       date: dto.date, // format ISO YYYY-MM-DD
+      categoryId: dto.categoryId,
+      categoryName: dto.categoryName,
     };
   }
 

@@ -18,4 +18,5 @@ export class ProductTable {
 
   readonly edit = output<Produit>();
   readonly supprimer = output<Produit>();
+  readonly voir = output<Produit>();
 }

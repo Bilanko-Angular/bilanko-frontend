@@ -7,6 +7,7 @@ import { Header } from "../header/header";
   imports: [Aside, Header],
   templateUrl: './template.html',
   styleUrls: ['./template.css'],
+  standalone: true
 })
 export class Template implements AfterViewInit {
   @ViewChild('asideComponent') asideComponent!: Aside;

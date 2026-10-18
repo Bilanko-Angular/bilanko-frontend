@@ -23,6 +23,12 @@ export class ProductApiService {
     return ProductMapper.toProduitList(response.data);
   }
 
+  async getByReference(reference: string): Promise<ProductApiDto> {
+    const encodedReference = encodeURIComponent(reference);
+    const response = await apiClient.get<ProductApiDto>(`${this.basePath}/ref/${encodedReference}`);
+    return response.data;
+  }
+
   async getById(id: string): Promise<Produit> {
     const response = await apiClient.get<ProductApiDto>(`${this.basePath}/${id}`);
     return ProductMapper.toProduit(response.data);

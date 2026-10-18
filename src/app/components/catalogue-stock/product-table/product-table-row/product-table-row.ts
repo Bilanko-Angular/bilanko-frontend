@@ -17,6 +17,7 @@ export class ProductTableRow {
   readonly devise = input<string>('XAF');
   readonly edit = output<Produit>();
   readonly supprimer = output<Produit>();
+  readonly voir = output<Produit>();
 
   statutStock(): StatutStock {
     const p = this.produit();

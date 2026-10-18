@@ -7,7 +7,7 @@
       <p class="bk-auth-subtitle text-muted mb-0">{{ prefs.t().registerSubtitle }}</p>
     </div>
 
-    @if (registerSuccess) {
+    @if (registerSuccess()) {
       <div class="alert alert-success d-flex align-items-center gap-2 mb-3" role="alert">
         <span class="material-icons flex-shrink-0">check_circle</span>
         <div>
@@ -146,7 +146,7 @@
             <input type="password" id="confirmPassword" class="form-control bk-input" [placeholder]="prefs.t().confirmYourPassword" formControlName="confirmPassword" autocomplete="new-password" #confirmPasswordInput>
             <button type="button" class="input-group-text bk-input-icon" (click)="togglePasswordVisibility(confirmPasswordInput)">
               <span class="material-icons fs-6">{{ confirmPasswordInput.type === 'password' ? 'visibility' : 'visibility_off' }}</span>
-            </button>          
+            </button>
           </div>
           @if (confirmPassword.touched && inscriptionForm.hasError('passwordMismatch')) {
             <div class="bk-field-error d-flex align-items-center gap-1 mt-1">
@@ -163,8 +163,8 @@
         </div>
 
         <!-- Bouton Inscription -->
-        <button type="submit" class="btn bk-btn-submit w-100 d-flex align-items-center justify-content-center gap-2" [disabled]="inscriptionForm.invalid || isLoading">
-          @if (isLoading) {
+        <button type="submit" class="btn bk-btn-submit w-100 d-flex align-items-center justify-content-center gap-2" [disabled]="inscriptionForm.invalid || isLoading()">
+          @if (isLoading()) {
             <span class="bk-spinner"></span>
             <span>{{ prefs.t().registering }}</span>
           } @else {
