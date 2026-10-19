@@ -1,6 +1,6 @@
 // src/app/pages/ventes/ventes.ts
 
-import { Component, signal, computed, effect, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -40,29 +40,7 @@ export class SalesComponent {
     () => this.store.searchTerm().trim().length > 0 || this.store.filterDate().length > 0
   );
 
-  readonly pageCourante = signal(1);
-  readonly parPage = 6;
-
-  readonly nombrePages = computed(() =>
-    Math.max(1, Math.ceil(this.store.filteredSales().length / this.parPage))
-  );
-
-  readonly salesPage = computed(() => {
-    const debut = (this.pageCourante() - 1) * this.parPage;
-    return this.store.filteredSales().slice(debut, debut + this.parPage);
-  });
-
-  constructor() {
-    effect(() => {
-      const max = this.nombrePages();
-      if (this.pageCourante() > max) this.pageCourante.set(max);
-    });
-    effect(() => {
-      this.store.searchTerm();
-      this.store.filterDate();
-      this.pageCourante.set(1);
-    });
-  }
+  constructor() {}
 
   onSearchChange(value: string): void {
     this.store.setSearchTerm(value);
@@ -93,11 +71,11 @@ export class SalesComponent {
   }
 
   pageSuivante(): void {
-    this.pageCourante.update((v) => Math.min(v + 1, this.nombrePages()));
+    this.store.pageSuivante();
   }
 
   pagePrecedente(): void {
-    this.pageCourante.update((v) => Math.max(v - 1, 1));
+    this.store.pagePrecedente();
   }
 
   openAddModal(): void {
@@ -165,7 +143,11 @@ export class SalesComponent {
 
     doc.setFontSize(10);
     doc.setTextColor(100, 116, 139);
-    doc.text(`Généré le : ${dateStr} | Total : ${liste.length} vente(s)`, 14, 27);
+    doc.text(
+      `Généré le : ${dateStr} | Total : ${this.store.totalElements()} vente(s) (page ${this.store.pageCourante()}/${this.store.nombrePages()})`,
+      14,
+      27
+    );
 
     const colonnes = ['Date', 'Client', 'Produits', `Montant (${currency})`, `Marge (${currency})`];
     const donnees = liste.map((s) => [

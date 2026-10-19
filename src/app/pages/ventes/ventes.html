@@ -76,7 +76,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (sale of salesPage(); track sale.id) {
+            @for (sale of store.filteredSales(); track sale.id) {
               <tr>
                 <td class="align-left" [attr.data-label]="prefs.t().date">
                   {{ sale.saleDate | date: prefs.angularDateFormat() + ' HH:mm' }}
@@ -104,15 +104,16 @@
         </table>
       </div>
 
-      @if (nombrePages() > 1) {
+      @if (store.nombrePages() > 1) {
         <div class="bk-pagination">
-          <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="pageCourante() === 1" type="button">
+          <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="!store.hasPrevPage()" type="button">
             ‹ {{ prefs.t().previous }}
           </button>
           <span class="bk-page-indicator">
-            {{ prefs.t().page }} {{ pageCourante() }} {{ prefs.t().pageOf }} {{ nombrePages() }}
+            {{ prefs.t().page }} {{ store.pageCourante() }} {{ prefs.t().pageOf }} {{ store.nombrePages() }}
+            <span class="bk-page-total">({{ store.totalElements() }} {{ prefs.t().result ?? 'résultats' }})</span>
           </span>
-          <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="pageCourante() === nombrePages()" type="button">
+          <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="!store.hasNextPage()" type="button">
             {{ prefs.t().next }} ›
           </button>
         </div>
