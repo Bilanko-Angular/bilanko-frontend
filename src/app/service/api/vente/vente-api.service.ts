@@ -6,6 +6,7 @@ import type {
   SaleResponseDTO,
   SaleSummaryDTO,
 } from '../../../models/DTO/SaleDto';
+import type { PagedResponseDto } from '../../../models/DTO/response/PageResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +20,17 @@ export class VenteApiService {
     return response.data;
   }
 
-  /** Liste les ventes (filtre optionnel par période) — GET /api/sales */
-  async getAllSales(from?: string, to?: string): Promise<SaleResponseDTO[]> {
-    const params: Record<string, string> = {};
+  /** Liste les ventes paginées (filtre optionnel par période) — GET /api/sales?page=&size= */
+  async getAllSales(
+    from?: string,
+    to?: string,
+    page = 0,
+    size = 20
+  ): Promise<PagedResponseDto<SaleResponseDTO>> {
+    const params: Record<string, string | number> = { page, size };
     if (from) params['from'] = from;
     if (to) params['to'] = to;
-    const response = await apiClient.get<SaleResponseDTO[]>(this.basePath, { params });
+    const response = await apiClient.get<PagedResponseDto<SaleResponseDTO>>(this.basePath, { params });
     return response.data;
   }
 
@@ -37,10 +43,14 @@ export class VenteApiService {
     return response.data;
   }
 
-  /** Recherche par mot-clé — GET /api/sales/search?keyword= */
-  async searchSales(keyword: string): Promise<SaleResponseDTO[]> {
-    const response = await apiClient.get<SaleResponseDTO[]>(`${this.basePath}/search`, {
-      params: { keyword },
+  /** Recherche paginée par mot-clé — GET /api/sales/search?keyword=&page=&size= */
+  async searchSales(
+    keyword: string,
+    page = 0,
+    size = 20
+  ): Promise<PagedResponseDto<SaleResponseDTO>> {
+    const response = await apiClient.get<PagedResponseDto<SaleResponseDTO>>(`${this.basePath}/search`, {
+      params: { keyword, page, size },
     });
     return response.data;
   }

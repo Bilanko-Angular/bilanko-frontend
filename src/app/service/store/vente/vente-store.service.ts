@@ -10,10 +10,20 @@ import type { SaleSummaryDTO } from '../../../models/DTO/SaleDto';
 export class VenteStoreService {
   private readonly venteApi = inject(VenteApiService);
 
+  // ──────────────────────────────────────────
+  // État paginé (serveur)
+  // ──────────────────────────────────────────
+
   private readonly _sales = signal<Sale[]>([]);
   readonly isLoading = signal(false);
   readonly error = signal<string | null>(null);
   readonly summary = signal<SaleSummaryDTO | null>(null);
+
+  /** Page courante (0-indexée pour l'API, exposée en 1-indexée pour la vue) */
+  readonly currentPage = signal(0);
+  readonly pageSize = signal(20);
+  readonly totalElements = signal(0);
+  readonly totalPages = signal(0);
 
   /** Terme de recherche (lié à l'endpoint /search) */
   readonly searchTerm = signal('');
@@ -23,8 +33,16 @@ export class VenteStoreService {
 
   readonly sales = this._sales.asReadonly();
 
-  /** Liste affichée : déjà filtrée côté API selon search / date */
+  /** Page affichée (1-indexée pour le template) */
+  readonly pageCourante = computed(() => this.currentPage() + 1);
+
+  /** Alias de compatibilité : la liste de la page actuelle */
   readonly filteredSales = computed(() => this._sales());
+
+  readonly nombrePages = computed(() => this.totalPages());
+
+  readonly hasNextPage = computed(() => this.currentPage() < this.totalPages() - 1);
+  readonly hasPrevPage = computed(() => this.currentPage() > 0);
 
   private searchDebounce?: ReturnType<typeof setTimeout>;
 
@@ -42,8 +60,10 @@ export class VenteStoreService {
     try {
       const date = this.filterDate();
       const { from, to } = this.toDateRange(date);
-      const dtos = await this.venteApi.getAllSales(from, to);
-      this._sales.set(SaleMapper.fromResponseDTOList(dtos));
+      const page = await this.venteApi.getAllSales(from, to, this.currentPage(), this.pageSize());
+      this._sales.set(SaleMapper.fromResponseDTOList(page.content));
+      this.totalElements.set(page.totalElements);
+      this.totalPages.set(page.totalPages);
     } catch (err) {
       console.error('VenteStore: erreur lors du chargement', err);
       this.error.set('Impossible de charger les ventes.');
@@ -84,6 +104,24 @@ export class VenteStoreService {
   }
 
   // ──────────────────────────────────────────
+  // Navigation de page
+  // ──────────────────────────────────────────
+
+  goToPage(page: number): void {
+    const clamped = Math.max(0, Math.min(page, this.totalPages() - 1));
+    this.currentPage.set(clamped);
+    void this.applyFilters();
+  }
+
+  pageSuivante(): void {
+    if (this.hasNextPage()) this.goToPage(this.currentPage() + 1);
+  }
+
+  pagePrecedente(): void {
+    if (this.hasPrevPage()) this.goToPage(this.currentPage() - 1);
+  }
+
+  // ──────────────────────────────────────────
   // Recherche & filtres
   // ──────────────────────────────────────────
 
@@ -91,35 +129,35 @@ export class VenteStoreService {
     this.searchTerm.set(term);
     clearTimeout(this.searchDebounce);
     this.searchDebounce = setTimeout(() => {
+      this.currentPage.set(0);
       void this.applyFilters();
     }, 300);
   }
 
   setFilterDate(date: string): void {
     this.filterDate.set(date);
+    this.currentPage.set(0);
     void this.applyFilters();
   }
 
   clearFilters(): void {
     this.searchTerm.set('');
     this.filterDate.set('');
+    this.currentPage.set(0);
     void this.loadAll();
   }
 
   private async applyFilters(): Promise<void> {
     const term = this.searchTerm().trim();
-    const date = this.filterDate();
 
-    // Recherche texte prioritaire via l'endpoint dédié
     if (term) {
       this.isLoading.set(true);
       this.error.set(null);
       try {
-        let dtos = await this.venteApi.searchSales(term);
-        if (date) {
-          dtos = dtos.filter((s) => s.saleDate.startsWith(date));
-        }
-        this._sales.set(SaleMapper.fromResponseDTOList(dtos));
+        const page = await this.venteApi.searchSales(term, this.currentPage(), this.pageSize());
+        this._sales.set(SaleMapper.fromResponseDTOList(page.content));
+        this.totalElements.set(page.totalElements);
+        this.totalPages.set(page.totalPages);
       } catch (err) {
         console.error('VenteStore: erreur recherche', err);
         this.error.set('Impossible de rechercher les ventes.');
@@ -134,7 +172,6 @@ export class VenteStoreService {
 
   private toDateRange(date: string): { from?: string; to?: string } {
     if (!date) return {};
-    // Début et fin de journée en ISO LocalDateTime
     return {
       from: `${date}T00:00:00`,
       to: `${date}T23:59:59`,
@@ -148,8 +185,10 @@ export class VenteStoreService {
   async add(sale: Omit<Sale, 'id'>): Promise<void> {
     const dto = SaleMapper.toRequestDTO(sale);
     try {
-      const created = await this.venteApi.createSale(dto);
-      this._sales.update((list) => [SaleMapper.fromResponseDTO(created), ...list]);
+      await this.venteApi.createSale(dto);
+      // Recharger la page 0 pour voir la nouvelle vente en tête
+      this.currentPage.set(0);
+      await this.applyFilters();
     } catch (err) {
       console.error('VenteStore: erreur création', err);
       this.error.set('Impossible de créer la vente.');
@@ -160,10 +199,9 @@ export class VenteStoreService {
   async update(id: string, sale: Omit<Sale, 'id'>): Promise<void> {
     const dto = SaleMapper.toRequestDTO(sale);
     try {
-      const updated = await this.venteApi.updateSale(Number(id), dto);
-      this._sales.update((list) =>
-        list.map((s) => (s.id === id ? SaleMapper.fromResponseDTO(updated) : s))
-      );
+      await this.venteApi.updateSale(Number(id), dto);
+      // Recharger la page courante pour refléter la mise à jour
+      await this.applyFilters();
     } catch (err) {
       console.error('VenteStore: erreur mise à jour', err);
       this.error.set('Impossible de mettre à jour la vente.');
@@ -174,7 +212,12 @@ export class VenteStoreService {
   async delete(id: string): Promise<void> {
     try {
       await this.venteApi.deleteSale(Number(id));
-      this._sales.update((list) => list.filter((s) => s.id !== id));
+      // Si la page devient vide après suppression, revenir à la page précédente
+      const remaining = this._sales().filter((s) => s.id !== id).length;
+      if (remaining === 0 && this.currentPage() > 0) {
+        this.currentPage.update((p) => p - 1);
+      }
+      await this.applyFilters();
     } catch (err) {
       console.error('VenteStore: erreur suppression', err);
       this.error.set('Impossible de supprimer la vente.');
