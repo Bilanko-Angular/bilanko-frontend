@@ -7,8 +7,8 @@
         <input
           id="activity-date-start"
           type="date"
-          [value]="overviewStore.filterFrom() ?? ''"
-          (change)="setPeriod($any($event.target).value, overviewStore.filterTo() ?? '')"
+          [value]="filterFrom()"
+          (change)="setPeriod($any($event.target).value, filterTo())"
         />
       </div>
       <span class="date-separator">au</span>
@@ -17,8 +17,8 @@
         <input
           id="activity-date-end"
           type="date"
-          [value]="overviewStore.filterTo() ?? ''"
-          (change)="setPeriod(overviewStore.filterFrom() ?? '', $any($event.target).value)"
+          [value]="filterTo()"
+          (change)="setPeriod(filterFrom(), $any($event.target).value)"
         />
       </div>
     </div>

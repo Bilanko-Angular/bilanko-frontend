@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { SaleTimeSeriesPoint } from '../../../models/overview';
 import { OverviewStoreService } from '../../../service/store/overview/overview-store.service';
@@ -44,6 +44,10 @@ export class ActivityChartComponent {
   protected readonly chartWidth = WIDTH;
   protected readonly chartHeight = HEIGHT;
 
+  // Filtres de période locaux — pas d'appel API, tout se filtre en mémoire
+  protected readonly filterFrom = signal<string>('');
+  protected readonly filterTo = signal<string>('');
+
   private readonly chargesByDay = computed<Map<string, number>>(() => {
     const map = new Map<string, number>();
     for (const charge of this.chargeStore.charges()) {
@@ -55,14 +59,24 @@ export class ActivityChartComponent {
 
   private readonly chartData = computed<ChartPoint[]>(() => {
     const byDay = this.chargesByDay();
-    return this.overviewStore.timeSeries().map((point: SaleTimeSeriesPoint) => {
-      const day = point.date.slice(0, 10);
+    const from = this.filterFrom();
+    const to = this.filterTo();
+
+    const filtered = this.overviewStore.timeSeries().filter((point: SaleTimeSeriesPoint) => {
+      const day = point.period.slice(0, 10);
+      if (from && day < from) return false;
+      if (to && day > to) return false;
+      return true;
+    });
+
+    return filtered.map((point: SaleTimeSeriesPoint) => {
+      const day = point.period.slice(0, 10);
       const charges = byDay.get(day) ?? 0;
       return {
         date: day,
-        revenue: point.revenue,
+        revenue: point.totalAmount,
         charges,
-        margin: point.revenue - charges,
+        margin: point.totalMargin,
       };
     });
   });
@@ -123,7 +137,8 @@ export class ActivityChartComponent {
   });
 
   protected setPeriod(from: string, to: string): void {
-    this.overviewStore.setPeriod(from || undefined, to || undefined);
+    this.filterFrom.set(from);
+    this.filterTo.set(to);
   }
 
   private buildYTicks(min: number, max: number): number[] {
