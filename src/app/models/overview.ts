@@ -18,9 +18,10 @@ export interface OverviewSummary {
 }
 
 export interface SaleTimeSeriesPoint {
-  date: string;
-  revenue: number;
+  period: string;
   salesCount: number;
+  totalAmount: number;
+  totalMargin: number;
 }
 
 export interface TopSoldProduct {

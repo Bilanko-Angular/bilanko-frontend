@@ -36,6 +36,7 @@ export class OverviewStoreService {
 
       this.summary.set(summaryRes);
       this.timeSeries.set(timeSeriesRes);
+      console.log(this.timeSeries())
       this.topProducts.set(topProductsRes);
     } catch (err) {
       console.error('Erreur lors du chargement du tableau de bord :', err);

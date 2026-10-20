@@ -14,6 +14,8 @@ import { StockAlertsComponent } from '../../components/accueil/stock-alert.compo
 import { ChargesDonutComponent } from '../../components/accueil/charges-donut.component/charges-donut.component';
 import { UserStoreService } from '../../service/store/user/user-store.service';
 import { PreferencesService } from '../../service/app/preference/preferences';
+import {OverviewStoreService} from '../../service/store/overview/overview-store.service';
+import {ActionResponseService} from '../../service/action-response/action-response.service';
 
 @Component({
   selector: 'app-acceuil',
@@ -33,7 +35,9 @@ import { PreferencesService } from '../../service/app/preference/preferences';
 })
 export class Acceuil {
   private readonly userStore = inject(UserStoreService);
+  private readonly overviewStore = inject(OverviewStoreService);
   protected readonly prefs = inject(PreferencesService);
+  private readonly  action =inject(ActionResponseService)
 
   protected readonly firstName = computed(() => {
     const nom = this.userStore.user()?.nom?.trim();
@@ -46,4 +50,22 @@ export class Acceuil {
       month: 'long',
     })
   );
+/*
+  ngOnInit() {
+
+    this.overviewStore.loadDashboardData()
+      .then(()=>{
+
+        console.log("Données chargé avec succès")
+      })
+      .catch((err)=>{
+        console.error(err);
+        this.action.error(err)
+      })
+      .finally(()=>{
+        console.log("JE suis en train de charger les données")
+      })
+  }
+
+ */
 }
