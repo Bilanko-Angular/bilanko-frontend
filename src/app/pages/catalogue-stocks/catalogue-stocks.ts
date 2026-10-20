@@ -60,6 +60,7 @@ export class CatalogueStocks {
   // ── Confirmation suppression ────────────────────────────────────────
   readonly produitASupprimer = signal<Produit | undefined>(undefined);
 
+
   constructor() {
     this.chargerCategories();
 
@@ -72,6 +73,7 @@ export class CatalogueStocks {
         page: this.pageCourante(),
       });
     });
+
   }
 
   private async chargerCategories(): Promise<void> {

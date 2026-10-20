@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { apiClient } from '../../../core/axios/axios.config';
 import { environment } from '../../../../environments/environment';
+
 import type {
   SaleRequestDTO,
   SaleResponseDTO,
   SaleSummaryDTO,
 } from '../../../models/DTO/SaleDto';
 import type { PagedResponseDto } from '../../../models/DTO/response/PageResponse';
+import SaleUserSummary from '../../../models/DTO/SalesUserSummary';
 
 @Injectable({
   providedIn: 'root',
@@ -70,5 +72,11 @@ export class VenteApiService {
   /** Supprime une vente — DELETE /api/sales/{id} */
   async deleteSale(id: number): Promise<void> {
     await apiClient.delete(`${this.basePath}/${id}`);
+  }
+
+  /** Recherche le résumé lié à la page de utilisateur */
+  async getUserSummary(): Promise<SaleUserSummary> {
+    const response = await apiClient.get<SaleUserSummary>(`${this.basePath}/user-summary`);
+    return response.data;
   }
 }

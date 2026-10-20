@@ -36,6 +36,56 @@
       </button>
     </div>
   </div>
+  @if (summary()) {
+    <div class="all-sumary-card">
+
+      <div class="summary-card summary-card--primary">
+        <div class="summary-card__icon">
+          <span class="material-icons">receipt_long</span>
+        </div>
+        <div class="summary-card__content">
+          <div class="title">Nombre de ventes</div>
+          <div class="main-card-info">{{ summary()?.totalSales }}</div>
+        </div>
+      </div>
+
+      <div class="summary-card summary-card--accent">
+        <div class="summary-card__icon">
+          <span class="material-icons">calendar_month</span>
+        </div>
+        <div class="summary-card__content">
+          <div class="title">Ventes du mois</div>
+          <div class="main-card-info">{{ summary()?.monthlySales }}</div>
+        </div>
+      </div>
+
+      <div class="summary-card summary-card--positive">
+        <div class="summary-card__icon">
+          <span class="material-icons">trending_up</span>
+        </div>
+        <div class="summary-card__content">
+          <div class="title">Marge du mois</div>
+          <div class="main-card-info">
+            {{ summary()?.totalMargin | number:'1.0-0' }}
+            <span class="currency">FCFA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-card summary-card--primary">
+        <div class="summary-card__icon">
+          <span class="material-icons">emoji_events</span>
+        </div>
+        <div class="summary-card__content">
+          <div class="title">Meilleur client</div>
+          <div class="main-card-info main-card-info--text">
+            {{ summary()?.bestCustomer }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  }
 
   <div class="product-search-bar">
     <app-basic-search-bar
@@ -133,6 +183,7 @@
             [initial]="editingSale"
             (submitSale)="handleSaleSubmit($event)"
             (cancel)="closeAddModal()"
+            [isCreating]="isCreating()"
           ></app-panier-form>
         </div>
       </div>

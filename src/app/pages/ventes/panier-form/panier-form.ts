@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject, signal, computed, effect, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, Output, inject, signal, computed, effect, OnInit, input} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { PreferencesService } from '../../../service/app/preference/preferences';
@@ -30,6 +30,8 @@ export class PanierForm implements OnInit {
   selectedProductId = signal('');
   selectedQuantity = signal(1);
   stockWarning = signal('');
+
+  isCreating = input(false);
 
   readonly filteredProducts = computed<Produit[]>(() => {
     const q = this.productQuery().trim().toLowerCase();
@@ -156,6 +158,6 @@ export class PanierForm implements OnInit {
       totalAmount: this.total(),
       totalMargin: this.totalMargin(),
       items: this.panier(),
-    });
+    })
   }
 }
