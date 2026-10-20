@@ -3,16 +3,33 @@
   flex: 1;
   min-width: 120px;
   max-width: 100%;
-}
 
+}
+.search-icon{
+  background: transparent;
+  border: none;
+  padding: 0 0 0 0.6rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: var(--bs-border-radius);
+}
 .bk-header-search--desktop .input-group {
-  background: var(--color-surface);
-  border-radius: 8px;
+  background: transparent;
+  border-radius: 50px;
   overflow: hidden;
   border: 1.5px solid var(--color-border);
   transition: all 0.3s ease;
 }
-
+.bk-header-search--desktop .form-control{
+  box-shadow: none !important;
+  border: none !important;
+}
 .bk-header-search--desktop .input-group:focus-within {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 4px var(--color-primary-subtle);

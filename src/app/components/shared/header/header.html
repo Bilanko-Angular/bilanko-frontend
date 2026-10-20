@@ -13,15 +13,7 @@
     <span></span>
   </button>
 
-  <!-- ✅ TITRE (caché sur mobile) -->
-  <div class="bk-header-info">
-    <p class="bk-header-breadcrumb">
-      <span class="separator">‹</span>
-      <span class="current">{{ breadcrumbCurrent }}</span>
-    </p>
-    <h1 class="bk-header-title">{{ pageTitle }}</h1>
-  </div>
-  <div style="width: 40% ; cursor: pointer ; margin: auto">
+  <div style="width: 40% ; align-self: center">
     <app-search-header [(searchPopupOpen)]="searchPopupOpen"/>
   </div>
 
