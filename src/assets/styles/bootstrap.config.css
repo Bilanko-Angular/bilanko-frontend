@@ -2,7 +2,7 @@
 [data-theme="light"],
 [data-bs-theme="light"] {
   --bs-primary:                var(--color-primary);
-  --bs-primary-rgb:            5, 223, 114;
+  --bs-primary-rgb:            0, 188, 125;
   --bs-primary-text-emphasis:  var(--color-primary-active);
   --bs-primary-bg-subtle:      var(--color-primary-subtle);
   --bs-primary-border-subtle:  var(--color-primary);
@@ -39,7 +39,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bs-primary-rgb:            5, 223, 114;
+    --bs-primary-rgb:            0, 188, 125;
     --bs-link-color:             var(--color-primary);
     --bs-link-hover-color:       var(--color-primary-hover);
     --bs-body-bg:                var(--color-background);
@@ -62,7 +62,7 @@
 [data-theme="dark"],
 [data-bs-theme="dark"] {
   --bs-primary:                var(--color-primary);
-  --bs-primary-rgb:            5, 223, 114;
+  --bs-primary-rgb:            0, 188, 125;
   --bs-primary-text-emphasis:  var(--color-primary-active);
   --bs-primary-bg-subtle:      var(--color-primary-subtle);
   --bs-primary-border-subtle:  var(--color-primary);

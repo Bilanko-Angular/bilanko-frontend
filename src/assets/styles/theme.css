@@ -1,10 +1,10 @@
 @import './bootstrap.config.css';
 
 :root {
-  --bilanko-primary:        #05DF72;
-  --bilanko-primary-hover:  #04C966;
-  --bilanko-primary-active: #03A654;
-  --bilanko-primary-subtle: #E6FCF1;
+  --bilanko-primary:        #00BC7D;
+  --bilanko-primary-hover:  #009966;
+  --bilanko-primary-active: #007A55;
+  --bilanko-primary-subtle: #ECFDF5;
 
   --bilanko-positive:        #065F46;
   --bilanko-positive-subtle: #D1FAE5;
@@ -14,10 +14,10 @@
   --bilanko-accent-subtle:   #FEF3C7;
 
   --bilanko-background:      #FFFFFF;
-  --bilanko-surface:         #f0fdf4;
-  --bilanko-border:          #DCFCE7;
+  --bilanko-surface:         #F3FCF8;
+  --bilanko-border:          #D1F2E4;
   --bilanko-text:            #111827;
-  --bilanko-text-muted:      #526E60;
+  --bilanko-text-muted:      #4F6B5F;
   --bilanko-on-brand:        #FFFFFF;
 
   --color-primary:        var(--bilanko-primary);
@@ -52,10 +52,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-primary:        #05DF72;
-    --color-primary-hover:  #33E78E;
-    --color-primary-active: #05DF72;
-    --color-primary-subtle: #013B1E;
+    --color-primary:        #00BC7D;
+    --color-primary-hover:  #00D492;
+    --color-primary-active: #00BC7D;
+    --color-primary-subtle: #012F22;
 
     --color-positive:        #34D399;
     --color-positive-subtle: #064E3B;
@@ -76,10 +76,10 @@
 
 [data-theme="dark"],
 [data-bs-theme="dark"] {
-  --color-primary:        #05DF72;
-  --color-primary-hover:  #33E78E;
-  --color-primary-active: #05DF72;
-  --color-primary-subtle: #013B1E;
+  --color-primary:        #00BC7D;
+  --color-primary-hover:  #00D492;
+  --color-primary-active: #00BC7D;
+  --color-primary-subtle: #012F22;
 
   --color-positive:        #34D399;
   --color-positive-subtle: #064E3B;
