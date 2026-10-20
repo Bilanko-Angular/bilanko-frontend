@@ -58,7 +58,7 @@
   overflow: visible;
 }
 
-/* Légende du graphique */
+/* Légende interactive du graphique */
 .chart-legend {
   display: flex;
   align-items: center;
@@ -72,20 +72,55 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s, opacity 0.2s;
 }
-.legend-box {
+.legend-item:hover {
+  background: var(--color-surface);
+}
+.legend-item input[type="checkbox"] {
+  display: none;
+}
+.legend-swatch {
   width: 22px;
   height: 12px;
   border-radius: 2px;
   border: 2px solid;
+  transition: opacity 0.2s, filter 0.2s;
+  flex-shrink: 0;
 }
-.legend-box.ca { background: rgba(5, 223, 114, 0.25); border-color: #05DF72; }
-.legend-box.marge { background: rgba(6, 95, 70, 0.25); border-color: #065F46; }
-.legend-box.charges { background: rgba(220, 38, 38, 0.18); border-color: #DC2626; }
+.legend-swatch.ca     { background: rgba(5, 223, 114, 0.25); border-color: #05DF72; }
+.legend-swatch.marge  { background: rgba(6, 95, 70, 0.25);  border-color: #065F46; }
+.legend-swatch.charges{ background: rgba(220, 38, 38, 0.18); border-color: #DC2626; }
+
+/* État désactivé */
+.legend-item--off {
+  opacity: 0.42;
+}
+.legend-item--off .legend-swatch {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+.legend-item--off span:last-child,
+.legend-item--off {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-text-muted);
+}
 
 .bk-activity-chart__empty {
   color: var(--color-text-muted);
   text-align: center;
   padding: 80px 0;
   margin: 0;
+}
+
+@media screen and (max-width:768px) {
+  .panel-head{
+    flex-direction: column;
+    align-items: self-start;
+    gap: 8px;
+  }
 }

@@ -68,39 +68,60 @@
           }
         </g>
 
-        <path [attr.d]="c.revenue.area" fill="url(#gradCA)" />
-        <path [attr.d]="c.margin.area" fill="url(#gradMarge)" />
-        <path [attr.d]="c.charges.area" fill="url(#gradCharges)" />
-
-        <path [attr.d]="c.revenue.line" fill="none" stroke="#05DF72" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-        <path [attr.d]="c.margin.line" fill="none" stroke="#065F46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-        <path [attr.d]="c.charges.line" fill="none" stroke="#DC2626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-
-        @for (dot of c.revenue.dots; track $index) {
-          <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#05DF72" stroke-width="2.5" />
+        @if (c.revenue) {
+          <path [attr.d]="c.revenue.area" fill="url(#gradCA)" />
         }
-        @for (dot of c.margin.dots; track $index) {
-          <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#065F46" stroke-width="2.5" />
+        @if (c.margin) {
+          <path [attr.d]="c.margin.area" fill="url(#gradMarge)" />
         }
-        @for (dot of c.charges.dots; track $index) {
-          <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2.5" />
+        @if (c.charges) {
+          <path [attr.d]="c.charges.area" fill="url(#gradCharges)" />
+        }
+
+        @if (c.revenue) {
+          <path [attr.d]="c.revenue.line" fill="none" stroke="#05DF72" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        }
+        @if (c.margin) {
+          <path [attr.d]="c.margin.line" fill="none" stroke="#065F46" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        }
+        @if (c.charges) {
+          <path [attr.d]="c.charges.line" fill="none" stroke="#DC2626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        }
+
+        @if (c.revenue) {
+          @for (dot of c.revenue.dots; track $index) {
+            <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#05DF72" stroke-width="2.5" />
+          }
+        }
+        @if (c.margin) {
+          @for (dot of c.margin.dots; track $index) {
+            <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#065F46" stroke-width="2.5" />
+          }
+        }
+        @if (c.charges) {
+          @for (dot of c.charges.dots; track $index) {
+            <circle [attr.cx]="dot.x" [attr.cy]="dot.y" r="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2.5" />
+          }
         }
       </svg>
     </div>
 
     <div class="chart-legend">
-      <div class="legend-item">
-        <span class="legend-box ca"></span>
+      <label class="legend-item" [class.legend-item--off]="!showRevenue()">
+        <input type="checkbox" [checked]="showRevenue()" (change)="showRevenue.set(!showRevenue())" />
+        <span class="legend-swatch ca"></span>
         Chiffre d'affaires
-      </div>
-      <div class="legend-item">
-        <span class="legend-box marge"></span>
+      </label>
+      <label class="legend-item" [class.legend-item--off]="!showMargin()">
+        <input type="checkbox" [checked]="showMargin()" (change)="showMargin.set(!showMargin())" />
+        <span class="legend-swatch marge"></span>
         Marge
-      </div>
-      <div class="legend-item">
-        <span class="legend-box charges"></span>
+      </label>
+      <label class="legend-item" [class.legend-item--off]="!showCharges()">
+        <input type="checkbox" [checked]="showCharges()" (change)="showCharges.set(!showCharges())" />
+        <span class="legend-swatch charges"></span>
         Charges
-      </div>
+      </label>
     </div>
   } @else {
     <p class="bk-activity-chart__empty">Aucune donnée sur cette période.</p>

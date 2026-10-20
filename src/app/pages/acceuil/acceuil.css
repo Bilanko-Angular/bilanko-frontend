@@ -85,8 +85,8 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .quick-actions {
-    grid-template-columns: 1fr;
+    display:none;
   }
 }

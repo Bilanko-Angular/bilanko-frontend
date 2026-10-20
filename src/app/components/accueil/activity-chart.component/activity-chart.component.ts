@@ -48,6 +48,11 @@ export class ActivityChartComponent {
   protected readonly filterFrom = signal<string>('');
   protected readonly filterTo = signal<string>('');
 
+  // Visibilité des courbes
+  protected readonly showRevenue = signal<boolean>(true);
+  protected readonly showMargin = signal<boolean>(true);
+  protected readonly showCharges = signal<boolean>(true);
+
   private readonly chargesByDay = computed<Map<string, number>>(() => {
     const map = new Map<string, number>();
     for (const charge of this.chargeStore.charges()) {
@@ -85,9 +90,18 @@ export class ActivityChartComponent {
     const data = this.chartData();
     if (data.length === 0) return null;
 
-    const allValues = data.flatMap((d) => [d.revenue, d.margin, d.charges]);
-    const minValue = Math.min(0, ...allValues);
-    const maxValue = Math.max(...allValues, 1);
+    const showRev = this.showRevenue();
+    const showMar = this.showMargin();
+    const showCha = this.showCharges();
+
+    // Y-axis calibré uniquement sur les séries visibles
+    const visibleValues = data.flatMap((d) => [
+      ...(showRev ? [d.revenue] : []),
+      ...(showMar ? [d.margin] : []),
+      ...(showCha ? [d.charges] : []),
+    ]);
+    const minValue = Math.min(0, ...(visibleValues.length ? visibleValues : [0]));
+    const maxValue = Math.max(...(visibleValues.length ? visibleValues : [1]), 1);
 
     const usableWidth = WIDTH - PAD_LEFT - PAD_RIGHT;
     const usableHeight = HEIGHT - PAD_TOP - PAD_BOTTOM;
@@ -121,9 +135,9 @@ export class ActivityChartComponent {
     }));
 
     return {
-      revenue: buildSeries((d) => d.revenue),
-      margin: buildSeries((d) => d.margin),
-      charges: buildSeries((d) => d.charges),
+      revenue: showRev ? buildSeries((d) => d.revenue) : null,
+      margin: showMar ? buildSeries((d) => d.margin) : null,
+      charges: showCha ? buildSeries((d) => d.charges) : null,
       zeroY: y(0),
       yTicks,
       xTicks: data.map((d, i) => ({
