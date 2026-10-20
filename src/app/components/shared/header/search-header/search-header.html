@@ -1,11 +1,13 @@
 <div class="bk-header-search bk-header-search--desktop">
   <div class="input-group">
-      <span class="input-group-text">
+
+      <span class="search-icon">
         <span class="material-symbols-outlined">search</span>
       </span>
     <input
       type="search"
       class="form-control"
+      style="background-color: transparent !important;"
       [placeholder]="prefs.t().searchPlaceholder"
       [value]="searchTerm()"
       (input)="onSearch($event)"
