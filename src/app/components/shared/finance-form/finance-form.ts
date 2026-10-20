@@ -33,6 +33,7 @@ export class FinanceForm {
     label: [''],
     amount: [0, [Validators.min(0)]],
     supplier: [''],
+    categoryId: [null as number | null],
     notes: ['']
   });
 
@@ -54,7 +55,8 @@ export class FinanceForm {
         label: c.label,
         amount: c.amount,
         supplier: c.supplier,
-        date: c.date
+        date: c.date,
+        categoryId: c.categoryId ?? null,
       });
     }
   }
@@ -108,8 +110,9 @@ export class FinanceForm {
       date: String(this.form.get('date')?.value ?? new Date().toISOString().split('T')[0]),
       label,
       amount,
-      supplier: this.form.get('supplier')?.value || '' ,
-      notes: this.form.get('notes')?.value || ''
+      supplier: this.form.get('supplier')?.value || '',
+      notes: this.form.get('notes')?.value || '',
+      categoryId: this.form.get('categoryId')?.value ?? undefined,
     };
     this.submit.emit(charge);
   }

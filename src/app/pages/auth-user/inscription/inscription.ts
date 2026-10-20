@@ -5,6 +5,8 @@ import { AuthUser } from "../auth-user";
 import { PreferencesService } from '../../../service/app/preference/preferences';
 import { GoogleLoginButton } from '../../../components/shared/ui/google-login-button/google-login-button';
 import {ActionResponseService} from '../../../service/action-response/action-response.service';
+import {AuthStoreService} from '../../../service/store/auth/auth-store.service';
+import {User} from '../../../models/person';
 
 @Component({
   selector: 'app-inscription',
@@ -18,6 +20,8 @@ export class Inscription {
   private readonly router = inject(Router);
   protected readonly prefs = inject(PreferencesService);
   private readonly action =inject(ActionResponseService);
+  private readonly authApi =inject(AuthStoreService);
+
   @ViewChild('passwordInput') passwordInput!: HTMLInputElement;
 
   isLoading = signal(false);
@@ -67,17 +71,29 @@ export class Inscription {
 
     this.isLoading.set(true);
     this.registerError = '';
-    this.registerSuccess.set(true);
-
-    setTimeout(() => {
-      this.isLoading.set(false);
-      this.registerSuccess.set(true);
-      console.log('Inscription réussie :', this.inscriptionForm.value);
-
-      setTimeout(() => {
-        this.router.navigate(['/connexion']);
-      }, 1500);
-    }, 800);
+    const user :User={
+      nom:this.inscriptionForm.value.nom || "",
+      subname: this.inscriptionForm.value.prenom || "",
+      email: this.inscriptionForm.value.email || "",
+      password:this.inscriptionForm.value.password || "",
+    }
+    this.authApi.register(user)
+      .then(()=>{
+        this.isLoading.set(false);
+        this.registerSuccess.set(true);
+        console.log('Inscription réussie :', this.inscriptionForm.value);
+        this.action.success("Inscription réussite")
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1500);
+      })
+      .catch((error)=>{
+        console.log(error);
+        this.action.error("Vérifier vos informations et réessayer après");
+      })
+      .finally(() => {
+        this.isLoading.set(false);
+      })
   }
   // connexion.ts
   onGoogleSuccess(): void {

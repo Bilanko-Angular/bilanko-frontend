@@ -6,7 +6,6 @@
       <h1 class="bk-auth-title">{{ prefs.t().createAccount }}</h1>
       <p class="bk-auth-subtitle text-muted mb-0">{{ prefs.t().registerSubtitle }}</p>
     </div>
-
     @if (registerSuccess()) {
       <div class="alert alert-success d-flex align-items-center gap-2 mb-3" role="alert">
         <span class="material-icons flex-shrink-0">check_circle</span>
@@ -24,7 +23,7 @@
       </div>
     }
 
-    @if (!registerSuccess) {
+    @if (!registerSuccess()) {
 
       <!-- Bouton Google (avant le formulaire) -->
       <app-google-login-button label="S'inscrire avec Google" (success)="onGoogleSuccess()" (error)="onGoogleError($event)" />

@@ -127,7 +127,7 @@
     }
 
     <!-- Aucune charge -->
-    @if (!store.isLoading() && !store.error() && store.filteredCharges().length === 0) {
+    @if (!store.isLoading() && !store.error() && store.charges().length === 0) {
       <div class="bk-state bk-state--empty">
         <span class="bk-state__icon">📭</span>
         <p>{{ prefs.t().noChargesFound }}</p>
@@ -136,7 +136,7 @@
     }
 
     <!-- Tableau avec données -->
-    @if (!store.isLoading() && !store.error() && store.filteredCharges().length > 0) {
+    @if (!store.isLoading() && !store.error() && store.charges().length > 0) {
       <div class="table-container">
         <table class="registry-table">
           <thead>
@@ -149,7 +149,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (c of chargesPage(); track c.id) {
+            @for (c of store.charges(); track c.id) {
               <tr>
                 <td>{{ c.label }}</td>
                 <td>{{ c.supplier || '-' }}</td>
@@ -163,13 +163,13 @@
           </tbody>
         </table>
 
-        @if (nombrePages() > 1) {
+        @if (store.totalPages() > 1) {
           <div class="bk-pagination">
-            <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="pageCourante() === 1">
+            <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="!store.hasPrevPage()">
               ‹ {{ prefs.t().previous }}
             </button>
-            <span class="bk-page-indicator">{{ prefs.t().page }} {{ pageCourante() }} {{ prefs.t().pageOf }} {{ nombrePages() }}</span>
-            <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="pageCourante() === nombrePages()">
+            <span class="bk-page-indicator">{{ prefs.t().page }} {{ store.currentPage() + 1 }} {{ prefs.t().pageOf }} {{ store.totalPages() }}</span>
+            <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="!store.hasNextPage()">
               {{ prefs.t().next }} ›
             </button>
           </div>

@@ -37,14 +37,10 @@ export class ChargesComponent {
   readonly filterPeriod = signal<'all' | 'today' | 'week' | 'month'>('all');
   readonly filterSupplier = signal('');
 
-  // --- BARRE DE RECHERCHE ---
+  // --- BARRE DE RECHERCHE (délégué au store) ---
   get searchTerm() { return this.store.searchTerm; }
 
-  // --- PAGINATION ---
-  readonly pageCourante = signal(1);
-  readonly parPage = 6;
-
-  // --- FOURNISSEURS UNIQUES POUR LE FILTRE ---
+  // --- FOURNISSEURS UNIQUES POUR LE FILTRE (extraits de la page courante) ---
   readonly fournisseurs = computed(() => {
     const charges = this.store.charges();
     const unique = new Set<string>();
@@ -54,71 +50,14 @@ export class ChargesComponent {
     return Array.from(unique).sort();
   });
 
-  // --- CHARGES FILTRÉES ---
-  readonly filteredCharges = computed(() => {
-    let charges = this.store.filteredCharges();
-
-    // Filtre par période
-    const period = this.filterPeriod();
-    if (period !== 'all') {
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-      charges = charges.filter(c => {
-        const date = new Date(c.date);
-        if (period === 'today') {
-          return date >= today;
-        }
-        if (period === 'week') {
-          const weekStart = new Date(today);
-          weekStart.setDate(today.getDate() - today.getDay());
-          return date >= weekStart;
-        }
-        if (period === 'month') {
-          const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-          return date >= monthStart;
-        }
-        return true;
-      });
-    }
-
-    // Filtre par fournisseur
-    const supplier = this.filterSupplier();
-    if (supplier) {
-      charges = charges.filter(c => c.supplier === supplier);
-    }
-
-    return charges;
-  });
-
-  readonly nombrePages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredCharges().length / this.parPage))
-  );
-
-  readonly chargesPage = computed(() => {
-    const debut = (this.pageCourante() - 1) * this.parPage;
-    return this.filteredCharges().slice(debut, debut + this.parPage);
-  });
-
   // --- INDICATEUR DE FILTRE ACTIF ---
-  hasActiveFilter = computed(() => {
-    return this.filterPeriod() !== 'all' || this.filterSupplier() !== '';
+  readonly hasActiveFilter = computed(() => {
+    return this.filterPeriod() !== 'all'
+      || this.filterSupplier() !== ''
+      || this.store.searchTerm() !== '';
   });
 
   constructor() {
-    effect(() => {
-      const max = this.nombrePages();
-      if (this.pageCourante() > max) this.pageCourante.set(max);
-    });
-    effect(() => {
-      this.store.searchTerm();
-      this.pageCourante.set(1);
-    });
-    effect(() => {
-      this.filterPeriod();
-      this.filterSupplier();
-      this.pageCourante.set(1);
-    });
     const viewId = this.route.snapshot.queryParamMap.get('viewId');
     if (viewId) {
       effect(() => {
@@ -128,18 +67,21 @@ export class ChargesComponent {
     }
   }
 
-  // --- RECHERCHE ---
+  // ──────────────────────────────────────────
+  // Recherche + Filtres → backend
+  // ──────────────────────────────────────────
+
+  /** Appelé par la barre de recherche — déclenche /search?label= côté serveur */
   onSearchChange(value: string): void {
-    this.searchTerm.set(value);
-    this.pageCourante.set(1);
+    this.store.searchTerm.set(value);
+    this._applySearchToBackend();
   }
 
   clearSearch(): void {
-    this.searchTerm.set('');
-    this.pageCourante.set(1);
+    this.store.searchTerm.set('');
+    this._applySearchToBackend();
   }
 
-  // --- FILTRE ---
   toggleFilter(): void {
     this.filterOpen.update(v => !v);
   }
@@ -148,25 +90,74 @@ export class ChargesComponent {
     this.filterPeriod.set(period);
   }
 
+  /** Applique tous les filtres actifs vers le backend */
   applyFilter(): void {
     this.filterOpen.set(false);
+    this._applySearchToBackend();
   }
 
   resetFilter(): void {
     this.filterPeriod.set('all');
     this.filterSupplier.set('');
+    this.store.searchTerm.set('');
     this.filterOpen.set(false);
+    this.store.resetDateFilter();
+  }
+
+  /** Construit les paramètres de filtre et délègue au store */
+  private _applySearchToBackend(): void {
+    const label = this.store.searchTerm();
+    const supplier = this.filterSupplier();
+    const { from, to } = this._periodToDateRange(this.filterPeriod());
+
+    const hasSearchCriteria = label || supplier || from || to;
+
+    if (hasSearchCriteria) {
+      this.store.search({
+        ...(label    && { label }),
+        ...(supplier && { supplier }),
+        ...(from     && { date: from }), // on utilise date pour filtre journalier
+        page: 0,
+      });
+      if (from || to) {
+        // Si période > aujourd'hui, on utilise applyDateFilter pour from/to
+        this.store.applyDateFilter(from, to);
+      }
+    } else {
+      this.store.resetDateFilter();
+    }
+  }
+
+  /** Convertit une période nommée en intervalle de dates ISO */
+  private _periodToDateRange(period: 'all' | 'today' | 'week' | 'month'): { from?: string; to?: string } {
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const toISO = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const today = toISO(now);
+
+    if (period === 'today') {
+      return { from: today, to: today };
+    }
+    if (period === 'week') {
+      const weekStart = new Date(now);
+      weekStart.setDate(now.getDate() - now.getDay());
+      return { from: toISO(weekStart), to: today };
+    }
+    if (period === 'month') {
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      return { from: toISO(monthStart), to: today };
+    }
+    return {};
   }
 
   // --- EXPORT (placeholder) ---
   exporter(): void {
     console.log('📤 Export des charges (à implémenter avec le backend)');
-    // Le chef implémentera plus tard avec le backend
   }
 
-  // --- PAGINATION ---
-  pageSuivante() { this.pageCourante.update(v => Math.min(v + 1, this.nombrePages())); }
-  pagePrecedente() { this.pageCourante.update(v => Math.max(v - 1, 1)); }
+  // --- PAGINATION SERVEUR ---
+  pageSuivante(): void  { this.store.nextPage(); }
+  pagePrecedente(): void { this.store.prevPage(); }
 
   // --- CRUD ---
   openAdd() {
