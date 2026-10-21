@@ -98,8 +98,6 @@
       />
     </div>
 
-
-
     <!-- =========================================================
          FILTRE POPUP
     ========================================================== -->
@@ -206,6 +204,30 @@
             }
           </tbody>
         </table>
+
+        <div class="charges-card-list">
+          @for (c of store.charges(); track c.id) {
+            <article class="charge-card">
+              <div class="charge-card__header">
+                <div>
+                  <h2>{{ c.label }}</h2>
+                  <p>{{ c.supplier || 'Fournisseur non renseigné' }}</p>
+                </div>
+                <app-action-menu (action)="onChargeAction($event, c.id)"></app-action-menu>
+              </div>
+              <div class="charge-card__details">
+                <div class="charge-card__detail">
+                  <span>{{ prefs.t().amount }}</span>
+                  <strong>{{ c.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+                </div>
+                <div class="charge-card__detail">
+                  <span>{{ prefs.t().date }}</span>
+                  <strong>{{ c.date | date: prefs.angularDateFormat() }}</strong>
+                </div>
+              </div>
+            </article>
+          }
+        </div>
 
         @if (store.totalPages() > 1) {
           <div class="bk-pagination">
