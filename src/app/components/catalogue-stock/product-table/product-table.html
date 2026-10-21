@@ -1,36 +1,38 @@
 <!-- product-table.html -->
-<div class="table-responsive">
-  <table class="table table-hover mb-0 align-middle" style="color: var(--color-text);">
-    <thead style="border-bottom: 2px solid var(--color-border);">
-      <tr>
-        <th class="fw-semibold text-secondary small text-nowrap ps-3">Produit &amp; référence</th>
-        <th class="fw-semibold text-secondary small text-nowrap">Catégorie</th>
-        <th class="fw-semibold text-secondary small text-nowrap text-center">Qté en stock</th>
-        <th class="fw-semibold text-secondary small text-nowrap text-center">Seuil d'alerte</th>
-        <th class="fw-semibold text-secondary small text-nowrap text-end">Marge unitaire (FCFA)</th>
-        <th class="fw-semibold text-secondary small text-nowrap text-center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (isLoading()) {
-        @for (i of [1, 2, 3, 4, 5]; track i) {
-          <tr app-product-skeleton-row class="skeleton-row"></tr>
+<div >
+  <div>
+    <table class="registry-table">
+      <thead>
+        <tr>
+          <th class="align-left ps-col">Produit &amp; référence</th>
+          <th class="align-left">Catégorie</th>
+          <th class="align-center">Qté en stock</th>
+          <th class="align-center">Seuil d'alerte</th>
+          <th class="align-right">Marge unitaire</th>
+          <th class="align-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (isLoading()) {
+          @for (i of [1, 2, 3, 4, 5]; track i) {
+            <tr app-product-skeleton-row class="skeleton-row"></tr>
+          }
+        } @else if (error()) {
+          <tr><td colspan="6" class="empty-state-cell">{{ error() }}</td></tr>
+        } @else if (produits().length === 0) {
+          <tr><td colspan="6" class="empty-state-cell">Aucun produit trouvé</td></tr>
+        } @else {
+          @for (p of produits(); track p.id) {
+            <tr app-product-table-row
+              [produit]="p"
+              [devise]="devise()"
+              (edit)="edit.emit($event)"
+              (supprimer)="supprimer.emit($event)"
+              (voir)="voir.emit($event)"
+            ></tr>
+          }
         }
-      } @else if (error()) {
-        <tr><td colspan="6" class="text-center text-danger py-4">{{ error() }}</td></tr>
-      } @else if (produits().length === 0) {
-        <tr><td colspan="6" class="text-center text-secondary py-4">Aucun produit trouvé</td></tr>
-      } @else {
-        @for (p of produits(); track p.id) {
-          <tr app-product-table-row
-            [produit]="p"
-            [devise]="devise()"
-            (edit)="edit.emit($event)"
-            (supprimer)="supprimer.emit($event)"
-            (voir)="voir.emit($event)"
-          ></tr>
-        }
-      }
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>

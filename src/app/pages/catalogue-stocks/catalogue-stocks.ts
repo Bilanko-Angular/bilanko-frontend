@@ -1,6 +1,7 @@
 import { Component, inject, signal, effect } from '@angular/core';
 import { ProduitStoreService } from '../../service/store/product/produit-store.service';
 import { CategoryApiService } from '../../service/api/product/category-api.service';
+import { ProductApiService } from '../../service/api/product/product-api.service';
 import { ProductSearchBar } from '../../components/catalogue-stock/product-search-bar/product-search-bar';
 import { ProductFilterDropdown, FiltresProduit, CategorieOption } from '../../components/catalogue-stock/product-filter-dropdown/product-filter-dropdown';
 import { ProductTable } from '../../components/catalogue-stock/product-table/product-table';
@@ -10,16 +11,21 @@ import { ProduitForm } from '../../components/catalogue-stock/produit-form/produ
 import { Template } from '../../components/shared/template/template';
 import { PreferencesService } from '../../service/app/preference/preferences';
 import { Produit } from '../../models/produit';
+import ProductUserSummary from '../../models/DTO/ProductUserSummary';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import {BasicSearchBar} from '../../components/shared/ui/basic-search-bar/basic-search-bar';
+import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
+
+import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
+import { SkeletonSearchBar } from '../../components/shared/ui/skeleton-search-bar/skeleton-search-bar';
+import { SkeletonPagination } from '../../components/shared/ui/skeleton-pagination/skeleton-pagination';
 
 @Component({
   selector: 'app-catalogue-stocks',
   standalone: true,
   imports: [
-    ProductSearchBar,
     ProductFilterDropdown,
     ProductTable,
     ProductPagination,
@@ -27,6 +33,10 @@ import { Router } from '@angular/router';
     ProduitForm,
     Template,
     BasicSearchBar,
+    DecimalPipe,
+    SkeletonSummaryCards,
+    SkeletonSearchBar,
+    SkeletonPagination,
   ],
   templateUrl: './catalogue-stocks.html',
   styleUrl:'catalogue-stocks.css'
@@ -35,7 +45,10 @@ export class CatalogueStocks {
   protected readonly prefs = inject(PreferencesService);
   private readonly store = inject(ProduitStoreService);
   private readonly categoryApi = inject(CategoryApiService);
+  private readonly productApi = inject(ProductApiService);
   private readonly router = inject(Router);
+
+  readonly summary = signal<ProductUserSummary | null>(null);
 
   // ── État issu du store (produits, pagination, chargement) ────────────
   readonly produits = this.store.produits;
@@ -60,8 +73,10 @@ export class CatalogueStocks {
   // ── Confirmation suppression ────────────────────────────────────────
   readonly produitASupprimer = signal<Produit | undefined>(undefined);
 
+
   constructor() {
     this.chargerCategories();
+    this.chargerSummary();
 
     // Relance la recherche à chaque changement de filtre/page
     effect(() => {
@@ -79,6 +94,14 @@ export class CatalogueStocks {
       this.categoriesOptions.set(await this.categoryApi.getAll());
     } catch (e) {
       console.error('Erreur chargement catégories :', e);
+    }
+  }
+
+  private async chargerSummary(): Promise<void> {
+    try {
+      this.summary.set(await this.productApi.getSummary());
+    } catch (e) {
+      console.error('Erreur chargement résumé produits :', e);
     }
   }
 

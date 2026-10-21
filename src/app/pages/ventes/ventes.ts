@@ -1,7 +1,7 @@
 // src/app/pages/ventes/ventes.ts
 
 import { Component, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
-import { DatePipe, CurrencyPipe } from '@angular/common';
+import {DatePipe, CurrencyPipe, DecimalPipe} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import type { Sale } from '../../models/sale';
@@ -14,11 +14,33 @@ import { VenteStoreService } from '../../service/store/vente/vente-store.service
 import { BasicSearchBar } from '../../components/shared/ui/basic-search-bar/basic-search-bar';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import {VenteApiService} from '../../service/api/vente/vente-api.service';
+import SaleUserSummary from '../../models/DTO/SalesUserSummary';
+import {ActionResponseService} from '../../service/action-response/action-response.service';
+
+import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
+import { SaleSkeletonRow } from '../../components/shared/ui/sale-skeleton-row/sale-skeleton-row';
+import { SkeletonSearchBar } from '../../components/shared/ui/skeleton-search-bar/skeleton-search-bar';
+import { SkeletonPagination } from '../../components/shared/ui/skeleton-pagination/skeleton-pagination';
 
 @Component({
   selector: 'app-ventes',
   standalone: true,
-  imports: [DatePipe, CurrencyPipe, FormsModule, Template, ConfirmDialog, ActionMenu, PanierForm, BasicSearchBar],
+  imports: [
+    DatePipe,
+    CurrencyPipe,
+    FormsModule,
+    Template,
+    ConfirmDialog,
+    ActionMenu,
+    PanierForm,
+    BasicSearchBar,
+    DecimalPipe,
+    SkeletonSummaryCards,
+    SaleSkeletonRow,
+    SkeletonSearchBar,
+    SkeletonPagination,
+  ],
   templateUrl: './ventes.html',
   styleUrls: ['./ventes.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,10 +49,13 @@ export class SalesComponent {
   protected readonly store = inject(VenteStoreService);
   private readonly router = inject(Router);
   protected readonly prefs = inject(PreferencesService);
+  private action =inject(ActionResponseService)
 
   isAddModalOpen = signal(false);
   isFilterModalOpen = signal(false);
   confirmDeleteId = signal<string | null>(null);
+  isCreating=signal(false);
+  readonly summary = signal<SaleUserSummary | null >(null)
   editingSale: Sale | null = null;
 
   /** Valeur temporaire dans la modale filtre (date) */
@@ -40,7 +65,19 @@ export class SalesComponent {
     () => this.store.searchTerm().trim().length > 0 || this.store.filterDate().length > 0
   );
 
-  constructor() {}
+  // Besoin malsain de venteapi
+  private readonly venteApi = inject(VenteApiService);
+
+  constructor() {
+    this.venteApi.getUserSummary()
+      .then((data) => {
+        this.summary.set(data);
+        console.log(this.summary())
+      })
+      .catch((err) => {
+        console.log("Erreur de chargement du résumé :"+ err);
+      })
+  }
 
   onSearchChange(value: string): void {
     this.store.setSearchTerm(value);
@@ -117,15 +154,34 @@ export class SalesComponent {
   }
 
   async handleSaleSubmit(payload: Omit<Sale, 'id'>): Promise<void> {
+    this.isCreating.set(true)
     try {
       if (this.editingSale) {
-        await this.store.update(this.editingSale.id, payload);
+        this.store.update(this.editingSale.id, payload)
+          .then(()=>{
+            this.action.success("Ajout d'une ventes")
+          })
+          .catch((err) => {
+            this.action.error(err);
+          })
+          .finally(()=>{
+            this.isCreating.set(false)
+          })
       } else {
-        await this.store.add(payload);
+        this.store.add(payload)
+          .then(()=>{
+            this.action.success("Ajout d'une ventes")
+          })
+          .catch((err) => {
+            this.action.error(err);
+          })
+          .finally(()=>{
+            this.isCreating.set(false)
+          })
       }
       this.closeAddModal();
     } catch {
-      // erreur déjà signalée dans le store
+      this.isCreating.set(false);
     }
   }
 

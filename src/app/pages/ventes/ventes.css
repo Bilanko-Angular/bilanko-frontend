@@ -191,6 +191,7 @@
   width: 100%;
   border-collapse: collapse;
   min-width: 640px;
+  border: 1px solid var(--color-border);
 }
 
 .registry-table th,
@@ -208,7 +209,7 @@
   color: var(--color-text-muted);
   font-size: 0.78rem;
   text-transform: uppercase;
-  border-bottom: 2px solid var(--color-text);
+  border-bottom: 1px solid var(--color-primary);
   white-space: nowrap;
 }
 
@@ -238,6 +239,12 @@
   color: var(--color-text-muted);
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-base);
+}
+
+.empty-state-inline {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
 }
 
 .error-state {
@@ -406,6 +413,9 @@
    ============================================================ */
 
 @media (max-width: 768px) {
+  .registry-table{
+    border: none;
+  }
   .page-header {
     flex-direction: column;
     align-items: stretch;
@@ -446,7 +456,6 @@
     border-radius: var(--radius-base);
     margin-bottom: 0.75rem;
     padding: 0.5rem 0.75rem;
-    background: var(--color-surface);
   }
 
   .registry-table tbody tr:hover {
@@ -478,6 +487,15 @@
     color: var(--color-text-muted);
     text-align: left;
   }
+
+  .registry-table td.empty-state-inline {
+    display: block;
+    text-align: center !important;
+  }
+
+  .registry-table td.empty-state-inline::before {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -496,5 +514,121 @@
   .modal-header,
   .modal-form {
     padding: 1rem;
+  }
+}
+
+/* Grille responsive */
+.all-sumary-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  margin: 50px 0
+}
+
+/* Carte : chaque variante définit sa couleur */
+.summary-card {
+  --card-color: var(--color-primary);
+  --card-bg: var(--color-primary-subtle);
+
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--card-color);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Variantes de couleur (s'adaptent au mode sombre via theme.css) */
+.summary-card--primary  { --card-color: var(--color-primary);  --card-bg: var(--color-primary-subtle); }
+.summary-card--accent   { --card-color: var(--color-accent);   --card-bg: var(--color-accent-subtle); }
+.summary-card--positive { --card-color: var(--color-positive); --card-bg: var(--color-positive-subtle); }
+
+/* Pastille d'icône */
+.summary-card__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background-color: var(--card-bg);
+  color: var(--card-color);
+  transition: transform 0.2s ease;
+}
+
+.summary-card:hover .summary-card__icon {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.summary-card__icon mat-icon,
+.summary-card__icon .material-icons {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+/* Texte */
+.summary-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0; /* permet l'ellipsis */
+}
+
+.summary-card .title {
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.summary-card .main-card-info {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-card .main-card-info--text {
+  font-size: 1.05rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary-card .currency {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .all-sumary-card {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  .summary-card {
+    padding: 1rem;
+  }
+
+  .summary-card .main-card-info {
+    font-size: 1.5rem;
   }
 }

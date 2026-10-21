@@ -11,6 +11,7 @@ type StatutStock = 'ok' | 'warning' | 'error';
   standalone: true,
   imports: [CurrencyPipe],
   templateUrl: './product-table-row.html',
+  styleUrl: './product-table-row.css',
 })
 export class ProductTableRow {
   readonly produit = input.required<Produit>();

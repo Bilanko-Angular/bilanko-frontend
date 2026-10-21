@@ -1,12 +1,14 @@
 <!-- product-table-row.html -->
   <!-- Produit & Référence -->
-  <td class="ps-3">
-    <span class="fw-medium" style="color: var(--color-text);">{{ produit().nom }}</span>
-    <div class="small mt-1" style="color: var(--color-text-muted);">Réf : {{ produit().reference }}</div>
+  <td class="ps-3" data-label="Produit">
+    <div class="product-cell">
+      <span class="fw-medium" style="color: var(--color-text);">{{ produit().nom }}</span>
+      <div class="small mt-1" style="color: var(--color-text-muted);">Réf : {{ produit().reference }}</div>
+    </div>
   </td>
 
   <!-- Catégorie -->
-  <td>
+  <td data-label="Catégorie">
     <span class="badge rounded-pill border small fw-normal"
       style="background-color: var(--color-background); border-color: var(--color-border) !important; color: var(--color-text);">
       {{ produit().categorie }}
@@ -14,30 +16,33 @@
   </td>
 
   <!-- Qté en stock -->
-  <td class="text-center">
-    <span
-      class="fw-bold me-1"
-      [class.text-warning]="statutStock() === 'warning'"
-      [class.text-danger]="statutStock() === 'error'"
-    >
-      {{ produit().quantiteStock }}
-    </span>
-    @if (statutStock() === 'warning') {
-      <span class="badge text-bg-warning" style="font-size: 0.6rem;">Stock bas</span>
-    }
-    @if (statutStock() === 'error') {
-      <span class="badge text-bg-danger" style="font-size: 0.6rem;">Rupture</span>
-    }
+  <td class="text-center" data-label="Qté stock">
+    <div class="stock-cell">
+      <span
+        class="fw-bold me-1"
+        [class.text-warning]="statutStock() === 'warning'"
+        [class.text-danger]="statutStock() === 'error'"
+      >
+        {{ produit().quantiteStock }}
+      </span>
+      @if (statutStock() === 'warning') {
+        <span class="badge text-bg-warning" style="font-size: 0.6rem;">Stock bas</span>
+      }
+      @if (statutStock() === 'error') {
+        <span class="badge text-bg-danger" style="font-size: 0.6rem;">Rupture</span>
+      }
+    </div>
   </td>
 
   <!-- Seuil alerte -->
-  <td class="text-center" style="color: var(--color-text-muted);">
+  <td class="text-center" data-label="Seuil" style="color: var(--color-text-muted);">
     {{ produit().seuilAlerte }}
   </td>
 
   <!-- Marge unitaire -->
   <td
     class="text-end fw-medium font-monospace"
+    data-label="Marge"
     [class.text-success]="margeUnitaire() >= 0"
     [class.text-danger]="margeUnitaire() < 0"
   >
@@ -45,7 +50,7 @@
   </td>
 
   <!-- Actions -->
-  <td class="text-center">
+  <td class="text-center td-actions">
     <div class="d-flex justify-content-center gap-2">
       <button
         type="button"

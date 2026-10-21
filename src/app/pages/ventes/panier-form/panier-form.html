@@ -106,6 +106,14 @@
 
   <div class="bk-form-actions">
     <button type="button" class="bk-btn bk-btn--outline" (click)="cancel.emit()">{{ prefs.t().cancel }}</button>
-    <button type="submit" class="bk-btn bk-btn--primary" [disabled]="panier().length === 0">{{ prefs.t().save }}</button>
+    <button type="submit" class="btn btn-primary" [disabled]="panier().length === 0 && !isCreating()">
+      @if (isCreating()){
+        <span class="bk-spinner"></span>
+        En cours d'envoi
+      }
+      @else{
+        {{ prefs.t().save }}
+      }
+    </button>
   </div>
 </form>

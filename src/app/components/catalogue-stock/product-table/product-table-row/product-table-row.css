@@ -1,5 +1,18 @@
-/* Bootstrap table-hover gère le row, on garde juste la colonne actions alignée */
+/* Layout vertical aligné — la bordure est gérée par product-table.css */
+
 td {
   vertical-align: middle;
-  border-bottom: 1px solid var(--color-border);
+}
+
+/* Contenu composite de la cellule produit */
+.product-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenu composite de la cellule stock */
+.stock-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }

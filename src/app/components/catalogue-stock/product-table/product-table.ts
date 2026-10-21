@@ -9,6 +9,7 @@ import { ProductSkeletonRow } from './product-skeleton-row/product-skeleton-row'
   standalone: true,
   imports: [ProductTableRow, ProductSkeletonRow],
   templateUrl: './product-table.html',
+  styleUrl: './product-table.css',
 })
 export class ProductTable {
   readonly produits = input.required<Produit[]>();

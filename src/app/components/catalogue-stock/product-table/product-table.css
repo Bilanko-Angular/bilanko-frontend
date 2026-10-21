@@ -1,4 +1,124 @@
-/* Bootstrap table gère tout. On conserve juste la couleur du thead. */
-thead th {
-  background-color: var(--color-surface);
+/* ============================================================
+   TABLE PRODUITS — desktop
+   ============================================================ */
+:host {
+  display: block;
+}
+
+.table-container {
+  overflow: visible;
+  position: relative;
+}
+@media (max-width: 768px) {
+  .registry-table ::ng-deep td { display: flex; /* ... */ }
+  .registry-table ::ng-deep td:not(.td-actions)::before { content: attr(data-label); /* ... */ }
+}
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.registry-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+  border: 1px solid var(--color-border);
+}
+
+.registry-table th,
+.registry-table td {
+  padding: 0.9rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  vertical-align: middle;
+  color: var(--color-text);
+}
+
+.registry-table thead th {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--color-primary);
+  white-space: nowrap;
+}
+
+.registry-table tbody tr:hover {
+  background-color: var(--color-primary-subtle);
+}
+
+.ps-col { padding-left: 1rem !important; }
+
+.align-left   { text-align: left; }
+.align-center { text-align: center; }
+.align-right  { text-align: right; }
+
+.empty-state-cell {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   RESPONSIVE — chaque <tr> devient une card (≤ 768 px)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .registry-table {
+    border: none;
+    min-width: 0;
+  }
+
+  .registry-table thead {
+    display: none;
+  }
+
+  .registry-table,
+  .registry-table tbody,
+  .registry-table tr,
+  .registry-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .registry-table tbody tr {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .registry-table tbody tr:hover {
+    background-color: var(--color-primary-subtle);
+  }
+
+  .registry-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.65rem 0;
+    text-align: right !important;
+  }
+
+  /* Ligne actions : centrée, sans label, sans séparateur bas */
+  .registry-table td.td-actions {
+    border-bottom: none;
+    justify-content: flex-end;
+  }
+
+  /* Pseudo-élément = label de colonne à gauche */
+  .registry-table td:not(.td-actions)::before {
+    content: attr(data-label);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-align: left;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 }
