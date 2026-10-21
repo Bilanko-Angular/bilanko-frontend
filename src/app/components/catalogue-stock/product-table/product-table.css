@@ -1,7 +1,6 @@
 /* ============================================================
    TABLE PRODUITS — desktop
    ============================================================ */
-
 :host {
   display: block;
 }
@@ -10,7 +9,10 @@
   overflow: visible;
   position: relative;
 }
-
+@media (max-width: 768px) {
+  .registry-table ::ng-deep td { display: flex; /* ... */ }
+  .registry-table ::ng-deep td:not(.td-actions)::before { content: attr(data-label); /* ... */ }
+}
 .table-scroll {
   width: 100%;
   overflow-x: auto;
@@ -22,7 +24,6 @@
   border-collapse: collapse;
   min-width: 640px;
   border: 1px solid var(--color-border);
-  background-color: var(--color-surface);
 }
 
 .registry-table th,
@@ -35,7 +36,6 @@
 }
 
 .registry-table thead th {
-  background-color: var(--color-surface);
   font-weight: 600;
   color: var(--color-text-muted);
   font-size: 0.78rem;
@@ -88,7 +88,6 @@
     border-radius: var(--radius-base);
     margin-bottom: 0.75rem;
     padding: 0.5rem 0.75rem;
-    background-color: var(--color-surface);
   }
 
   .registry-table tbody tr:hover {
