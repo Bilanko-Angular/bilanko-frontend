@@ -75,6 +75,8 @@
         </div>
 
       </div>
+    } @else {
+      <app-skeleton-summary-cards [count]="4" />
     }
 
     <!-- Barre de recherche -->
@@ -84,16 +86,14 @@
 
 
     <!-- Tableau -->
-    <div class="card border rounded" style="border-color: var(--color-border) !important; background-color: var(--color-surface);">
-      <app-product-table
-        [produits]="produits()"
-        [isLoading]="isLoading()"
-        [error]="error()"
-        (edit)="ouvrirEdition($event)"
-        (supprimer)="demanderSuppression($event)"
-        (voir)="voirProduit($event)"
-      />
-    </div>
+    <app-product-table
+      [produits]="produits()"
+      [isLoading]="isLoading()"
+      [error]="error()"
+      (edit)="ouvrirEdition($event)"
+      (supprimer)="demanderSuppression($event)"
+      (voir)="voirProduit($event)"
+    />
 
     <!-- Pagination -->
     <app-product-pagination

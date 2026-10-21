@@ -18,6 +18,8 @@ import {BasicSearchBar} from '../../components/shared/ui/basic-search-bar/basic-
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 
+import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
+
 @Component({
   selector: 'app-catalogue-stocks',
   standalone: true,
@@ -31,6 +33,7 @@ import { Router } from '@angular/router';
     Template,
     BasicSearchBar,
     DecimalPipe,
+    SkeletonSummaryCards,
   ],
   templateUrl: './catalogue-stocks.html',
   styleUrl:'catalogue-stocks.css'

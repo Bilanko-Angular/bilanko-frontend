@@ -85,6 +85,8 @@
       </div>
 
     </div>
+  } @else {
+    <app-skeleton-summary-cards [count]="4" />
   }
 
   <div class="product-search-bar">
@@ -94,38 +96,38 @@
     />
   </div>
 
-  @if (store.isLoading()) {
-    <div class="empty-state">Chargement…</div>
-  }
-
   @if (store.error() && !store.isLoading()) {
     <div class="empty-state error-state">{{ store.error() }}</div>
   }
 
   <div class="table-container">
-    @if (!store.isLoading() && store.filteredSales().length === 0) {
-      <div class="empty-state">
-        <p>{{ prefs.t().noSalesRecorded }}</p>
-        @if (hasActiveFilter()) {
-          <p class="text-muted small mt-2">{{ prefs.t().noResults }} — {{ prefs.t().reset }} {{ prefs.t().filter }}</p>
-        }
-      </div>
-    }
-
-    @if (!store.isLoading() && store.filteredSales().length > 0) {
-      <div class="table-scroll">
-        <table class="registry-table">
-          <thead>
+    <div class="table-scroll">
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th class="align-left">{{ prefs.t().date }}</th>
+            <th class="align-left">{{ prefs.t().client }}</th>
+            <th class="align-center">{{ prefs.t().products }}</th>
+            <th class="align-right">{{ prefs.t().totalAmount }}</th>
+            <th class="align-right">{{ prefs.t().simplifiedMargin }}</th>
+            <th class="align-center">{{ prefs.t().actions }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (store.isLoading()) {
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+              <tr app-sale-skeleton-row></tr>
+            }
+          } @else if (store.filteredSales().length === 0) {
             <tr>
-              <th class="align-left">{{ prefs.t().date }}</th>
-              <th class="align-left">{{ prefs.t().client }}</th>
-              <th class="align-center">{{ prefs.t().products }}</th>
-              <th class="align-right">{{ prefs.t().totalAmount }}</th>
-              <th class="align-right">{{ prefs.t().simplifiedMargin }}</th>
-              <th class="align-center">{{ prefs.t().actions }}</th>
+              <td colspan="6" class="empty-state-inline">
+                <p>{{ prefs.t().noSalesRecorded }}</p>
+                @if (hasActiveFilter()) {
+                  <p class="text-muted small mt-2">{{ prefs.t().noResults }} — {{ prefs.t().reset }} {{ prefs.t().filter }}</p>
+                }
+              </td>
             </tr>
-          </thead>
-          <tbody>
+          } @else {
             @for (sale of store.filteredSales(); track sale.id) {
               <tr>
                 <td class="align-left" [attr.data-label]="prefs.t().date">
@@ -150,24 +152,24 @@
                 </td>
               </tr>
             }
-          </tbody>
-        </table>
-      </div>
+          }
+        </tbody>
+      </table>
+    </div>
 
-      @if (store.nombrePages() > 1) {
-        <div class="bk-pagination">
-          <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="!store.hasPrevPage()" type="button">
-            ‹ {{ prefs.t().previous }}
-          </button>
-          <span class="bk-page-indicator">
-            {{ prefs.t().page }} {{ store.pageCourante() }} {{ prefs.t().pageOf }} {{ store.nombrePages() }}
-            <span class="bk-page-total">({{ store.totalElements() }} {{ prefs.t().result ?? 'résultats' }})</span>
-          </span>
-          <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="!store.hasNextPage()" type="button">
-            {{ prefs.t().next }} ›
-          </button>
-        </div>
-      }
+    @if (store.nombrePages() > 1) {
+      <div class="bk-pagination">
+        <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="!store.hasPrevPage()" type="button">
+          ‹ {{ prefs.t().previous }}
+        </button>
+        <span class="bk-page-indicator">
+          {{ prefs.t().page }} {{ store.pageCourante() }} {{ prefs.t().pageOf }} {{ store.nombrePages() }}
+          <span class="bk-page-total">({{ store.totalElements() }} {{ prefs.t().result ?? 'résultats' }})</span>
+        </span>
+        <button class="bk-page-btn" (click)="pageSuivante()" [disabled]="!store.hasNextPage()" type="button">
+          {{ prefs.t().next }} ›
+        </button>
+      </div>
     }
   </div>
 

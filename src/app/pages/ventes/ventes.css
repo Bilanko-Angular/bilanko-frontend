@@ -241,6 +241,12 @@
   border-radius: var(--radius-base);
 }
 
+.empty-state-inline {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
 .error-state {
   color: var(--color-negative);
   border-color: var(--color-negative);
@@ -480,6 +486,15 @@
     text-transform: uppercase;
     color: var(--color-text-muted);
     text-align: left;
+  }
+
+  .registry-table td.empty-state-inline {
+    display: block;
+    text-align: center !important;
+  }
+
+  .registry-table td.empty-state-inline::before {
+    display: none;
   }
 }
 

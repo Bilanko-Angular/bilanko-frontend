@@ -18,10 +18,25 @@ import {VenteApiService} from '../../service/api/vente/vente-api.service';
 import SaleUserSummary from '../../models/DTO/SalesUserSummary';
 import {ActionResponseService} from '../../service/action-response/action-response.service';
 
+import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
+import { SaleSkeletonRow } from '../../components/shared/ui/sale-skeleton-row/sale-skeleton-row';
+
 @Component({
   selector: 'app-ventes',
   standalone: true,
-  imports: [DatePipe, CurrencyPipe, FormsModule, Template, ConfirmDialog, ActionMenu, PanierForm, BasicSearchBar, DecimalPipe],
+  imports: [
+    DatePipe,
+    CurrencyPipe,
+    FormsModule,
+    Template,
+    ConfirmDialog,
+    ActionMenu,
+    PanierForm,
+    BasicSearchBar,
+    DecimalPipe,
+    SkeletonSummaryCards,
+    SaleSkeletonRow,
+  ],
   templateUrl: './ventes.html',
   styleUrls: ['./ventes.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
