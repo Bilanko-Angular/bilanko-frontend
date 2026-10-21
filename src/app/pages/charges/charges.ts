@@ -2,7 +2,7 @@
 
 import { Component, signal, computed, effect, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { CommonModule, DatePipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Template } from "../../components/shared/template/template";
 import type { Charge } from '../../models/finance';
@@ -13,11 +13,34 @@ import { ConfirmDialog } from '../../components/shared/confirm/confirm';
 import { PreferencesService } from '../../service/app/preference/preferences';
 import { ChargeStoreService } from '../../service/store/charge/charge-store.service';
 import { BasicSearchBar } from '../../components/shared/ui/basic-search-bar/basic-search-bar';
+import { CategoryApiService } from '../../service/api/product/category-api.service';
+import { CategoryType } from '../../models/category';
+import type { CategorieOption } from '../../components/catalogue-stock/product-filter-dropdown/product-filter-dropdown';
+import { ActionResponseService } from '../../service/action-response/action-response.service';
+import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
+import { SkeletonSearchBar } from '../../components/shared/ui/skeleton-search-bar/skeleton-search-bar';
+import { SkeletonPagination } from '../../components/shared/ui/skeleton-pagination/skeleton-pagination';
+import { ChargeSkeletonRow } from '../../components/shared/ui/charge-skeleton-row/charge-skeleton-row';
 
 @Component({
   selector: 'app-charges',
   standalone: true,
-  imports: [CommonModule, DatePipe, CurrencyPipe, FormsModule, Template, ActionMenu, ConfirmDialog, FinanceForm, BasicSearchBar],
+  imports: [
+    CommonModule,
+    DatePipe,
+    CurrencyPipe,
+    DecimalPipe,
+    FormsModule,
+    Template,
+    ActionMenu,
+    ConfirmDialog,
+    FinanceForm,
+    BasicSearchBar,
+    SkeletonSummaryCards,
+    SkeletonSearchBar,
+    SkeletonPagination,
+    ChargeSkeletonRow,
+  ],
   templateUrl: './charges.html',
   styleUrls: ['./charges.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,12 +48,18 @@ import { BasicSearchBar } from '../../components/shared/ui/basic-search-bar/basi
 export class ChargesComponent {
   protected readonly prefs = inject(PreferencesService);
   protected readonly store = inject(ChargeStoreService);
+  private readonly categoryApi = inject(CategoryApiService);
+  private readonly action = inject(ActionResponseService);
   private readonly route = inject(ActivatedRoute);
 
   editingCharge: Charge | null = null;
   isAddModalOpen = signal(false);
   confirmDeleteId = signal<string | null>(null);
   viewingCharge = signal<Charge | null>(null);
+  readonly categories = signal<CategorieOption[]>([]);
+  readonly categoriesLoading = signal(false);
+  readonly categoriesError = signal<string | null>(null);
+  readonly isCreating = signal(false);
 
   // --- FILTRE ---
   readonly filterOpen = signal(false);
@@ -58,12 +87,27 @@ export class ChargesComponent {
   });
 
   constructor() {
+    void this.loadCategories();
     const viewId = this.route.snapshot.queryParamMap.get('viewId');
     if (viewId) {
       effect(() => {
         const charge = this.store.charges().find((item) => item.id === viewId);
         if (charge) this.viewingCharge.set(charge);
       });
+    }
+
+  }
+
+  private async loadCategories(): Promise<void> {
+    this.categoriesLoading.set(true);
+    this.categoriesError.set(null);
+    try {
+      this.categories.set(await this.categoryApi.getAll(CategoryType.CHARGE));
+    } catch (err) {
+      console.error('Erreur chargement catégories de charges', err);
+      this.categoriesError.set('Impossible de charger les catégories.');
+    } finally {
+      this.categoriesLoading.set(false);
     }
   }
 
@@ -170,16 +214,25 @@ export class ChargesComponent {
     this.editingCharge = null;
   }
 
-  async handleChargeSubmit(payload: Sale | Charge) {
+  async handleChargeSubmit(payload: Sale | Charge): Promise<void> {
     const c = payload as Charge;
-    if (this.editingCharge) {
-      const { id, ...rest } = c;
-      await this.store.update(this.editingCharge.id, rest);
-    } else {
-      const { id, ...rest } = c as any;
-      await this.store.add(rest);
+    this.isCreating.set(true);
+    try {
+      if (this.editingCharge) {
+        const { id, ...rest } = c;
+        await this.store.update(this.editingCharge.id, rest);
+        this.action.success('Charge modifiée avec succès.');
+      } else {
+        const { id, ...rest } = c;
+        await this.store.add(rest);
+        this.action.success('Charge créée avec succès.');
+      }
+      this.closeAdd();
+    } catch (err) {
+      this.action.error(err);
+    } finally {
+      this.isCreating.set(false);
     }
-    this.closeAdd();
   }
 
   showDeleteConfirm(id: string) {

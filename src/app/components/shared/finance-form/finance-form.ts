@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import type { Charge } from '../../../models/finance';
 import type { Sale } from '../../../models/sale';
 import { PreferencesService } from '../../../service/app/preference/preferences';
+import type { CategorieOption } from '../../catalogue-stock/product-filter-dropdown/product-filter-dropdown';
 
 @Component({
   selector: 'app-finance-form',
@@ -16,6 +17,9 @@ import { PreferencesService } from '../../../service/app/preference/preferences'
 export class FinanceForm {
   @Input() kind: 'sale' | 'charge' = 'sale';
   @Input() initial: Sale | Charge | null = null;
+  @Input() categories: CategorieOption[] = [];
+  @Input() categoriesLoading = false;
+  @Input() categoriesError: string | null = null;
   @Output() submit = new EventEmitter<Sale | Charge>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -100,9 +104,11 @@ export class FinanceForm {
     // charge
     const label = this.form.get('label')?.value;
     const amount = Number(this.form.get('amount')?.value || 0);
-    if (!label || amount <= 0) {
+    const categoryId = this.form.get('categoryId')?.value;
+    if (!label || amount <= 0 || categoryId == null) {
       this.form.get('label')?.markAsTouched();
       this.form.get('amount')?.markAsTouched();
+      this.form.get('categoryId')?.markAsTouched();
       return;
     }
     const charge: Charge = {
@@ -112,7 +118,7 @@ export class FinanceForm {
       amount,
       supplier: this.form.get('supplier')?.value || '',
       notes: this.form.get('notes')?.value || '',
-      categoryId: this.form.get('categoryId')?.value ?? undefined,
+      categoryId: categoryId ?? undefined,
     };
     this.submit.emit(charge);
   }

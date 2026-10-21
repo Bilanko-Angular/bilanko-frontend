@@ -15,6 +15,67 @@
   max-width: 100%;
 }
 
+.all-sumary-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  margin: 50px 0;
+}
+
+.summary-card {
+  --card-color: var(--color-primary);
+  --card-bg: var(--color-primary-subtle);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 104px;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card--accent { --card-color: var(--color-accent); --card-bg: var(--color-accent-subtle); }
+.summary-card--positive { --card-color: var(--color-positive); --card-bg: var(--color-positive-subtle); }
+.summary-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--card-bg);
+  color: var(--card-color);
+}
+.summary-card__icon .material-icons { font-size: 28px; }
+.summary-card__content { min-width: 0; }
+.summary-card .title {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.summary-card .main-card-info {
+  color: var(--color-text);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.summary-card .main-card-info--text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.summary-card .currency {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
 /* ─── EN-TÊTE ─────────────────────────────────────────────── */
 .page-header {
   display: flex;
@@ -193,6 +254,10 @@
   border: 1px solid var(--color-border);
 }
 
+.charges-card-list {
+  display: none;
+}
+
 .registry-table {
   width: 100%;
   border-collapse: collapse;
@@ -216,7 +281,6 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   color: var(--color-text-muted);
-  border-bottom: 2px solid var(--color-text);
   font-weight: 700;
   letter-spacing: 0.04em;
   background: var(--color-surface);
@@ -670,6 +734,119 @@
   .modal-content {
     max-width: 100%;
     margin: 0.5rem;
+  }
+
+  .table-container {
+    overflow: visible;
+    border: 0;
+  }
+
+  .table-container > .registry-table {
+    display: none;
+  }
+
+  .charges-card-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .charge-card {
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .charge-card--skeleton {
+    min-height: 138px;
+  }
+
+  .charge-card--skeleton::before,
+  .charge-card__skeleton-title,
+  .charge-card__skeleton-action,
+  .charge-card__skeleton-detail {
+    background: linear-gradient(
+      90deg,
+      var(--color-border) 25%,
+      var(--color-surface) 50%,
+      var(--color-border) 75%
+    );
+    background-size: 200% 100%;
+    animation: charge-shimmer 1.4s ease-in-out infinite;
+  }
+
+  .charge-card__skeleton-title {
+    width: 55%;
+    height: 16px;
+    border-radius: 4px;
+  }
+
+  .charge-card__skeleton-action {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+
+  .charge-card__skeleton-detail {
+    height: 36px;
+    border-radius: 5px;
+  }
+
+  @keyframes charge-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .charge-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .charge-card__header h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .charge-card__header p {
+    margin: 0.3rem 0 0;
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+  }
+
+  .charge-card__details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding-top: 0.85rem;
+  }
+
+  .charge-card__detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .charge-card__detail span {
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .charge-card__detail strong {
+    color: var(--color-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
   }
 }
 

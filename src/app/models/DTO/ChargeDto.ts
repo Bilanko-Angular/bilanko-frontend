@@ -25,6 +25,13 @@ export interface ChargeSummaryDTO {
   averageAmount: number;
 }
 
+export interface ChargeUserSummary {
+  totalCharges: number;
+  monthlyCharges: number;
+  topSupplier: string;
+  averageChargeAmount: number;
+}
+
 // Paramètres de pagination + filtre de période pour GET /api/charges
 export interface ChargeFilterParams {
   from?: string;  // ISO date YYYY-MM-DD

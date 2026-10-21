@@ -65,8 +65,22 @@
       </div>
 
       <div class="bk-form-group">
-        <label for="categoryId">Catégorie (ID)</label>
-        <input id="categoryId" type="number" min="1" formControlName="categoryId" [placeholder]="prefs.t().optional" />
+        <label for="categoryId">Catégorie</label>
+        @if (categoriesLoading) {
+          <span class="bk-field-hint">Chargement des catégories...</span>
+        } @else if (categoriesError) {
+          <span class="bk-field-error">{{ categoriesError }}</span>
+        } @else {
+          <select id="categoryId" formControlName="categoryId">
+            <option [ngValue]="null">Sélectionner une catégorie</option>
+            @for (category of categories; track category.id) {
+              <option [ngValue]="category.id">{{ category.name }}</option>
+            }
+          </select>
+          @if (form.get('categoryId')?.touched && form.get('categoryId')?.value == null) {
+            <span class="bk-field-error">La catégorie est obligatoire</span>
+          }
+        }
       </div>
 
       <div class="bk-form-group bk-form-group--full">

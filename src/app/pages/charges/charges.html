@@ -46,15 +46,57 @@
       </div>
     </div>
 
+    @if (store.userSummary(); as summary) {
+      <div class="all-sumary-card">
+        <div class="summary-card summary-card--primary">
+          <div class="summary-card__icon"><span class="material-icons">receipt_long</span></div>
+          <div class="summary-card__content">
+            <div class="title">Total charges</div>
+            <div class="main-card-info">{{ summary.totalCharges }}</div>
+          </div>
+        </div>
+        <div class="summary-card summary-card--accent">
+          <div class="summary-card__icon"><span class="material-icons">calendar_month</span></div>
+          <div class="summary-card__content">
+            <div class="title">Charges du mois</div>
+            <div class="main-card-info">{{ summary.monthlyCharges }}</div>
+          </div>
+        </div>
+        <div class="summary-card summary-card--positive">
+          <div class="summary-card__icon"><span class="material-icons">store</span></div>
+          <div class="summary-card__content">
+            <div class="title">Fournisseur principal</div>
+            <div class="main-card-info main-card-info--text">{{ summary.topSupplier || '—' }}</div>
+          </div>
+        </div>
+        <div class="summary-card summary-card--primary">
+          <div class="summary-card__icon"><span class="material-icons">price_check</span></div>
+          <div class="summary-card__content">
+            <div class="title">Montant moyen</div>
+            <div class="main-card-info">
+              {{ summary.averageChargeAmount | number:'1.0-0' }}
+              <span class="currency">{{ prefs.currency() }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <app-skeleton-summary-cards [count]="4" />
+    }
+
     <!-- =========================================================
          BARRE DE RECHERCHE
     ========================================================== -->
-    <div class="product-search-bar">
-      <app-basic-search-bar
-        (rechercheChange)="onSearchChange($event)"
-        [placeholder]="prefs.t().search + ' ' + prefs.t().label + '...'"
-      />
-    </div>
+    @if (store.isLoading()) {
+      <app-skeleton-search-bar />
+    } @else {
+      <div class="product-search-bar">
+        <app-basic-search-bar
+          (rechercheChange)="onSearchChange($event)"
+          [placeholder]="prefs.t().search + ' ' + prefs.t().label + '...'"
+        />
+      </div>
+    }
 
     <!-- =========================================================
          FILTRE POPUP
@@ -110,14 +152,6 @@
          TABLEAU ET ÉTATS
     ========================================================== -->
 
-    <!-- Chargement -->
-    @if (store.isLoading()) {
-      <div class="bk-state">
-        <div class="bk-state__spinner"></div>
-        <p>Chargement des charges...</p>
-      </div>
-    }
-
     <!-- Erreur -->
     @if (store.error() && !store.isLoading()) {
       <div class="bk-state bk-state--error">
@@ -136,7 +170,7 @@
     }
 
     <!-- Tableau avec données -->
-    @if (!store.isLoading() && !store.error() && store.charges().length > 0) {
+    @if (!store.error() && (store.isLoading() || store.charges().length > 0)) {
       <div class="table-container">
         <table class="registry-table">
           <thead>
@@ -149,21 +183,68 @@
             </tr>
           </thead>
           <tbody>
-            @for (c of store.charges(); track c.id) {
-              <tr>
-                <td>{{ c.label }}</td>
-                <td>{{ c.supplier || '-' }}</td>
-                <td class="align-right tabular-nums">{{ c.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
-                <td>{{ c.date | date: prefs.angularDateFormat() }}</td>
-                <td class="align-center">
-                  <app-action-menu (action)="onChargeAction($event, c.id)"></app-action-menu>
-                </td>
-              </tr>
+            @if (store.isLoading()) {
+              @for (item of [1, 2, 3, 4, 5]; track item) {
+                <tr app-charge-skeleton-row></tr>
+              }
+            } @else {
+              @for (c of store.charges(); track c.id) {
+                <tr>
+                  <td>{{ c.label }}</td>
+                  <td>{{ c.supplier || '-' }}</td>
+                  <td class="align-right tabular-nums">{{ c.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</td>
+                  <td>{{ c.date | date: prefs.angularDateFormat() }}</td>
+                  <td class="align-center">
+                    <app-action-menu (action)="onChargeAction($event, c.id)"></app-action-menu>
+                  </td>
+                </tr>
+              }
             }
           </tbody>
         </table>
 
-        @if (store.totalPages() > 1) {
+        <div class="charges-card-list">
+          @if (store.isLoading()) {
+            @for (item of [1, 2, 3, 4]; track item) {
+              <article class="charge-card charge-card--skeleton">
+                <div class="charge-card__header">
+                  <div class="charge-card__skeleton-title"></div>
+                  <div class="charge-card__skeleton-action"></div>
+                </div>
+                <div class="charge-card__details">
+                  <div class="charge-card__skeleton-detail"></div>
+                  <div class="charge-card__skeleton-detail"></div>
+                </div>
+              </article>
+            }
+          } @else {
+            @for (c of store.charges(); track c.id) {
+              <article class="charge-card">
+                <div class="charge-card__header">
+                  <div>
+                    <h2>{{ c.label }}</h2>
+                    <p>{{ c.supplier || 'Fournisseur non renseigné' }}</p>
+                  </div>
+                  <app-action-menu (action)="onChargeAction($event, c.id)"></app-action-menu>
+                </div>
+                <div class="charge-card__details">
+                  <div class="charge-card__detail">
+                    <span>{{ prefs.t().amount }}</span>
+                    <strong>{{ c.amount | currency: prefs.currency() : 'symbol' : '1.0-0' }}</strong>
+                  </div>
+                  <div class="charge-card__detail">
+                    <span>{{ prefs.t().date }}</span>
+                    <strong>{{ c.date | date: prefs.angularDateFormat() }}</strong>
+                  </div>
+                </div>
+              </article>
+            }
+          }
+        </div>
+
+        @if (store.isLoading()) {
+          <app-skeleton-pagination />
+        } @else if (store.totalPages() > 1) {
           <div class="bk-pagination">
             <button class="bk-page-btn" (click)="pagePrecedente()" [disabled]="!store.hasPrevPage()">
               ‹ {{ prefs.t().previous }}
@@ -188,7 +269,15 @@
             <h2>{{ prefs.t().addACharge }}</h2>
             <button class="close-btn" (click)="closeAdd()">×</button>
           </div>
-          <app-finance-form [kind]="'charge'" [initial]="editingCharge" (submit)="handleChargeSubmit($event)" (cancel)="closeAdd()"></app-finance-form>
+          <app-finance-form
+            [kind]="'charge'"
+            [initial]="editingCharge"
+            [categories]="categories()"
+            [categoriesLoading]="categoriesLoading()"
+            [categoriesError]="categoriesError()"
+            (submit)="handleChargeSubmit($event)"
+            (cancel)="closeAdd()"
+          ></app-finance-form>
         </div>
       </div>
     }

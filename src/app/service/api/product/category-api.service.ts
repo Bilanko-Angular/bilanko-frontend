@@ -10,9 +10,9 @@ import {CategoryType} from '../../../models/category';
 export class CategoryApiService {
   private readonly basePath = '/categories';
 
-  async getAll(): Promise<CategorieOption[]> {
+  async getAll(categoryType: CategoryType = CategoryType.PRODUCT): Promise<CategorieOption[]> {
     const response = await apiClient.get<CategoryApiDto[]>(this.basePath + '/all',{
-      params:{categoryType:CategoryType.PRODUCT}
+      params:{ categoryType }
     });
     return response.data.map((dto) => ({ id: dto.id, name: dto.name }));
   }
