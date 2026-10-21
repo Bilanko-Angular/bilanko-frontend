@@ -5,6 +5,7 @@ import {
   ChargeRequestDTO,
   ChargeResponseDTO,
   ChargeSummaryDTO,
+  ChargeUserSummary,
   ChargeFilterParams,
   ChargeSearchParams,
 } from '../../../models/DTO/ChargeDto';
@@ -71,6 +72,12 @@ export class ChargeApiService {
         ...(to   && { to }),
       },
     });
+    return response.data;
+  }
+
+  /** Résumé des charges de l'utilisateur — GET /api/charges/user-summary */
+  async getUserSummary(): Promise<ChargeUserSummary> {
+    const response = await apiClient.get<ChargeUserSummary>(`${this.basePath}/user-summary`);
     return response.data;
   }
 

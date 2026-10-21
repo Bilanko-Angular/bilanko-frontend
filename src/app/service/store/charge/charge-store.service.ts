@@ -2,7 +2,12 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { ChargeApiService } from '../../api/charge/charge-api.service';
 import { ChargeMapper } from '../../../mapper/ChargeMapper';
 import type { Charge } from '../../../models/finance';
-import type { ChargeSummaryDTO, ChargeFilterParams, ChargeSearchParams } from '../../../models/DTO/ChargeDto';
+import type {
+  ChargeSummaryDTO,
+  ChargeUserSummary,
+  ChargeFilterParams,
+  ChargeSearchParams,
+} from '../../../models/DTO/ChargeDto';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +40,7 @@ export class ChargeStoreService {
 
   // --- Résumé financier ---
   readonly summary = signal<ChargeSummaryDTO | null>(null);
+  readonly userSummary = signal<ChargeUserSummary | null>(null);
 
   // --- Terme de recherche textuelle (branché sur /search?label=) ---
   readonly searchTerm = signal<string>('');
@@ -57,6 +63,7 @@ export class ChargeStoreService {
   constructor() {
     this.loadPage();
     this.loadSummary();
+    this.loadUserSummary();
   }
 
   // ──────────────────────────────────────────
@@ -147,6 +154,15 @@ export class ChargeStoreService {
     }
   }
 
+  async loadUserSummary(): Promise<void> {
+    try {
+      this.userSummary.set(await this.chargeApi.getUserSummary());
+    } catch (err) {
+      console.error('ChargeStore: erreur lors du chargement du résumé utilisateur', err);
+      this.userSummary.set(null);
+    }
+  }
+
   // ──────────────────────────────────────────
   // Création
   // ──────────────────────────────────────────
@@ -155,12 +171,12 @@ export class ChargeStoreService {
     const dto = ChargeMapper.toRequestDTO(charge);
     try {
       await this.chargeApi.createCharge(dto);
-      // Recharger la page courante + résumé
-      await Promise.all([this._reload(), this.loadSummary()]);
     } catch (err) {
       console.error('ChargeStore: erreur lors de la création', err);
       this.error.set('Impossible de créer la charge.');
+      throw err;
     }
+    await this.refreshAfterMutation();
   }
 
   // ──────────────────────────────────────────
@@ -172,12 +188,12 @@ export class ChargeStoreService {
     const dto = ChargeMapper.toRequestDTO(charge);
     try {
       await this.chargeApi.updateCharge(numericId, dto);
-      // Recharger la page courante + résumé
-      await Promise.all([this._reload(), this.loadSummary()]);
     } catch (err) {
       console.error('ChargeStore: erreur lors de la mise à jour', err);
       this.error.set('Impossible de mettre à jour la charge.');
+      throw err;
     }
+    await this.refreshAfterMutation();
   }
 
   // ──────────────────────────────────────────
@@ -188,12 +204,12 @@ export class ChargeStoreService {
     const numericId = Number(id);
     try {
       await this.chargeApi.deleteCharge(numericId);
-      // Recharger la page courante + résumé
-      await Promise.all([this._reload(), this.loadSummary()]);
     } catch (err) {
       console.error('ChargeStore: erreur lors de la suppression', err);
       this.error.set('Impossible de supprimer la charge.');
+      throw err;
     }
+    await this.refreshAfterMutation();
   }
 
   // ──────────────────────────────────────────
@@ -241,5 +257,13 @@ export class ChargeStoreService {
       return this.search({ ...this._lastSearchParams, page: this.currentPage() });
     }
     return this.loadPage({ page: this.currentPage() });
+  }
+
+  private async refreshAfterMutation(): Promise<void> {
+    try {
+      await Promise.all([this._reload(), this.loadSummary(), this.loadUserSummary()]);
+    } catch (err) {
+      console.error('ChargeStore: erreur lors du rafraîchissement après mutation', err);
+    }
   }
 }

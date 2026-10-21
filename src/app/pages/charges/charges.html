@@ -56,6 +56,48 @@
       />
     </div>
 
+    @if (store.userSummary(); as summary) {
+      <div class="all-sumary-card">
+        <div class="summary-card summary-card--primary">
+          <div class="summary-card__icon"><span class="material-icons">receipt_long</span></div>
+          <div class="summary-card__content">
+            <div class="title">Total charges</div>
+            <div class="main-card-info">{{ summary.totalCharges }}</div>
+          </div>
+        </div>
+        <div class="summary-card summary-card--accent">
+          <div class="summary-card__icon"><span class="material-icons">calendar_month</span></div>
+          <div class="summary-card__content">
+            <div class="title">Charges du mois</div>
+            <div class="main-card-info">{{ summary.monthlyCharges }}</div>
+          </div>
+        </div>
+        <div class="summary-card summary-card--positive">
+          <div class="summary-card__icon"><span class="material-icons">store</span></div>
+          <div class="summary-card__content">
+            <div class="title">Fournisseur principal</div>
+            <div class="main-card-info main-card-info--text">{{ summary.topSupplier || '—' }}</div>
+          </div>
+        </div>
+        <div class="summary-card summary-card--primary">
+          <div class="summary-card__icon"><span class="material-icons">price_check</span></div>
+          <div class="summary-card__content">
+            <div class="title">Montant moyen</div>
+            <div class="main-card-info">
+              {{ summary.averageChargeAmount | number:'1.0-0' }}
+              <span class="currency">{{ prefs.currency() }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="all-sumary-card summary-skeleton" aria-label="Chargement du résumé">
+        @for (item of [1, 2, 3, 4]; track item) {
+          <div class="summary-card"></div>
+        }
+      </div>
+    }
+
     <!-- =========================================================
          FILTRE POPUP
     ========================================================== -->
@@ -188,7 +230,15 @@
             <h2>{{ prefs.t().addACharge }}</h2>
             <button class="close-btn" (click)="closeAdd()">×</button>
           </div>
-          <app-finance-form [kind]="'charge'" [initial]="editingCharge" (submit)="handleChargeSubmit($event)" (cancel)="closeAdd()"></app-finance-form>
+          <app-finance-form
+            [kind]="'charge'"
+            [initial]="editingCharge"
+            [categories]="categories()"
+            [categoriesLoading]="categoriesLoading()"
+            [categoriesError]="categoriesError()"
+            (submit)="handleChargeSubmit($event)"
+            (cancel)="closeAdd()"
+          ></app-finance-form>
         </div>
       </div>
     }

@@ -33,6 +33,7 @@
 
 /* ─── INPUTS ─────────────────────────────────────────────── */
 .bk-form-group input,
+.bk-form-group select,
 .bk-form-group textarea {
   width: 100%;
   padding: 0.7rem 0.9rem;
@@ -47,11 +48,17 @@
 }
 
 .bk-form-group input:focus,
+.bk-form-group select:focus,
 .bk-form-group textarea:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-subtle);
   background: var(--color-background);
+}
+
+.bk-field-hint {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
 }
 
 .bk-form-group input::placeholder,
