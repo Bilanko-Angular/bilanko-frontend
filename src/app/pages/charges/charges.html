@@ -46,16 +46,6 @@
       </div>
     </div>
 
-    <!-- =========================================================
-         BARRE DE RECHERCHE
-    ========================================================== -->
-    <div class="product-search-bar">
-      <app-basic-search-bar
-        (rechercheChange)="onSearchChange($event)"
-        [placeholder]="prefs.t().search + ' ' + prefs.t().label + '...'"
-      />
-    </div>
-
     @if (store.userSummary(); as summary) {
       <div class="all-sumary-card">
         <div class="summary-card summary-card--primary">
@@ -97,6 +87,18 @@
         }
       </div>
     }
+
+    <!-- =========================================================
+         BARRE DE RECHERCHE
+    ========================================================== -->
+    <div class="product-search-bar">
+      <app-basic-search-bar
+        (rechercheChange)="onSearchChange($event)"
+        [placeholder]="prefs.t().search + ' ' + prefs.t().label + '...'"
+      />
+    </div>
+
+
 
     <!-- =========================================================
          FILTRE POPUP
