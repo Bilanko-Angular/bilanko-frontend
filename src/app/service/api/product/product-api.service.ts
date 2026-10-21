@@ -5,6 +5,7 @@ import { ProductMapper } from '../../../mapper/ProductMapper';
 import { CreateProduitPayload, UpdateProduitPayload } from '../../../models/DTO/payload/ProductPayload';
 import { apiClient } from '../../../core/axios/axios.config';
 import { PagedResponseDto } from '../../../models/DTO/response/PageResponse';
+import ProductUserSummary from '../../../models/DTO/ProductUserSummary';
 
 
 @Injectable({
@@ -66,5 +67,10 @@ export class ProductApiService {
       totalPages: response.data.totalPages,
       page: response.data.number,
     };
+  }
+
+  async getSummary(): Promise<ProductUserSummary> {
+    const response = await apiClient.get<ProductUserSummary>(`${this.basePath}/summary`);
+    return response.data;
   }
 }

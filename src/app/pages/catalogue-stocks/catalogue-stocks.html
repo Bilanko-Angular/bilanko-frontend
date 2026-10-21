@@ -25,6 +25,58 @@
       </div>
     </div>
 
+    <!-- Résumé produits -->
+    @if (summary()) {
+      <div class="all-sumary-card">
+
+        <div class="summary-card summary-card--primary">
+          <div class="summary-card__icon">
+            <span class="material-icons">inventory_2</span>
+          </div>
+          <div class="summary-card__content">
+            <div class="title">Total produits</div>
+            <div class="main-card-info">{{ summary()?.total }}</div>
+          </div>
+        </div>
+
+        <div class="summary-card summary-card--accent">
+          <div class="summary-card__icon">
+            <span class="material-icons">calendar_month</span>
+          </div>
+          <div class="summary-card__content">
+            <div class="title">Ajoutés ce mois</div>
+            <div class="main-card-info">{{ summary()?.onTheMount ?? 0 }}</div>
+          </div>
+        </div>
+
+        <div class="summary-card summary-card--positive">
+          <div class="summary-card__icon">
+            <span class="material-icons">category</span>
+          </div>
+          <div class="summary-card__content">
+            <div class="title">Catégorie principale</div>
+            <div class="main-card-info main-card-info--text">
+              {{ summary()?.mainCategory ?? '—' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-card summary-card--primary">
+          <div class="summary-card__icon">
+            <span class="material-icons">price_check</span>
+          </div>
+          <div class="summary-card__content">
+            <div class="title">Prix moyen</div>
+            <div class="main-card-info">
+              {{ summary()?.averagePrice | number:'1.0-0' }}
+              <span class="currency">{{ prefs.currency() }}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
     <!-- Barre de recherche -->
     <div class="product-search-bar">
       <app-basic-search-bar (rechercheChange)="onRechercheChange($event)" [placeholder]="'Recherchez un produit ...'" />
