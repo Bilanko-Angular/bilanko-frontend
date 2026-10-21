@@ -80,9 +80,13 @@
     }
 
     <!-- Barre de recherche -->
-    <div class="product-search-bar">
-      <app-basic-search-bar (rechercheChange)="onRechercheChange($event)" [placeholder]="'Recherchez un produit ...'" />
-    </div>
+    @if (isLoading()) {
+      <app-skeleton-search-bar />
+    } @else {
+      <div class="product-search-bar">
+        <app-basic-search-bar (rechercheChange)="onRechercheChange($event)" [placeholder]="'Recherchez un produit ...'" />
+      </div>
+    }
 
 
     <!-- Tableau -->
@@ -96,12 +100,16 @@
     />
 
     <!-- Pagination -->
-    <app-product-pagination
-      [pageCourante]="pageCourante()"
-      [totalPages]="totalPages()"
-      [totalElements]="totalElements()"
-      (changerPage)="onChangerPage($event)"
-    />
+    @if (isLoading()) {
+      <app-skeleton-pagination />
+    } @else {
+      <app-product-pagination
+        [pageCourante]="pageCourante()"
+        [totalPages]="totalPages()"
+        [totalElements]="totalElements()"
+        (changerPage)="onChangerPage($event)"
+      />
+    }
 
     <!-- Formulaire modal -->
     @if (afficherFormulaire()) {

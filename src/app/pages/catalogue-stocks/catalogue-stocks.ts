@@ -19,12 +19,13 @@ import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
+import { SkeletonSearchBar } from '../../components/shared/ui/skeleton-search-bar/skeleton-search-bar';
+import { SkeletonPagination } from '../../components/shared/ui/skeleton-pagination/skeleton-pagination';
 
 @Component({
   selector: 'app-catalogue-stocks',
   standalone: true,
   imports: [
-    ProductSearchBar,
     ProductFilterDropdown,
     ProductTable,
     ProductPagination,
@@ -34,6 +35,8 @@ import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summar
     BasicSearchBar,
     DecimalPipe,
     SkeletonSummaryCards,
+    SkeletonSearchBar,
+    SkeletonPagination,
   ],
   templateUrl: './catalogue-stocks.html',
   styleUrl:'catalogue-stocks.css'

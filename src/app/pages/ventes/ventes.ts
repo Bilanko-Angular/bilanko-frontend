@@ -20,6 +20,8 @@ import {ActionResponseService} from '../../service/action-response/action-respon
 
 import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
 import { SaleSkeletonRow } from '../../components/shared/ui/sale-skeleton-row/sale-skeleton-row';
+import { SkeletonSearchBar } from '../../components/shared/ui/skeleton-search-bar/skeleton-search-bar';
+import { SkeletonPagination } from '../../components/shared/ui/skeleton-pagination/skeleton-pagination';
 
 @Component({
   selector: 'app-ventes',
@@ -36,6 +38,8 @@ import { SaleSkeletonRow } from '../../components/shared/ui/sale-skeleton-row/sa
     DecimalPipe,
     SkeletonSummaryCards,
     SaleSkeletonRow,
+    SkeletonSearchBar,
+    SkeletonPagination,
   ],
   templateUrl: './ventes.html',
   styleUrls: ['./ventes.css'],
