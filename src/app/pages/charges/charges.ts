@@ -17,11 +17,30 @@ import { CategoryApiService } from '../../service/api/product/category-api.servi
 import { CategoryType } from '../../models/category';
 import type { CategorieOption } from '../../components/catalogue-stock/product-filter-dropdown/product-filter-dropdown';
 import { ActionResponseService } from '../../service/action-response/action-response.service';
+import { SkeletonSummaryCards } from '../../components/shared/ui/skeleton-summary-cards/skeleton-summary-cards';
+import { SkeletonSearchBar } from '../../components/shared/ui/skeleton-search-bar/skeleton-search-bar';
+import { SkeletonPagination } from '../../components/shared/ui/skeleton-pagination/skeleton-pagination';
+import { ChargeSkeletonRow } from '../../components/shared/ui/charge-skeleton-row/charge-skeleton-row';
 
 @Component({
   selector: 'app-charges',
   standalone: true,
-  imports: [CommonModule, DatePipe, CurrencyPipe, DecimalPipe, FormsModule, Template, ActionMenu, ConfirmDialog, FinanceForm, BasicSearchBar],
+  imports: [
+    CommonModule,
+    DatePipe,
+    CurrencyPipe,
+    DecimalPipe,
+    FormsModule,
+    Template,
+    ActionMenu,
+    ConfirmDialog,
+    FinanceForm,
+    BasicSearchBar,
+    SkeletonSummaryCards,
+    SkeletonSearchBar,
+    SkeletonPagination,
+    ChargeSkeletonRow,
+  ],
   templateUrl: './charges.html',
   styleUrls: ['./charges.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

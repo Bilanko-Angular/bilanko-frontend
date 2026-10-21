@@ -76,16 +76,6 @@
   font-size: 0.75rem;
   font-weight: 500;
 }
-.summary-skeleton .summary-card {
-  min-height: 104px;
-  background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-primary-subtle) 50%, var(--color-surface) 75%);
-  background-size: 200% 100%;
-  animation: summary-shimmer 1.4s infinite;
-}
-@keyframes summary-shimmer {
-  to { background-position: -200% 0; }
-}
-
 /* ─── EN-TÊTE ─────────────────────────────────────────────── */
 .page-header {
   display: flex;
@@ -766,6 +756,46 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius-base);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .charge-card--skeleton {
+    min-height: 138px;
+  }
+
+  .charge-card--skeleton::before,
+  .charge-card__skeleton-title,
+  .charge-card__skeleton-action,
+  .charge-card__skeleton-detail {
+    background: linear-gradient(
+      90deg,
+      var(--color-border) 25%,
+      var(--color-surface) 50%,
+      var(--color-border) 75%
+    );
+    background-size: 200% 100%;
+    animation: charge-shimmer 1.4s ease-in-out infinite;
+  }
+
+  .charge-card__skeleton-title {
+    width: 55%;
+    height: 16px;
+    border-radius: 4px;
+  }
+
+  .charge-card__skeleton-action {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+
+  .charge-card__skeleton-detail {
+    height: 36px;
+    border-radius: 5px;
+  }
+
+  @keyframes charge-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
   .charge-card__header {
